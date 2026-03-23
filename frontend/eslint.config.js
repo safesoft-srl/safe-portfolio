@@ -22,4 +22,10 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    files: ["src/components/**"],
+    rules: {
+      "react-refresh/only-export-components": ["off", { allowConstantExport: true }],
+    },
+  },
 ]);
