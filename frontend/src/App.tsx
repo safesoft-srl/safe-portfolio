@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 function App() {
+  const bad;
   return (
     <div className="flex-col w-full h-screen">
       <div className="flex flex-col justify-center items-center w-full h-full gap-2">
