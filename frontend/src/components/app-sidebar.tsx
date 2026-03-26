@@ -1,17 +1,28 @@
-import * as React from "react"
+import * as React from "react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { RowsIcon, WaveformIcon, CommandIcon, TerminalIcon, RobotIcon, BookOpenIcon, GearIcon, CropIcon, ChartPieIcon, MapTrifoldIcon } from "@phosphor-icons/react"
+} from "@/components/ui/sidebar";
+import {
+  RowsIcon,
+  WaveformIcon,
+  CommandIcon,
+  TerminalIcon,
+  RobotIcon,
+  BookOpenIcon,
+  GearIcon,
+  CropIcon,
+  ChartPieIcon,
+  MapTrifoldIcon,
+} from "@phosphor-icons/react";
 
 // This is sample data.
 const data = {
@@ -23,26 +34,17 @@ const data = {
   teams: [
     {
       name: "Acme Inc",
-      logo: (
-        <RowsIcon
-        />
-      ),
+      logo: <RowsIcon />,
       plan: "Enterprise",
     },
     {
       name: "Acme Corp.",
-      logo: (
-        <WaveformIcon
-        />
-      ),
+      logo: <WaveformIcon />,
       plan: "Startup",
     },
     {
       name: "Evil Corp.",
-      logo: (
-        <CommandIcon
-        />
-      ),
+      logo: <CommandIcon />,
       plan: "Free",
     },
   ],
@@ -50,10 +52,7 @@ const data = {
     {
       title: "Playground",
       url: "#",
-      icon: (
-        <TerminalIcon
-        />
-      ),
+      icon: <TerminalIcon />,
       isActive: true,
       items: [
         {
@@ -73,10 +72,7 @@ const data = {
     {
       title: "Models",
       url: "#",
-      icon: (
-        <RobotIcon
-        />
-      ),
+      icon: <RobotIcon />,
       items: [
         {
           title: "Genesis",
@@ -95,10 +91,7 @@ const data = {
     {
       title: "Documentation",
       url: "#",
-      icon: (
-        <BookOpenIcon
-        />
-      ),
+      icon: <BookOpenIcon />,
       items: [
         {
           title: "Introduction",
@@ -121,10 +114,7 @@ const data = {
     {
       title: "Settings",
       url: "#",
-      icon: (
-        <GearIcon
-        />
-      ),
+      icon: <GearIcon />,
       items: [
         {
           title: "General",
@@ -149,29 +139,20 @@ const data = {
     {
       name: "Design Engineering",
       url: "#",
-      icon: (
-        <CropIcon
-        />
-      ),
+      icon: <CropIcon />,
     },
     {
       name: "Sales & Marketing",
       url: "#",
-      icon: (
-        <ChartPieIcon
-        />
-      ),
+      icon: <ChartPieIcon />,
     },
     {
       name: "Travel",
       url: "#",
-      icon: (
-        <MapTrifoldIcon
-        />
-      ),
+      icon: <MapTrifoldIcon />,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -188,5 +169,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
