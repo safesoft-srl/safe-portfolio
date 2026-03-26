@@ -75,3 +75,43 @@ All generated code MUST follow these guidelines.
 ## Goal
 
 Maintain a clean, consistent, and scalable codebase.
+
+## Project Structure
+
+📂frontend
+┃ ┣ 📂public
+┃ ┣ 📂src
+┃ ┃ ┣ 📂assets
+┃ ┃ ┣ 📂components
+┃ ┃ ┃ ┣ 📂ui
+┃ ┃ ┃ ┃ ┣ 📜button.tsx
+┃ ┃ ┣ 📂config
+┃ ┃ ┃ ┗ 📜env.ts
+┃ ┃ ┣ 📂features
+┃ ┃ ┣ 📂hooks
+┃ ┃ ┣ 📂layouts
+┃ ┃ ┣ 📂lib
+┃ ┃ ┃ ┗ 📜utils.ts
+┃ ┃ ┣ 📂pages
+┃ ┃ ┣ 📂services
+┃ ┃ ┣ 📂store
+┃ ┃ ┣ 📂styles
+┃ ┃ ┣ 📂types
+┃ ┃ ┣ 📜App.tsx
+┃ ┃ ┣ 📜index.css
+┃ ┃ ┗ 📜main.tsx
+┃ ┣ 📜.env.development
+┃ ┣ 📜.gitignore
+┃ ┣ 📜.prettierignore
+┃ ┣ 📜.prettierrc
+┃ ┣ 📜AGENTS.md
+┃ ┣ 📜README.md
+┃ ┣ 📜components.json
+┃ ┣ 📜eslint.config.js
+┃ ┣ 📜index.html
+┃ ┣ 📜package-lock.json
+┃ ┣ 📜package.json
+┃ ┣ 📜tsconfig.app.json
+┃ ┣ 📜tsconfig.json
+┃ ┣ 📜tsconfig.node.json
+┃ ┗ 📜vite.config.ts
