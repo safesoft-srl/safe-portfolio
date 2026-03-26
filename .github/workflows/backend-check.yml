@@ -49,7 +49,7 @@ jobs:
     - name: Configure Database
       run: |
         echo "DB_CONNECTION=pgsql" >> .env
-        echo "DB_HOST=postgres" >> .env
+        echo "DB_HOST=127.0.0.1" >> .env
         echo "DB_PORT=5432" >> .env
         echo "DB_DATABASE=portfolio_db" >> .env
         echo "DB_USERNAME=postgres" >> .env
@@ -68,7 +68,7 @@ jobs:
       run: ./vendor/bin/pint --test
 
     - name: Run Migrations
-      run: php artisan migrate --force
+      run: php artisan migrate 
 
     - name: Execute tests
       run: php artisan test
