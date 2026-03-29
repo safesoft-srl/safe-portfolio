@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     /**
      * Authenticate user and return a JWT.
      *
-     * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(LoginRequest $request)
@@ -36,7 +35,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        // auth('api')->user() returns the logged-in user 
+        // auth('api')->user() returns the logged-in user
         // using the bearer token sent in the headers.
         return $this->successResponse(auth('api')->user(), 'User profile retrieved successfully');
     }
@@ -69,9 +68,8 @@ class AuthController extends Controller
      * Get the token array structure.
      * We extracted this logic into a helper function to keep the code DRY.
      *
-     * @param  string $token
-     * @param  string $message
-     *
+     * @param  string  $token
+     * @param  string  $message
      * @return \Illuminate\Http\JsonResponse
      */
     protected function respondWithToken($token, $message)
@@ -79,7 +77,7 @@ class AuthController extends Controller
         $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
         ];
 
         return $this->successResponse($data, $message);
