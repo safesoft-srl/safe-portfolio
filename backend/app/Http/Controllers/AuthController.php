@@ -16,27 +16,72 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        // 1. Tomamos solo email y password que ya pasaron por el request de validación
         $credentials = $request->only('email', 'password');
 
         try {
-            // 2. Intentamos iniciar sesión. Si falla, botamos error con nuestro Trait (ApiResponse)
             if (! $token = JWTAuth::attempt($credentials)) {
-                return $this->errorResponse('Credenciales inválidas', 401);
+                return $this->errorResponse('Invalid credentials', 401);
             }
         } catch (JWTException $e) {
-            // Error raro en el servidor con JWT
-            return $this->errorResponse('No se pudo crear el token de autenticación', 500);
+            return $this->errorResponse('Could not create authentication token', 500);
         }
 
-        // 3. Todo salió bien, armamos la información que necesita el frontend (Dylan)
+        return $this->respondWithToken($token, 'Login successful');
+    }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function me()
+    {
+        // auth('api')->user() returns the logged-in user 
+        // using the bearer token sent in the headers.
+        return $this->successResponse(auth('api')->user(), 'User profile retrieved successfully');
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        // This will blacklist the token so it can't be used again
+        auth('api')->logout();
+
+        return $this->successResponse([], 'Successfully logged out');
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        // Gives a brand new token and invalidates the old one
+        return $this->respondWithToken(auth('api')->refresh(), 'Token refreshed successfully');
+    }
+
+    /**
+     * Get the token array structure.
+     * We extracted this logic into a helper function to keep the code DRY.
+     *
+     * @param  string $token
+     * @param  string $message
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token, $message)
+    {
         $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60
         ];
 
-        // Usamos nuestro Trait para responder con el estándar del equipo
-        return $this->successResponse($data, 'Login exitoso');
+        return $this->successResponse($data, $message);
     }
 }
