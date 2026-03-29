@@ -21,3 +21,4 @@ context/
 composer.phar
 # Windows artifact
 nul
+.phpunit.result.cache
