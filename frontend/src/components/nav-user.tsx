@@ -24,16 +24,11 @@ import {
   BellIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
+import type { User } from "@/types/users";
+import { useAuthStore } from "@/lib/auth-store";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser({ user }: { user: User }) {
+  const { logout } = useAuthStore();
   const { isMobile } = useSidebar();
   return (
     <SidebarMenu>
@@ -43,7 +38,7 @@ export function NavUser({
             render={<SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />}
           >
             <Avatar>
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage src={""} alt={user.name} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
@@ -62,7 +57,7 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarImage src={""} alt={user.name} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -95,7 +90,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
               <SignOutIcon />
               Log out
             </DropdownMenuItem>

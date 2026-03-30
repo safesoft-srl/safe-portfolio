@@ -23,6 +23,7 @@ import {
   ChartPieIcon,
   MapTrifoldIcon,
 } from "@phosphor-icons/react";
+import { useAuthStore } from "@/lib/auth-store";
 
 // This is sample data.
 const data = {
@@ -155,6 +156,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuthStore();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -165,7 +167,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user || {}} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
