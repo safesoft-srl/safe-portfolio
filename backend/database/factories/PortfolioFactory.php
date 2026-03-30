@@ -22,7 +22,7 @@ class PortfolioFactory extends Factory
             'user_id'=> User::all()->random()->id,
             'profile_name'=> $this->faker->name(),
             'profile_email'=>$this->faker->unique()->safeEmail(),
-            'profesion'=> fake()->randomElement(['Backend Developer', 'Frontend Developer', 'Fullstack', 'Mobile Dev']),
+            'profession'=> fake()->randomElement(['Backend Developer', 'Frontend Developer', 'Fullstack', 'Mobile Dev']),
             'bio'=>$this->faker->sentence(),
             'profile_image'=>null,
             'url_portfolio'=>$this->faker->url(),

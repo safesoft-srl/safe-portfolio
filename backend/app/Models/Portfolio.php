@@ -13,7 +13,7 @@ class Portfolio extends Model
         'user_id',
         'profile_name',
         'profile_email',
-        'profesion',
+        'profession',
         'bio',
         'profile_image',
         'url_portfolio',
