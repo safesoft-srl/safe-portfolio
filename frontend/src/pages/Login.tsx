@@ -34,7 +34,6 @@ export default function Login() {
         // Save the token and expiration using our Zustand store
         loginFn(data.data.access_token, data.data.expires_in);
         // Redirect to dashboard
-        console.log("Login, redirecting to");
         navigate("/dashboard");
       } else {
         setErrorMsg(data.message || "Login failed");
