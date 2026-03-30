@@ -23,4 +23,14 @@ class PortfolioController extends Controller
             201
         );
     }
+
+    public function index() 
+    {
+        $portfolios = $this->portfolioService->getAll();
+
+        return ApiResponse::success(
+            $portfolios,
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
 }
