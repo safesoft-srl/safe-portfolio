@@ -10,9 +10,14 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import { useAuthStore } from "@/lib/auth-store";
 
 export default function UserLayout({ children }: { children?: React.ReactNode }) {
+  const { isAuthenticated } = useAuthStore();
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
   return (
     <SidebarProvider>
       <AppSidebar />
