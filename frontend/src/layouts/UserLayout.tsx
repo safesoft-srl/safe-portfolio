@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/ModeToggle";
 import {
@@ -12,12 +13,36 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuthStore } from "@/lib/auth-store";
+import { api } from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
 
 export default function UserLayout({ children }: { children?: React.ReactNode }) {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, setUser, logout } = useAuthStore();
+
+  const { data, isError } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await api.get("/api/auth/me");
+      return response.data.data;
+    },
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUser(data);
+    }
+  }, [data, setUser]);
+
+  useEffect(() => {
+    if (isError) {
+      logout();
+    }
+  }, [isError, logout]);
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
+
   return (
     <SidebarProvider>
       <AppSidebar />
