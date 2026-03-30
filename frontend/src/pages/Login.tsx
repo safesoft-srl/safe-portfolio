@@ -61,26 +61,26 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#111321] flex items-center justify-center p-4 font-sans text-slate-100">
-      <Card className="w-full max-w-sm bg-[#15172b] border-[#2a2d46] shadow-2xl rounded-2xl">
+    <div className="min-h-screen bg-[#14162f] flex items-center justify-center px-4 py-0 text-slate-100 font-heading">
+      <Card className="w-full max-w-md bg-[#13152e] border border-[#232555] shadow-2xl rounded-2xl">
         <form onSubmit={handleSubmit}>
-          <CardHeader className="text-center pt-8 pb-4">
-            <CardTitle className="text-2xl font-medium tracking-wide text-white">
-              Portfolio Pro
+          <CardHeader className="text-center pb-4 pt-2">
+            <CardTitle className="text-2xl font-bold tracking-wide text-white">
+              Safe Portfolio
             </CardTitle>
-            <CardDescription className="text-sm mt-3 text-slate-400">
+            <CardDescription className="text-sm mt-4 text-slate-400">
               Inicia sesión en tu cuenta
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-5 px-6 pt-2">
+          <CardContent className="space-y-4 px-6 pt-2">
             {errorMsg && (
               <div className="text-red-400 text-sm font-medium text-center bg-red-950/30 p-2 rounded">
                 {errorMsg}
               </div>
             )}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ml-1">
+            <div className="space-y-1">
+              <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ">
                 Email
               </Label>
               <Input
@@ -89,12 +89,12 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="h-11 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4"
+                className="h-9 bg-[#1c1f38] font-sans border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-xs font-semibold text-slate-300 ml-1">
+            <div className="space-y-1">
+              <Label htmlFor="password" className="text-xs font-semibold text-slate-300">
                 Contraseña
               </Label>
               <Input
@@ -102,22 +102,22 @@ export default function Login() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="........"
-                className="h-11 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest"
+                placeholder="*********"
+                className="h-9 bg-[#1c1f38] font-sans border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest"
               />
             </div>
 
             <Button
               type="submit"
               disabled={loginMutation.isPending}
-              className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2 disabled:opacity-50"
+              className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-9 rounded-lg font-medium tracking-wide disabled:opacity-50 font-heading"
             >
               {loginMutation.isPending ? "Iniciando..." : "Iniciar Sesión"}
             </Button>
           </CardContent>
 
-          <CardFooter className="flex flex-col space-y-3 pb-8 px-6 text-center">
-            <div className="text-sm text-slate-400">
+          <CardFooter className="flex flex-col space-y-3 pt-6 pb-2 px-6 text-center font-sans">
+            <div className="text-xs text-slate-400">
               ¿No tienes cuenta?{" "}
               <Link
                 to="/register"
