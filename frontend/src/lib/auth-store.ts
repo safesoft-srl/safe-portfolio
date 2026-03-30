@@ -1,14 +1,6 @@
 import { create } from "zustand";
 import Cookies from "js-cookie";
-
-interface User {
-  id?: string | number;
-  name?: string;
-  email?: string;
-  email_verified_at?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+import type { User } from "@/types/users";
 
 interface AuthState {
   isAuthenticated: boolean;
