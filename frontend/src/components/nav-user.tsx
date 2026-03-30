@@ -24,6 +24,7 @@ import {
   BellIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
+import { useAuthStore } from "@/lib/auth-store";
 
 export function NavUser({
   user,
@@ -34,6 +35,7 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const { logout } = useAuthStore();
   const { isMobile } = useSidebar();
   return (
     <SidebarMenu>
@@ -95,7 +97,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
               <SignOutIcon />
               Log out
             </DropdownMenuItem>
