@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Portfolio>
@@ -17,15 +17,15 @@ class PortfolioFactory extends Factory
      */
     public function definition(): array
     {
-        
+
         return [
-            'user_id'=> User::all()->random()->id,
-            'profile_name'=> $this->faker->name(),
-            'profile_email'=>$this->faker->unique()->safeEmail(),
-            'profession'=> fake()->randomElement(['Backend Developer', 'Frontend Developer', 'Fullstack', 'Mobile Dev']),
-            'bio'=>$this->faker->sentence(),
-            'profile_image'=>null,
-            'url_portfolio'=>$this->faker->url(),
+            'user_id' => User::all()->random()->id,
+            'profile_name' => $this->faker->name(),
+            'profile_email' => $this->faker->unique()->safeEmail(),
+            'profession' => fake()->randomElement(['Backend Developer', 'Frontend Developer', 'Fullstack', 'Mobile Dev']),
+            'bio' => $this->faker->sentence(),
+            'profile_image' => null,
+            'url_portfolio' => $this->faker->url(),
         ];
     }
 }
