@@ -75,4 +75,35 @@ class PortfolioTest extends TestCase
                 ],
             ]);
     }
+
+    public function test_can_update_portfolio(): void
+    {
+        $user = User::factory()->create();
+
+        $portfolio = Portfolio::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $payload = [
+            'user_id' => $user->id,
+            'url_portfolio' => 'updated.com',
+            'profile_name' => 'Updated Name',
+            'profile_email' => 'updated@example.com',
+            'profession' => 'Updated Profession',
+            'bio' => 'Updated Bio',
+            'profile_image' => 'updated_profile.jpg',
+        ];
+
+        $response = $this->putJson("/api/portfolios/{$portfolio->id}", $payload);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Recurso actualizado exitosamente.',
+            ]);
+
+        $this->assertDatabaseHas('portfolios', [
+            'url_portfolio' => 'updated.com',
+        ]);
+    }
 }
