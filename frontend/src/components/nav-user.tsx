@@ -26,10 +26,12 @@ import {
 } from "@phosphor-icons/react";
 import type { User } from "@/types/users";
 import { useAuthStore } from "@/lib/auth-store";
+import { useNavigate } from "react-router-dom";
 
 export function NavUser({ user }: { user: User }) {
   const { logout } = useAuthStore();
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -76,7 +78,7 @@ export function NavUser({ user }: { user: User }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {navigate("/dashboard/account")}}>
                 <CheckCircleIcon />
                 Account
               </DropdownMenuItem>

@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
+import UserAccount from "./pages/UserAccount";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,11 @@ export const router = createBrowserRouter([
             path: "test",
             element: <div>Testing Page</div>,
           },
+          {
+            path: "account",
+            element: <UserAccount />,
+          },
+
         ],
       },
     ],
