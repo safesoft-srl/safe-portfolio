@@ -23,6 +23,24 @@ class EmailVerificationService
         return $verification;
     }
 
+    public function refreshToken(Account $account): EmailVerification
+    {
+        $token = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
+
+        $verification = EmailVerification::firstOrNew([
+            'account_id' => $account->id,
+        ]);
+
+        $verification->token = $token;
+        $verification->expires_at = now()->addMinutes(60);
+        $verification->used_at = null;
+        $verification->save();
+
+        $this->SendToken($account->email, $token);
+
+        return $verification;
+    }
+
     public function SendToken(string $email, string $token): void
     {
         Mail::raw("Tu código de verificación es: $token", function ($message) use ($email) {

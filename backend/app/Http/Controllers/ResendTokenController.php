@@ -40,7 +40,7 @@ class ResendTokenController extends Controller
                 ], 400);
             }
 
-            $this->emailVerificationService->GenerateToken($account);
+            $this->emailVerificationService->refreshToken($account);
 
             return response()->json([
                 'success' => true,

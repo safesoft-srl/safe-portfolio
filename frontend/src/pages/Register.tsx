@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-// Definimos la interfaz para asegurar el tipado estricto
 interface RegisterErrors {
   name?: string;
   email?: string;
@@ -21,23 +20,19 @@ interface RegisterErrors {
 }
 
 export default function RegisterPage() {
-  // Estados para los campos del formulario
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [token, setToken] = useState("");
-
-  // Estados para el control de la UI
   const [step, setStep] = useState(1);
-  // Aplicamos la interfaz al estado de los errores
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const [apiSuccess, setApiSuccess] = useState("");
 
-  // Función para validar el formulario
+
   const validateForm = () => {
-    // Asignamos la interfaz a la variable temporal
     const newErrors: RegisterErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -65,7 +60,7 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Manejador del botón Continuar (Paso 1)
+
   const handleContinue = async () => {
     setApiError("");
     if (validateForm()) {
@@ -93,14 +88,69 @@ export default function RegisterPage() {
     }
   };
 
-  // Manejadores para el Paso 2 (Token)
-  const handleVerifyToken = () => {
-    console.log("Verificando token y creando cuenta...", { token });
+
+  const handleVerifyToken = async () => {
+      setApiError("");
+      setApiSuccess("");
+
+    if (!token.trim()) {
+      setApiError("Debes ingresar el código de confirmación.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/api/verify-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, token }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setApiSuccess(data.message || "Correo verificado exitosamente");
+ 
+        //       setTimeout(() => { navigate("/login");  }, 1500);
+      } else {
+        setApiError(data.message || "Error al verificar token.");
+      }
+    } catch {
+      setApiError("Error de conexión con el servidor.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleResendToken = () => {
-    console.log("Reenviando token a:", email);
-  };
+
+  const handleResendToken = async () => {
+  setApiError("");
+  setApiSuccess("");
+  setIsLoading(true);
+
+  try {
+    const response = await fetch("http://localhost:8000/api/resend-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setApiSuccess(data.message || "Token reenviado correctamente");
+    } else {
+      setApiError(data.message || "Error al reenviar token.");
+    }
+  } catch {
+    setApiError("Error de conexión con el servidor.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#111321] flex items-center justify-center p-4 font-sans text-slate-100">
@@ -114,16 +164,15 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
 
-        {/* Contenedor del Slide Effect */}
         <div className="relative overflow-hidden w-full">
           <div
             className="flex transition-transform duration-500 ease-in-out w-full"
             style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
           >
-            {/* -------------------- PASO 1: Formulario de Registro -------------------- */}
+            {/* -------------------- STEP 1: Registration Form -------------------- */}
             <div className="w-full shrink-0">
               <CardContent className="space-y-4 px-6 pt-2">
-                {apiError && (
+                {step === 1 && apiError && (
                   <div className="text-red-400 text-sm bg-red-950/30 p-2 rounded border border-red-900/50 text-center">
                     {apiError}
                   </div>
@@ -199,9 +248,20 @@ export default function RegisterPage() {
               </CardContent>
             </div>
 
-            {/* -------------------- PASO 2: Verificación de Token -------------------- */}
+            {/* -------------------- STEP 2: Token Verification -------------------- */}
             <div className="w-full shrink-0">
               <CardContent className="space-y-5 px-6 pt-2">
+                {step === 2 && apiError && (
+                  <div className="text-red-400 text-sm bg-red-950/30 p-2 rounded border border-red-900/50 text-center">
+                    {apiError}
+                  </div>
+                )}
+
+                {step === 2 && apiSuccess && (
+                  <div className="text-green-400 text-sm bg-green-950/30 p-2 rounded border border-green-900/50 text-center">
+                    {apiSuccess}
+                  </div>
+                )}
                 <p className="text-sm text-slate-300 text-center mb-4">
                   Hemos enviado un código de confirmación a <br/>
                   <span className="font-semibold text-white">{email || "tu correo"}</span>
@@ -222,19 +282,21 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="flex flex-col gap-3 pt-2">
-                  <Button 
+                  <Button
                     onClick={handleVerifyToken}
+                    disabled={isLoading || token.trim() === ""}
                     className="w-full bg-[#10b981] hover:bg-[#059669] text-white h-11 rounded-lg font-medium tracking-wide"
                   >
-                    Crear cuenta
+                    {isLoading ? "Verificando..." : "Crear cuenta"}
                   </Button>
                   
-                  <Button 
+                  <Button
                     variant="outline"
                     onClick={handleResendToken}
+                    disabled={isLoading}
                     className="w-full bg-transparent border-[#2a2d46] text-slate-300 hover:text-white hover:bg-[#1c1f38] h-11 rounded-lg font-medium"
                   >
-                    Reenviar código
+                    {isLoading ? "Enviando..." : "Reenviar código"}
                   </Button>
                 </div>
               </CardContent>

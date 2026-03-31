@@ -15,9 +15,32 @@ class RegisterAccountController extends Controller
 
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:account,email',
-                'password' => 'required|string|min:8',
+                'email' => 'required|string|email|max:255',
+                'password' => 'required|string|min:6',
             ]);
+
+            $account = Account::where('email', $validatedData['email'])->first();
+
+            if ($account) {
+
+                if ($account->verified) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Este correo ya está registrado y verificado',
+                    ], 409);
+                }
+
+                $account->name = $validatedData['name'];
+                $account->password = bcrypt($validatedData['password']);
+                $account->save();
+
+                $emailVerificationService->refreshToken($account);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Cuenta actualizada, se reenviará el token',
+                ], 200);
+            }
 
             $account = Account::create([
                 'name' => $validatedData['name'],
