@@ -33,4 +33,14 @@ class PortfolioController extends Controller
             ResponseMessages::FETCHED_SUCCESSFULLY
         );
     }
+
+    public function show(int $id)
+    {
+        $portfolio = $this->portfolioService->getById($id);
+
+        return ApiResponse::success(
+            $portfolio,
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
 }

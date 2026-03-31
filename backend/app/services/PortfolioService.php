@@ -15,4 +15,9 @@ class PortfolioService
     {
         return Portfolio::all();
     }
+
+    public function getById(int $id)
+    {
+        return Portfolio::findOrFail($id);
+    }
 }
