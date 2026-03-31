@@ -56,4 +56,23 @@ class PortfolioTest extends TestCase
                 'success' => true,
             ]);
     }
+
+    public function test_can_get_single_portfolio(): void
+    {
+        $user = User::factory()->create();
+
+        $portfolio = Portfolio::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->getJson("/api/portfolios/{$portfolio->id}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'data' => [
+                    'id' => $portfolio->id,
+                ],
+            ]);
+    }
 }
