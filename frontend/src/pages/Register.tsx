@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,89 +12,239 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+// Definimos la interfaz para asegurar el tipado estricto
+interface RegisterErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  passwordConfirm?: string;
+}
+
 export default function RegisterPage() {
+  // Estados para los campos del formulario
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [token, setToken] = useState("");
+
+  // Estados para el control de la UI
+  const [step, setStep] = useState(1);
+  // Aplicamos la interfaz al estado de los errores
+  const [errors, setErrors] = useState<RegisterErrors>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+
+  // Función para validar el formulario
+  const validateForm = () => {
+    // Asignamos la interfaz a la variable temporal
+    const newErrors: RegisterErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name.trim()) {
+      newErrors.name = "El nombre es obligatorio.";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "El email es obligatorio.";
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "El formato del email no es válido.";
+    }
+
+    if (!password) {
+      newErrors.password = "La contraseña es obligatoria.";
+    } else if (password.length < 6) {
+      newErrors.password = "La contraseña debe tener al menos 6 caracteres.";
+    }
+
+    if (password !== passwordConfirm) {
+      newErrors.passwordConfirm = "Las contraseñas no coinciden.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Manejador del botón Continuar (Paso 1)
+  const handleContinue = async () => {
+    setApiError("");
+    if (validateForm()) {
+      setIsLoading(true);
+      try {
+        const response = await fetch("http://localhost:8000/api/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        if (response.ok) {
+          setStep(2);
+        } else {
+          const errorData = await response.json();
+          setApiError(errorData.message || "Hubo un error al registrar el usuario.");
+        }
+      } catch  {
+        setApiError("Error de conexión con el servidor.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  // Manejadores para el Paso 2 (Token)
+  const handleVerifyToken = () => {
+    console.log("Verificando token y creando cuenta...", { token });
+  };
+
+  const handleResendToken = () => {
+    console.log("Reenviando token a:", email);
+  };
+
   return (
     <div className="min-h-screen bg-[#111321] flex items-center justify-center p-4 font-sans text-slate-100">
-      <Card className="w-full max-w-sm bg-[#15172b] border-[#2a2d46] shadow-2xl rounded-2xl">
+      <Card className="w-full max-w-sm bg-[#15172b] border-[#2a2d46] shadow-2xl rounded-2xl overflow-hidden">
         <CardHeader className="text-center pt-8 pb-4">
           <CardTitle className="text-2xl font-medium tracking-wide text-white">
             Portfolio Pro
           </CardTitle>
           <CardDescription className="text-sm mt-3 text-slate-400">
-            Registrar nueva cuenta
+            {step === 1 ? "Registrar nueva cuenta" : "Verifica tu cuenta"}
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-5 px-6 pt-2">
+        {/* Contenedor del Slide Effect */}
+        <div className="relative overflow-hidden w-full">
+          <div
+            className="flex transition-transform duration-500 ease-in-out w-full"
+            style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
+          >
+            {/* -------------------- PASO 1: Formulario de Registro -------------------- */}
+            <div className="w-full shrink-0">
+              <CardContent className="space-y-4 px-6 pt-2">
+                {apiError && (
+                  <div className="text-red-400 text-sm bg-red-950/30 p-2 rounded border border-red-900/50 text-center">
+                    {apiError}
+                  </div>
+                )}
 
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ml-1">
-              Nombre completo
-            </Label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="Tu nombre y apellido"
-              className="h-11 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4"
-            />
-          </div>
+                <div className="space-y-1">
+                  <Label htmlFor="name" className="text-xs font-semibold text-slate-300 ml-1">
+                    Nombre completo
+                  </Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Tu nombre y apellido"
+                    className={`h-11 bg-[#1c1f38] ${errors.name ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                  />
+                  {errors.name && <p className="text-red-400 text-xs ml-1 mt-1">{errors.name}</p>}
+                </div>
 
+                <div className="space-y-1">
+                  <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ml-1">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tu@email.com"
+                    className={`h-11 w-full bg-[#1c1f38] ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                  />
+                  {errors.email && <p className="text-red-400 text-xs ml-1 mt-1">{errors.email}</p>}
+                </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ml-1">
-              Email
-            </Label>
-            {/* Contenedor FLEX para alinear input y botón */}
-            <div className="flex items-center gap-2">
-              <Input
-                id="email"
-                type="email"
-                placeholder="tu@email.com"
-                className="h-11 flex-1 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4"
-              />
-              <Button 
-                type="button" 
-                className="h-11 bg-slate-700 hover:bg-slate-600 text-white px-4 rounded-lg font-medium transition-colors"
-              >
-                Verificar
-              </Button>
+                <div className="space-y-1">
+                  <Label htmlFor="password" className="text-xs font-semibold text-slate-300 ml-1">
+                    Contraseña
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="........"
+                    className={`h-11 bg-[#1c1f38] ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
+                  />
+                  {errors.password && <p className="text-red-400 text-xs ml-1 mt-1">{errors.password}</p>}
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="password-confirm" className="text-xs font-semibold text-slate-300 ml-1">
+                    Confirmar contraseña
+                  </Label>
+                  <Input
+                    id="password-confirm"
+                    type="password"
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                    placeholder="........"
+                    className={`h-11 bg-[#1c1f38] ${errors.passwordConfirm ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
+                  />
+                  {errors.passwordConfirm && <p className="text-red-400 text-xs ml-1 mt-1">{errors.passwordConfirm}</p>}
+                </div>
+
+                <Button 
+                  onClick={handleContinue} 
+                  disabled={isLoading}
+                  className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
+                >
+                  {isLoading ? "Cargando..." : "Continuar"}
+                </Button>
+              </CardContent>
+            </div>
+
+            {/* -------------------- PASO 2: Verificación de Token -------------------- */}
+            <div className="w-full shrink-0">
+              <CardContent className="space-y-5 px-6 pt-2">
+                <p className="text-sm text-slate-300 text-center mb-4">
+                  Hemos enviado un código de confirmación a <br/>
+                  <span className="font-semibold text-white">{email || "tu correo"}</span>
+                </p>
+
+                <div className="space-y-2">
+                  <Label htmlFor="token" className="text-xs font-semibold text-slate-300 ml-1">
+                    Código de confirmación
+                  </Label>
+                  <Input
+                    id="token"
+                    type="text"
+                    value={token}
+                    onChange={(e) => setToken(e.target.value)}
+                    placeholder="Ej. 123456"
+                    className="h-11 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 text-center tracking-widest text-lg"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-3 pt-2">
+                  <Button 
+                    onClick={handleVerifyToken}
+                    className="w-full bg-[#10b981] hover:bg-[#059669] text-white h-11 rounded-lg font-medium tracking-wide"
+                  >
+                    Crear cuenta
+                  </Button>
+                  
+                  <Button 
+                    variant="outline"
+                    onClick={handleResendToken}
+                    className="w-full bg-transparent border-[#2a2d46] text-slate-300 hover:text-white hover:bg-[#1c1f38] h-11 rounded-lg font-medium"
+                  >
+                    Reenviar código
+                  </Button>
+                </div>
+              </CardContent>
             </div>
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-xs font-semibold text-slate-300 ml-1">
-              Contraseña
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="........"
-              className="h-11 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest"
-            />
-
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="password-confirm" className="text-xs font-semibold text-slate-300 ml-1">
-              Confirmar contraseña
-            </Label>
-            <Input
-              id="password-confirm"
-              type="password"
-              placeholder="........"
-              className="h-11 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest"
-            />
-          </div>
-
-          <Button className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2">
-            Crear Cuenta
-          </Button>
-        </CardContent>
+        </div>
 
         <CardFooter className="flex flex-col space-y-3 pb-8 px-6 text-center">
-          
           <Link to="/" className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
-            Volver al inicio
+            {step === 1 ? "Volver al inicio" : "Cancelar registro"}
           </Link>
         </CardFooter>
       </Card>
