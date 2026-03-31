@@ -20,4 +20,12 @@ class PortfolioService
     {
         return Portfolio::findOrFail($id);
     }
+
+    public function update(int $id, array $data)
+    {
+        $portfolio = Portfolio::findOrFail($id);
+        $portfolio->update($data);
+
+        return $portfolio;
+    }
 }

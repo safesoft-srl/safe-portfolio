@@ -43,4 +43,14 @@ class PortfolioController extends Controller
             ResponseMessages::FETCHED_SUCCESSFULLY
         );
     }
+
+    public function update(int $id, StorePortfolioRequest $request)
+    {
+        $portfolio = $this->portfolioService->update($id, $request->validated());
+
+        return ApiResponse::success(
+            $portfolio,
+            ResponseMessages::UPDATED_SUCCESSFULLY
+        );
+    }
 }
