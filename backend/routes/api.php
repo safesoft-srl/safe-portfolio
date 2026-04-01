@@ -19,4 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get(
+    'users/{userId}/portfolio',
+    [PortfolioController::class, 'getByUserId']
+);
+
 Route::apiResource('portfolios', PortfolioController::class);

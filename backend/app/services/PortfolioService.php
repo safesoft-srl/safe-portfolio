@@ -21,11 +21,24 @@ class PortfolioService
         return Portfolio::findOrFail($id);
     }
 
+    public function getByUserId(int $userId)
+    {
+        return Portfolio::where('user_id', $userId)->firstOrFail();
+    }
+
     public function update(int $id, array $data)
     {
         $portfolio = Portfolio::findOrFail($id);
         $portfolio->update($data);
 
         return $portfolio;
+    }
+
+    public function delete(int $id)
+    {
+        $portfolio = Portfolio::findOrFail($id);
+        $portfolio->delete();
+
+        return true;
     }
 }
