@@ -53,4 +53,14 @@ class PortfolioController extends Controller
             ResponseMessages::UPDATED_SUCCESSFULLY
         );
     }
+
+    public function destroy(int $id)
+    {
+        $this->portfolioService->delete($id);
+
+        return ApiResponse::success(
+            null,
+            ResponseMessages::DELETED_SUCCESSFULLY
+        );
+    }
 }

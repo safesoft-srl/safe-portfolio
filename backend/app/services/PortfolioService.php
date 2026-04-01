@@ -28,4 +28,12 @@ class PortfolioService
 
         return $portfolio;
     }
+
+    public function delete(int $id)
+    {
+        $portfolio = Portfolio::findOrFail($id);
+        $portfolio->delete();
+
+        return true;
+    }
 }
