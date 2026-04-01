@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\AuthController;
 
-use Illuminate\Support\Facades\Route;
+
 
 Route::group([
     'middleware' => 'api',
