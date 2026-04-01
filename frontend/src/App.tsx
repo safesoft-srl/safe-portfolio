@@ -1,18 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes";
+import { ThemeProvider } from "./components/providers/ThemeProvider";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/react-query";
+
 function App() {
   return (
-    <div className="flex-col w-full h-screen">
-      <div className="flex flex-col justify-center items-center w-full h-full gap-2">
-        <Button size={`lg`} onClick={() => toast.success("Testing button")}>
-          Testing button
-        </Button>
-        <Button variant="secondary">Testing button</Button>
-        <Button variant="outline">Testing button</Button>
-        <Button variant="destructive">Testing button</Button>
-        <Button variant="link">Testing button</Button>
-      </div>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

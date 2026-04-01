@@ -16,3 +16,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+context/
+# Local Composer binary
+composer.phar
+# Windows artifact
+nul
+.phpunit.result.cache
