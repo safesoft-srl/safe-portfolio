@@ -34,6 +34,16 @@ class PortfolioController extends Controller
         );
     }
 
+    public function getByUserId(int $userId)
+    {
+        $portfolio = $this->portfolioService->getByUserId($userId);
+
+        return ApiResponse::success(
+            $portfolio,
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
     public function show(int $id)
     {
         $portfolio = $this->portfolioService->getById($id);
