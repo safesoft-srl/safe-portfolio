@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use App\Models\Account;
 use App\Models\EmailVerification;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class EmailVerificationService
 {
-    public function GenerateToken(Account $account): EmailVerification
+    public function GenerateToken(User $account): EmailVerification
     {
         $token = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
 
         $verification = EmailVerification::create([
-            'account_id' => $account->id,
+            'user_id' => $account->id,
             'token' => $token,
             'expires_at' => now()->addMinutes(60),
         ]);
@@ -23,12 +23,12 @@ class EmailVerificationService
         return $verification;
     }
 
-    public function refreshToken(Account $account): EmailVerification
+    public function refreshToken(User $account): EmailVerification
     {
         $token = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
 
         $verification = EmailVerification::firstOrNew([
-            'account_id' => $account->id,
+            'user_id' => $account->id,
         ]);
 
         $verification->token = $token;

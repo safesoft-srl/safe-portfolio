@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,6 +30,8 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [apiSuccess, setApiSuccess] = useState("");
+
+  const navigate = useNavigate();
 
 
   const validateForm = () => {
@@ -113,7 +115,7 @@ export default function RegisterPage() {
 
       if (response.ok) {
         setApiSuccess(data.message || "Correo verificado exitosamente");
- 
+        navigate("/dashboard");
         //       setTimeout(() => { navigate("/login");  }, 1500);
       } else {
         setApiError(data.message || "Error al verificar token.");

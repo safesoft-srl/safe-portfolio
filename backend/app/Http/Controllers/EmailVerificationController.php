@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
 use App\Models\EmailVerification;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EmailVerificationController extends Controller
@@ -16,7 +16,7 @@ class EmailVerificationController extends Controller
             'token' => 'required|string|max:10',
         ]);
 
-        $account = Account::where('email', $request->email)->first();
+        $account = User::where('email', $request->email)->first();
 
         if (! $account) {
             return response()->json([
@@ -32,7 +32,7 @@ class EmailVerificationController extends Controller
             ], 200);
         }
 
-        $verification = EmailVerification::where('account_id', $account->id)
+        $verification = EmailVerification::where('user_id', $account->id)
             ->where('token', $request->token)
             ->first();
 

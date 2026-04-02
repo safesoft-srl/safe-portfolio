@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Account;
+use App\Models\User;
 use App\Services\EmailVerificationService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -19,7 +19,7 @@ class RegisterAccountController extends Controller
                 'password' => 'required|string|min:6',
             ]);
 
-            $account = Account::where('email', $validatedData['email'])->first();
+            $account = User::where('email', $validatedData['email'])->first();
 
             if ($account) {
 
@@ -42,7 +42,7 @@ class RegisterAccountController extends Controller
                 ], 200);
             }
 
-            $account = Account::create([
+            $account = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),

@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('email_verification', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id')
+            $table->foreignId('user_id')
                 ->unique()
-                ->constrained('account')
+                ->constrained('users')
                 ->onDelete('cascade');
             $table->string('token')->unique();
             $table->timestamp('expires_at')->nullable();
