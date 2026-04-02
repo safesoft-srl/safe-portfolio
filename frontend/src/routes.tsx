@@ -7,72 +7,71 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <div>Landing page</div>,
-  },
-  {
-    path: "/login",
-    element: <GuestRoute />,
-    children: [
-      {
-        path: "",
-        element: <Login />,
-      },
-    ],
-  },
-  {
-    path: "/register",
-    element: <GuestRoute />,
-    children: [
-      {
-        path: "",
-        element: <Register />,
-      },
-    ],
-  },
-  {
-    path: "/dashboard",
-    element: <ProtectedRoute />,
-    children: [
-      {
-        path: "",
-        element: <UserLayout />,
+    {
+        path: "/",
+        element: <div>Landing page</div>,
+    },
+    {
+        path: "/login",
+        element: <GuestRoute />,
         children: [
-          {
-            path: "",
-            element: <div>Dashboard Page</div>,
-          },
-          {
-            path: "test",
-            element: <div>Testing Page</div>,
-          },
+            {
+                path: "",
+                element: <Login />,
+            },
         ],
-      },
-      {
-        path: "profile",
-        element: <Profile />,
-      },
-      {
-        path: "projects",
-        element: <div>Projects Page</div>,
-      },
-      {
-        path: "skills",
-        element: <div>Skills Page</div>,
-      },
-      {
-        path: "experience",
-        element: <div>Experience Page</div>,
-      },
-      {
-        path: "configuration",
-        element: <div>Configuration Page</div>,
-      },
-      {
-        path: "reports",
-        element: <div>Reports Page</div>,
-      },
-    ],
-  },
+    },
+    {
+        path: "/register",
+        element: <GuestRoute />,
+        children: [
+            {
+                path: "",
+                element: <Register />,
+            },
+        ],
+    },
+    {
+        path: "/dashboard",
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "",
+                element: <UserLayout />,
+                children: [
+                    {
+                        path: "",
+                        element: <div>Dashboard Page</div>,
+                    },
+
+                    {
+                        path: "profile",
+                        element: <Profile />,
+                    },
+                    {
+                        path: "projects",
+                        element: <div>Projects Page</div>,
+                    },
+                    {
+                        path: "skills",
+                        element: <div>Skills Page</div>,
+                    },
+                    {
+                        path: "experience",
+                        element: <div>Experience Page</div>,
+                    },
+                    {
+                        path: "configuration",
+                        element: <div>Configuration Page</div>,
+                    },
+                    {
+                        path: "reports",
+                        element: <div>Reports Page</div>,
+                    },
+
+                ],
+            },
+
+        ],
+    },
 ]);

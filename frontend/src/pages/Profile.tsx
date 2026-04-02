@@ -382,7 +382,7 @@ export default function Profile() {
             <Input
               id="fullName"
               name="fullName"
-              type="text"
+              type="text" pattern="[A-Za-z ]+"
               placeholder="Ej: Juan Perez"
               value={formData.profile_name}
               onChange={handleInputChange}
