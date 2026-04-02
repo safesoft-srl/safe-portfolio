@@ -1,7 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
-import Register from "./pages/register";
+import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Home from "./pages/Home";
+import DashboardHome from "./pages/DashboardHome";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
@@ -9,7 +11,7 @@ import { GuestRoute } from "./components/auth/GuestRoute";
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <div>Landing page</div>,
+        element: <Home />,
     },
     {
         path: "/login",
@@ -41,7 +43,7 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         path: "",
-                        element: <div>Dashboard Page</div>,
+                        element: <DashboardHome />,
                     },
 
                     {
