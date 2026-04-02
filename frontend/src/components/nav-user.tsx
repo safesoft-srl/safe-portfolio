@@ -18,9 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   CaretUpDownIcon,
-  SparkleIcon,
   CheckCircleIcon,
-  CreditCardIcon,
   BellIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
@@ -75,19 +73,8 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <SparkleIcon />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
                 <CheckCircleIcon />
                 Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon />
-                Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <BellIcon />
