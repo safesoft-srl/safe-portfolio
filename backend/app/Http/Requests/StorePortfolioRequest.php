@@ -27,7 +27,7 @@ class StorePortfolioRequest extends FormRequest
             'profile_name' => 'required|string|max:255',
             'profile_email' => 'required|email',
             'profession' => 'required|string|max:255',
-            'bio' => 'nullable|string',
+            'bio' => 'nullable|text',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
