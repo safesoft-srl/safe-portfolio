@@ -40,8 +40,9 @@ class PortfolioController extends Controller
         );
     }
 
-    public function getByUserId(int $userId)
+    public function getMyPortfolio()
     {
+        $userId = auth()->id();
         $portfolio = $this->portfolioService->getByUserId($userId);
 
         return ApiResponse::success(
@@ -60,11 +61,12 @@ class PortfolioController extends Controller
         );
     }
 
-    public function update(int $id, UpdatePortfolioRequest $request)
+    public function updateMyPortfolio(UpdatePortfolioRequest $request)
     {
+        $userId = auth()->id();
         try {
             $portfolio = $this->portfolioService->update(
-                $id,
+                $userId,
                 $request->validated()
             );
 

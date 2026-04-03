@@ -35,9 +35,9 @@ class PortfolioService
         return Portfolio::where('user_id', $userId)->firstOrFail();
     }
 
-    public function update(int $id, array $data)
+    public function update(int $user_id, array $data)
     {
-        $portfolio = Portfolio::findOrFail($id);
+        $portfolio = Portfolio::where('user_id', $user_id)->firstOrFail();
         $data = $this->handleProfileImage($data);
         $portfolio->update($data);
 

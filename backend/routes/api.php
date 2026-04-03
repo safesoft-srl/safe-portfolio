@@ -38,9 +38,17 @@ Route::group([
     Route::get('/me', [AuthController::class, 'me'])->middleware('auth:api');
 });
 
-Route::get(
+/*Route::get(
     'users/{userId}/portfolio',
     [PortfolioController::class, 'getByUserId']
 );
 
 Route::apiResource('portfolios', PortfolioController::class);
+*/
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
+    Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
+});
+
+Route::apiResource('/portfolios', PortfolioController::class);
