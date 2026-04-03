@@ -3,10 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  deleteProfilePhoto,
   getProfile,
   updateProfile,
-  uploadProfilePhoto,
 } from "@/services/profile.service";
 import {
   AlertDialog,
@@ -51,14 +49,17 @@ export default function Profile() {
     profile_email: "",
     profession: "",
     bio: "",
+    url_portfolio: "",
   });
   const [initialFormData, setInitialFormData] = useState({
     profile_name: "",
     profile_email: "",
     profession: "",
     bio: "",
+    url_portfolio: "",
   });
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const validateField = (field: ProfileField, value: string) => {
     const trimmedValue = value.trim();
@@ -118,7 +119,8 @@ export default function Profile() {
     formData.profile_name !== initialFormData.profile_name ||
     formData.profile_email !== initialFormData.profile_email ||
     formData.profession !== initialFormData.profession ||
-    formData.bio !== initialFormData.bio;
+    formData.bio !== initialFormData.bio || 
+    selectedFile !== null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -170,16 +172,21 @@ export default function Profile() {
       profile_email: formData.profile_email.trim(),
       profession: formData.profession.trim(),
       bio: formData.bio.trim(),
+      profile_image: null,
+      url_portfolio: formData.url_portfolio.trim(),
     };
 
     try {
-      const profile = await updateProfile(payload);
+      const profile = await updateProfile(payload, selectedFile);
       const nextData = {
         profile_name: profile.profile_name,
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
+        url_portfolio: profile.url_portfolio,
       };
+
+      setSelectedFile(null);
 
       setInitialFormData(nextData);
       setFormData({
@@ -187,18 +194,25 @@ export default function Profile() {
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
+        url_portfolio: profile.url_portfolio,
       });
 
       if (profile.profile_image) {
         setProfileImage(profile.profile_image);
       }
-    } catch {
+    } catch( error: any) {
       setFormData({
         profile_name: payload.profile_name,
         profile_email: payload.profile_email,
         profession: payload.profession,
         bio: payload.bio,
+        url_portfolio: payload.url_portfolio,
       });
+      
+      console.error("Error updating profile:");
+      console.error(error.response?.data);
+      console.error(error.response?.status);
+
     }
 
     setErrors(EMPTY_ERRORS);
@@ -212,27 +226,13 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    try {
-      const profile = await uploadProfilePhoto(file);
-      if (profile.profile_image) {
-        setProfileImage(profile.profile_image);
-      } else {
-        setProfileImage(URL.createObjectURL(file));
-      }
-    } catch {
-      setProfileImage(URL.createObjectURL(file));
-    }
-
+    setSelectedFile(file);
+    setProfileImage(URL.createObjectURL(file));
     setShowPhotoActions(false);
+
   };
 
   const handleRemovePhoto = async () => {
-    try {
-      await deleteProfilePhoto();
-    } catch {
-    // local.
-    }
-
     setProfileImage(DEFAULT_PROFILE_IMAGE);
     setShowPhotoActions(false);
     if (fileInputRef.current) {
@@ -253,12 +253,14 @@ export default function Profile() {
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
+          url_portfolio: profile.url_portfolio,
         });
         setInitialFormData({
           profile_name: profile.profile_name,
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
+          url_portfolio: profile.url_portfolio,
         });
         
         setProfileImage(profile.profile_image ?? DEFAULT_PROFILE_IMAGE);
