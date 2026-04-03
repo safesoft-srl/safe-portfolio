@@ -26,7 +26,7 @@ class UpdatePortfolioRequest extends FormRequest
             'profile_name' => 'sometimes|string|max:255',
             'profile_email' => 'sometimes|email',
             'profession' => 'sometimes|string|max:255',
-            'bio' => 'nullable|text',
+            'bio' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
