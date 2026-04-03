@@ -3,13 +3,22 @@
 namespace App\Services;
 
 use App\Models\Portfolio;
+use App\Services\ImageUploadService;
+
 
 class PortfolioService
 {
+    public function __construct(
+        private ImageUploadService $imageUploadService
+    ) {}
+
     public function create(array $data)
     {
+        $data = $this->handleProfileImage($data);
+
         return Portfolio::create($data);
     }
+
 
     public function getAll()
     {
@@ -29,9 +38,20 @@ class PortfolioService
     public function update(int $id, array $data)
     {
         $portfolio = Portfolio::findOrFail($id);
+        $data = $this->handleProfileImage($data);
         $portfolio->update($data);
 
-        return $portfolio;
+        return $portfolio->fresh();
+    }
+
+    private function handleProfileImage(array $data): array
+    {
+        if (isset($data['profile_image']) && $data['profile_image']) {
+            $data['profile_image'] = $this->imageUploadService
+                ->upload($data['profile_image']);
+        }
+
+        return $data;
     }
 
     public function delete(int $id)
