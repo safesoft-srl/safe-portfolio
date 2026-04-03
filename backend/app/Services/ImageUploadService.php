@@ -11,9 +11,9 @@ class ImageUploadService
         $uploadedFile = Cloudinary::upload(
             $file->getRealPath(),
             [
-                'folder' => 'portfolios'
+                'folder' => 'portfolios',
             ]
-        ); 
+        );
 
         return $uploadedFile->getSecurePath();
     }

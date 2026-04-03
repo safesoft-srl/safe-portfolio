@@ -200,7 +200,7 @@ export default function Profile() {
       if (profile.profile_image) {
         setProfileImage(profile.profile_image);
       }
-    } catch( error: any) {
+    } catch( error) {
       setFormData({
         profile_name: payload.profile_name,
         profile_email: payload.profile_email,
@@ -208,11 +208,7 @@ export default function Profile() {
         bio: payload.bio,
         url_portfolio: payload.url_portfolio,
       });
-      
-      console.error("Error updating profile:");
-      console.error(error.response?.data);
-      console.error(error.response?.status);
-
+      console.error("Error updating profile:", error);
     }
 
     setErrors(EMPTY_ERRORS);

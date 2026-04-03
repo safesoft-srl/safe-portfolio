@@ -21,10 +21,8 @@ Route::post('/resend-token', [ResendTokenController::class, 'resend']);
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\AuthController;
-
-
+use App\Http\Controllers\PortfolioController;
 
 Route::group([
     'middleware' => 'api',

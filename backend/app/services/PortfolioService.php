@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\Portfolio;
-use App\Services\ImageUploadService;
-
 
 class PortfolioService
 {
@@ -18,7 +16,6 @@ class PortfolioService
 
         return Portfolio::create($data);
     }
-
 
     public function getAll()
     {

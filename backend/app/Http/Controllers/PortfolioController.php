@@ -7,9 +7,7 @@ use App\Constants\ResponseMessages;
 use App\Http\Requests\StorePortfolioRequest;
 use App\Http\Requests\UpdatePortfolioRequest;
 use App\Services\PortfolioService;
-
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
