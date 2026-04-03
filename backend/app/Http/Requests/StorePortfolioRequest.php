@@ -23,12 +23,12 @@ class StorePortfolioRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'url_portfolio' => 'string|unique:portfolios',
+            'url_portfolio' => 'sometimes|nullable|string',
             'profile_name' => 'required|string|max:255',
             'profile_email' => 'required|email',
             'profession' => 'required|string|max:255',
             'bio' => 'nullable|string',
-            'profile_image' => 'nullable|string',
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 }
