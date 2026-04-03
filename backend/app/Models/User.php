@@ -21,6 +21,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'verified',
     ];
 
     /**
@@ -61,5 +62,25 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            Portfolio::create([
+                'user_id' => $user->id,
+                'profile_name' => $user->name,
+                'profile_email' => $user->email,
+                'profession' => '',
+                'bio' => '',
+                'profile_image' => null,
+                'url_portfolio' => '',
+            ]);
+        });
+    }
+
+    public function portfolios()
+    {
+        return $this->hasMany(Portfolio::class);
     }
 }

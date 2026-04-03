@@ -16,14 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  CaretUpDownIcon,
-  SparkleIcon,
-  CheckCircleIcon,
-  CreditCardIcon,
-  BellIcon,
-  SignOutIcon,
-} from "@phosphor-icons/react";
+import { CaretUpDownIcon, CheckCircleIcon, BellIcon, SignOutIcon } from "@phosphor-icons/react";
 import type { User } from "@/types/users";
 import { useAuthStore } from "@/lib/auth-store";
 
@@ -70,19 +63,8 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <SparkleIcon />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
                 <CheckCircleIcon />
                 Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon />
-                Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <BellIcon />

@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
@@ -13,15 +12,13 @@ import {
 } from "@/components/ui/sidebar";
 import {
   RowsIcon,
-  WaveformIcon,
-  CommandIcon,
-  TerminalIcon,
-  RobotIcon,
-  BookOpenIcon,
+  LayoutIcon,
+  UserIcon,
+  MedalIcon,
   GearIcon,
-  CropIcon,
-  ChartPieIcon,
-  MapTrifoldIcon,
+  BriefcaseIcon,
+  ChartBarIcon,
+  GraduationCapIcon,
 } from "@phosphor-icons/react";
 import { useAuthStore } from "@/lib/auth-store";
 
@@ -34,123 +31,46 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Safe Portfolio",
       logo: <RowsIcon />,
       plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: <WaveformIcon />,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: <CommandIcon />,
-      plan: "Free",
     },
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: <TerminalIcon />,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
+      title: "Panel",
+      url: "/dashboard",
+      icon: <LayoutIcon />,
     },
     {
-      title: "Models",
-      url: "#",
-      icon: <RobotIcon />,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Perfil",
+      url: "/dashboard/profile",
+      icon: <UserIcon />,
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: <BookOpenIcon />,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      title: "Proyectos",
+      url: "/dashboard/projects",
+      icon: <BriefcaseIcon />,
     },
     {
-      title: "Settings",
-      url: "#",
+      title: "Habilidades",
+      url: "/dashboard/skills",
+      icon: <MedalIcon />,
+    },
+    {
+      title: "Experiencia",
+      url: "/dashboard/experience",
+      icon: <GraduationCapIcon />,
+    },
+    {
+      title: "Configuración",
+      url: "/dashboard/configuration",
       icon: <GearIcon />,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: <CropIcon />,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: <ChartPieIcon />,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: <MapTrifoldIcon />,
+      title: "Reportes",
+      url: "/dashboard/reports",
+      icon: <ChartBarIcon />,
     },
   ],
 };
@@ -162,9 +82,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="mt-4">
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user || {}} />

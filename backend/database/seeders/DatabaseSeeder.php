@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Portfolio;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +20,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@safeportfolio.com',
             'password' => bcrypt('password123'),
         ]);
+
+        $this->call(UserSeeder::class);
+
+        Portfolio::factory(3)->create();
     }
 }

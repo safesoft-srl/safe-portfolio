@@ -1,5 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import Home from "./pages/Home";
+import DashboardHome from "./pages/DashboardHome";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
@@ -7,7 +11,7 @@ import { GuestRoute } from "./components/auth/GuestRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Landing page</div>,
+    element: <Home />,
   },
   {
     path: "/login",
@@ -25,7 +29,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <div>Register Page</div>,
+        element: <Register />,
       },
     ],
   },
@@ -39,11 +43,32 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <div>Dashboard Page</div>,
+            element: <DashboardHome />,
+          },
+
+          {
+            path: "profile",
+            element: <Profile />,
           },
           {
-            path: "test",
-            element: <div>Testing Page</div>,
+            path: "projects",
+            element: <div>Projects Page</div>,
+          },
+          {
+            path: "skills",
+            element: <div>Skills Page</div>,
+          },
+          {
+            path: "experience",
+            element: <div>Experience Page</div>,
+          },
+          {
+            path: "configuration",
+            element: <div>Configuration Page</div>,
+          },
+          {
+            path: "reports",
+            element: <div>Reports Page</div>,
           },
         ],
       },
