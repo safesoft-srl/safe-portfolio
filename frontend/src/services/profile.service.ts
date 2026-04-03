@@ -44,7 +44,7 @@ const unwrapData = (responseData: unknown): ApiProfilePayload | undefined => {
 };
        
 export async function getProfile(): Promise<ProfileData> {
-  const response = await http.get("/api/users/2/portfolio");
+  const response = await http.get("/api/me/portfolio");
   return toProfileData(unwrapData(response.data));
 }
 
@@ -64,7 +64,7 @@ export async function updateProfile(payload: ProfileData,
   }
 
   formData.append("_method", "PUT");
-  const response = await http.post("/api/portfolios/1",formData);
+  const response = await http.post("/api/me/portfolio",formData);
 
   return toProfileData(unwrapData(response.data));
 }
