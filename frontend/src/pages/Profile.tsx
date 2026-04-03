@@ -2,10 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  getProfile,
-  updateProfile,
-} from "@/services/profile.service";
+import { getProfile, updateProfile } from "@/services/profile.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -119,7 +116,7 @@ export default function Profile() {
     formData.profile_name !== initialFormData.profile_name ||
     formData.profile_email !== initialFormData.profile_email ||
     formData.profession !== initialFormData.profession ||
-    formData.bio !== initialFormData.bio || 
+    formData.bio !== initialFormData.bio ||
     selectedFile !== null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -200,7 +197,7 @@ export default function Profile() {
       if (profile.profile_image) {
         setProfileImage(profile.profile_image);
       }
-    } catch( error) {
+    } catch (error) {
       setFormData({
         profile_name: payload.profile_name,
         profile_email: payload.profile_email,
@@ -225,7 +222,6 @@ export default function Profile() {
     setSelectedFile(file);
     setProfileImage(URL.createObjectURL(file));
     setShowPhotoActions(false);
-
   };
 
   const handleRemovePhoto = async () => {
@@ -258,7 +254,7 @@ export default function Profile() {
           bio: profile.bio,
           url_portfolio: profile.url_portfolio,
         });
-        
+
         setProfileImage(profile.profile_image ?? DEFAULT_PROFILE_IMAGE);
         console.log("Loaded profile:", profile);
       } catch {
@@ -280,7 +276,9 @@ export default function Profile() {
       const target = event.target;
       if (!(target instanceof Element)) return;
 
-      const clickedInsideAlertDialog = Boolean(target.closest('[data-slot="alert-dialog-content"]'));
+      const clickedInsideAlertDialog = Boolean(
+        target.closest('[data-slot="alert-dialog-content"]')
+      );
       if (clickedInsideAlertDialog) return;
 
       if (photoActionsRef.current && !photoActionsRef.current.contains(target)) {
@@ -304,164 +302,169 @@ export default function Profile() {
       <section className="w-full rounded-2xl bg-[#13152e] px-7 py-8">
         <h2 className="mb-8 text-2xl font-semibold">Información Básica</h2>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
-        <div className="space-y-5">
-          <Label className="text-xs font-semibold text-slate-300">Foto de Perfil</Label>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
+          <div className="space-y-5">
+            <Label className="text-xs font-semibold text-slate-300">Foto de Perfil</Label>
 
-          <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
-            <Avatar className="h-60 w-60">
-              <AvatarImage src={profileImage} alt="Foto de perfil" />
-              <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white">👤</AvatarFallback>
-            </Avatar>
+            <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
+              <Avatar className="h-60 w-60">
+                <AvatarImage src={profileImage} alt="Foto de perfil" />
+                <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white">
+                  👤
+                </AvatarFallback>
+              </Avatar>
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
 
-            <button
-              type="button"
-              onClick={() => setShowPhotoActions((prev) => !prev)}
-              className="absolute bottom-2 left-2 inline-flex h-7 items-center gap-1 rounded-md border border-[#6d79ff]/70 bg-[#5562ed] px-2 text-xs font-medium text-white hover:bg-[#4d59da]"
-            >
-              <span aria-hidden="true" className="text-xs leading-none">✎</span>
-              Editar
-            </button>
+              <button
+                type="button"
+                onClick={() => setShowPhotoActions((prev) => !prev)}
+                className="absolute bottom-2 left-2 inline-flex h-7 items-center gap-1 rounded-md border border-[#6d79ff]/70 bg-[#5562ed] px-2 text-xs font-medium text-white hover:bg-[#4d59da]"
+              >
+                <span aria-hidden="true" className="text-xs leading-none">
+                  ✎
+                </span>
+                Editar
+              </button>
 
-            {showPhotoActions ? (
-              <div className="absolute left-2 top-full z-10 mt-2 w-36 rounded-md border border-[#2a2d46] bg-[#151a3f] p-1 shadow-lg">
-                <button
-                  type="button"
-                  onClick={handleUploadPhoto}
-                  className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a]"
-                >
-                  Subir foto
-                </button>
-                <AlertDialog>
-                  <AlertDialogTrigger
-                    disabled={!hasCustomPhoto}
-                    className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+              {showPhotoActions ? (
+                <div className="absolute left-2 top-full z-10 mt-2 w-36 rounded-md border border-[#2a2d46] bg-[#151a3f] p-1 shadow-lg">
+                  <button
+                    type="button"
+                    onClick={handleUploadPhoto}
+                    className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a]"
                   >
-                    Eliminar foto
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="border-[#2a2d46] bg-[#151a3f] text-slate-100">
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>¿Eliminar foto de perfil?</AlertDialogTitle>
-                      <AlertDialogDescription className="text-slate-300">
-                        Esta acción quitará tu foto actual y volverá a la imagen por defecto.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className="border-[#2a2d46] text-slate-300 hover:bg-[#1c1f38] hover:text-slate-200">
-                        Cancelar
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleRemovePhoto}
-                        className="bg-[#6c72ff] text-white hover:bg-[#5c61eb]"
-                      >
-                        Eliminar
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            ) : null}
+                    Subir foto
+                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger
+                      disabled={!hasCustomPhoto}
+                      className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+                    >
+                      Eliminar foto
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="border-[#2a2d46] bg-[#151a3f] text-slate-100">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Eliminar foto de perfil?</AlertDialogTitle>
+                        <AlertDialogDescription className="text-slate-300">
+                          Esta acción quitará tu foto actual y volverá a la imagen por defecto.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="border-[#2a2d46] text-slate-300 hover:bg-[#1c1f38] hover:text-slate-200">
+                          Cancelar
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={handleRemovePhoto}
+                          className="bg-[#6c72ff] text-white hover:bg-[#5c61eb]"
+                        >
+                          Eliminar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className="space-y-2.5">
+              <Label htmlFor="fullName" className="text-xs font-semibold text-slate-300">
+                Nombre Completo *
+              </Label>
+              <Input
+                id="fullName"
+                name="fullName"
+                type="text"
+                pattern="[A-Za-z ]+"
+                placeholder="Ej: Juan Perez"
+                value={formData.profile_name}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
+                className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.fullName ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.fullName}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2.5">
+              <Label htmlFor="email" className="text-xs font-semibold text-slate-300">
+                Correo *
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Ej: user@example.com"
+                value={formData.profile_email}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
+                className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.email ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.email}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2.5">
+              <Label htmlFor="profession" className="text-xs font-semibold text-slate-300">
+                Profesión *
+              </Label>
+              <Input
+                id="profession"
+                name="profession"
+                type="text"
+                placeholder="Ej: Desarrollador Full Stack"
+                value={formData.profession}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
+                className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.profession ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.profession}
+                </p>
+              ) : null}
+            </div>
           </div>
         </div>
 
-        <div className="space-y-5">
-          <div className="space-y-2.5">
-            <Label htmlFor="fullName" className="text-xs font-semibold text-slate-300">
-              Nombre Completo *
-            </Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              type="text" pattern="[A-Za-z ]+"
-              placeholder="Ej: Juan Perez"
-              value={formData.profile_name}
-              onChange={handleInputChange}
-              onBlur={handleFieldBlur}
-              style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            {errors.fullName ? (
-              <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                {errors.fullName}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="space-y-2.5">
-            <Label htmlFor="email" className="text-xs font-semibold text-slate-300">
-              Correo *
-            </Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Ej: user@example.com"
-              value={formData.profile_email}
-              onChange={handleInputChange}
-              onBlur={handleFieldBlur}
-              style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            {errors.email ? (
-              <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                {errors.email}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="space-y-2.5">
-            <Label htmlFor="profession" className="text-xs font-semibold text-slate-300">
-              Profesión *
-            </Label>
-            <Input
-              id="profession"
-              name="profession"
-              type="text"
-              placeholder="Ej: Desarrollador Full Stack"
-              value={formData.profession}
-              onChange={handleInputChange}
-              onBlur={handleFieldBlur}
-              style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            {errors.profession ? (
-              <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                {errors.profession}
-              </p>
-            ) : null}
-          </div>
+        <div className="mt-8 space-y-2.5">
+          <Label htmlFor="bio" className="text-xs font-semibold text-slate-300">
+            Biografía *
+          </Label>
+          <textarea
+            id="bio"
+            name="bio"
+            placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
+            value={formData.bio}
+            onChange={handleInputChange}
+            onBlur={handleFieldBlur}
+            rows={6}
+            style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
+            className="w-full rounded-xl border bg-[#1f2552] px-4 py-3 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          {errors.bio ? (
+            <p className="text-xs" style={{ color: "var(--destructive)" }}>
+              {errors.bio}
+            </p>
+          ) : null}
         </div>
-      </div>
-
-      <div className="mt-8 space-y-2.5">
-        <Label htmlFor="bio" className="text-xs font-semibold text-slate-300">
-          Biografía *
-        </Label>
-        <textarea
-          id="bio"
-          name="bio"
-          placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
-          value={formData.bio}
-          onChange={handleInputChange}
-          onBlur={handleFieldBlur}
-          rows={6}
-          style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
-          className="w-full rounded-xl border bg-[#1f2552] px-4 py-3 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-        />
-        {errors.bio ? (
-          <p className="text-xs" style={{ color: "var(--destructive)" }}>
-            {errors.bio}
-          </p>
-        ) : null}
-      </div>
 
         <div className="mt-6">
           <div className="flex justify-center gap-3">

@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/ModeToggle";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-} from "@/components/ui/breadcrumb";
+import { Breadcrumb, BreadcrumbList } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Outlet, Navigate } from "react-router-dom";
@@ -48,7 +45,9 @@ export default function UserLayout({ children }: { children?: React.ReactNode })
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
             <Breadcrumb>
-              <BreadcrumbList>{/* Breadcrumb items dinámicos irán aquí más adelante */}</BreadcrumbList>
+              <BreadcrumbList>
+                {/* Breadcrumb items dinámicos irán aquí más adelante */}
+              </BreadcrumbList>
             </Breadcrumb>
           </div>
           <div className="mr-5">

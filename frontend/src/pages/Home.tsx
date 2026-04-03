@@ -5,8 +5,7 @@ import { RowsIcon } from "@phosphor-icons/react";
 export default function Home() {
   const navigate = useNavigate();
   return (
-	<div className="min-h-screen bg-[#050816] bg-[url('/hero-bg.png')] bg-no-repeat bg-top bg-cover text-slate-100 font-heading">
-      
+    <div className="min-h-screen bg-[#050816] bg-[url('/hero-bg.png')] bg-no-repeat bg-top bg-cover text-slate-100 font-heading">
       <header className="border-b border-white/5 bg-[#050816]/70 backdrop-blur-md sticky top-0 z-20">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <Link to="/" className="flex items-center gap-2">
@@ -33,9 +32,7 @@ export default function Home() {
         </div>
       </header>
 
-      
       <main className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-12 md:flex-row md:items-center">
-        
         <section className="flex-1 space-y-6">
           <div className="space-y-3">
             <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
@@ -45,11 +42,10 @@ export default function Home() {
               </span>
             </h1>
             <p className="max-w-xl text-sm text-slate-300 sm:text-base">
-              Crea y gestiona tu portafolio en línea integrando proyectos, habilidades, experiencia y logros para
-              fortalecer tu marca personal.
+              Crea y gestiona tu portafolio en línea integrando proyectos, habilidades, experiencia
+              y logros para fortalecer tu marca personal.
             </p>
           </div>
-
         </section>
       </main>
     </div>

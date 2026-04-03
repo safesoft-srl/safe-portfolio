@@ -6,7 +6,7 @@ export type ProfileData = {
   profession: string;
   bio: string;
   profile_image: string | null;
-  url_portfolio:string;
+  url_portfolio: string;
 };
 
 type ApiProfilePayload = {
@@ -42,31 +42,30 @@ const unwrapData = (responseData: unknown): ApiProfilePayload | undefined => {
 
   return responseData as ApiProfilePayload;
 };
-       
+
 export async function getProfile(): Promise<ProfileData> {
   const response = await http.get("/api/me/portfolio");
   return toProfileData(unwrapData(response.data));
 }
 
-export async function updateProfile(payload: ProfileData,
-  file?: File|null
+export async function updateProfile(
+  payload: ProfileData,
+  file?: File | null
 ): Promise<ProfileData> {
   const formData = new FormData();
 
-  formData.append('profile_name',payload.profile_name);
-  formData.append('profile_email', payload.profile_email);
-  formData.append('profession', payload.profession);
-  formData.append('bio', payload.bio);
-  formData.append('url_portfolio', payload.url_portfolio);
-  
-  if(file) {
-    formData.append('profile_image', file);
+  formData.append("profile_name", payload.profile_name);
+  formData.append("profile_email", payload.profile_email);
+  formData.append("profession", payload.profession);
+  formData.append("bio", payload.bio);
+  formData.append("url_portfolio", payload.url_portfolio);
+
+  if (file) {
+    formData.append("profile_image", file);
   }
 
   formData.append("_method", "PUT");
-  const response = await http.post("/api/me/portfolio",formData);
+  const response = await http.post("/api/me/portfolio", formData);
 
   return toProfileData(unwrapData(response.data));
 }
-
-

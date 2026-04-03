@@ -29,10 +29,7 @@ function AlertDialogOverlay({ className, ...props }: AlertDialogPrimitive.Backdr
   );
 }
 
-function AlertDialogContent({
-  className,
-  ...props
-}: AlertDialogPrimitive.Popup.Props) {
+function AlertDialogContent({ className, ...props }: AlertDialogPrimitive.Popup.Props) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
@@ -77,11 +74,8 @@ function AlertDialogTitle({ className, ...props }: AlertDialogPrimitive.Title.Pr
     />
   );
 }
-    
-function AlertDialogDescription({
-  className,
-  ...props
-}: AlertDialogPrimitive.Description.Props) {
+
+function AlertDialogDescription({ className, ...props }: AlertDialogPrimitive.Description.Props) {
   return (
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"

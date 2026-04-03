@@ -16,12 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  CaretUpDownIcon,
-  CheckCircleIcon,
-  BellIcon,
-  SignOutIcon,
-} from "@phosphor-icons/react";
+import { CaretUpDownIcon, CheckCircleIcon, BellIcon, SignOutIcon } from "@phosphor-icons/react";
 import type { User } from "@/types/users";
 import { useAuthStore } from "@/lib/auth-store";
 

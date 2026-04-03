@@ -29,7 +29,7 @@ export default function Login() {
       const response = await api.post("/api/auth/login", { email, password });
       const token = response.data.data.access_token;
       localStorage.setItem("token", token);
-      
+
       return response.data;
     },
     onSuccess: (data) => {

@@ -33,7 +33,6 @@ export default function RegisterPage() {
 
   const navigate = useNavigate();
 
-
   const validateForm = () => {
     const newErrors: RegisterErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -62,7 +61,6 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-
   const handleContinue = async () => {
     setApiError("");
     if (validateForm()) {
@@ -82,7 +80,7 @@ export default function RegisterPage() {
           const errorData = await response.json();
           setApiError(errorData.message || "Hubo un error al registrar el usuario.");
         }
-      } catch  {
+      } catch {
         setApiError("Error de conexión con el servidor.");
       } finally {
         setIsLoading(false);
@@ -90,10 +88,9 @@ export default function RegisterPage() {
     }
   };
 
-
   const handleVerifyToken = async () => {
-      setApiError("");
-      setApiSuccess("");
+    setApiError("");
+    setApiSuccess("");
 
     if (!token.trim()) {
       setApiError("Debes ingresar el código de confirmación.");
@@ -127,32 +124,31 @@ export default function RegisterPage() {
     }
   };
 
-
   const handleResendToken = async () => {
-  setApiError("");
-  setApiSuccess("");
-  setIsLoading(true);
+    setApiError("");
+    setApiSuccess("");
+    setIsLoading(true);
 
-  try {
-    const response = await fetch("http://localhost:8000/api/resend-token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      const response = await fetch("http://localhost:8000/api/resend-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setApiSuccess(data.message || "Token reenviado correctamente");
-    } else {
-      setApiError(data.message || "Error al reenviar token.");
+      if (response.ok) {
+        setApiSuccess(data.message || "Token reenviado correctamente");
+      } else {
+        setApiError(data.message || "Error al reenviar token.");
+      }
+    } catch {
+      setApiError("Error de conexión con el servidor.");
+    } finally {
+      setIsLoading(false);
     }
-  } catch {
-    setApiError("Error de conexión con el servidor.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-[#111321] flex items-center justify-center p-4 font-sans text-slate-100">
@@ -190,7 +186,7 @@ export default function RegisterPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Tu nombre y apellido"
-                    className={`h-11 bg-[#1c1f38] ${errors.name ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                    className={`h-11 bg-[#1c1f38] ${errors.name ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
                   {errors.name && <p className="text-red-400 text-xs ml-1 mt-1">{errors.name}</p>}
                 </div>
@@ -205,7 +201,7 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tu@email.com"
-                    className={`h-11 w-full bg-[#1c1f38] ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                    className={`h-11 w-full bg-[#1c1f38] ${errors.email ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
                   {errors.email && <p className="text-red-400 text-xs ml-1 mt-1">{errors.email}</p>}
                 </div>
@@ -220,13 +216,18 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="........"
-                    className={`h-11 bg-[#1c1f38] ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
+                    className={`h-11 bg-[#1c1f38] ${errors.password ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
                   />
-                  {errors.password && <p className="text-red-400 text-xs ml-1 mt-1">{errors.password}</p>}
+                  {errors.password && (
+                    <p className="text-red-400 text-xs ml-1 mt-1">{errors.password}</p>
+                  )}
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="password-confirm" className="text-xs font-semibold text-slate-300 ml-1">
+                  <Label
+                    htmlFor="password-confirm"
+                    className="text-xs font-semibold text-slate-300 ml-1"
+                  >
                     Confirmar contraseña
                   </Label>
                   <Input
@@ -235,13 +236,15 @@ export default function RegisterPage() {
                     value={passwordConfirm}
                     onChange={(e) => setPasswordConfirm(e.target.value)}
                     placeholder="........"
-                    className={`h-11 bg-[#1c1f38] ${errors.passwordConfirm ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
+                    className={`h-11 bg-[#1c1f38] ${errors.passwordConfirm ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
                   />
-                  {errors.passwordConfirm && <p className="text-red-400 text-xs ml-1 mt-1">{errors.passwordConfirm}</p>}
+                  {errors.passwordConfirm && (
+                    <p className="text-red-400 text-xs ml-1 mt-1">{errors.passwordConfirm}</p>
+                  )}
                 </div>
 
-                <Button 
-                  onClick={handleContinue} 
+                <Button
+                  onClick={handleContinue}
                   disabled={isLoading}
                   className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
                 >
@@ -265,7 +268,7 @@ export default function RegisterPage() {
                   </div>
                 )}
                 <p className="text-sm text-slate-300 text-center mb-4">
-                  Hemos enviado un código de confirmación a <br/>
+                  Hemos enviado un código de confirmación a <br />
                   <span className="font-semibold text-white">{email || "tu correo"}</span>
                 </p>
 
@@ -291,7 +294,7 @@ export default function RegisterPage() {
                   >
                     {isLoading ? "Verificando..." : "Crear cuenta"}
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     onClick={handleResendToken}
