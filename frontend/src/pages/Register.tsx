@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 
 interface RegisterErrors {
   name?: string;
+  username?: string; 
   email?: string;
   password?: string;
   passwordConfirm?: string;
@@ -21,6 +22,7 @@ interface RegisterErrors {
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -33,13 +35,21 @@ export default function RegisterPage() {
 
   const navigate = useNavigate();
 
-
   const validateForm = () => {
     const newErrors: RegisterErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!name.trim()) {
       newErrors.name = "El nombre es obligatorio.";
+    }
+
+  
+    if (!username.trim()) {
+      newErrors.username = "El nombre de usuario es obligatorio.";
+    } else if (username.length < 3) {
+      newErrors.username = "Debe tener al menos 3 caracteres.";
+    } else if (/\s/.test(username)) {
+      newErrors.username = "No debe contener espacios.";
     }
 
     if (!email.trim()) {
@@ -62,7 +72,6 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-
   const handleContinue = async () => {
     setApiError("");
     if (validateForm()) {
@@ -73,7 +82,8 @@ export default function RegisterPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name, email, password }),
+         
+          body: JSON.stringify({ name, username, email, password }),
         });
 
         if (response.ok) {
@@ -82,7 +92,7 @@ export default function RegisterPage() {
           const errorData = await response.json();
           setApiError(errorData.message || "Hubo un error al registrar el usuario.");
         }
-      } catch  {
+      } catch {
         setApiError("Error de conexión con el servidor.");
       } finally {
         setIsLoading(false);
@@ -90,10 +100,9 @@ export default function RegisterPage() {
     }
   };
 
-
   const handleVerifyToken = async () => {
-      setApiError("");
-      setApiSuccess("");
+    setApiError("");
+    setApiSuccess("");
 
     if (!token.trim()) {
       setApiError("Debes ingresar el código de confirmación.");
@@ -116,7 +125,7 @@ export default function RegisterPage() {
       if (response.ok) {
         setApiSuccess(data.message || "Correo verificado exitosamente");
         navigate("/dashboard");
-        //       setTimeout(() => { navigate("/login");  }, 1500);
+        // setTimeout(() => { navigate("/login");  }, 1500);
       } else {
         setApiError(data.message || "Error al verificar token.");
       }
@@ -127,32 +136,31 @@ export default function RegisterPage() {
     }
   };
 
-
   const handleResendToken = async () => {
-  setApiError("");
-  setApiSuccess("");
-  setIsLoading(true);
+    setApiError("");
+    setApiSuccess("");
+    setIsLoading(true);
 
-  try {
-    const response = await fetch("http://localhost:8000/api/resend-token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      const response = await fetch("http://localhost:8000/api/resend-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setApiSuccess(data.message || "Token reenviado correctamente");
-    } else {
-      setApiError(data.message || "Error al reenviar token.");
+      if (response.ok) {
+        setApiSuccess(data.message || "Token reenviado correctamente");
+      } else {
+        setApiError(data.message || "Error al reenviar token.");
+      }
+    } catch {
+      setApiError("Error de conexión con el servidor.");
+    } finally {
+      setIsLoading(false);
     }
-  } catch {
-    setApiError("Error de conexión con el servidor.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-[#111321] flex items-center justify-center p-4 font-sans text-slate-100">
@@ -171,7 +179,7 @@ export default function RegisterPage() {
             className="flex transition-transform duration-500 ease-in-out w-full"
             style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
           >
-            {/* -------------------- STEP 1: Registration Form -------------------- */}
+            
             <div className="w-full shrink-0">
               <CardContent className="space-y-4 px-6 pt-2">
                 {step === 1 && apiError && (
@@ -193,6 +201,22 @@ export default function RegisterPage() {
                     className={`h-11 bg-[#1c1f38] ${errors.name ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
                   {errors.name && <p className="text-red-400 text-xs ml-1 mt-1">{errors.name}</p>}
+                </div>
+
+                
+                <div className="space-y-1">
+                  <Label htmlFor="username" className="text-xs font-semibold text-slate-300 ml-1">
+                    Nombre de usuario
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Tu nombre de usuario"
+                    className={`h-11 bg-[#1c1f38] ${errors.username ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                  />
+                  {errors.username && <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>}
                 </div>
 
                 <div className="space-y-1">
@@ -250,7 +274,7 @@ export default function RegisterPage() {
               </CardContent>
             </div>
 
-            {/* -------------------- STEP 2: Token Verification -------------------- */}
+            
             <div className="w-full shrink-0">
               <CardContent className="space-y-5 px-6 pt-2">
                 {step === 2 && apiError && (
