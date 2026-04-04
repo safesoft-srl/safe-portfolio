@@ -266,6 +266,7 @@ export default function RegisterPage() {
 
                 <Button 
                   onClick={handleContinue} 
+                  //onClick={() => setStep(2)} use this line to skip API and go directly to step 2 which is the slide efect
                   disabled={isLoading}
                   className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
                 >
@@ -311,7 +312,7 @@ export default function RegisterPage() {
                   <Button
                     onClick={handleVerifyToken}
                     disabled={isLoading || token.trim() === ""}
-                    className="w-full bg-[#10b981] hover:bg-[#059669] text-white h-11 rounded-lg font-medium tracking-wide"
+                    className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
                   >
                     {isLoading ? "Verificando..." : "Crear cuenta"}
                   </Button>
