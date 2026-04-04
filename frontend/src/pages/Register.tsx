@@ -44,6 +44,10 @@ export default function RegisterPage() {
       newErrors.name = "El nombre es obligatorio.";
     }
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 9c9a0bb (feat: added username in the register form)
     if (!username.trim()) {
       newErrors.username = "El nombre de usuario es obligatorio.";
     } else if (username.length < 3) {
@@ -82,7 +86,11 @@ export default function RegisterPage() {
           headers: {
             "Content-Type": "application/json",
           },
+<<<<<<< HEAD
 
+=======
+         
+>>>>>>> 9c9a0bb (feat: added username in the register form)
           body: JSON.stringify({ name, username, email, password }),
         });
 
@@ -125,7 +133,7 @@ export default function RegisterPage() {
       if (response.ok) {
         setApiSuccess(data.message || "Correo verificado exitosamente");
         navigate("/dashboard");
-        //       setTimeout(() => { navigate("/login");  }, 1500);
+        // setTimeout(() => { navigate("/login");  }, 1500);
       } else {
         setApiError(data.message || "Error al verificar token.");
       }
@@ -142,7 +150,11 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
+<<<<<<< HEAD
       const response = await fetch(`${URL_API}/api/resend-token`, {
+=======
+      const response = await fetch("http://localhost:8000/api/resend-token", {
+>>>>>>> 9c9a0bb (feat: added username in the register form)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -179,7 +191,7 @@ export default function RegisterPage() {
             className="flex transition-transform duration-500 ease-in-out w-full"
             style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
           >
-            {/* -------------------- STEP 1: Registration Form -------------------- */}
+            
             <div className="w-full shrink-0">
               <CardContent className="space-y-4 px-6 pt-2">
                 {step === 1 && apiError && (
@@ -205,6 +217,26 @@ export default function RegisterPage() {
                   />
                   {errors.name && <p className="text-red-400 text-xs ml-1 mt-1">{errors.name}</p>}
                 </div>
+<<<<<<< HEAD
+=======
+
+                
+                <div className="space-y-1">
+                  <Label htmlFor="username" className="text-xs font-semibold text-slate-300 ml-1">
+                    Nombre de usuario
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Tu nombre de usuario"
+                    className={`h-11 bg-[#1c1f38] ${errors.username ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                  />
+                  {errors.username && <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>}
+                </div>
+
+>>>>>>> 9c9a0bb (feat: added username in the register form)
                 <div className="space-y-1">
                   <Label htmlFor="username" className="text-xs font-semibold text-slate-300">
                     Nombre de usuario
@@ -283,7 +315,7 @@ export default function RegisterPage() {
               </CardContent>
             </div>
 
-            {/* -------------------- STEP 2: Token Verification -------------------- */}
+            
             <div className="w-full shrink-0">
               <CardContent className="space-y-5 px-6 pt-2">
                 {step === 2 && apiError && (
