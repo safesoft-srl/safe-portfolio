@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const API_URL = import.meta.env.VITE_API_URL;
 interface RegisterErrors {
   name?: string;
   email?: string;
@@ -66,7 +67,7 @@ export default function RegisterPage() {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        const response = await fetch("http://localhost:8000/api/register", {
+        const response = await fetch(`${API_URL}/api/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -100,7 +101,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/verify-email", {
+      const response = await fetch(`${API_URL}/api/verify-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,7 +131,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/resend-token", {
+      const response = await fetch(`${API_URL}/api/resend-token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
