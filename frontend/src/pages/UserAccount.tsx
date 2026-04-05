@@ -3,63 +3,34 @@ interface SectionProps {
   Biografia: string;
   Usuario: string;
   Descripcion: string;
+  correo: string
   imagen?: string;
 }
 
-function Section({ Datos, Biografia,imagen }: SectionProps) {
+function Section({ Usuario, Descripcion, Biografia,correo, imagen }: SectionProps) {
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>{Datos}</h2>
-
       <div style={styles.content}>
-        {/* Imagen para el perfil */}
-        <div style={styles.imageContainer}>
-          <img
-            src={imagen}
-            alt="Imagen de usuario"
-            style={styles.image}
-          />
-          <button style={styles.editButton}>Editar</button>
+        
+        {/* Imagen izquierda */}
+        <div style={styles.imageWrapper}>
+          <img src={imagen} alt="Usuario" style={styles.image} />
         </div>
 
-        {/* Formulario */}
-        <div style={styles.form}>
-          <label style={styles.label}>Nombre Completo *</label>
-          <input
-            type="text"
-            placeholder="Ej. Juan Perez"
-            style={styles.input}
-          />
+        {/* Texto derecha */}
+        <div style={styles.textContainer}>
+          <span style={styles.smallText}>Hey, I'm</span>
 
-          <label style={styles.label}>Correo *</label>
-          <input
-            type="email"
-            placeholder="Ej. user@example.com"
-            style={styles.input}
-          />
+          <h1 style={styles.name}>{Usuario}</h1>
 
-          <label style={styles.label}>Profesión *</label>
-          <input
-            type="text"
-            placeholder="Ej. Desarrollador Full Stack"
-            style={styles.input}
-          />
+          <h2 style={styles.profession}>
+             {Descripcion}
+           </h2>
+          <h3 style={styles.email}>
+           Email: {correo}
+           </h3>
+          <p style={styles.bio}>{Biografia}</p>
         </div>
-      </div>
-
-      {/* Biografía */}
-      <div>
-        <label style={styles.label}>{Biografia} *</label>
-        <textarea
-          placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
-          style={styles.textarea}
-        />
-      </div>
-
-      {/* Botones */}
-      <div style={styles.buttons}>
-        <button style={styles.saveButton}>Guardar Cambios</button>
-        <button style={styles.cancelButton}>Cancelar</button>
       </div>
     </div>
   );
@@ -69,11 +40,11 @@ export default function UserAccount() {
   return (
     <div style={styles.page}>
       <Section
-        Datos="Información Básica"
-        Biografia="Biografía"
-        Usuario="nombre de usuario"
-        Descripcion="Descripción del Usuario"
-        imagen="https://via.placeholder.com/150"
+        Usuario="Nombre de persona"
+        Descripcion="Profesion"
+        Biografia="Descripcion de la biografia"
+        correo="direccion de correo electronico"
+        imagen="Imagen del perfil"
       />
     </div>
   );
@@ -83,93 +54,77 @@ const styles: { [key: string]: React.CSSProperties } = {
   page: {
     backgroundColor: "#0f172a",
     minHeight: "100vh",
-    padding: "30px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    padding: "40px",
   },
+
   container: {
+    width: "1000px",
     backgroundColor: "#1e293b",
-    padding: "30px",
-    borderRadius: "12px",
-    width: "800px",
-    color: "white",
-    boxShadow: "0 0 20px rgba(0,0,0,0.4)",
+    borderRadius: "20px",
+    padding: "40px",
+    boxShadow: "0 0 30px rgba(0,0,0,0.5)",
   },
-  title: {
-    marginBottom: "20px",
-  },
+
   content: {
     display: "flex",
-    gap: "30px",
-    marginBottom: "20px",
-  },
-  imageContainer: {
-    display: "flex",
-    flexDirection: "column",
     alignItems: "center",
+    gap: "50px",
   },
+
+  imageWrapper: {
+    width: "350px",
+    height: "350px",
+    borderRadius: "40px",
+    overflow: "hidden",
+    background: "linear-gradient(135deg, #06b6d4, #22c55e)",
+    padding: "5px",
+  },
+
   image: {
-    width: "150px",
-    height: "150px",
-    borderRadius: "50%",
-    backgroundColor: "#334155",
-  },
-  editButton: {
-    marginTop: "10px",
-    backgroundColor: "#3b82f6",
-    border: "none",
-    padding: "6px 12px",
-    borderRadius: "6px",
-    color: "white",
-    cursor: "pointer",
-  },
-  form: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  label: {
-    fontSize: "14px",
-    color: "#cbd5f5",
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #334155",
-    backgroundColor: "#0f172a",
-    color: "white",
-  },
-  textarea: {
     width: "100%",
-    height: "100px",
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #334155",
-    backgroundColor: "#0f172a",
+    height: "100%",
+    objectFit: "cover",
+    borderRadius: "35px",
+  },
+
+  textContainer: {
+    flex: 1,
     color: "white",
-    marginTop: "5px",
   },
-  buttons: {
-    marginTop: "20px",
-    display: "flex",
-    gap: "10px",
-  },
-  saveButton: {
-    backgroundColor: "#6366f1",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: "8px",
-    color: "white",
-    cursor: "pointer",
-  },
-  cancelButton: {
-    backgroundColor: "transparent",
-    border: "none",
+
+  smallText: {
     color: "#94a3b8",
-    cursor: "pointer",
+    fontSize: "14px",
+  },
+
+  name: {
+    fontSize: "28px",
+    margin: "5px 0",
+  },
+
+  profession: {
+    fontSize: "48px",
+    fontWeight: "bold",
+    lineHeight: "1.2",
+  },
+
+  highlight: {
+    color: "#27e46d",
+  },
+
+  bio: {
+    marginTop: "20px",
+    color: "#cbd5e1",
+    lineHeight: "1.6",
+    maxWidth: "500px",
+  },
+  email: {
+    marginTop: "20px",
+    color: "#cbd5e1",
+    lineHeight: "1.6",
+    maxWidth: "500px",
   },
 };
-
-
