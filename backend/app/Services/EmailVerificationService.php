@@ -70,4 +70,7 @@ class EmailVerificationService
             Log::error('Excepción al enviar token: '.$e->getMessage());
         }
     }
+
+
+
 }
