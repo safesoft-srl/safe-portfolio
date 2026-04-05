@@ -14,9 +14,10 @@ class RegisterAccountController extends Controller
         try {
 
             $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'],
+                'username' => 'required|string|max:50',
                 'email' => 'required|string|email|max:255',
-                'password' => 'required|string|min:6',
+                'password' => 'required|string|min:8',
             ]);
 
             $account = User::where('email', $validatedData['email'])->first();
@@ -29,8 +30,20 @@ class RegisterAccountController extends Controller
                         'message' => 'Este correo ya está registrado y verificado',
                     ], 409);
                 }
+            
+             $usernameExists = User::where('username', $validatedData['username'])
+                    ->where('id', '!=', $account->id)
+                    ->exists();
+
+                if ($usernameExists) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Este nombre de usuario ya está en uso',
+                    ], 409);
+                }
 
                 $account->name = $validatedData['name'];
+                $account->username = $validatedData['username'];
                 $account->password = bcrypt($validatedData['password']);
                 $account->save();
 
@@ -42,8 +55,18 @@ class RegisterAccountController extends Controller
                 ], 200);
             }
 
+            $usernameExists = User::where('username', $validatedData['username'])->exists();
+
+            if ($usernameExists) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Este nombre de usuario ya está en uso',
+                ], 409);
+            }
+
             $account = User::create([
                 'name' => $validatedData['name'],
+                'username' => $validatedData['username'],
                 'email' => $validatedData['email'],
                 'password' => bcrypt($validatedData['password']),
                 'verified' => false,

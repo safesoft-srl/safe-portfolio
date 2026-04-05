@@ -256,7 +256,7 @@ export default function Profile() {
         });
 
         setProfileImage(profile.profile_image ?? DEFAULT_PROFILE_IMAGE);
-        console.log("Loaded profile:", profile);
+        
       } catch {
         // local.
       }
