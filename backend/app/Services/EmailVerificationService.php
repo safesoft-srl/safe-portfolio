@@ -4,14 +4,13 @@ namespace App\Services;
 
 use App\Models\EmailVerification;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class EmailVerificationService
 {
-protected $scriptUrl = 'https://script.google.com/macros/s/AKfycbwiBDgJ8Jo_piuHE2QLMplkJS7H1in-LACvzwmWYrghy_frdPu4okSohOqsmhJ_tzBbhQ/exec';
-
+    protected $scriptUrl = 'https://script.google.com/macros/s/AKfycbwiBDgJ8Jo_piuHE2QLMplkJS7H1in-LACvzwmWYrghy_frdPu4okSohOqsmhJ_tzBbhQ/exec';
 
     public function GenerateToken(User $account): EmailVerification
     {
@@ -51,28 +50,24 @@ protected $scriptUrl = 'https://script.google.com/macros/s/AKfycbwiBDgJ8Jo_piuHE
     //     Mail::raw("Tu código de verificación es: $token", function ($message) use ($email) {
     //         $message->to($email)
     //             ->subject('Código de verificación');
-     //    });
+    //    });
     // }
 
-
-  public function SendToken(string $email, string $token): void
+    public function SendToken(string $email, string $token): void
     {
         try {
             $response = Http::post($this->scriptUrl, [
                 'to' => $email,
-                'token' => $token
+                'token' => $token,
             ]);
 
             $result = $response->json();
 
-            if (!($result['success'] ?? false)) {
-                Log::error('Error enviando token: ' . ($result['error'] ?? 'Desconocido'));
+            if (! ($result['success'] ?? false)) {
+                Log::error('Error enviando token: '.($result['error'] ?? 'Desconocido'));
             }
         } catch (\Exception $e) {
-            Log::error('Excepción al enviar token: ' . $e->getMessage());
+            Log::error('Excepción al enviar token: '.$e->getMessage());
         }
     }
-
-
-
 }

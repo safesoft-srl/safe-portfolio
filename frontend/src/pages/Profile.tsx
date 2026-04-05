@@ -256,7 +256,6 @@ export default function Profile() {
         });
 
         setProfileImage(profile.profile_image ?? DEFAULT_PROFILE_IMAGE);
-        
       } catch {
         // local.
       }

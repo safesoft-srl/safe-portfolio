@@ -1,7 +1,7 @@
 import { http } from "@/services/http.service";
 
 export type ProfileData = {
-  id?:number
+  id?: number;
   profile_name: string;
   profile_email: string;
   profession: string;
@@ -11,7 +11,7 @@ export type ProfileData = {
 };
 
 type ApiProfilePayload = {
-  id:number;
+  id: number;
   name?: string;
   profile_name?: string;
   profile_email?: string;

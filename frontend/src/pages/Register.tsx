@@ -197,8 +197,8 @@ export default function RegisterPage() {
                     type="text"
                     value={name}
                     onChange={(e) => {
-                    const soloLetras = e.target.value.replace(/\d/g, "");
-                    setName(soloLetras);
+                      const soloLetras = e.target.value.replace(/\d/g, "");
+                      setName(soloLetras);
                     }}
                     placeholder="Tu nombre y apellido"
                     className={`h-11 bg-[#1c1f38] ${errors.name ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
@@ -215,9 +215,11 @@ export default function RegisterPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Tu nombre de usuario"
-                    className={`h-11 bg-[#1c1f38] ${errors.username ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                    className={`h-11 bg-[#1c1f38] ${errors.username ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
-                  {errors.username && <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>}
+                  {errors.username && (
+                    <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ml-1">

@@ -30,8 +30,8 @@ class RegisterAccountController extends Controller
                         'message' => 'Este correo ya está registrado y verificado',
                     ], 409);
                 }
-            
-             $usernameExists = User::where('username', $validatedData['username'])
+
+                $usernameExists = User::where('username', $validatedData['username'])
                     ->where('id', '!=', $account->id)
                     ->exists();
 
