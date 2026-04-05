@@ -12,7 +12,7 @@ function Section({ Datos, Biografia,imagen }: SectionProps) {
       <h2 style={styles.title}>{Datos}</h2>
 
       <div style={styles.content}>
-        {/* Imagen de perfil */}
+        {/* Imagen para el perfil */}
         <div style={styles.imageContainer}>
           <img
             src={imagen}
@@ -171,3 +171,5 @@ const styles: { [key: string]: React.CSSProperties } = {
     cursor: "pointer",
   },
 };
+
+
