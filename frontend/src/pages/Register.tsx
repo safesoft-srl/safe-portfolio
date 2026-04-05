@@ -196,7 +196,10 @@ export default function RegisterPage() {
                     id="name"
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                    const soloLetras = e.target.value.replace(/\d/g, "");
+                    setName(soloLetras);
+                    }}
                     placeholder="Tu nombre y apellido"
                     className={`h-11 bg-[#1c1f38] ${errors.name ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
