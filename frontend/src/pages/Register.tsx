@@ -44,10 +44,7 @@ export default function RegisterPage() {
       newErrors.name = "El nombre es obligatorio.";
     }
 
-<<<<<<< HEAD
-=======
   
->>>>>>> 9c9a0bb (feat: added username in the register form)
     if (!username.trim()) {
       newErrors.username = "El nombre de usuario es obligatorio.";
     } else if (username.length < 3) {
@@ -86,11 +83,7 @@ export default function RegisterPage() {
           headers: {
             "Content-Type": "application/json",
           },
-<<<<<<< HEAD
-
-=======
          
->>>>>>> 9c9a0bb (feat: added username in the register form)
           body: JSON.stringify({ name, username, email, password }),
         });
 
@@ -150,11 +143,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-<<<<<<< HEAD
       const response = await fetch(`${URL_API}/api/resend-token`, {
-=======
-      const response = await fetch("http://localhost:8000/api/resend-token", {
->>>>>>> 9c9a0bb (feat: added username in the register form)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -217,26 +206,6 @@ export default function RegisterPage() {
                   />
                   {errors.name && <p className="text-red-400 text-xs ml-1 mt-1">{errors.name}</p>}
                 </div>
-<<<<<<< HEAD
-=======
-
-                
-                <div className="space-y-1">
-                  <Label htmlFor="username" className="text-xs font-semibold text-slate-300 ml-1">
-                    Nombre de usuario
-                  </Label>
-                  <Input
-                    id="username"
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Tu nombre de usuario"
-                    className={`h-11 bg-[#1c1f38] ${errors.username ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
-                  />
-                  {errors.username && <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>}
-                </div>
-
->>>>>>> 9c9a0bb (feat: added username in the register form)
                 <div className="space-y-1">
                   <Label htmlFor="username" className="text-xs font-semibold text-slate-300">
                     Nombre de usuario
@@ -305,14 +274,8 @@ export default function RegisterPage() {
                   )}
                 </div>
 
-<<<<<<< HEAD
                 <Button
                   onClick={handleContinue}
-=======
-                <Button 
-                  onClick={handleContinue} 
-                  //onClick={() => setStep(2)} use this line to skip API and go directly to step 2 which is the slide efect
->>>>>>> e472811 (feat: the Crear cuenta's green  button color was changed to blue)
                   disabled={isLoading}
                   className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-9 rounded-lg font-medium tracking-wide mt-2 font-heading"
                 >
@@ -358,11 +321,7 @@ export default function RegisterPage() {
                   <Button
                     onClick={handleVerifyToken}
                     disabled={isLoading || token.trim() === ""}
-<<<<<<< HEAD
                     className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-9 rounded-lg font-medium tracking-wide font-heading"
-=======
-                    className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
->>>>>>> e472811 (feat: the Crear cuenta's green  button color was changed to blue)
                   >
                     {isLoading ? "Verificando..." : "Crear cuenta"}
                   </Button>
