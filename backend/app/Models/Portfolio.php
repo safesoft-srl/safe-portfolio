@@ -16,6 +16,7 @@ class Portfolio extends Model
         'profession',
         'bio',
         'profile_image',
+        'image_id',
         'url_portfolio',
     ];
 
