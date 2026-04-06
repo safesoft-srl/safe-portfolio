@@ -50,6 +50,7 @@ export default function Profile() {
     profile_email: "",
     profession: "",
     bio: "",
+    url_photo:DEFAULT_PROFILE_IMAGE,
     url_portfolio: "",
   });
   const [initialFormData, setInitialFormData] = useState({
@@ -57,6 +58,7 @@ export default function Profile() {
     profile_email: "",
     profession: "",
     bio: "",
+    url_photo:DEFAULT_PROFILE_IMAGE,
     url_portfolio: "",
   });
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
@@ -193,6 +195,7 @@ export default function Profile() {
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
+        url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
         url_portfolio: profile.url_portfolio,
       };
 
@@ -204,6 +207,7 @@ export default function Profile() {
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
+        url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
         url_portfolio: profile.url_portfolio,
       });
 
@@ -224,6 +228,7 @@ export default function Profile() {
         profile_email: payload.profile_email,
         profession: payload.profession,
         bio: payload.bio,
+        url_photo: payload.profile_image??DEFAULT_PROFILE_IMAGE,
         url_portfolio: payload.url_portfolio,
       });
       console.error("Error updating profile:", error);
@@ -242,7 +247,12 @@ export default function Profile() {
     if (!file) return;
 
     setSelectedFile(file);
+  
     setProfileImage(URL.createObjectURL(file));
+    setFormData({
+      ...formData,
+      url_photo:URL.createObjectURL(file),
+    });
     setShowPhotoActions(false);
   };
 
@@ -252,7 +262,14 @@ export default function Profile() {
     await deleteProfilePhoto(idPortfolio);
 
     setSelectedFile(null);
-    setProfileImage(DEFAULT_PROFILE_IMAGE);
+    setFormData({
+      ...formData,
+      url_photo:DEFAULT_PROFILE_IMAGE,
+    });
+    setInitialFormData({
+      ...formData,
+      url_photo:DEFAULT_PROFILE_IMAGE,
+    });
     setShowPhotoActions(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -277,6 +294,7 @@ export default function Profile() {
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
+          url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
           url_portfolio: profile.url_portfolio,
         });
         setInitialFormData({
@@ -284,6 +302,7 @@ export default function Profile() {
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
+          url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
           url_portfolio: profile.url_portfolio,
         });
 
@@ -339,7 +358,7 @@ export default function Profile() {
 
             <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
               <Avatar className="h-60 w-60">
-                <AvatarImage src={profileImage} alt="Foto de perfil" />
+                <AvatarImage src={formData.url_photo} alt="Foto de perfil" />
                 <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white">
                 </AvatarFallback>
               </Avatar>
