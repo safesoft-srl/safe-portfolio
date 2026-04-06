@@ -59,7 +59,7 @@ export default function Login() {
     e.preventDefault();
     setErrorMsg("");
     if (!email || !password) {
-      setErrorMsg("Please fill in all fields");
+      setErrorMsg("Por");
       return;
     }
     loginMutation.mutate();
@@ -126,7 +126,11 @@ export default function Login() {
               disabled={loginMutation.isPending}
               className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-9 rounded-lg font-medium tracking-wide disabled:opacity-50 font-heading"
             >
-              {loginMutation.isPending ? <CircleNotchIcon size={20} /> : "Iniciar Sesión"}
+              {loginMutation.isPending ? (
+                <CircleNotchIcon size={20} className="animate-spin" />
+              ) : (
+                "Iniciar Sesión"
+              )}
             </Button>
           </CardContent>
 
