@@ -82,7 +82,6 @@ export default function PublicPortfolio() {
           </nav>
 
           <div className="flex items-center gap-3">
-            
             <button className="flex h-9 w-9 items-center justify-center rounded-full border border-[#262b46] bg-[#181b36] text-slate-200 hover:border-[#3b4270] md:hidden">
               <List className="h-4 w-4" weight="bold" />
             </button>
@@ -114,13 +113,13 @@ export default function PublicPortfolio() {
 
               <h1 className="text-3xl font-semibold leading-snug text-white sm:text-4xl md:text-5xl">
                 <span className="block">
-                  <span className="text-[#6c72ff] text-5xl sm:text-5xl md:text-6xl">{profession}</span>
+                  <span className="text-[#6c72ff] text-5xl sm:text-5xl md:text-6xl">
+                    {profession}
+                  </span>
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-300">
-                {bio}
-              </p>
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-300">{bio}</p>
 
               <div className="mt-8" />
             </div>

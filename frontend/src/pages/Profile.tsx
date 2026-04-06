@@ -56,7 +56,7 @@ export default function Profile() {
     profile_email: "",
     profession: "",
     bio: "",
-    url_photo:DEFAULT_PROFILE_IMAGE,
+    url_photo: DEFAULT_PROFILE_IMAGE,
     url_portfolio: "",
   });
   const [initialFormData, setInitialFormData] = useState({
@@ -64,7 +64,7 @@ export default function Profile() {
     profile_email: "",
     profession: "",
     bio: "",
-    url_photo:DEFAULT_PROFILE_IMAGE,
+    url_photo: DEFAULT_PROFILE_IMAGE,
     url_portfolio: "",
   });
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
@@ -201,7 +201,7 @@ export default function Profile() {
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
-        url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
+        url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
         url_portfolio: profile.url_portfolio,
       };
 
@@ -213,7 +213,7 @@ export default function Profile() {
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
-        url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
+        url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
         url_portfolio: profile.url_portfolio,
       });
 
@@ -230,7 +230,7 @@ export default function Profile() {
         profile_email: payload.profile_email,
         profession: payload.profession,
         bio: payload.bio,
-        url_photo: payload.profile_image??DEFAULT_PROFILE_IMAGE,
+        url_photo: payload.profile_image ?? DEFAULT_PROFILE_IMAGE,
         url_portfolio: payload.url_portfolio,
       });
       console.error("Error updating profile:", error);
@@ -249,11 +249,11 @@ export default function Profile() {
     if (!file) return;
 
     setSelectedFile(file);
-  
+
     setProfileImage(URL.createObjectURL(file));
     setFormData({
       ...formData,
-      url_photo:URL.createObjectURL(file),
+      url_photo: URL.createObjectURL(file),
     });
     setShowPhotoActions(false);
 
@@ -263,30 +263,29 @@ export default function Profile() {
   };
 
   const handleRemovePhoto = async () => {
-  try {
+    try {
+      await deleteProfilePhoto(idPortfolio);
 
-    await deleteProfilePhoto(idPortfolio);
+      setSelectedFile(null);
+      setFormData({
+        ...formData,
+        url_photo: DEFAULT_PROFILE_IMAGE,
+      });
+      setInitialFormData({
+        ...formData,
+        url_photo: DEFAULT_PROFILE_IMAGE,
+      });
+      setShowPhotoActions(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
-    setSelectedFile(null);
-    setFormData({
-      ...formData,
-      url_photo:DEFAULT_PROFILE_IMAGE,
-    });
-    setInitialFormData({
-      ...formData,
-      url_photo:DEFAULT_PROFILE_IMAGE,
-    });
-    setShowPhotoActions(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      toast.success("La foto se ha eliminado correctamente.", {
+        style: TOAST_SUCCESS_STYLE,
+      });
+    } catch (error) {
+      console.error("Error deleting profile photo:", error);
     }
-
-    toast.success("La foto se ha eliminado correctamente.", {
-      style: TOAST_SUCCESS_STYLE,
-    });
-  } catch (error) {
-    console.error("Error deleting profile photo:", error);
-  }
   };
 
   useEffect(() => {
@@ -297,14 +296,16 @@ export default function Profile() {
         const profile = await getProfile();
         if (!isMounted) return;
 
-        if (profile.id) {setIdPortfolio(profile.id)}
+        if (profile.id) {
+          setIdPortfolio(profile.id);
+        }
 
         setFormData({
           profile_name: profile.profile_name,
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
-          url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
+          url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
           url_portfolio: profile.url_portfolio,
         });
         setInitialFormData({
@@ -312,7 +313,7 @@ export default function Profile() {
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
-          url_photo: profile.profile_image??DEFAULT_PROFILE_IMAGE,
+          url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
           url_portfolio: profile.url_portfolio,
         });
 
@@ -369,8 +370,7 @@ export default function Profile() {
             <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
               <Avatar className="h-60 w-60">
                 <AvatarImage src={formData.url_photo} alt="Foto de perfil" />
-                <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white">
-                </AvatarFallback>
+                <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white"></AvatarFallback>
               </Avatar>
 
               <input
