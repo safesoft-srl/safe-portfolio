@@ -65,7 +65,9 @@ export default function DashboardHome() {
           <h1 className="text-2xl font-bold tracking-tight text-white">
             ¡Bienvenido, {displayName}!
           </h1>
-          <p className="mt-1 text-sm text-slate-300 font-sans">Gestiona tu portafolio profesional</p>
+          <p className="mt-1 text-sm text-slate-300 font-sans">
+            Gestiona tu portafolio profesional
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -105,9 +107,7 @@ export default function DashboardHome() {
 
       <section className="mx-auto w-full max-w-7xl px-1">
         <div className="inline-flex items-center gap-2 rounded-md bg-[#151a3b] px-3 py-1.5">
-          <p className="text-xs text-slate-300 font-sans">
-            portfolio.dev.portafolios-digitales
-          </p>
+          <p className="text-xs text-slate-300 font-sans">portfolio.dev.portafolios-digitales</p>
           <button
             type="button"
             onClick={() => navigator.clipboard.writeText("portfolio.dev.portafolios-digitales")}
