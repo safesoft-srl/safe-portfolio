@@ -17,7 +17,7 @@ class ImageUploadService
 
         return [
             'url' => $uploadedFile->getSecurePath(),
-            'image_id' => $uploadedFile->getPublicId()
+            'image_id' => $uploadedFile->getPublicId(),
         ];
     }
 }
