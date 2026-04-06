@@ -29,6 +29,12 @@ const VALID_NAME_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
 const VALID_PROFESSION_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s/-]+$/;
 const EMAIL_REGEX = /^[a-z0-9]+@gmail\.com$/;
 
+const TOAST_SUCCESS_STYLE = {
+  background: "#6c72ff",
+  color: "#ffffff",
+  border: "1px solid #8b90ff",
+};
+
 type ProfileField = "fullName" | "email" | "profession" | "bio";
 
 const EMPTY_ERRORS: Record<ProfileField, string> = {
@@ -216,11 +222,7 @@ export default function Profile() {
       }
 
       toast.success("Los cambios se han guardado correctamente.", {
-        style: {
-          background: "#6c72ff",
-          color: "#ffffff",
-          border: "1px solid #8b90ff",
-        },
+        style: TOAST_SUCCESS_STYLE,
       });
     } catch (error) {
       setFormData({
@@ -254,6 +256,10 @@ export default function Profile() {
       url_photo:URL.createObjectURL(file),
     });
     setShowPhotoActions(false);
+
+    toast.success("La foto se ha cargado correctamente.", {
+      style: TOAST_SUCCESS_STYLE,
+    });
   };
 
   const handleRemovePhoto = async () => {
@@ -274,6 +280,10 @@ export default function Profile() {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+
+    toast.success("La foto se ha eliminado correctamente.", {
+      style: TOAST_SUCCESS_STYLE,
+    });
   } catch (error) {
     console.error("Error deleting profile photo:", error);
   }
@@ -389,7 +399,7 @@ export default function Profile() {
                     onClick={handleUploadPhoto}
                     className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a]"
                   >
-                    Subir foto
+                    {hasCustomPhoto ? "Actualizar foto" : "Subir foto"}
                   </button>
                   <AlertDialog>
                     <AlertDialogTrigger
@@ -483,7 +493,7 @@ export default function Profile() {
                 onChange={handleInputChange}
                 onBlur={handleFieldBlur}
                 style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
-                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü /-]+"
+                pattern=".*"
                 className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
               />
               {errors.profession ? (
@@ -532,6 +542,11 @@ export default function Profile() {
               onClick={() => {
                 setErrors(EMPTY_ERRORS);
                 setFormData(initialFormData);
+                setSelectedFile(null);
+                setProfileImage(initialFormData.url_photo || DEFAULT_PROFILE_IMAGE);
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = "";
+                }
               }}
               disabled={!hasUnsavedChanges}
               className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 transition-colors transition-transform duration-150 hover:bg-[#262b57] hover:border-[#5d68f5] hover:text-white hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:border-[#2a2d46] disabled:hover:text-slate-300"
