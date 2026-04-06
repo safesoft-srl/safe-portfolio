@@ -19,11 +19,11 @@ class AuthController extends Controller
         $loginValue = $request->input('email');
         $password = $request->input('password');
 
-        $fieldType = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $fieldType = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         $credentials = [
             $fieldType => $loginValue,
-            'password' => $password
+            'password' => $password,
         ];
 
         try {
