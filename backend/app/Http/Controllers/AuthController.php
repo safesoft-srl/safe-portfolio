@@ -15,17 +15,26 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
+        // El frontend envía todo en el campo 'email', pero internamente evaluamos si es usuario o correo
+        $loginValue = $request->input('email');
+        $password = $request->input('password');
+
+        $fieldType = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        $credentials = [
+            $fieldType => $loginValue,
+            'password' => $password
+        ];
 
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
-                return $this->errorResponse('Invalid credentials', 401);
+                return $this->errorResponse('Credenciales incorrectas.', 401);
             }
         } catch (JWTException $e) {
-            return $this->errorResponse('Could not create authentication token', 500);
+            return $this->errorResponse('No se pudo crear el token de autenticación.', 500);
         }
 
-        return $this->respondWithToken($token, 'Login successful');
+        return $this->respondWithToken($token, 'Inicio de sesión exitoso.');
     }
 
     /**
@@ -37,7 +46,7 @@ class AuthController extends Controller
     {
         // auth('api')->user() returns the logged-in user
         // using the bearer token sent in the headers.
-        return $this->successResponse(auth('api')->user(), 'User profile retrieved successfully');
+        return $this->successResponse(auth('api')->user(), 'Perfil de usuario recuperado exitosamente.');
     }
 
     /**
@@ -50,7 +59,7 @@ class AuthController extends Controller
         // This will blacklist the token so it can't be used again
         auth('api')->logout();
 
-        return $this->successResponse([], 'Successfully logged out');
+        return $this->successResponse([], 'Sesión cerrada exitosamente.');
     }
 
     /**
@@ -61,7 +70,7 @@ class AuthController extends Controller
     public function refresh()
     {
         // Gives a brand new token and invalidates the old one
-        return $this->respondWithToken(auth('api')->refresh(), 'Token refreshed successfully');
+        return $this->respondWithToken(auth('api')->refresh(), 'Token actualizado correctamente.');
     }
 
     /**
