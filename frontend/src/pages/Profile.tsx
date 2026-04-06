@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getProfile, updateProfile } from "@/services/profile.service";
+import { toast } from "sonner";
+import { deleteProfilePhoto, getProfile, updateProfile } from "@/services/profile.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,8 +24,10 @@ const DEFAULT_PROFILE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent(
   </svg>`
 )}`;
 
-const VALID_TEXT_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:()'"\-\n\r]+$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const VALID_TEXT_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:()'"/\-\n\r]+$/;
+const VALID_NAME_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
+const VALID_PROFESSION_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s/-]+$/;
+const EMAIL_REGEX = /^[a-z0-9]+@gmail\.com$/;
 
 type ProfileField = "fullName" | "email" | "profession" | "bio";
 
@@ -39,6 +42,7 @@ export default function Profile() {
   const [showPhotoActions, setShowPhotoActions] = useState(false);
   const [profileImage, setProfileImage] = useState<string>(DEFAULT_PROFILE_IMAGE);
   const hasCustomPhoto = profileImage !== DEFAULT_PROFILE_IMAGE;
+  const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const photoActionsRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
@@ -57,16 +61,20 @@ export default function Profile() {
   });
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [idPortfolio, setIdPortfolio] = useState<number>(0);
 
   const validateField = (field: ProfileField, value: string) => {
     const trimmedValue = value.trim();
 
     if (field === "fullName") {
       if (!trimmedValue) return "El nombre es obligatorio.";
-      if (trimmedValue.length < 2 || trimmedValue.length > 30) {
-        return "El nombre debe tener entre 2 y 30 caracteres.";
+      if (trimmedValue.length < 2 || trimmedValue.length > 50) {
+        return "El nombre debe tener entre 2 y 50 caracteres.";
       }
-      if (!VALID_TEXT_REGEX.test(trimmedValue)) {
+      if (/\d/.test(trimmedValue)) {
+        return "El nombre no debe contener números.";
+      }
+      if (!VALID_NAME_REGEX.test(trimmedValue)) {
         return "El nombre contiene caracteres inválidos.";
       }
       return "";
@@ -75,7 +83,7 @@ export default function Profile() {
     if (field === "email") {
       if (!trimmedValue) return "El correo electrónico es obligatorio.";
       if (!EMAIL_REGEX.test(trimmedValue)) {
-        return "El correo electrónico no tiene un formato válido.";
+        return "El correo no tiene un formato válido.";
       }
       return "";
     }
@@ -84,8 +92,11 @@ export default function Profile() {
       if (trimmedValue.length < 5) {
         return "La profesión debe tener al menos 5 caracteres.";
       }
-      if (!VALID_TEXT_REGEX.test(trimmedValue)) {
-        return "La profesión contiene caracteres inválidos.";
+      if (/\d/.test(trimmedValue)) {
+        return "La profesión no debe contener números.";
+      }
+      if (!VALID_PROFESSION_REGEX.test(trimmedValue)) {
+        return "La profesión contiene caracteres inválidos. Solo se permiten letras, espacios, '/' y '-'.";
       }
       return "";
     }
@@ -173,6 +184,8 @@ export default function Profile() {
       url_portfolio: formData.url_portfolio.trim(),
     };
 
+    setIsSaving(true);
+
     try {
       const profile = await updateProfile(payload, selectedFile);
       const nextData = {
@@ -197,6 +210,14 @@ export default function Profile() {
       if (profile.profile_image) {
         setProfileImage(profile.profile_image);
       }
+
+      toast.success("Los cambios se han guardado correctamente.", {
+        style: {
+          background: "#6c72ff",
+          color: "#ffffff",
+          border: "1px solid #8b90ff",
+        },
+      });
     } catch (error) {
       setFormData({
         profile_name: payload.profile_name,
@@ -209,6 +230,7 @@ export default function Profile() {
     }
 
     setErrors(EMPTY_ERRORS);
+    setIsSaving(false);
   };
 
   const handleUploadPhoto = () => {
@@ -225,11 +247,19 @@ export default function Profile() {
   };
 
   const handleRemovePhoto = async () => {
+  try {
+
+    await deleteProfilePhoto(idPortfolio);
+
+    setSelectedFile(null);
     setProfileImage(DEFAULT_PROFILE_IMAGE);
     setShowPhotoActions(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+  } catch (error) {
+    console.error("Error deleting profile photo:", error);
+  }
   };
 
   useEffect(() => {
@@ -239,6 +269,8 @@ export default function Profile() {
       try {
         const profile = await getProfile();
         if (!isMounted) return;
+
+        if (profile.id) {setIdPortfolio(profile.id)}
 
         setFormData({
           profile_name: profile.profile_name,
@@ -309,7 +341,6 @@ export default function Profile() {
               <Avatar className="h-60 w-60">
                 <AvatarImage src={profileImage} alt="Foto de perfil" />
                 <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white">
-                  👤
                 </AvatarFallback>
               </Avatar>
 
@@ -382,7 +413,7 @@ export default function Profile() {
                 id="fullName"
                 name="fullName"
                 type="text"
-                pattern="[A-Za-z ]+"
+                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+"
                 placeholder="Ej: Juan Perez"
                 value={formData.profile_name}
                 onChange={handleInputChange}
@@ -405,7 +436,8 @@ export default function Profile() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="Ej: user@example.com"
+                placeholder="Ej: example1@gmail.com"
+                pattern="[a-z0-9]+@gmail\\.com"
                 value={formData.profile_email}
                 onChange={handleInputChange}
                 onBlur={handleFieldBlur}
@@ -432,6 +464,7 @@ export default function Profile() {
                 onChange={handleInputChange}
                 onBlur={handleFieldBlur}
                 style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
+                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü /-]+"
                 className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
               />
               {errors.profession ? (
@@ -470,10 +503,10 @@ export default function Profile() {
             <button
               type="button"
               onClick={handleSave}
-              disabled={!hasUnsavedChanges}
-              className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white hover:bg-[#5c61eb] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff]"
+              disabled={!hasUnsavedChanges || isSaving}
+              className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white shadow-sm transition-colors transition-transform duration-150 hover:bg-[#8b90ff] hover:shadow-lg hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff]"
             >
-              Guardar Cambios
+              {isSaving ? "Guardando..." : "Guardar Cambios"}
             </button>
             <button
               type="button"
@@ -482,7 +515,7 @@ export default function Profile() {
                 setFormData(initialFormData);
               }}
               disabled={!hasUnsavedChanges}
-              className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 hover:bg-[#1c1f38] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+              className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 transition-colors transition-transform duration-150 hover:bg-[#262b57] hover:border-[#5d68f5] hover:text-white hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:border-[#2a2d46] disabled:hover:text-slate-300"
             >
               Cancelar
             </button>
