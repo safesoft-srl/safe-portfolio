@@ -72,13 +72,6 @@ export default function PublicPortfolio() {
 
           <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex">
             <button className="text-xs font-medium text-[#6c72ff]">Sobre mi</button>
-            {/*
-            <button className="text-xs text-slate-300 hover:text-white">Resume</button>
-            <button className="text-xs text-slate-300 hover:text-white">Services</button>
-            <button className="text-xs text-slate-300 hover:text-white">Portfolio</button>
-            <button className="text-xs text-slate-300 hover:text-white">Blog</button>
-            <button className="text-xs text-slate-300 hover:text-white">Contact</button>
-            */}
           </nav>
 
           <div className="flex items-center gap-3">
