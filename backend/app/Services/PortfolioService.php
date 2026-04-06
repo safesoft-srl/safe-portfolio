@@ -63,11 +63,11 @@ class PortfolioService
         return true;
     }
 
-    public function deletePhoto(int $id) 
+    public function deletePhoto(int $id)
     {
         $portfolio = Portfolio::findOrFail($id);
 
-        if(!$portfolio->image_id) {
+        if (! $portfolio->image_id) {
             return $portfolio;
         }
 
@@ -77,7 +77,7 @@ class PortfolioService
             'profile_image' => null,
             'image_id' => null,
         ]);
-        
+
         return $portfolio->fresh();
     }
 }

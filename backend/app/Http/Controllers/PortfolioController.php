@@ -102,7 +102,7 @@ class PortfolioController extends Controller
         );
     }
 
-    public function deletePhoto(int $id) 
+    public function deletePhoto(int $id)
     {
         $portfolio = $this->portfolioService->deletePhoto($id);
 
