@@ -59,7 +59,7 @@ export default function Login() {
     e.preventDefault();
     setErrorMsg("");
     if (!email || !password) {
-      setErrorMsg("Por");
+      setErrorMsg("Por favor, complete todos los campos");
       return;
     }
     loginMutation.mutate();
