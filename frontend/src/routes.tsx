@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import DashboardHome from "./pages/DashboardHome";
+import PublicPortfolio from "./pages/PublicPortfolio";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
@@ -12,6 +13,10 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/portfolio",
+    element: <PublicPortfolio />,
   },
   {
     path: "/login",
