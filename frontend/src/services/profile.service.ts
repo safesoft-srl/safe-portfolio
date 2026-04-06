@@ -1,6 +1,7 @@
 import { http } from "@/services/http.service";
 
 export type ProfileData = {
+  id?: number;
   profile_name: string;
   profile_email: string;
   profession: string;
@@ -10,6 +11,7 @@ export type ProfileData = {
 };
 
 type ApiProfilePayload = {
+  id: number;
   name?: string;
   profile_name?: string;
   profile_email?: string;
@@ -20,6 +22,7 @@ type ApiProfilePayload = {
 };
 
 const toProfileData = (payload: ApiProfilePayload | undefined): ProfileData => ({
+  id: payload?.id ?? 1,
   profile_name: payload?.profile_name ?? payload?.profile_name ?? "",
   profile_email: payload?.profile_email ?? "",
   profession: payload?.profession ?? "",

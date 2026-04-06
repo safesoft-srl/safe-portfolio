@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 const URL_API = import.meta.env.VITE_API_URL;
 interface RegisterErrors {
   name?: string;
+  username?: string;
   email?: string;
   password?: string;
   passwordConfirm?: string;
@@ -22,6 +23,7 @@ interface RegisterErrors {
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -42,6 +44,14 @@ export default function RegisterPage() {
       newErrors.name = "El nombre es obligatorio.";
     }
 
+    if (!username.trim()) {
+      newErrors.username = "El nombre de usuario es obligatorio.";
+    } else if (username.length < 3) {
+      newErrors.username = "Debe tener al menos 3 caracteres.";
+    } else if (/\s/.test(username)) {
+      newErrors.username = "No debe contener espacios.";
+    }
+
     if (!email.trim()) {
       newErrors.email = "El email es obligatorio.";
     } else if (!emailRegex.test(email)) {
@@ -50,8 +60,8 @@ export default function RegisterPage() {
 
     if (!password) {
       newErrors.password = "La contraseña es obligatoria.";
-    } else if (password.length < 6) {
-      newErrors.password = "La contraseña debe tener al menos 6 caracteres.";
+    } else if (password.length < 8) {
+      newErrors.password = "La contraseña debe tener al menos 8 caracteres.";
     }
 
     if (password !== passwordConfirm) {
@@ -72,7 +82,8 @@ export default function RegisterPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name, email, password }),
+
+          body: JSON.stringify({ name, username, email, password }),
         });
 
         if (response.ok) {
@@ -185,13 +196,31 @@ export default function RegisterPage() {
                     id="name"
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      const soloLetras = e.target.value.replace(/\d/g, "");
+                      setName(soloLetras);
+                    }}
                     placeholder="Tu nombre y apellido"
                     className={`h-11 bg-[#1c1f38] ${errors.name ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
                   {errors.name && <p className="text-red-400 text-xs ml-1 mt-1">{errors.name}</p>}
                 </div>
-
+                <div className="space-y-1">
+                  <Label htmlFor="username" className="text-xs font-semibold text-slate-300 ml-1">
+                    Nombre de usuario
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Tu nombre de usuario"
+                    className={`h-11 bg-[#1c1f38] ${errors.username ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                  />
+                  {errors.username && (
+                    <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>
+                  )}
+                </div>
                 <div className="space-y-1">
                   <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ml-1">
                     Email
@@ -291,7 +320,7 @@ export default function RegisterPage() {
                   <Button
                     onClick={handleVerifyToken}
                     disabled={isLoading || token.trim() === ""}
-                    className="w-full bg-[#10b981] hover:bg-[#059669] text-white h-11 rounded-lg font-medium tracking-wide"
+                    className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
                   >
                     {isLoading ? "Verificando..." : "Crear cuenta"}
                   </Button>
