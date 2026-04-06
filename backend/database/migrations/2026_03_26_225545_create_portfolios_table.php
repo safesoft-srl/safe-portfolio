@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('profession', 50);
             $table->text('bio');
             $table->string('profile_image')->nullable();
+            $table->string('image_id')->nullable();
             $table->string('url_portfolio')->nullable();
             $table->timestamps();
         });

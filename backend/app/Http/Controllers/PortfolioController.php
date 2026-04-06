@@ -80,7 +80,6 @@ class PortfolioController extends Controller
             );
         } catch (Throwable $e) {
             Log::error('Portfolio update failed', [
-                'portfolio_id' => $id,
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -99,6 +98,16 @@ class PortfolioController extends Controller
 
         return ApiResponse::success(
             null,
+            ResponseMessages::DELETED_SUCCESSFULLY
+        );
+    }
+
+    public function deletePhoto(int $id) 
+    {
+        $portfolio = $this->portfolioService->deletePhoto($id);
+
+        return ApiResponse::success(
+            $portfolio,
             ResponseMessages::DELETED_SUCCESSFULLY
         );
     }

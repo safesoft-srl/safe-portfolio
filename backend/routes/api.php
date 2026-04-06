@@ -47,6 +47,7 @@ Route::apiResource('portfolios', PortfolioController::class);
 Route::middleware('auth:api')->group(function () {
     Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
     Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
+    Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
 });
 
 Route::apiResource('/portfolios', PortfolioController::class);
