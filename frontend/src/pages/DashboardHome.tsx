@@ -16,7 +16,6 @@ export default function DashboardHome() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [id_portfolio, setIdPortfolio] = useState<number>(1);
-
   const validatePortfolioUrl = (value: string) => {
     const trimmed = value.trim();
 
@@ -38,6 +37,8 @@ export default function DashboardHome() {
     return "";
   };
 
+  const isValidSlug = slug.trim() !== "" && portfolioUrlError === "";
+
   const handleBlurPortfolioUrl = (event: React.FocusEvent<HTMLInputElement>) => {
     const message = validatePortfolioUrl(event.target.value);
     setPortfolioUrlError(message);
@@ -47,10 +48,8 @@ export default function DashboardHome() {
     const value = event.target.value;
     setSlug(value);
 
-    if (portfolioUrlError) {
-      const message = validatePortfolioUrl(value);
-      setPortfolioUrlError(message);
-    }
+    const message = validatePortfolioUrl(value);
+    setPortfolioUrlError(message);
   };
 
   const handlePublish = async () => {
@@ -147,7 +146,13 @@ export default function DashboardHome() {
           </div>
 
           <Button
-            className="inline-flex items-center gap-2 h-11 rounded-lg bg-[#6c72ff] px-4 text-xs sm:text-sm font-medium tracking-wide text-white hover:bg-[#5c61eb] font-heading"
+            disabled={!isValidSlug || loading}
+            className={`inline-flex items-center gap-2 h-11 rounded-lg px-4 text-xs sm:text-sm font-medium tracking-wide text-white font-heading
+                ${
+                  !isValidSlug || loading
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-[#6c72ff] hover:bg-[#5c61eb]"
+                }`}
             onClick={handlePublish}
           >
             {loading ? "Generando..." : "Generar Url Público"}
