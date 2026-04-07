@@ -2,16 +2,19 @@ import { useState } from "react";
 import { useAuthStore } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
 import { CopySimple } from "@phosphor-icons/react";
+import { checkSlug, publishPortfolio } from "@/services/url.service";
 
 export default function DashboardHome() {
   const user = useAuthStore((state) => state.user);
-  const navigate = useNavigate();
 
   const displayName = user?.name ?? "Usuario";
   const [portfolioUrl, setPortfolioUrl] = useState("");
+  const [slug, setSlug] = useState("");
   const [portfolioUrlError, setPortfolioUrlError] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
+
 
   const validatePortfolioUrl = (value: string) => {
     const trimmed = value.trim();
@@ -41,7 +44,7 @@ export default function DashboardHome() {
 
   const handleChangePortfolioUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setPortfolioUrl(value);
+    setSlug(value);
 
     if (portfolioUrlError) {
       const message = validatePortfolioUrl(value);
@@ -49,14 +52,33 @@ export default function DashboardHome() {
     }
   };
 
-  const handleOpenPortfolio = () => {
-    const message = validatePortfolioUrl(portfolioUrl);
-    setPortfolioUrlError(message);
+  const handlePublish = async () => {
 
-    if (message) return;
+    if (!slug) {
+      setPortfolioUrlError("ingresa un nombre para la url de tu portafolio.");
+      return;
+    }
+    try {
+      setLoading(true);
 
-    navigate("/portfolio");
-  };
+      const available = await checkSlug(slug);
+
+      if (!available) {
+        setPortfolioUrlError("La URL ya está en uso. Por favor elige otra.");
+        return;
+      }
+
+      const url = await publishPortfolio(slug);
+      const frontendUrl = `${window.location.origin}/p/${url}`;
+      setPortfolioUrl(frontendUrl);
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
 
   return (
     <>
@@ -78,14 +100,13 @@ export default function DashboardHome() {
                 <Input
                   type="text"
                   placeholder="Ej: portfolio.dev.hedi"
-                  value={portfolioUrl}
+                  value={slug}
                   onChange={handleChangePortfolioUrl}
                   onBlur={handleBlurPortfolioUrl}
-                  className={`h-11 w-72 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-                    portfolioUrlError
-                      ? "border-red-500 focus-visible:ring-red-500"
-                      : "border-transparent focus-visible:ring-[#5d68f5]"
-                  }`}
+                  className={`h-11 w-72 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${portfolioUrlError
+                    ? "border-red-500 focus-visible:ring-red-500"
+                    : "border-transparent focus-visible:ring-[#5d68f5]"
+                    }`}
                 />
                 {portfolioUrlError && (
                   <p className="pointer-events-none absolute left-0 top-full mt-0.5 text-xs text-red-400 max-w-xs">
@@ -98,24 +119,40 @@ export default function DashboardHome() {
 
           <Button
             className="inline-flex items-center gap-2 h-11 rounded-lg bg-[#6c72ff] px-4 text-xs sm:text-sm font-medium tracking-wide text-white hover:bg-[#5c61eb] font-heading"
-            onClick={handleOpenPortfolio}
+            onClick={handlePublish}
           >
-            Generar Portafolio Público
+             {loading ? "Generando..." : "Generar Url Público"}
           </Button>
         </div>
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-1">
         <div className="inline-flex items-center gap-2 rounded-md bg-[#151a3b] px-3 py-1.5">
-          <p className="text-xs text-slate-300 font-sans">portfolio.dev.portafolios-digitales</p>
-          <button
-            type="button"
-            onClick={() => navigator.clipboard.writeText("portfolio.dev.portafolios-digitales")}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white transition-colors"
-            aria-label="Copiar URL de portafolio"
-          >
-            <CopySimple size={16} weight="regular" />
-          </button>
+          <p className="text-xs text-slate-300 font-sans">
+            {portfolioUrl || "safeportfolio.url.dev"}
+          </p>
+
+          <div className="relative group">
+            <button
+              type="button"
+              onClick={() => {
+                if (!portfolioUrl) return;
+
+                navigator.clipboard.writeText(portfolioUrl);
+                setCopied(true);
+
+                setTimeout(() => setCopied(false), 2000);
+              }}
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white transition-colors"
+              aria-label="Copiar URL de portafolio"
+            >
+              <CopySimple size={16} weight="regular" />
+            </button>
+
+            <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black px-2 py-1 text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
+              {copied ? "Copiado!" : "Copy"}
+            </span>
+          </div>
         </div>
       </section>
     </>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import {useParams} from "react-router-dom";
 import { List } from "@phosphor-icons/react";
-import { getProfile, type ProfileData } from "@/services/profile.service";
+import { type ProfileData } from "@/services/profile.service";
+import { getPublicPortfolio } from "@/services/url.service";
 
 const DEFAULT_PROFILE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent(
   `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
@@ -17,6 +19,7 @@ const DEFAULT_PROFILE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent(
 
 export default function PublicPortfolio() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const { slug } = useParams();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +27,7 @@ export default function PublicPortfolio() {
 
     const loadProfile = async () => {
       try {
-        const data = await getProfile();
+        const data = await getPublicPortfolio(slug!);
         if (!isMounted) return;
         setProfile(data);
       } catch (error) {
@@ -39,7 +42,7 @@ export default function PublicPortfolio() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [slug]);
 
   const firstName = profile?.profile_name?.split(" ")[0] ?? "Usuario";
   const profession = profile?.profession ?? "";
