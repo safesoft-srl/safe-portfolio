@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CopySimple } from "@phosphor-icons/react";
-import { checkSlug, publishPortfolio } from "@/services/url.service";
+import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
+import { getProfile } from "@/services/profile.service";
 
 export default function DashboardHome() {
   const user = useAuthStore((state) => state.user);
@@ -14,6 +15,7 @@ export default function DashboardHome() {
   const [portfolioUrlError, setPortfolioUrlError] = useState("");
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [id_portfolio, setIdPortfolio] = useState<number>(1);
 
   const validatePortfolioUrl = (value: string) => {
     const trimmed = value.trim();
@@ -69,12 +71,42 @@ export default function DashboardHome() {
       const url = await publishPortfolio(slug);
       const frontendUrl = `${window.location.origin}/p/${url}`;
       setPortfolioUrl(frontendUrl);
+
+      await saveUrlPortfolio(frontendUrl, id_portfolio);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const getPortfolio = async () => {
+      try {
+        const portfolio = await getProfile();
+
+        if (!isMounted) return;
+
+        if (portfolio?.id) {
+          setIdPortfolio(portfolio.id);
+        }
+
+        if (portfolio?.url_portfolio) {
+          setPortfolioUrl(portfolio.url_portfolio);
+        }
+      } catch (error) {
+        console.error("Error loading portfolio:", error);
+      }
+    };
+
+    getPortfolio();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <>
@@ -99,11 +131,10 @@ export default function DashboardHome() {
                   value={slug}
                   onChange={handleChangePortfolioUrl}
                   onBlur={handleBlurPortfolioUrl}
-                  className={`h-11 w-72 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-                    portfolioUrlError
+                  className={`h-11 w-72 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${portfolioUrlError
                       ? "border-red-500 focus-visible:ring-red-500"
                       : "border-transparent focus-visible:ring-[#5d68f5]"
-                  }`}
+                    }`}
                 />
                 {portfolioUrlError && (
                   <p className="pointer-events-none absolute left-0 top-full mt-0.5 text-xs text-red-400 max-w-xs">
