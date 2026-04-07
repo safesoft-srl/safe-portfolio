@@ -123,13 +123,17 @@ class PortfolioController extends Controller
         );
     }
 
-    public function publish(Request $request)
+    public function getSlug(Request $request)
     {
         $validateData = $request->validate([
-                'slug' => 'required|string|exists:portfolios,portfolio_slug',
+                'slug' => 'required|string',
             ]);
         
         $userId = auth()->id();
+
+        if(!$userId) {
+            error_log("User ID: " . $userId);
+        }
         
         $portfolio = $this->portfolioService->getByUserId($userId);
 

@@ -48,6 +48,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
     Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
     Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
+    Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
+    Route::post('/me/portfolio/publish', [PortfolioController::class, 'getSlug']);
 });
 
 Route::apiResource('/portfolios', PortfolioController::class);
+
+Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);

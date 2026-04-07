@@ -18,6 +18,8 @@ class Portfolio extends Model
         'profile_image',
         'image_id',
         'url_portfolio',
+        'portfolio_slug',
+        'is_public',
     ];
 
     public function user()
