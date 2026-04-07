@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import defaultProfileImage from "@/assets/image.png";
 import { toast } from "sonner";
 import { deleteProfilePhoto, getProfile, updateProfile } from "@/services/profile.service";
 import {
@@ -16,13 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const DEFAULT_PROFILE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent(
-  `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
-    <rect width='200' height='200' rx='100' fill='#21264f'/>
-    <circle cx='100' cy='78' r='34' fill='#d8ddff'/>
-    <path d='M40 162c10-28 34-42 60-42s50 14 60 42' fill='#d8ddff'/>
-  </svg>`
-)}`;
+const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
 const VALID_TEXT_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:()'"/\-\n\r]+$/;
 const VALID_NAME_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
@@ -70,6 +65,7 @@ export default function Profile() {
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [idPortfolio, setIdPortfolio] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const validateField = (field: ProfileField, value: string) => {
     const trimmedValue = value.trim();
@@ -320,6 +316,10 @@ export default function Profile() {
         setProfileImage(profile.profile_image ?? DEFAULT_PROFILE_IMAGE);
       } catch {
         // local.
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -355,6 +355,17 @@ export default function Profile() {
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [showPhotoActions]);
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl items-center justify-center font-sans text-white">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[#6c72ff] border-t-transparent" />
+          <span className="text-sm text-slate-200">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-5xl font-sans text-white">
@@ -548,7 +559,7 @@ export default function Profile() {
                   fileInputRef.current.value = "";
                 }
               }}
-              disabled={!hasUnsavedChanges}
+              disabled={!hasUnsavedChanges || isSaving}
               className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 transition-colors transition-transform duration-150 hover:bg-[#262b57] hover:border-[#5d68f5] hover:text-white hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:border-[#2a2d46] disabled:hover:text-slate-300"
             >
               Cancelar
