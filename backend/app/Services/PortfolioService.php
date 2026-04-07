@@ -90,4 +90,12 @@ class PortfolioService
     {
         return Portfolio::where('portfolio_slug', $slug)->firstOrFail();
     }
+
+    public function saveUrlPortfolio(string $url, int $id)
+    {
+        $portfolio = Portfolio::findOrFail($id);
+        $portfolio->update(['url_portfolio' => $url]);
+
+        return $portfolio->fresh();
+    }
 }
