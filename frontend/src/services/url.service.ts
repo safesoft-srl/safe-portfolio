@@ -18,6 +18,6 @@ export async function getPublicPortfolio(slug: string): Promise<ProfileData> {
 }
 
 export async function saveUrlPortfolio(url: string, id: number) {
-    const response = await http.post(`/api/me/portfolio/save-url/${id}`, { url });
-    return response.data.data;
+  const response = await http.post(`/api/me/portfolio/save-url/${id}`, { url });
+  return response.data.data;
 }
