@@ -15,7 +15,6 @@ export default function DashboardHome() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
   const validatePortfolioUrl = (value: string) => {
     const trimmed = value.trim();
 
@@ -53,7 +52,6 @@ export default function DashboardHome() {
   };
 
   const handlePublish = async () => {
-
     if (!slug) {
       setPortfolioUrlError("ingresa un nombre para la url de tu portafolio.");
       return;
@@ -71,14 +69,12 @@ export default function DashboardHome() {
       const url = await publishPortfolio(slug);
       const frontendUrl = `${window.location.origin}/p/${url}`;
       setPortfolioUrl(frontendUrl);
-
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  }
-
+  };
 
   return (
     <>
@@ -103,10 +99,11 @@ export default function DashboardHome() {
                   value={slug}
                   onChange={handleChangePortfolioUrl}
                   onBlur={handleBlurPortfolioUrl}
-                  className={`h-11 w-72 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${portfolioUrlError
-                    ? "border-red-500 focus-visible:ring-red-500"
-                    : "border-transparent focus-visible:ring-[#5d68f5]"
-                    }`}
+                  className={`h-11 w-72 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                    portfolioUrlError
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : "border-transparent focus-visible:ring-[#5d68f5]"
+                  }`}
                 />
                 {portfolioUrlError && (
                   <p className="pointer-events-none absolute left-0 top-full mt-0.5 text-xs text-red-400 max-w-xs">
@@ -121,7 +118,7 @@ export default function DashboardHome() {
             className="inline-flex items-center gap-2 h-11 rounded-lg bg-[#6c72ff] px-4 text-xs sm:text-sm font-medium tracking-wide text-white hover:bg-[#5c61eb] font-heading"
             onClick={handlePublish}
           >
-             {loading ? "Generando..." : "Generar Url Público"}
+            {loading ? "Generando..." : "Generar Url Público"}
           </Button>
         </div>
       </section>

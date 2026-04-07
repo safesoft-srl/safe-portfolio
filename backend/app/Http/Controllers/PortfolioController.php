@@ -8,8 +8,8 @@ use App\Http\Requests\StorePortfolioRequest;
 use App\Http\Requests\UpdatePortfolioRequest;
 use App\Services\PortfolioService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class PortfolioController extends Controller
@@ -118,7 +118,7 @@ class PortfolioController extends Controller
         $exists = $this->portfolioService->slugExists($slug);
 
         return ApiResponse::success(
-            ['available' => !$exists],
+            ['available' => ! $exists],
             'el nombre esta disponible'
         );
     }
@@ -126,15 +126,15 @@ class PortfolioController extends Controller
     public function getSlug(Request $request)
     {
         $validateData = $request->validate([
-                'slug' => 'required|string',
-            ]);
-        
+            'slug' => 'required|string',
+        ]);
+
         $userId = auth()->id();
 
-        if(!$userId) {
-            error_log("User ID: " . $userId);
+        if (! $userId) {
+            error_log('User ID: '.$userId);
         }
-        
+
         $portfolio = $this->portfolioService->getByUserId($userId);
 
         $portfolio->update([
@@ -145,7 +145,7 @@ class PortfolioController extends Controller
         return ApiResponse::success([
             'slug' => $portfolio->portfolio_slug,
         ], 'Portafolio publicado exitosamente');
-        
+
     }
 
     public function publicPortfolio(string $slug)
@@ -154,7 +154,7 @@ class PortfolioController extends Controller
 
         return ApiResponse::success(
             $portfolio,
-            "Portafolio público recuperado exitosamente"
+            'Portafolio público recuperado exitosamente'
         );
-    } 
+    }
 }
