@@ -50,6 +50,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
     Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
     Route::post('/me/portfolio/publish', [PortfolioController::class, 'getSlug']);
+    Route::post('/me/portfolio/save-url/{id}', [PortfolioController::class, 'saveUrlPortfolio']);
 });
 
 Route::apiResource('/portfolios', PortfolioController::class);

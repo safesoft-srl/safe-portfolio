@@ -157,4 +157,21 @@ class PortfolioController extends Controller
             'Portafolio público recuperado exitosamente'
         );
     }
+
+    public function saveUrlPortfolio(Request $request, int $id)
+    {
+        $validateData = $request->validate([
+            'url' => 'required|url',
+        ]);
+
+        $portfolio = $this->portfolioService->saveUrlPortfolio(
+            $validateData['url'],
+            $id
+        );
+
+        return ApiResponse::success(
+            $portfolio,
+            'URL del portafolio guardada exitosamente'
+        );
+    }
 }
