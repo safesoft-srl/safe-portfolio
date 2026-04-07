@@ -22,7 +22,7 @@ const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 const VALID_TEXT_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:()'"/\-\n\r]+$/;
 const VALID_NAME_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
 const VALID_PROFESSION_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s/-]+$/;
-const EMAIL_REGEX = /^[a-z0-9]+@gmail\.com$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const TOAST_SUCCESS_STYLE = {
   background: "#6c72ff",
