@@ -30,9 +30,9 @@ export default function DashboardHome() {
       return "La URL no debe contener espacios.";
     }
 
-    const pattern = /^[a-z0-9.-]+$/;
+    const pattern = /^[a-z0-9.-]+$/i;
     if (!pattern.test(trimmed)) {
-      return "Solo se permiten letras minúsculas, números, puntos y guiones.";
+      return "Solo se permiten letras, números, puntos y guiones.";
     }
 
     return "";
