@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('profile_image')->nullable();
             $table->string('image_id')->nullable();
             $table->string('url_portfolio')->nullable();
+            $table->string('portfolio_slug')->unique()->nullable();
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
         });
     }

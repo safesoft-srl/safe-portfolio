@@ -1,22 +1,15 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { List } from "@phosphor-icons/react";
-import { getProfile, type ProfileData } from "@/services/profile.service";
+import defaultProfileImage from "@/assets/image.png";
+import { type ProfileData } from "@/services/profile.service";
+import { getPublicPortfolio } from "@/services/url.service";
 
-const DEFAULT_PROFILE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent(
-  `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
-    <rect width='200' height='200' rx='32' fill='#0b0c2a'/>
-    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-      <stop offset='0' stop-color='#22c55e'/>
-      <stop offset='1' stop-color='#6366f1'/>
-    </linearGradient>
-    <circle cx='100' cy='78' r='42' fill='url(#g)'/>
-    <circle cx='100' cy='74' r='34' fill='#0b0c2a'/>
-    <path d='M40 170c12-30 34-46 60-46s48 16 60 46' fill='#0f172a'/>
-  </svg>`
-)}`;
+const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
 export default function PublicPortfolio() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const { slug } = useParams();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +17,7 @@ export default function PublicPortfolio() {
 
     const loadProfile = async () => {
       try {
-        const data = await getProfile();
+        const data = await getPublicPortfolio(slug!);
         if (!isMounted) return;
         setProfile(data);
       } catch (error) {
@@ -39,7 +32,7 @@ export default function PublicPortfolio() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [slug]);
 
   const firstName = profile?.profile_name?.split(" ")[0] ?? "Usuario";
   const profession = profile?.profession ?? "";
@@ -49,7 +42,10 @@ export default function PublicPortfolio() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0a0b1e] text-slate-100 flex items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-[#6c72ff] border-t-transparent" />
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[#6c72ff] border-t-transparent" />
+          <span className="text-sm text-slate-200">Cargando...</span>
+        </div>
       </div>
     );
   }
@@ -72,13 +68,6 @@ export default function PublicPortfolio() {
 
           <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex">
             <button className="text-xs font-medium text-[#6c72ff]">Sobre mi</button>
-            {/*
-            <button className="text-xs text-slate-300 hover:text-white">Resume</button>
-            <button className="text-xs text-slate-300 hover:text-white">Services</button>
-            <button className="text-xs text-slate-300 hover:text-white">Portfolio</button>
-            <button className="text-xs text-slate-300 hover:text-white">Blog</button>
-            <button className="text-xs text-slate-300 hover:text-white">Contact</button>
-            */}
           </nav>
 
           <div className="flex items-center gap-3">

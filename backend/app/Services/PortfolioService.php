@@ -80,4 +80,14 @@ class PortfolioService
 
         return $portfolio->fresh();
     }
+
+    public function slugExists(string $slug): bool
+    {
+        return Portfolio::where('portfolio_slug', $slug)->exists();
+    }
+
+    public function getBySlug(string $slug)
+    {
+        return Portfolio::where('portfolio_slug', $slug)->firstOrFail();
+    }
 }
