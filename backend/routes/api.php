@@ -5,6 +5,11 @@ use App\Http\Controllers\RegisterAccountController;
 use App\Http\Controllers\ResendTokenController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SkillProjectController;
+
 Route::post('/register', [RegisterAccountController::class, 'register']);
 // Api   http://localhost:8000/api/register   (Para registrar nuevos usuarios)  JSON(name,email,password)
 Route::post('/verify-email', [EmailVerificationController::class, 'verifyEmail']);
@@ -21,8 +26,6 @@ Route::post('/resend-token', [ResendTokenController::class, 'resend']);
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PortfolioController;
 
 Route::group([
     'middleware' => 'api',
@@ -56,3 +59,10 @@ Route::middleware('auth:api')->group(function () {
 Route::apiResource('/portfolios', PortfolioController::class);
 
 Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);
+
+// routes for projects
+Route::get('/portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
+Route::apiResource('/projects', ProjectController::class);
+
+//routes for skills
+Route::apiResource('/skills',SkillProjectController::class);
