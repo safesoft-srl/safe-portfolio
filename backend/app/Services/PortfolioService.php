@@ -24,7 +24,9 @@ class PortfolioService
 
     public function getById(int $id)
     {
-        return Portfolio::findOrFail($id);
+        return Portfolio::with(['user.workExperiences' => function ($query) {
+            $query->where('is_visible', true)->orderBy('start_date', 'desc');
+        }])->findOrFail($id);
     }
 
     public function getByUserId(int $userId)
