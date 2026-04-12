@@ -44,9 +44,12 @@ Route::group([
 Route::apiResource('portfolios', PortfolioController::class);
 */
 
+use App\Http\Controllers\WorkExperienceController;
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
     Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
+    Route::apiResource('/me/work-experiences', WorkExperienceController::class)->except(['create', 'edit', 'show']);
 });
 
 Route::apiResource('/portfolios', PortfolioController::class);
