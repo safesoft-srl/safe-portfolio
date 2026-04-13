@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         // Create a test user for development and frontend testing
         \App\Models\User::factory()->create([
             'name' => 'Admin SafePortfolio',
+            'username' => 'admin_safe',
             'email' => 'admin@safeportfolio.com',
             'password' => bcrypt('password123'),
         ]);
