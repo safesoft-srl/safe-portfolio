@@ -45,7 +45,7 @@ interface WorkExperience {
   end_date: string | null;
   is_current: boolean;
   description: string;
-  achievements: string[];
+  achievements: string;
   is_visible: boolean;
   created_at: string;
   updated_at: string;
@@ -150,7 +150,7 @@ export default function ExperiencePage() {
         end_date: exp.end_date ? exp.end_date.split("T")[0] : "",
         is_current: exp.is_current,
         description: exp.description,
-        achievements: exp.achievements || [],
+        achievements: exp.achievements ? exp.achievements.split("\n").filter(Boolean) : [],
 
         is_visible: exp.is_visible,
       });
@@ -177,10 +177,15 @@ export default function ExperiencePage() {
   };
 
   const onSubmit = (data: ExperienceFormData) => {
+    const payload = {
+      ...data,
+      achievements: data.achievements ? data.achievements.join("\n") : "",
+    };
+
     if (editingExperience) {
-      updateMutation.mutate({ id: editingExperience.id, exp: data });
+      updateMutation.mutate({ id: editingExperience.id, exp: payload as unknown as ExperienceFormData });
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(payload as unknown as ExperienceFormData);
     }
   };
 
@@ -245,7 +250,7 @@ export default function ExperiencePage() {
                   <div className="text-sm">
                     <strong className="text-slate-400 block mb-1">Logros:</strong>
                     <ul className="list-disc pl-5 text-slate-300 space-y-1">
-                      {(exp.achievements || [])
+                      {(exp.achievements ? exp.achievements.split("\n") : [])
                         .filter(Boolean)
                         .map((ach: string, i: number) => (
                           <li key={i}>{ach}</li>
