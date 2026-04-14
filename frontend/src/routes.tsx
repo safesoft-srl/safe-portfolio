@@ -7,6 +7,7 @@ import DashboardHome from "./pages/DashboardHome";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
+import ExperiencePage from "./pages/Experience";
 
 export const router = createBrowserRouter([
   {
@@ -60,7 +61,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "experience",
-            element: <div>Experience Page</div>,
+            element: <ExperiencePage />,
           },
           {
             path: "configuration",
