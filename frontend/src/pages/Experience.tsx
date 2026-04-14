@@ -14,6 +14,7 @@ import {
   TrashIcon,
   BuildingsIcon,
   CircleNotchIcon,
+  X,
 } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ interface WorkExperience {
   end_date: string | null;
   is_current: boolean;
   description: string;
-  achievements: string;
+  achievements: string[];
   is_visible: boolean;
   created_at: string;
   updated_at: string;
@@ -59,7 +60,7 @@ const experienceSchema = z
     end_date: z.string().nullable().optional(),
     is_current: z.boolean(),
     description: z.string().min(1, "La descripción es requerida"),
-    achievements: z.string().nullable().optional(),
+    achievements: z.array(z.string()).nullable().optional(),
     is_visible: z.boolean(),
   })
   .superRefine((data, ctx) => {
@@ -129,7 +130,7 @@ export default function ExperiencePage() {
       is_current: false,
       is_visible: true,
       description: "",
-      achievements: "",
+      achievements: [],
       company: "",
       position: "",
       start_date: "",
@@ -149,7 +150,8 @@ export default function ExperiencePage() {
         end_date: exp.end_date ? exp.end_date.split("T")[0] : "",
         is_current: exp.is_current,
         description: exp.description,
-        achievements: exp.achievements || "",
+        achievements: exp.achievements || [],
+
         is_visible: exp.is_visible,
       });
     } else {
@@ -162,7 +164,7 @@ export default function ExperiencePage() {
         start_date: "",
         end_date: "",
         description: "",
-        achievements: "",
+        achievements: [],
       });
     }
     setIsModalOpen(true);
@@ -198,7 +200,7 @@ export default function ExperiencePage() {
       {/* List */}
       <div className="space-y-6">
         {isLoading ? (
-          <div className="text-slate-400 text-center py-12">Cargando experiencias...</div>
+          <div className="text-slate-400 text-center py-12">Cargando experiencia...</div>
         ) : experiences && experiences.length > 0 ? (
           experiences.map((exp) => (
             <motion.div
@@ -243,10 +245,9 @@ export default function ExperiencePage() {
                   <div className="text-sm">
                     <strong className="text-slate-400 block mb-1">Logros:</strong>
                     <ul className="list-disc pl-5 text-slate-300 space-y-1">
-                      {exp.achievements
-                        .split("\n")
+                      {(exp.achievements || [])
                         .filter(Boolean)
-                        .map((ach, i) => (
+                        .map((ach: string, i: number) => (
                           <li key={i}>{ach}</li>
                         ))}
                     </ul>
@@ -316,7 +317,7 @@ export default function ExperiencePage() {
         <DialogContent className="sm:max-w-2xl bg-slate-900 border-slate-800 flex flex-col max-h-[90vh]">
           <DialogHeader className="border-b border-slate-800 pb-4">
             <DialogTitle className="text-xl font-bold text-white">
-              {editingExperience ? "Editar Experiencia" : "Nueva Experiencia"}
+              {editingExperience ? "Editar Experiencia Laboral" : "Nueva Experiencia Laboral"}
             </DialogTitle>
           </DialogHeader>
 
@@ -406,18 +407,82 @@ export default function ExperiencePage() {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label className="text-slate-300">
-                  Logros{" "}
-                  <span className="text-slate-500 font-normal">(Opcional, un logro por línea)</span>
-                </Label>
-                <Textarea
-                  {...register("achievements")}
-                  rows={3}
-                  placeholder="Reduje los tiempos de carga en un 50%&#10;Implementé una nueva arquitectura..."
-                  className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
-                />
-              </div>
+              <Controller
+                name="achievements"
+                control={control}
+                render={({ field }) => {
+                  const valueArray = Array.isArray(field.value) ? field.value : [];
+                  return (
+                    <div className="space-y-3">
+                      <Label className="text-slate-300">
+                        Logros{" "}
+                        <span className="text-slate-500 font-normal">
+                          (Opcional, presiona Enter o el botón para agregar)
+                        </span>
+                      </Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="achievement-input"
+                          placeholder="Ej: Reduje los tiempos de carga en un 50%"
+                          className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 font-sans"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              const val = e.currentTarget.value.trim();
+                              if (val) {
+                                field.onChange([...valueArray, val]);
+                                e.currentTarget.value = "";
+                              }
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white border-none"
+                          onClick={() => {
+                            const input = document.getElementById(
+                              "achievement-input"
+                            ) as HTMLInputElement;
+                            if (input) {
+                              const val = input.value.trim();
+                              if (val) {
+                                field.onChange([...valueArray, val]);
+                                input.value = "";
+                              }
+                            }
+                          }}
+                        >
+                          <PlusIcon weight="bold" />
+                        </Button>
+                      </div>
+                      {valueArray.length > 0 && (
+                        <div className="flex flex-col gap-2">
+                          {valueArray.map((achievement, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-start justify-between w-full bg-slate-900 border border-slate-800 text-slate-300 px-3 py-2.5 rounded-lg text-xs"
+                            >
+                              <span className="flex-1">{achievement}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newArr = [...valueArray];
+                                  newArr.splice(idx, 1);
+                                  field.onChange(newArr);
+                                }}
+                                className="text-slate-500 hover:text-red-400 transition-colors ml-3 shrink-0 mt-0.5"
+                              >
+                                <X weight="bold" size={16} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }}
+              />
 
               <div className="flex items-center gap-3">
                 <Controller
