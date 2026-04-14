@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('profile_name', 50)->unique();
-            $table->string('profile_email', 50)->unique();
+            $table->string('profile_name', 50);
+            $table->string('profile_email', 50);
             $table->string('profession', 50);
-            $table->string('bio');
+            $table->text('bio');
             $table->string('profile_image')->nullable();
+            $table->string('image_id')->nullable();
             $table->string('url_portfolio')->nullable();
+            $table->string('portfolio_slug')->unique()->nullable();
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
         });
     }

@@ -21,10 +21,8 @@ Route::post('/resend-token', [ResendTokenController::class, 'resend']);
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\AuthController;
-
-
+use App\Http\Controllers\PortfolioController;
 
 Route::group([
     'middleware' => 'api',
@@ -38,9 +36,23 @@ Route::group([
     Route::get('/me', [AuthController::class, 'me'])->middleware('auth:api');
 });
 
-Route::get(
+/*Route::get(
     'users/{userId}/portfolio',
     [PortfolioController::class, 'getByUserId']
 );
 
 Route::apiResource('portfolios', PortfolioController::class);
+*/
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
+    Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
+    Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
+    Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
+    Route::post('/me/portfolio/publish', [PortfolioController::class, 'getSlug']);
+    Route::post('/me/portfolio/save-url/{id}', [PortfolioController::class, 'saveUrlPortfolio']);
+});
+
+Route::apiResource('/portfolios', PortfolioController::class);
+
+Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);

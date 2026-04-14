@@ -14,11 +14,13 @@ import { Label } from "@/components/ui/label";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 import { useAuthStore } from "@/lib/auth-store";
+import { EyeIcon, EyeClosedIcon, CircleNotchIcon } from "@phosphor-icons/react";
 import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   const navigate = useNavigate();
@@ -27,6 +29,9 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: async () => {
       const response = await api.post("/api/auth/login", { email, password });
+      const token = response.data.data.access_token;
+      localStorage.setItem("token", token);
+
       return response.data;
     },
     onSuccess: (data) => {
@@ -54,7 +59,7 @@ export default function Login() {
     e.preventDefault();
     setErrorMsg("");
     if (!email || !password) {
-      setErrorMsg("Please fill in all fields");
+      setErrorMsg("Por favor, complete todos los campos");
       return;
     }
     loginMutation.mutate();
@@ -81,14 +86,14 @@ export default function Login() {
             )}
             <div className="space-y-1">
               <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ">
-                Email
+                Usuario o Email
               </Label>
               <Input
                 id="email"
-                type="email"
+                type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="tu@email.com"
+                placeholder="Ej: pcalle"
                 className="h-9 bg-[#1c1f38] font-sans border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4"
               />
             </div>
@@ -97,14 +102,23 @@ export default function Login() {
               <Label htmlFor="password" className="text-xs font-semibold text-slate-300">
                 Contraseña
               </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="*********"
-                className="h-9 bg-[#1c1f38] font-sans border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="******"
+                  className="h-9 pr-10 bg-[#1c1f38] font-sans border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+                >
+                  {showPassword ? <EyeIcon size={20} /> : <EyeClosedIcon size={20} />}
+                </button>
+              </div>
             </div>
 
             <Button
@@ -112,7 +126,11 @@ export default function Login() {
               disabled={loginMutation.isPending}
               className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-9 rounded-lg font-medium tracking-wide disabled:opacity-50 font-heading"
             >
-              {loginMutation.isPending ? "Iniciando..." : "Iniciar Sesión"}
+              {loginMutation.isPending ? (
+                <CircleNotchIcon size={20} className="animate-spin" />
+              ) : (
+                "Iniciar Sesión"
+              )}
             </Button>
           </CardContent>
 
@@ -126,8 +144,11 @@ export default function Login() {
                 Regístrate
               </Link>
             </div>
-            <Link to="/" className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
-              Volver al inicio
+            <Link
+              to="/"
+              className="text-xs text-slate-400 hover:text-slate-200 transition-colors underline"
+            >
+              Volver a la página principal
             </Link>
           </CardFooter>
         </form>

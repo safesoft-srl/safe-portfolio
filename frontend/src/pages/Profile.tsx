@@ -2,12 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  deleteProfilePhoto,
-  getProfile,
-  updateProfile,
-  uploadProfilePhoto,
-} from "@/services/profile.service";
+import defaultProfileImage from "@/assets/image.png";
+import { toast } from "sonner";
+import { deleteProfilePhoto, getProfile, updateProfile } from "@/services/profile.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,16 +17,18 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const DEFAULT_PROFILE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent(
-  `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
-    <rect width='200' height='200' rx='100' fill='#21264f'/>
-    <circle cx='100' cy='78' r='34' fill='#d8ddff'/>
-    <path d='M40 162c10-28 34-42 60-42s50 14 60 42' fill='#d8ddff'/>
-  </svg>`
-)}`;
+const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
-const VALID_TEXT_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:()'"\-\n\r]+$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const VALID_TEXT_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:()'"/\-\n\r]+$/;
+const VALID_NAME_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
+const VALID_PROFESSION_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s/-]+$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+const TOAST_SUCCESS_STYLE = {
+  background: "#6c72ff",
+  color: "#ffffff",
+  border: "1px solid #8b90ff",
+};
 
 type ProfileField = "fullName" | "email" | "profession" | "bio";
 
@@ -44,6 +43,7 @@ export default function Profile() {
   const [showPhotoActions, setShowPhotoActions] = useState(false);
   const [profileImage, setProfileImage] = useState<string>(DEFAULT_PROFILE_IMAGE);
   const hasCustomPhoto = profileImage !== DEFAULT_PROFILE_IMAGE;
+  const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const photoActionsRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
@@ -51,24 +51,34 @@ export default function Profile() {
     profile_email: "",
     profession: "",
     bio: "",
+    url_photo: DEFAULT_PROFILE_IMAGE,
+    url_portfolio: "",
   });
   const [initialFormData, setInitialFormData] = useState({
     profile_name: "",
     profile_email: "",
     profession: "",
     bio: "",
+    url_photo: DEFAULT_PROFILE_IMAGE,
+    url_portfolio: "",
   });
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [idPortfolio, setIdPortfolio] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const validateField = (field: ProfileField, value: string) => {
     const trimmedValue = value.trim();
 
     if (field === "fullName") {
       if (!trimmedValue) return "El nombre es obligatorio.";
-      if (trimmedValue.length < 2 || trimmedValue.length > 30) {
-        return "El nombre debe tener entre 2 y 30 caracteres.";
+      if (trimmedValue.length < 2 || trimmedValue.length > 50) {
+        return "El nombre debe tener entre 2 y 50 caracteres.";
       }
-      if (!VALID_TEXT_REGEX.test(trimmedValue)) {
+      if (/\d/.test(trimmedValue)) {
+        return "El nombre no debe contener números.";
+      }
+      if (!VALID_NAME_REGEX.test(trimmedValue)) {
         return "El nombre contiene caracteres inválidos.";
       }
       return "";
@@ -77,7 +87,7 @@ export default function Profile() {
     if (field === "email") {
       if (!trimmedValue) return "El correo electrónico es obligatorio.";
       if (!EMAIL_REGEX.test(trimmedValue)) {
-        return "El correo electrónico no tiene un formato válido.";
+        return "El correo no tiene un formato válido.";
       }
       return "";
     }
@@ -86,8 +96,11 @@ export default function Profile() {
       if (trimmedValue.length < 5) {
         return "La profesión debe tener al menos 5 caracteres.";
       }
-      if (!VALID_TEXT_REGEX.test(trimmedValue)) {
-        return "La profesión contiene caracteres inválidos.";
+      if (/\d/.test(trimmedValue)) {
+        return "La profesión no debe contener números.";
+      }
+      if (!VALID_PROFESSION_REGEX.test(trimmedValue)) {
+        return "La profesión contiene caracteres inválidos. Solo se permiten letras, espacios, '/' y '-'.";
       }
       return "";
     }
@@ -118,7 +131,8 @@ export default function Profile() {
     formData.profile_name !== initialFormData.profile_name ||
     formData.profile_email !== initialFormData.profile_email ||
     formData.profession !== initialFormData.profession ||
-    formData.bio !== initialFormData.bio;
+    formData.bio !== initialFormData.bio ||
+    selectedFile !== null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -170,16 +184,24 @@ export default function Profile() {
       profile_email: formData.profile_email.trim(),
       profession: formData.profession.trim(),
       bio: formData.bio.trim(),
+      profile_image: null,
+      url_portfolio: formData.url_portfolio.trim(),
     };
 
+    setIsSaving(true);
+
     try {
-      const profile = await updateProfile(payload);
+      const profile = await updateProfile(payload, selectedFile);
       const nextData = {
         profile_name: profile.profile_name,
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
+        url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
+        url_portfolio: profile.url_portfolio,
       };
+
+      setSelectedFile(null);
 
       setInitialFormData(nextData);
       setFormData({
@@ -187,21 +209,31 @@ export default function Profile() {
         profile_email: profile.profile_email,
         profession: profile.profession,
         bio: profile.bio,
+        url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
+        url_portfolio: profile.url_portfolio,
       });
 
       if (profile.profile_image) {
         setProfileImage(profile.profile_image);
       }
-    } catch {
+
+      toast.success("Los cambios se han guardado correctamente.", {
+        style: TOAST_SUCCESS_STYLE,
+      });
+    } catch (error) {
       setFormData({
         profile_name: payload.profile_name,
         profile_email: payload.profile_email,
         profession: payload.profession,
         bio: payload.bio,
+        url_photo: payload.profile_image ?? DEFAULT_PROFILE_IMAGE,
+        url_portfolio: payload.url_portfolio,
       });
+      console.error("Error updating profile:", error);
     }
 
     setErrors(EMPTY_ERRORS);
+    setIsSaving(false);
   };
 
   const handleUploadPhoto = () => {
@@ -212,31 +244,43 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    try {
-      const profile = await uploadProfilePhoto(file);
-      if (profile.profile_image) {
-        setProfileImage(profile.profile_image);
-      } else {
-        setProfileImage(URL.createObjectURL(file));
-      }
-    } catch {
-      setProfileImage(URL.createObjectURL(file));
-    }
+    setSelectedFile(file);
 
+    setProfileImage(URL.createObjectURL(file));
+    setFormData({
+      ...formData,
+      url_photo: URL.createObjectURL(file),
+    });
     setShowPhotoActions(false);
+
+    toast.success("La foto se ha cargado correctamente.", {
+      style: TOAST_SUCCESS_STYLE,
+    });
   };
 
   const handleRemovePhoto = async () => {
     try {
-      await deleteProfilePhoto();
-    } catch {
-    // local.
-    }
+      await deleteProfilePhoto(idPortfolio);
 
-    setProfileImage(DEFAULT_PROFILE_IMAGE);
-    setShowPhotoActions(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      setSelectedFile(null);
+      setFormData({
+        ...formData,
+        url_photo: DEFAULT_PROFILE_IMAGE,
+      });
+      setInitialFormData({
+        ...formData,
+        url_photo: DEFAULT_PROFILE_IMAGE,
+      });
+      setShowPhotoActions(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      toast.success("La foto se ha eliminado correctamente.", {
+        style: TOAST_SUCCESS_STYLE,
+      });
+    } catch (error) {
+      console.error("Error deleting profile photo:", error);
     }
   };
 
@@ -248,23 +292,34 @@ export default function Profile() {
         const profile = await getProfile();
         if (!isMounted) return;
 
+        if (profile.id) {
+          setIdPortfolio(profile.id);
+        }
+
         setFormData({
           profile_name: profile.profile_name,
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
+          url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
+          url_portfolio: profile.url_portfolio,
         });
         setInitialFormData({
           profile_name: profile.profile_name,
           profile_email: profile.profile_email,
           profession: profile.profession,
           bio: profile.bio,
+          url_photo: profile.profile_image ?? DEFAULT_PROFILE_IMAGE,
+          url_portfolio: profile.url_portfolio,
         });
-        
+
         setProfileImage(profile.profile_image ?? DEFAULT_PROFILE_IMAGE);
-        console.log("Loaded profile:", profile);
       } catch {
         // local.
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -282,7 +337,9 @@ export default function Profile() {
       const target = event.target;
       if (!(target instanceof Element)) return;
 
-      const clickedInsideAlertDialog = Boolean(target.closest('[data-slot="alert-dialog-content"]'));
+      const clickedInsideAlertDialog = Boolean(
+        target.closest('[data-slot="alert-dialog-content"]')
+      );
       if (clickedInsideAlertDialog) return;
 
       if (photoActionsRef.current && !photoActionsRef.current.contains(target)) {
@@ -299,6 +356,17 @@ export default function Profile() {
     };
   }, [showPhotoActions]);
 
+  if (isLoading) {
+    return (
+      <div className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl items-center justify-center font-sans text-white">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[#6c72ff] border-t-transparent" />
+          <span className="text-sm text-slate-200">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto w-full max-w-5xl font-sans text-white">
       <h1 className="mb-4 text-3xl font-semibold">Mi Perfil</h1>
@@ -306,183 +374,193 @@ export default function Profile() {
       <section className="w-full rounded-2xl bg-[#13152e] px-7 py-8">
         <h2 className="mb-8 text-2xl font-semibold">Información Básica</h2>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
-        <div className="space-y-5">
-          <Label className="text-xs font-semibold text-slate-300">Foto de Perfil</Label>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
+          <div className="space-y-5">
+            <Label className="text-xs font-semibold text-slate-300">Foto de Perfil</Label>
 
-          <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
-            <Avatar className="h-60 w-60">
-              <AvatarImage src={profileImage} alt="Foto de perfil" />
-              <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white">👤</AvatarFallback>
-            </Avatar>
+            <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
+              <Avatar className="h-60 w-60">
+                <AvatarImage src={formData.url_photo} alt="Foto de perfil" />
+                <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white"></AvatarFallback>
+              </Avatar>
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
 
-            <button
-              type="button"
-              onClick={() => setShowPhotoActions((prev) => !prev)}
-              className="absolute bottom-2 left-2 inline-flex h-7 items-center gap-1 rounded-md border border-[#6d79ff]/70 bg-[#5562ed] px-2 text-xs font-medium text-white hover:bg-[#4d59da]"
-            >
-              <span aria-hidden="true" className="text-xs leading-none">✎</span>
-              Editar
-            </button>
+              <button
+                type="button"
+                onClick={() => setShowPhotoActions((prev) => !prev)}
+                className="absolute bottom-2 left-2 inline-flex h-7 items-center gap-1 rounded-md border border-[#6d79ff]/70 bg-[#5562ed] px-2 text-xs font-medium text-white hover:bg-[#4d59da]"
+              >
+                <span aria-hidden="true" className="text-xs leading-none">
+                  ✎
+                </span>
+                Editar
+              </button>
 
-            {showPhotoActions ? (
-              <div className="absolute left-2 top-full z-10 mt-2 w-36 rounded-md border border-[#2a2d46] bg-[#151a3f] p-1 shadow-lg">
-                <button
-                  type="button"
-                  onClick={handleUploadPhoto}
-                  className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a]"
-                >
-                  Subir foto
-                </button>
-                <AlertDialog>
-                  <AlertDialogTrigger
-                    disabled={!hasCustomPhoto}
-                    className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+              {showPhotoActions ? (
+                <div className="absolute left-2 top-full z-10 mt-2 w-36 rounded-md border border-[#2a2d46] bg-[#151a3f] p-1 shadow-lg">
+                  <button
+                    type="button"
+                    onClick={handleUploadPhoto}
+                    className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a]"
                   >
-                    Eliminar foto
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="border-[#2a2d46] bg-[#151a3f] text-slate-100">
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>¿Eliminar foto de perfil?</AlertDialogTitle>
-                      <AlertDialogDescription className="text-slate-300">
-                        Esta acción quitará tu foto actual y volverá a la imagen por defecto.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className="border-[#2a2d46] text-slate-300 hover:bg-[#1c1f38] hover:text-slate-200">
-                        Cancelar
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleRemovePhoto}
-                        className="bg-[#6c72ff] text-white hover:bg-[#5c61eb]"
-                      >
-                        Eliminar
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            ) : null}
+                    {hasCustomPhoto ? "Actualizar foto" : "Subir foto"}
+                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger
+                      disabled={!hasCustomPhoto}
+                      className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-200 hover:bg-[#232a5a] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+                    >
+                      Eliminar foto
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="border-[#2a2d46] bg-[#151a3f] text-slate-100">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Eliminar foto de perfil?</AlertDialogTitle>
+                        <AlertDialogDescription className="text-slate-300">
+                          Esta acción quitará tu foto actual y volverá a la imagen por defecto.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="border-[#2a2d46] text-slate-300 hover:bg-[#1c1f38] hover:text-slate-200">
+                          Cancelar
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={handleRemovePhoto}
+                          className="bg-[#6c72ff] text-white hover:bg-[#5c61eb]"
+                        >
+                          Eliminar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className="space-y-2.5">
+              <Label htmlFor="fullName" className="text-xs font-semibold text-slate-300">
+                Nombre Completo *
+              </Label>
+              <Input
+                id="fullName"
+                name="fullName"
+                type="text"
+                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+"
+                placeholder="Ej: Juan Perez"
+                value={formData.profile_name}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
+                className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.fullName ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.fullName}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2.5">
+              <Label htmlFor="email" className="text-xs font-semibold text-slate-300">
+                Correo *
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Ej: example1@gmail.com"
+                pattern="[a-z0-9]+@gmail\\.com"
+                value={formData.profile_email}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
+                className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.email ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.email}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2.5">
+              <Label htmlFor="profession" className="text-xs font-semibold text-slate-300">
+                Profesión *
+              </Label>
+              <Input
+                id="profession"
+                name="profession"
+                type="text"
+                placeholder="Ej: Desarrollador Full Stack"
+                value={formData.profession}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
+                pattern=".*"
+                className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.profession ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.profession}
+                </p>
+              ) : null}
+            </div>
           </div>
         </div>
 
-        <div className="space-y-5">
-          <div className="space-y-2.5">
-            <Label htmlFor="fullName" className="text-xs font-semibold text-slate-300">
-              Nombre Completo *
-            </Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              type="text" pattern="[A-Za-z ]+"
-              placeholder="Ej: Juan Perez"
-              value={formData.profile_name}
-              onChange={handleInputChange}
-              onBlur={handleFieldBlur}
-              style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            {errors.fullName ? (
-              <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                {errors.fullName}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="space-y-2.5">
-            <Label htmlFor="email" className="text-xs font-semibold text-slate-300">
-              Correo *
-            </Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Ej: user@example.com"
-              value={formData.profile_email}
-              onChange={handleInputChange}
-              onBlur={handleFieldBlur}
-              style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            {errors.email ? (
-              <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                {errors.email}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="space-y-2.5">
-            <Label htmlFor="profession" className="text-xs font-semibold text-slate-300">
-              Profesión *
-            </Label>
-            <Input
-              id="profession"
-              name="profession"
-              type="text"
-              placeholder="Ej: Desarrollador Full Stack"
-              value={formData.profession}
-              onChange={handleInputChange}
-              onBlur={handleFieldBlur}
-              style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-            />
-            {errors.profession ? (
-              <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                {errors.profession}
-              </p>
-            ) : null}
-          </div>
+        <div className="mt-8 space-y-2.5">
+          <Label htmlFor="bio" className="text-xs font-semibold text-slate-300">
+            Biografía *
+          </Label>
+          <textarea
+            id="bio"
+            name="bio"
+            placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
+            value={formData.bio}
+            onChange={handleInputChange}
+            onBlur={handleFieldBlur}
+            rows={6}
+            style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
+            className="w-full rounded-xl border bg-[#1f2552] px-4 py-3 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          {errors.bio ? (
+            <p className="text-xs" style={{ color: "var(--destructive)" }}>
+              {errors.bio}
+            </p>
+          ) : null}
         </div>
-      </div>
-
-      <div className="mt-8 space-y-2.5">
-        <Label htmlFor="bio" className="text-xs font-semibold text-slate-300">
-          Biografía *
-        </Label>
-        <textarea
-          id="bio"
-          name="bio"
-          placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
-          value={formData.bio}
-          onChange={handleInputChange}
-          onBlur={handleFieldBlur}
-          rows={6}
-          style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
-          className="w-full rounded-xl border bg-[#1f2552] px-4 py-3 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-        />
-        {errors.bio ? (
-          <p className="text-xs" style={{ color: "var(--destructive)" }}>
-            {errors.bio}
-          </p>
-        ) : null}
-      </div>
 
         <div className="mt-6">
           <div className="flex justify-center gap-3">
             <button
               type="button"
               onClick={handleSave}
-              disabled={!hasUnsavedChanges}
-              className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white hover:bg-[#5c61eb] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff]"
+              disabled={!hasUnsavedChanges || isSaving}
+              className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white shadow-sm transition-colors transition-transform duration-150 hover:bg-[#8b90ff] hover:shadow-lg hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff]"
             >
-              Guardar Cambios
+              {isSaving ? "Guardando..." : "Guardar Cambios"}
             </button>
             <button
               type="button"
               onClick={() => {
                 setErrors(EMPTY_ERRORS);
                 setFormData(initialFormData);
+                setSelectedFile(null);
+                setProfileImage(initialFormData.url_photo || DEFAULT_PROFILE_IMAGE);
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = "";
+                }
               }}
-              disabled={!hasUnsavedChanges}
-              className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 hover:bg-[#1c1f38] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+              disabled={!hasUnsavedChanges || isSaving}
+              className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 transition-colors transition-transform duration-150 hover:bg-[#262b57] hover:border-[#5d68f5] hover:text-white hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:border-[#2a2d46] disabled:hover:text-slate-300"
             >
               Cancelar
             </button>

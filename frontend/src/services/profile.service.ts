@@ -1,31 +1,34 @@
 import { http } from "@/services/http.service";
 
 export type ProfileData = {
+  id?: number;
   profile_name: string;
   profile_email: string;
   profession: string;
   bio: string;
   profile_image: string | null;
-  url_portfolio:"";
+  url_portfolio: string;
 };
 
 type ApiProfilePayload = {
+  id: number;
   name?: string;
   profile_name?: string;
   profile_email?: string;
   profession?: string | null;
   bio?: string | null;
-  avatar_url?: string | null;
-  avatarUrl?: string | null;
+  profile_image?: string | null;
+  url_portfolio?: string | null;
 };
 
 const toProfileData = (payload: ApiProfilePayload | undefined): ProfileData => ({
+  id: payload?.id ?? 1,
   profile_name: payload?.profile_name ?? payload?.profile_name ?? "",
   profile_email: payload?.profile_email ?? "",
   profession: payload?.profession ?? "",
   bio: payload?.bio ?? "",
-  profile_image: payload?.avatar_url ?? payload?.avatarUrl ?? null,
-  url_portfolio: "",
+  profile_image: payload?.profile_image ?? null,
+  url_portfolio: payload?.url_portfolio ?? "",
 });
 
 const unwrapData = (responseData: unknown): ApiProfilePayload | undefined => {
@@ -44,35 +47,32 @@ const unwrapData = (responseData: unknown): ApiProfilePayload | undefined => {
 };
 
 export async function getProfile(): Promise<ProfileData> {
-  const response = await http.get("/api/users/1/portfolio");
-  console.log("API response:", response.data);
+  const response = await http.get("/api/me/portfolio");
   return toProfileData(unwrapData(response.data));
 }
 
-export async function updateProfile(payload: Omit<ProfileData, "profile_image" | "url_portfolio">): Promise<ProfileData> {
-  const response = await http.patch("/api/users/1/portfolio", {
-    name: payload.profile_name,
-    email: payload.profile_email,
-    profession: payload.profession,
-    bio: payload.bio,
-  });
-
-  return toProfileData(unwrapData(response.data));
-}
-
-export async function uploadProfilePhoto(file: File): Promise<ProfileData> {
+export async function updateProfile(
+  payload: ProfileData,
+  file?: File | null
+): Promise<ProfileData> {
   const formData = new FormData();
-  formData.append("photo", file);
 
-  const response = await http.post("/profile/photo", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  formData.append("profile_name", payload.profile_name);
+  formData.append("profile_email", payload.profile_email);
+  formData.append("profession", payload.profession);
+  formData.append("bio", payload.bio);
+  formData.append("url_portfolio", payload.url_portfolio);
 
+  if (file) {
+    formData.append("profile_image", file);
+  }
+
+  formData.append("_method", "PUT");
+  const response = await http.post("/api/me/portfolio", formData);
+  console.log("API Response:", response);
   return toProfileData(unwrapData(response.data));
 }
 
-export async function deleteProfilePhoto(): Promise<void> {
-  await http.delete("/profile/photo");
+export async function deleteProfilePhoto(portfolioId: number): Promise<void> {
+  await http.delete(`/api/me/portfolio/${portfolioId}/photo`);
 }

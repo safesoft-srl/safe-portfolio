@@ -22,7 +22,7 @@ export function TeamSwitcher({
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
             {activeTeam.logo}
           </div>
-          <span className="truncate text-base md:text-lg font-semibold" >{activeTeam.name}</span>
+          <span className="truncate text-base md:text-lg font-semibold">{activeTeam.name}</span>
         </div>
       </SidebarMenuItem>
     </SidebarMenu>

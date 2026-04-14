@@ -12,9 +12,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const URL_API = import.meta.env.VITE_API_URL;
 interface RegisterErrors {
   name?: string;
-  username?: string; 
+  username?: string;
   email?: string;
   password?: string;
   passwordConfirm?: string;
@@ -43,7 +44,6 @@ export default function RegisterPage() {
       newErrors.name = "El nombre es obligatorio.";
     }
 
-  
     if (!username.trim()) {
       newErrors.username = "El nombre de usuario es obligatorio.";
     } else if (username.length < 3) {
@@ -77,12 +77,12 @@ export default function RegisterPage() {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        const response = await fetch("http://localhost:8000/api/register", {
+        const response = await fetch(`${URL_API}/api/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-         
+
           body: JSON.stringify({ name, username, email, password }),
         });
 
@@ -112,7 +112,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/verify-email", {
+      const response = await fetch(`${URL_API}/api/verify-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +142,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/resend-token", {
+      const response = await fetch(`${URL_API}/api/resend-token`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -163,13 +163,13 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#111321] flex items-center justify-center p-4 font-sans text-slate-100">
-      <Card className="w-full max-w-sm bg-[#15172b] border-[#2a2d46] shadow-2xl rounded-2xl overflow-hidden">
-        <CardHeader className="text-center pt-8 pb-4">
-          <CardTitle className="text-2xl font-medium tracking-wide text-white">
-            Portfolio Pro
+    <div className="min-h-screen bg-[#14162f] flex items-center justify-center px-4 py-0 text-slate-100 font-heading">
+      <Card className="w-full max-w-md bg-[#13152e] border border-[#232555] shadow-2xl rounded-2xl overflow-hidden">
+        <CardHeader className="text-center pb-4 pt-2">
+          <CardTitle className="text-2xl font-bold tracking-wide text-white">
+            Safe Portfolio
           </CardTitle>
-          <CardDescription className="text-sm mt-3 text-slate-400">
+          <CardDescription className="text-sm mt-4 text-slate-400">
             {step === 1 ? "Registrar nueva cuenta" : "Verifica tu cuenta"}
           </CardDescription>
         </CardHeader>
@@ -183,13 +183,13 @@ export default function RegisterPage() {
             <div className="w-full shrink-0">
               <CardContent className="space-y-4 px-6 pt-2">
                 {step === 1 && apiError && (
-                  <div className="text-red-400 text-sm bg-red-950/30 p-2 rounded border border-red-900/50 text-center">
+                  <div className="text-red-400 text-sm font-medium text-center bg-red-950/30 p-2 rounded">
                     {apiError}
                   </div>
                 )}
 
                 <div className="space-y-1">
-                  <Label htmlFor="name" className="text-xs font-semibold text-slate-300 ml-1">
+                  <Label htmlFor="name" className="text-xs font-semibold text-slate-300">
                     Nombre completo
                   </Label>
                   <Input
@@ -197,18 +197,16 @@ export default function RegisterPage() {
                     type="text"
                     value={name}
                     onChange={(e) => {
-                    const soloLetras = e.target.value.replace(/\d/g, "");
-                    setName(soloLetras);
+                      const soloLetras = e.target.value.replace(/\d/g, "");
+                      setName(soloLetras);
                     }}
                     placeholder="Tu nombre y apellido"
-                    className={`h-11 bg-[#1c1f38] ${errors.name ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                    className={`h-9 bg-[#1c1f38] font-sans ${errors.name ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
                   {errors.name && <p className="text-red-400 text-xs ml-1 mt-1">{errors.name}</p>}
                 </div>
-
-                
                 <div className="space-y-1">
-                  <Label htmlFor="username" className="text-xs font-semibold text-slate-300 ml-1">
+                  <Label htmlFor="username" className="text-xs font-semibold text-slate-300">
                     Nombre de usuario
                   </Label>
                   <Input
@@ -217,13 +215,14 @@ export default function RegisterPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Tu nombre de usuario"
-                    className={`h-11 bg-[#1c1f38] ${errors.username ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                    className={`h-9 bg-[#1c1f38] font-sans ${errors.username ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
-                  {errors.username && <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>}
+                  {errors.username && (
+                    <p className="text-red-400 text-xs ml-1 mt-1">{errors.username}</p>
+                  )}
                 </div>
-
                 <div className="space-y-1">
-                  <Label htmlFor="email" className="text-xs font-semibold text-slate-300 ml-1">
+                  <Label htmlFor="email" className="text-xs font-semibold text-slate-300">
                     Email
                   </Label>
                   <Input
@@ -232,13 +231,13 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tu@email.com"
-                    className={`h-11 w-full bg-[#1c1f38] ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
+                    className={`h-9 w-full bg-[#1c1f38] font-sans ${errors.email ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4`}
                   />
                   {errors.email && <p className="text-red-400 text-xs ml-1 mt-1">{errors.email}</p>}
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="password" className="text-xs font-semibold text-slate-300 ml-1">
+                  <Label htmlFor="password" className="text-xs font-semibold text-slate-300">
                     Contraseña
                   </Label>
                   <Input
@@ -247,13 +246,18 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="........"
-                    className={`h-11 bg-[#1c1f38] ${errors.password ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
+                    className={`h-9 pr-10 bg-[#1c1f38] font-sans ${errors.password ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
                   />
-                  {errors.password && <p className="text-red-400 text-xs ml-1 mt-1">{errors.password}</p>}
+                  {errors.password && (
+                    <p className="text-red-400 text-xs ml-1 mt-1">{errors.password}</p>
+                  )}
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="password-confirm" className="text-xs font-semibold text-slate-300 ml-1">
+                  <Label
+                    htmlFor="password-confirm"
+                    className="text-xs font-semibold text-slate-300"
+                  >
                     Confirmar contraseña
                   </Label>
                   <Input
@@ -262,16 +266,20 @@ export default function RegisterPage() {
                     value={passwordConfirm}
                     onChange={(e) => setPasswordConfirm(e.target.value)}
                     placeholder="........"
-                    className={`h-11 bg-[#1c1f38] ${errors.passwordConfirm ? 'border-red-500 focus-visible:ring-red-500' : 'border-transparent focus-visible:ring-indigo-500'} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
+                    className={`h-9 pr-10 bg-[#1c1f38] font-sans ${errors.passwordConfirm ? "border-red-500 focus-visible:ring-red-500" : "border-transparent focus-visible:ring-indigo-500"} text-slate-200 placeholder:text-slate-500 rounded-lg px-4 tracking-widest`}
                   />
-                  {errors.passwordConfirm && <p className="text-red-400 text-xs ml-1 mt-1">{errors.passwordConfirm}</p>}
+                  {errors.passwordConfirm && (
+                    <p className="text-red-400 text-xs ml-1 mt-1">{errors.passwordConfirm}</p>
+                  )}
                 </div>
 
                 <Button 
                   onClick={handleContinue} 
                   //onClick={() => setStep(2)} use this line to skip API and go directly to step 2 which is the slide efect
+                <Button
+                  onClick={handleContinue}
                   disabled={isLoading}
-                  className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
+                  className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-9 rounded-lg font-medium tracking-wide mt-2 font-heading"
                 >
                   {isLoading ? "Cargando..." : "Continuar"}
                 </Button>
@@ -282,23 +290,23 @@ export default function RegisterPage() {
             <div className="w-full shrink-0">
               <CardContent className="space-y-5 px-6 pt-2">
                 {step === 2 && apiError && (
-                  <div className="text-red-400 text-sm bg-red-950/30 p-2 rounded border border-red-900/50 text-center">
+                  <div className="text-red-400 text-sm font-medium text-center bg-red-950/30 p-2 rounded">
                     {apiError}
                   </div>
                 )}
 
                 {step === 2 && apiSuccess && (
-                  <div className="text-green-400 text-sm bg-green-950/30 p-2 rounded border border-green-900/50 text-center">
+                  <div className="text-green-400 text-sm font-medium text-center bg-green-950/30 p-2 rounded">
                     {apiSuccess}
                   </div>
                 )}
-                <p className="text-sm text-slate-300 text-center mb-4">
-                  Hemos enviado un código de confirmación a <br/>
+                <p className="text-sm text-slate-300 text-center mb-0 mt-4">
+                  Hemos enviado un código de confirmación a <br />
                   <span className="font-semibold text-white">{email || "tu correo"}</span>
                 </p>
 
-                <div className="space-y-2">
-                  <Label htmlFor="token" className="text-xs font-semibold text-slate-300 ml-1">
+                <div className="space-y-2 mt-4">
+                  <Label htmlFor="token" className="text-xs font-semibold text-slate-300">
                     Código de confirmación
                   </Label>
                   <Input
@@ -307,24 +315,24 @@ export default function RegisterPage() {
                     value={token}
                     onChange={(e) => setToken(e.target.value)}
                     placeholder="Ej. 123456"
-                    className="h-11 bg-[#1c1f38] border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 text-center tracking-widest text-lg"
+                    className="h-9 bg-[#1c1f38] font-sans border-transparent focus-visible:ring-1 focus-visible:ring-indigo-500 text-slate-200 placeholder:text-slate-500 rounded-lg px-4 text-center tracking-widest text-lg"
                   />
                 </div>
 
-                <div className="flex flex-col gap-3 pt-2">
+                <div className="flex flex-col gap-3 pt-6">
                   <Button
                     onClick={handleVerifyToken}
                     disabled={isLoading || token.trim() === ""}
-                    className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-11 rounded-lg font-medium tracking-wide mt-2"
+                    className="w-full bg-[#6c72ff] hover:bg-[#5c61eb] text-white h-9 rounded-lg font-medium tracking-wide font-heading"
                   >
                     {isLoading ? "Verificando..." : "Crear cuenta"}
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     onClick={handleResendToken}
                     disabled={isLoading}
-                    className="w-full bg-transparent border-[#2a2d46] text-slate-300 hover:text-white hover:bg-[#1c1f38] h-11 rounded-lg font-medium"
+                    className="w-full bg-transparent border-[#2a2d46] text-slate-300 hover:text-white hover:bg-[#1c1f38] h-9 rounded-lg font-medium font-heading"
                   >
                     {isLoading ? "Enviando..." : "Reenviar código"}
                   </Button>
@@ -334,9 +342,21 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        <CardFooter className="flex flex-col space-y-3 pb-8 px-6 text-center">
-          <Link to="/" className="text-sm text-slate-400 hover:text-slate-200 transition-colors">
-            {step === 1 ? "Volver al inicio" : "Cancelar registro"}
+        <CardFooter className="flex flex-col space-y-3 pt-6 pb-2 px-6 text-center font-sans">
+          <div className="text-xs text-slate-400">
+            ¿Ya tienes cuenta?{" "}
+            <Link
+              to="/login"
+              className="text-[#6c72ff] hover:text-[#8b8fff] transition-colors font-medium"
+            >
+              Iniciar Sesión
+            </Link>
+          </div>
+          <Link
+            to="/"
+            className="text-xs text-slate-400 hover:text-slate-200 transition-colors underline"
+          >
+            {step === 1 ? "Volver a la página principal" : "Cancelar registro"}
           </Link>
         </CardFooter>
       </Card>

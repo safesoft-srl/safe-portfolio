@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use App\Constants\ApiResponse;
 use App\Constants\ResponseMessages;
 use App\Http\Requests\StorePortfolioRequest;
+use App\Http\Requests\UpdatePortfolioRequest;
 use App\Services\PortfolioService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class PortfolioController extends Controller
 {
@@ -34,8 +39,9 @@ class PortfolioController extends Controller
         );
     }
 
-    public function getByUserId(int $userId)
+    public function getMyPortfolio()
     {
+        $userId = auth()->id();
         $portfolio = $this->portfolioService->getByUserId($userId);
 
         return ApiResponse::success(
@@ -54,14 +60,37 @@ class PortfolioController extends Controller
         );
     }
 
-    public function update(int $id, StorePortfolioRequest $request)
+    public function updateMyPortfolio(UpdatePortfolioRequest $request)
     {
-        $portfolio = $this->portfolioService->update($id, $request->validated());
+        $userId = auth()->id();
+        try {
+            $portfolio = $this->portfolioService->update(
+                $userId,
+                $request->validated()
+            );
 
-        return ApiResponse::success(
-            $portfolio,
-            ResponseMessages::UPDATED_SUCCESSFULLY
-        );
+            return ApiResponse::success(
+                $portfolio,
+                ResponseMessages::UPDATED_SUCCESSFULLY
+            );
+        } catch (ModelNotFoundException $e) {
+            return ApiResponse::error(
+                ResponseMessages::RESOURCE_NOT_FOUND,
+                null,
+                404
+            );
+        } catch (Throwable $e) {
+            Log::error('Portfolio update failed', [
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return ApiResponse::error(
+                ResponseMessages::INTERNAL_SERVER_ERROR,
+                null,
+                500
+            );
+        }
     }
 
     public function destroy(int $id)
@@ -71,6 +100,78 @@ class PortfolioController extends Controller
         return ApiResponse::success(
             null,
             ResponseMessages::DELETED_SUCCESSFULLY
+        );
+    }
+
+    public function deletePhoto(int $id)
+    {
+        $portfolio = $this->portfolioService->deletePhoto($id);
+
+        return ApiResponse::success(
+            $portfolio,
+            ResponseMessages::DELETED_SUCCESSFULLY
+        );
+    }
+
+    public function checkSlug(string $slug)
+    {
+        $exists = $this->portfolioService->slugExists($slug);
+
+        return ApiResponse::success(
+            ['available' => ! $exists],
+            'el nombre esta disponible'
+        );
+    }
+
+    public function getSlug(Request $request)
+    {
+        $validateData = $request->validate([
+            'slug' => 'required|string',
+        ]);
+
+        $userId = auth()->id();
+
+        if (! $userId) {
+            error_log('User ID: '.$userId);
+        }
+
+        $portfolio = $this->portfolioService->getByUserId($userId);
+
+        $portfolio->update([
+            'is_public' => true,
+            'portfolio_slug' => $validateData['slug'],
+        ]);
+
+        return ApiResponse::success([
+            'slug' => $portfolio->portfolio_slug,
+        ], 'Portafolio publicado exitosamente');
+
+    }
+
+    public function publicPortfolio(string $slug)
+    {
+        $portfolio = $this->portfolioService->getBySlug($slug);
+
+        return ApiResponse::success(
+            $portfolio,
+            'Portafolio público recuperado exitosamente'
+        );
+    }
+
+    public function saveUrlPortfolio(Request $request, int $id)
+    {
+        $validateData = $request->validate([
+            'url' => 'required|url',
+        ]);
+
+        $portfolio = $this->portfolioService->saveUrlPortfolio(
+            $validateData['url'],
+            $id
+        );
+
+        return ApiResponse::success(
+            $portfolio,
+            'URL del portafolio guardada exitosamente'
         );
     }
 }
