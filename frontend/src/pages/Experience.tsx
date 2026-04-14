@@ -183,7 +183,10 @@ export default function ExperiencePage() {
     };
 
     if (editingExperience) {
-      updateMutation.mutate({ id: editingExperience.id, exp: payload as unknown as ExperienceFormData });
+      updateMutation.mutate({
+        id: editingExperience.id,
+        exp: payload as unknown as ExperienceFormData,
+      });
     } else {
       createMutation.mutate(payload as unknown as ExperienceFormData);
     }
