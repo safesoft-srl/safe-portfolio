@@ -6,7 +6,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ImageUploadService
 {
-    public function upload($file): string
+    public function upload($file): array
     {
         $uploadedFile = Cloudinary::upload(
             $file->getRealPath(),
@@ -15,6 +15,9 @@ class ImageUploadService
             ]
         );
 
-        return $uploadedFile->getSecurePath();
+        return [
+            'url' => $uploadedFile->getSecurePath(),
+            'image_id' => $uploadedFile->getPublicId(),
+        ];
     }
 }

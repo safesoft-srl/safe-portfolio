@@ -28,6 +28,7 @@ class UpdatePortfolioRequest extends FormRequest
             'profession' => 'sometimes|string|max:255',
             'bio' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image_id' => 'nullable|string',
         ];
     }
 }

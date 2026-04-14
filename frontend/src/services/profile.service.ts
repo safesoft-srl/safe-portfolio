@@ -69,6 +69,10 @@ export async function updateProfile(
 
   formData.append("_method", "PUT");
   const response = await http.post("/api/me/portfolio", formData);
-
+  console.log("API Response:", response);
   return toProfileData(unwrapData(response.data));
+}
+
+export async function deleteProfilePhoto(portfolioId: number): Promise<void> {
+  await http.delete(`/api/me/portfolio/${portfolioId}/photo`);
 }
