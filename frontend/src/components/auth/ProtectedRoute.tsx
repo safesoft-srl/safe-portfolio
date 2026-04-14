@@ -6,7 +6,7 @@ export const ProtectedRoute = () => {
 
   if (!isAuthenticated) {
     // Redirect to login if they are not authenticated
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Portfolio;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PortfolioService
 {
@@ -46,8 +47,11 @@ class PortfolioService
     private function handleProfileImage(array $data): array
     {
         if (isset($data['profile_image']) && $data['profile_image']) {
-            $data['profile_image'] = $this->imageUploadService
+            $upload = $this->imageUploadService
                 ->upload($data['profile_image']);
+
+            $data['profile_image'] = $upload['url'];
+            $data['image_id'] = $upload['image_id'];
         }
 
         return $data;
@@ -59,5 +63,41 @@ class PortfolioService
         $portfolio->delete();
 
         return true;
+    }
+
+    public function deletePhoto(int $id)
+    {
+        $portfolio = Portfolio::findOrFail($id);
+
+        if (! $portfolio->image_id) {
+            return $portfolio;
+        }
+
+        Cloudinary::destroy($portfolio->image_id);
+
+        $portfolio->update([
+            'profile_image' => null,
+            'image_id' => null,
+        ]);
+
+        return $portfolio->fresh();
+    }
+
+    public function slugExists(string $slug): bool
+    {
+        return Portfolio::where('portfolio_slug', $slug)->exists();
+    }
+
+    public function getBySlug(string $slug)
+    {
+        return Portfolio::where('portfolio_slug', $slug)->firstOrFail();
+    }
+
+    public function saveUrlPortfolio(string $url, int $id)
+    {
+        $portfolio = Portfolio::findOrFail($id);
+        $portfolio->update(['url_portfolio' => $url]);
+
+        return $portfolio->fresh();
     }
 }
