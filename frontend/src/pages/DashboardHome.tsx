@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
+import CreateProfileModal from "@/components/CreateProfileModal";
 import { Input } from "@/components/ui/input";
 import { CopySimple } from "@phosphor-icons/react";
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
@@ -109,28 +110,28 @@ export default function DashboardHome() {
 
   return (
     <>
-      <section className="mx-auto flex w-full max-w-7xl items-start justify-between px-1 py-2">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
+      <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-start lg:justify-between px-2 sm:px-3 md:px-6 py-2">
+        <div className="mb-4 lg:mb-0 w-full">
+          <h1 className="text-2xl font-bold tracking-tight">
             ¡Bienvenido, {displayName}!
           </h1>
-          <p className="mt-1 text-sm text-slate-300 font-sans">
+          <p className="mt-1 text-sm font-sans">
             Gestiona tu portafolio profesional
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden md:flex flex-col">
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-slate-200 font-sans">Personalizar URL portafolio:</span>
-              <div className="relative">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-3 w-full">
+          <div className="flex flex-col w-full lg:w-auto">
+            <div className="flex flex-col gap-2 w-full lg:flex-row lg:items-center lg:gap-3 lg:w-auto">
+              <span className="text-xs font-sans mb-1 lg:mb-0">Personalizar URL portafolio:</span>
+              <div className="relative w-full lg:w-auto">
                 <Input
                   type="text"
                   placeholder="Ej: portfolio.dev.hedi"
                   value={slug}
                   onChange={handleChangePortfolioUrl}
                   onBlur={handleBlurPortfolioUrl}
-                  className={`h-11 w-72 rounded-xl border bg-[#1f2552] px-4 text-sm text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                  className={`h-11 w-full lg:w-72 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
                     portfolioUrlError
                       ? "border-red-500 focus-visible:ring-red-500"
                       : "border-transparent focus-visible:ring-[#5d68f5]"
@@ -152,7 +153,7 @@ export default function DashboardHome() {
                   !isValidSlug || loading
                     ? "bg-gray-500 cursor-not-allowed"
                     : "bg-[#6c72ff] hover:bg-[#5c61eb]"
-                }`}
+                } w-full lg:w-auto min-w-[140px]`}
             onClick={handlePublish}
           >
             {loading ? "Generando..." : "Generar Url Público"}
@@ -160,32 +161,37 @@ export default function DashboardHome() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-1">
-        <div className="inline-flex items-center gap-2 rounded-md bg-[#151a3b] px-3 py-1.5">
-          <p className="text-xs text-slate-300 font-sans">
-            {portfolioUrl || "safeportfolio.url.dev"}
-          </p>
-
-          <div className="relative group">
+      <section className="mx-auto w-full max-w-7xl px-2 sm:px-3 md:px-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 rounded-md bg-input dark:bg-[#151a3b] px-3 py-1.5 w-full max-w-xl">
+          <p className="text-xs font-sans break-all flex-1">{portfolioUrl || "safeportfolio.url.dev"}</p>
+          <div className="relative group sm:ml-2 mt-2 sm:mt-0">
             <button
               type="button"
               onClick={() => {
                 if (!portfolioUrl) return;
-
                 navigator.clipboard.writeText(portfolioUrl);
                 setCopied(true);
-
                 setTimeout(() => setCopied(false), 2000);
               }}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white transition-colors"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-black dark:border-slate-700 hover:bg-slate-800 hover:text-white transition-colors"
               aria-label="Copiar URL de portafolio"
             >
               <CopySimple size={16} weight="regular" />
             </button>
-
             <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black px-2 py-1 text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
-              {copied ? "Copiado!" : "Copy"}
+              {copied ? "Copiado!" : "Copiar"}
             </span>
+          </div>
+        </div>
+      </section>
+      {/* este es mi cuadro nuevo para agregar proyectos */}
+      <section className="mt-8 w-full max-w-7xl mx-auto px-2 sm:px-3 md:px-6">
+        <div className="w-full rounded-2xl bg-sidebar py-6 border border-sidebar-border px-4 sm:px-8">
+          <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
+            <p className="text-sm text-sidebar-foreground">
+                Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
+            </p>
+            <CreateProfileModal />
           </div>
         </div>
       </section>
