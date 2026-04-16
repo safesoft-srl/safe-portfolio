@@ -14,10 +14,10 @@ import {
   RowsIcon,
   LayoutIcon,
   UserIcon,
-  /*MedalIcon,
-  GearIcon,
+  //MedalIcon,
+  //GearIcon,
   BriefcaseIcon,
-  ChartBarIcon,
+  /*ChartBarIcon,
   GraduationCapIcon,*/
 } from "@phosphor-icons/react";
 import { useAuthStore } from "@/lib/auth-store";
@@ -47,12 +47,13 @@ const data = {
       url: "/dashboard/profile",
       icon: <UserIcon />,
     },
-    /*
+
     {
       title: "Proyectos",
       url: "/dashboard/projects",
       icon: <BriefcaseIcon />,
     },
+    /*
     {
       title: "Habilidades",
       url: "/dashboard/skills",

@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Projects from "./pages/Projects";
 import Home from "./pages/Home";
 import DashboardHome from "./pages/DashboardHome";
 import PublicPortfolio from "./pages/PublicPortfolio";
@@ -57,7 +58,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "projects",
-            element: <div>Projects Page</div>,
+            element: <Projects />,
           },
           {
             path: "skills",
