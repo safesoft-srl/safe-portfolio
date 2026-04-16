@@ -76,3 +76,21 @@ export async function updateProfile(
 export async function deleteProfilePhoto(portfolioId: number): Promise<void> {
   await http.delete(`/api/me/portfolio/${portfolioId}/photo`);
 }
+
+export async function createProfile(
+  payload: ProfileData,
+  file?: File | null
+): Promise<ProfileData> {
+  const formData = new FormData();
+  formData.append("profile_name", payload.profile_name);
+  formData.append("profile_email", payload.profile_email);
+  formData.append("profession", payload.profession);
+  formData.append("bio", payload.bio);
+  formData.append("url_portfolio", payload.url_portfolio);
+  if (file) {
+    formData.append("profile_image", file);
+  }
+ 
+  const response = await http.post("/api/portfolios", formData);
+  return toProfileData(unwrapData(response.data));
+}
