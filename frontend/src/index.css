@@ -128,7 +128,29 @@
   html {
     @apply font-sans;
   }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* basic way to change color */
+    cursor: pointer;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.5); /* gray-500 */
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 116, 139, 0.8);
+  }
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
