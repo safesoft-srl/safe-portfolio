@@ -31,7 +31,7 @@ class PortfolioTechnicalSkillController extends Controller
 
             if ($exists) {
                 return ApiResponse::error(
-                    "Esta habilidad ya está agregada en tu portafolio. Puedes editar su nivel o eliminarla primero.",
+                    "Esta habilidad ya está agregada en tu portafolio. ",
                     409,
                     null
                 );
