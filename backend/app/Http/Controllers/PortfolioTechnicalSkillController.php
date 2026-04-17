@@ -14,12 +14,9 @@ use Throwable;
 class PortfolioTechnicalSkillController extends Controller
 {
 
-    public function store(Request $request, int $portfolioId){
-
-            // Portfolio::where('id', $portfolioId)
-            // ->where('user_id', auth()->id())
-            // ->firstOrFail();
-            Portfolio::findOrFail($portfolioId);
+    public function store(Request $request, int $portfolioId)
+    {
+        Portfolio::findOrFail($portfolioId);
 
         $validated = $request->validate([
             'technical_skill_id' => 'required|exists:technical_skills,id',
@@ -29,17 +26,16 @@ class PortfolioTechnicalSkillController extends Controller
         try {
 
             $exists = PortfolioSkill::where('portfolio_id', $portfolioId)
-            ->where('technical_skill_id', $validated['technical_skill_id'])
-            ->exists();
+                ->where('technical_skill_id', $validated['technical_skill_id'])
+                ->exists();
 
             if ($exists) {
-            return ApiResponse::error(
-                    'Esta skill ya está registrada en este portafolio',
+                return ApiResponse::error(
+                    "Esta habilidad ya está agregada en tu portafolio. Puedes editar su nivel o eliminarla primero.",
                     409,
                     null
                 );
             }
-
 
             $skill = PortfolioSkill::create([
                 'portfolio_id' => $portfolioId,
@@ -49,17 +45,19 @@ class PortfolioTechnicalSkillController extends Controller
 
             return ApiResponse::success(
                 $skill,
-                ResponseMessages::CREATED_SUCCESSFULLY,
+                "Habilidad agregada correctamente a tu portafolio 🎉",
                 201
             );
+
         } catch (Throwable $e) {
-            Log::error('Error creating portfolio technical skill', [
+
+            Log::error('Error creando skill del portafolio', [
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
             return ApiResponse::error(
-                ResponseMessages::INTERNAL_SERVER_ERROR,
+                "No se pudo agregar la habilidad. Intenta nuevamente más tarde.",
                 500,
                 null
             );
@@ -71,97 +69,108 @@ class PortfolioTechnicalSkillController extends Controller
 
 
 
-        public function update(Request $request, int $portfolioId)
-        {
-            // Portfolio::where('id', $portfolioId)
-            //     ->where('user_id', auth()->id())
-            //     ->firstOrFail();
-
-            Portfolio::findOrFail($portfolioId);
-
-
-            $validated = $request->validate([
-                'technical_skill_id' => 'required|exists:technical_skills,id',
-                'level' => 'required|string|max:50',
-            ]);
-
-            try {
-                $portfolioSkill = PortfolioSkill::where('portfolio_id', $portfolioId)
-                    ->where('technical_skill_id', $validated['technical_skill_id'])
-                    ->firstOrFail();
-
-                $portfolioSkill->update([
-                    'level' => $validated['level']
-                ]);
-
-                return ApiResponse::success(
-                    $portfolioSkill,
-                    ResponseMessages::UPDATED_SUCCESSFULLY
-                );
-
-            } catch (ModelNotFoundException $e) {
-                return ApiResponse::error(
-                    ResponseMessages::RESOURCE_NOT_FOUND,
-                    404,
-                    null
-                );
-            } catch (Throwable $e) {
-                Log::error('Error updating portfolio technical skill', [
-                    'error_message' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
-                ]);
-
-                return ApiResponse::error(
-                    ResponseMessages::INTERNAL_SERVER_ERROR,
-                    500,
-                    null
-                );
-            }
-        }
-
-
-
-   public function destroy(Request $request, int $portfolioId)
+    public function update(Request $request, int $portfolioId)
     {
-                // Portfolio::where('id', $portfolioId)
-                //             ->where('user_id', auth()->id())
-                //             ->firstOrFail();
-            Portfolio::findOrFail($portfolioId);
+        Portfolio::findOrFail($portfolioId);
+
         $validated = $request->validate([
             'technical_skill_id' => 'required|exists:technical_skills,id',
+            'level' => 'required|string|max:50',
         ]);
 
         try {
+
             $portfolioSkill = PortfolioSkill::where('portfolio_id', $portfolioId)
                 ->where('technical_skill_id', $validated['technical_skill_id'])
                 ->firstOrFail();
 
-            $portfolioSkill->delete();
+            $oldLevel = $portfolioSkill->level;
+
+            $portfolioSkill->update([
+                'level' => $validated['level']
+            ]);
 
             return ApiResponse::success(
-                null,
-                ResponseMessages::DELETED_SUCCESSFULLY
+                $portfolioSkill,
+                "Nivel actualizado de '{$oldLevel}' a '{$validated['level']}' correctamente ✔"
             );
 
         } catch (ModelNotFoundException $e) {
+
             return ApiResponse::error(
-                ResponseMessages::RESOURCE_NOT_FOUND,
-                null,
-                404
+                "No se encontró esta habilidad en tu portafolio.",
+                404,
+                null
             );
+
         } catch (Throwable $e) {
-            Log::error('Error deleting portfolio technical skill', [
+
+            Log::error('Error actualizando skill del portafolio', [
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
             return ApiResponse::error(
-                ResponseMessages::INTERNAL_SERVER_ERROR,
-                null,
-                500
+                "Error al actualizar la habilidad. Intenta nuevamente.",
+                500,
+                null
             );
         }
     }
+
+
+
+
+
+
+    public function destroy(Request $request, int $portfolioId)
+    {
+        Portfolio::findOrFail($portfolioId);
+
+        $validated = $request->validate([
+            'technical_skill_id' => 'required|exists:technical_skills,id',
+        ]);
+
+        try {
+
+            $portfolioSkill = PortfolioSkill::where('portfolio_id', $portfolioId)
+                ->where('technical_skill_id', $validated['technical_skill_id'])
+                ->firstOrFail();
+
+            $name = $portfolioSkill->technicalSkill->name ?? "la habilidad";
+
+            $portfolioSkill->delete();
+
+            return ApiResponse::success(
+                null,
+                "La habilidad '{$name}' fue eliminada correctamente del portafolio 🗑"
+            );
+
+        } catch (ModelNotFoundException $e) {
+
+            return ApiResponse::error(
+                "No se pudo encontrar la habilidad que intentas eliminar.",
+                404,
+                null
+            );
+
+        } catch (Throwable $e) {
+
+            Log::error('Error eliminando skill del portafolio', [
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return ApiResponse::error(
+                "Error al eliminar la habilidad. Intenta nuevamente.",
+                500,
+                null
+            );
+        }
+    }
+
+
+
 
 
 
@@ -177,39 +186,29 @@ class PortfolioTechnicalSkillController extends Controller
 
             return ApiResponse::success(
                 $skills,
-                "Skills obtenidas correctamente"
+                "Habilidades cargadas correctamente ✔"
             );
 
         } catch (ModelNotFoundException $e) {
+
             return ApiResponse::error(
-                ResponseMessages::RESOURCE_NOT_FOUND,
+                "No se encontró el portafolio solicitado.",
                 404,
                 null
             );
+
         } catch (Throwable $e) {
+
             Log::error("Error obteniendo technical skills", [
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
             return ApiResponse::error(
-                ResponseMessages::INTERNAL_SERVER_ERROR,
+                "Error al cargar las habilidades. Intenta nuevamente más tarde.",
                 500,
                 null
             );
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
