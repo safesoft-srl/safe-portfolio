@@ -45,7 +45,7 @@ class PortfolioTechnicalSkillController extends Controller
 
             return ApiResponse::success(
                 $skill,
-                "Habilidad agregada correctamente a tu portafolio 🎉",
+                "Habilidad agregada correctamente a tu portafolio ",
                 201
             );
 
@@ -186,7 +186,7 @@ class PortfolioTechnicalSkillController extends Controller
 
             return ApiResponse::success(
                 $skills,
-                "Habilidades cargadas correctamente ✔"
+                "Habilidades cargadas correctamente "
             );
 
         } catch (ModelNotFoundException $e) {
