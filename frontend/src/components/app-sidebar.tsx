@@ -14,6 +14,7 @@ import {
   RowsIcon,
   LayoutIcon,
   UserIcon,
+  MedalIcon,
   /*MedalIcon,
   GearIcon,
   BriefcaseIcon,
@@ -47,17 +48,18 @@ const data = {
       url: "/dashboard/profile",
       icon: <UserIcon />,
     },
+    {
+      title: "Habilidades",
+      url: "/dashboard/skills",
+      icon: <MedalIcon />,
+    },
     /*
     {
       title: "Proyectos",
       url: "/dashboard/projects",
       icon: <BriefcaseIcon />,
     },
-    {
-      title: "Habilidades",
-      url: "/dashboard/skills",
-      icon: <MedalIcon />,
-    },
+    
     {
       title: "Experiencia",
       url: "/dashboard/experience",
