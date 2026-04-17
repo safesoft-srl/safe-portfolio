@@ -78,6 +78,8 @@ Route::put('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkil
 // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para actualizar el nivel de una skill en un portafolio) JSON(technical_skill_id, level)
 Route::delete('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'destroy']);
 // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para eliminar una skill de un portafolio) JSON(technical_skill_id)
+Route::get('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'index']);
+// Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para obtener las skills registradas en un portafolio)
 
 
 

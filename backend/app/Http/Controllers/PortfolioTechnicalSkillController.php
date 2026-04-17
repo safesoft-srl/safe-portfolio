@@ -16,9 +16,10 @@ class PortfolioTechnicalSkillController extends Controller
 
     public function store(Request $request, int $portfolioId){
 
-            Portfolio::where('id', $portfolioId)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
+            // Portfolio::where('id', $portfolioId)
+            // ->where('user_id', auth()->id())
+            // ->firstOrFail();
+            Portfolio::findOrFail($portfolioId);
 
         $validated = $request->validate([
             'technical_skill_id' => 'required|exists:technical_skills,id',
@@ -72,9 +73,12 @@ class PortfolioTechnicalSkillController extends Controller
 
         public function update(Request $request, int $portfolioId)
         {
-            Portfolio::where('id', $portfolioId)
-                ->where('user_id', auth()->id())
-                ->firstOrFail();
+            // Portfolio::where('id', $portfolioId)
+            //     ->where('user_id', auth()->id())
+            //     ->firstOrFail();
+
+            Portfolio::findOrFail($portfolioId);
+
 
             $validated = $request->validate([
                 'technical_skill_id' => 'required|exists:technical_skills,id',
@@ -119,10 +123,10 @@ class PortfolioTechnicalSkillController extends Controller
 
    public function destroy(Request $request, int $portfolioId)
     {
-                Portfolio::where('id', $portfolioId)
-                            ->where('user_id', auth()->id())
-                            ->firstOrFail();
-
+                // Portfolio::where('id', $portfolioId)
+                //             ->where('user_id', auth()->id())
+                //             ->firstOrFail();
+            Portfolio::findOrFail($portfolioId);
         $validated = $request->validate([
             'technical_skill_id' => 'required|exists:technical_skills,id',
         ]);
@@ -158,4 +162,54 @@ class PortfolioTechnicalSkillController extends Controller
             );
         }
     }
+
+
+
+    public function index(int $portfolioId)
+    {
+        try {
+
+            Portfolio::findOrFail($portfolioId);
+
+            $skills = PortfolioSkill::where('portfolio_id', $portfolioId)
+                ->with('technicalSkill')
+                ->get();
+
+            return ApiResponse::success(
+                $skills,
+                "Skills obtenidas correctamente"
+            );
+
+        } catch (ModelNotFoundException $e) {
+            return ApiResponse::error(
+                ResponseMessages::RESOURCE_NOT_FOUND,
+                404,
+                null
+            );
+        } catch (Throwable $e) {
+            Log::error("Error obteniendo technical skills", [
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return ApiResponse::error(
+                ResponseMessages::INTERNAL_SERVER_ERROR,
+                500,
+                null
+            );
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
