@@ -273,9 +273,9 @@ export default function RegisterPage() {
                   )}
                 </div>
 
-                <Button 
+                {/*<Button 
                   onClick={handleContinue} 
-                  //onClick={() => setStep(2)} use this line to skip API and go directly to step 2 which is the slide efect
+                  onClick={() => setStep(2)} use this line to skip API and go directly to step 2 which is the slide efect */}
                 <Button
                   onClick={handleContinue}
                   disabled={isLoading}

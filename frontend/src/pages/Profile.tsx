@@ -544,7 +544,7 @@ export default function Profile() {
               type="button"
               onClick={handleSave}
               disabled={!hasUnsavedChanges || isSaving}
-              className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white shadow-sm transition-colors transition-transform duration-150 hover:bg-[#8b90ff] hover:shadow-lg hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff]"
+              className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white shadow-sm transition-all duration-150 hover:bg-[#8b90ff] hover:shadow-lg hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff]"
             >
               {isSaving ? "Guardando..." : "Guardar Cambios"}
             </button>

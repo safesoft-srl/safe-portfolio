@@ -8,6 +8,7 @@ import PublicPortfolio from "./pages/PublicPortfolio";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
+import Skills from "./pages/Skills";
 
 export const router = createBrowserRouter([
   {
@@ -61,7 +62,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "skills",
-            element: <div>Skills Page</div>,
+            element: <Skills />,
           },
           {
             path: "experience",
