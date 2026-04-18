@@ -15,10 +15,12 @@ import {
   LayoutIcon,
   UserIcon,
   MedalIcon,
+  GraduationCapIcon,
+  BriefcaseIcon,
   /*MedalIcon,
   GearIcon,
   BriefcaseIcon,
-  ChartBarIcon,
+  /*ChartBarIcon,
   GraduationCapIcon,*/
 } from "@phosphor-icons/react";
 import { useAuthStore } from "@/lib/auth-store";
@@ -53,19 +55,19 @@ const data = {
       url: "/dashboard/skills",
       icon: <MedalIcon />,
     },
-    /*
+
     {
       title: "Proyectos",
       url: "/dashboard/projects",
       icon: <BriefcaseIcon />,
     },
-    
+
     {
       title: "Experiencia",
       url: "/dashboard/experience",
       icon: <GraduationCapIcon />,
     },
-    {
+    /*{
       title: "Configuración",
       url: "/dashboard/configuration",
       icon: <GearIcon />,

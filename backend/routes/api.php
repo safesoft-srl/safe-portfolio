@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegisterAccountController;
 use App\Http\Controllers\ResendTokenController;
+use App\Http\Controllers\SkillProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [RegisterAccountController::class, 'register']);
@@ -21,8 +25,6 @@ Route::post('/resend-token', [ResendTokenController::class, 'resend']);
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PortfolioController;
 
 Route::group([
     'middleware' => 'api',
@@ -74,3 +76,10 @@ Route::delete('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalS
 // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para eliminar una skill de un portafolio) JSON(technical_skill_id)
 Route::get('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'index']);
 // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para obtener las skills registradas en un portafolio)
+
+// routes for projects
+Route::get('/portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
+Route::apiResource('/projects', ProjectController::class);
+
+// routes for skills
+Route::apiResource('/skills', SkillProjectController::class);

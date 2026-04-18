@@ -1,0 +1,142 @@
+import React, { useState, useMemo } from "react";
+import { X, MagnifyingGlass } from "@phosphor-icons/react";
+import { Input } from "@/components/ui/input";
+
+export interface Skill {
+  id: number;
+  skill_name: string;
+  logo_url?: string;
+}
+
+interface SkillComboBoxProps {
+  skills: Skill[];
+  selected: number[];
+  onChange: (ids: number[]) => void;
+  placeholder?: string;
+  label?: string;
+}
+
+export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
+  skills,
+  selected,
+  onChange,
+  placeholder = "Selecciona habilidades...",
+  label = "Habilidades",
+}) => {
+  const [input, setInput] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const filtered = useMemo(() => {
+    const lower = input.toLowerCase();
+    return skills.filter(
+      (s) => s.skill_name.toLowerCase().includes(lower) && !selected.includes(s.id)
+    );
+  }, [input, skills, selected]);
+
+  const handleSelect = (id: number) => {
+    onChange([...selected, id]);
+    setInput("");
+    setIsOpen(false);
+  };
+
+  const handleRemove = (id: number) => {
+    onChange(selected.filter((sid) => sid !== id));
+  };
+
+  return (
+    <div className="w-full">
+      {label && (
+        <label className="block mb-1 text-xs font-semibold text-slate-900 dark:text-slate-300">
+          {label}
+        </label>
+      )}
+      <div className="relative mb-2">
+        <div className="relative flex items-center">
+          <MagnifyingGlass
+            size={18}
+            className="absolute left-3 text-[#8c91b7] pointer-events-none"
+          />
+          <Input
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              setIsOpen(true);
+            }}
+            onFocus={() => setIsOpen(true)}
+            onBlur={() => setTimeout(() => setIsOpen(false), 100)}
+            placeholder={placeholder}
+            className="h-10 w-full min-w-0 rounded-xl border bg-input dark:bg-[#1f2552] pl-10 text-sm text-slate-900 dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+          />
+        </div>
+        {isOpen && filtered.length > 0 && (
+          <ul
+            className="absolute z-20 mt-1 w-full bg-input dark:bg-[#1f2552] border border-input dark:border-[#2a2d46] rounded-xl shadow-xl max-h-48 overflow-auto animate-in fade-in zoom-in-95"
+            style={{
+              scrollbarColor: "#23234a #181c2f",
+              scrollbarWidth: "thin",
+            }}
+          >
+            <style>{`
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 8px;
+                background: #181c2f;
+              }
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #23234a;
+                border-radius: 8px;
+              }
+            `}</style>
+            <div className="custom-scrollbar">
+              {filtered.map((skill) => (
+                <li
+                  key={skill.id}
+                  className="flex items-center gap-2 px-4 py-2 cursor-pointer text-sm text-slate-900 dark:text-slate-200 hover:bg-[#f3f4f6] dark:hover:bg-[#23234a] transition-colors"
+                  onMouseDown={() => handleSelect(skill.id)}
+                >
+                  {skill.logo_url && (
+                    <img
+                      src={skill.logo_url}
+                      alt={skill.skill_name}
+                      className="w-4 h-4 rounded-full"
+                    />
+                  )}
+                  {skill.skill_name}
+                </li>
+              ))}
+            </div>
+          </ul>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {selected.map((id) => {
+          const skill = skills.find((s) => s.id === id);
+          if (!skill) return null;
+          return (
+            <span
+              key={id}
+              className="flex items-center gap-1 px-2 py-1 rounded-lg shadow-sm text-xs"
+              style={{ background: "#6c72ff", color: "#fff" }}
+            >
+              {skill.logo_url && (
+                <img
+                  src={skill.logo_url}
+                  alt={skill.skill_name}
+                  className="w-4 h-4 rounded-full mr-1"
+                />
+              )}
+              {skill.skill_name}
+              <button
+                type="button"
+                className="ml-1 rounded hover:bg-[#5c61eb] p-0.5"
+                onClick={() => handleRemove(id)}
+                aria-label="Quitar habilidad"
+              >
+                <X size={12} />
+              </button>
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
