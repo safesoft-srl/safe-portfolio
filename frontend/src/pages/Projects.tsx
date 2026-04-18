@@ -588,12 +588,11 @@ export default function Projects() {
                     {form.url_image && (
                       <AlertDialog>
                         <AlertDialogTrigger
-                            type="button"
-                            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600"
-                          >
-                            <TrashSimple size={14} />
-                            Eliminar Imagen
-                          
+                          type="button"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600"
+                        >
+                          <TrashSimple size={14} />
+                          Eliminar Imagen
                         </AlertDialogTrigger>
                         <AlertDialogContent className="border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-[#151a3f] text-slate-900 dark:text-slate-100 backdrop-blur-sm">
                           <AlertDialogHeader>
