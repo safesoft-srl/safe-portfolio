@@ -19,7 +19,7 @@ class TechnicalSkill extends Model
     public function getIconUrlAttribute()
     {
         return $this->icon_path
-            ? url('storage/' . $this->icon_path)
+            ? url('storage/'.$this->icon_path)
             : null;
     }
 }

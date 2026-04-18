@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use App\Models\TechnicalSkill;
+use Illuminate\Database\Seeder;
 
 class TechnicalSkillsSeeder extends Seeder
 {
-   public function run(): void
+    public function run(): void
     {
         $skills = [
 
@@ -85,8 +84,6 @@ class TechnicalSkillsSeeder extends Seeder
             ['name' => 'Swift',     'category' => 'Backend', 'icon_path' => 'iconskills/Swift.svg'],
             ['name' => 'Hibernate',     'category' => 'Backend', 'icon_path' => 'iconskills/Hibernate-Light.svg'],
 
-
-
             // ====================== FRONTEND ======================
             // Frameworks, librerías y herramientas de interfaz de usuario
 
@@ -114,7 +111,7 @@ class TechnicalSkillsSeeder extends Seeder
             ['name' => 'Remix',          'category' => 'Frontend', 'icon_path' => 'iconskills/Remix-Light.svg'],
             ['name' => 'Sass',           'category' => 'Frontend', 'icon_path' => 'iconskills/Sass.svg'],
             ['name' => 'SolidJS',        'category' => 'Frontend', 'icon_path' => 'iconskills/SolidJS-Light.svg'],
-            ['name' => 'StyledComponents','category' => 'Frontend', 'icon_path' => 'iconskills/StyledComponents.svg'],
+            ['name' => 'StyledComponents', 'category' => 'Frontend', 'icon_path' => 'iconskills/StyledComponents.svg'],
             ['name' => 'Svelte',         'category' => 'Frontend', 'icon_path' => 'iconskills/Svelte.svg'],
             ['name' => 'TailwindCSS',    'category' => 'Frontend', 'icon_path' => 'iconskills/TailwindCSS-Light.svg'],
             ['name' => 'ThreeJS',        'category' => 'Frontend', 'icon_path' => 'iconskills/ThreeJS-Light.svg'],
@@ -142,8 +139,6 @@ class TechnicalSkillsSeeder extends Seeder
             ['name' => 'P5JS',             'category' => 'Frontend', 'icon_path' => 'iconskills/p5js.svg'],
             ['name' => 'Markdown',         'category' => 'Frontend', 'icon_path' => 'iconskills/Markdown-Light.svg'],
             ['name' => 'Gulp',             'category' => 'Frontend', 'icon_path' => 'iconskills/Gulp.svg'],
-
-
 
             // ====================== DEVOPS ======================
             // Herramientas de infraestructura, CI/CD, contenedores y cloud
@@ -263,26 +258,20 @@ class TechnicalSkillsSeeder extends Seeder
             ['name' => 'SVG',           'category' => 'Otros', 'icon_path' => 'iconskills/SVG-Light.svg'],
             ['name' => 'Vitest',        'category' => 'Otros', 'icon_path' => 'iconskills/Vitest-Light.svg'],
             ['name' => 'Workers',       'category' => 'Otros', 'icon_path' => 'iconskills/Workers-Light.svg'],
-                // ... (puedes seguir agregando los que faltan aquí)
+            // ... (puedes seguir agregando los que faltan aquí)
 
         ];
 
-            foreach ($skills as $skill) {
-                TechnicalSkill::firstOrCreate(
-                    ['icon_path' => $skill['icon_path']],
-                    [
-                        'name' => $skill['name'],
-                        'category' => $skill['category'],
-                    ]
-                );
-            }
+        foreach ($skills as $skill) {
+            TechnicalSkill::firstOrCreate(
+                ['icon_path' => $skill['icon_path']],
+                [
+                    'name' => $skill['name'],
+                    'category' => $skill['category'],
+                ]
+            );
+        }
 
-            $this->command->info('Skills insertados correctamente sin duplicados.');
+        $this->command->info('Skills insertados correctamente sin duplicados.');
     }
-
-
-
-
-    }
-
-
+}

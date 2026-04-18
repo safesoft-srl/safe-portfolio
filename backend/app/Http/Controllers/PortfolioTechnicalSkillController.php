@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ApiResponse;
-use App\Constants\ResponseMessages;
-use App\Models\PortfolioSkill;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Log;
 use App\Models\Portfolio;
+use App\Models\PortfolioSkill;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class PortfolioTechnicalSkillController extends Controller
 {
-
     public function store(Request $request, int $portfolioId)
     {
         Portfolio::findOrFail($portfolioId);
@@ -31,7 +29,7 @@ class PortfolioTechnicalSkillController extends Controller
 
             if ($exists) {
                 return ApiResponse::error(
-                    "Esta habilidad ya está agregada en tu portafolio. ",
+                    'Esta habilidad ya está agregada en tu portafolio. ',
                     409,
                     null
                 );
@@ -45,7 +43,7 @@ class PortfolioTechnicalSkillController extends Controller
 
             return ApiResponse::success(
                 $skill,
-                "Habilidad agregada correctamente a tu portafolio ",
+                'Habilidad agregada correctamente a tu portafolio ',
                 201
             );
 
@@ -57,17 +55,12 @@ class PortfolioTechnicalSkillController extends Controller
             ]);
 
             return ApiResponse::error(
-                "No se pudo agregar la habilidad. Intenta nuevamente más tarde.",
+                'No se pudo agregar la habilidad. Intenta nuevamente más tarde.',
                 500,
                 null
             );
         }
     }
-
-
-
-
-
 
     public function update(Request $request, int $portfolioId)
     {
@@ -87,7 +80,7 @@ class PortfolioTechnicalSkillController extends Controller
             $oldLevel = $portfolioSkill->level;
 
             $portfolioSkill->update([
-                'level' => $validated['level']
+                'level' => $validated['level'],
             ]);
 
             return ApiResponse::success(
@@ -98,7 +91,7 @@ class PortfolioTechnicalSkillController extends Controller
         } catch (ModelNotFoundException $e) {
 
             return ApiResponse::error(
-                "No se encontró esta habilidad en tu portafolio.",
+                'No se encontró esta habilidad en tu portafolio.',
                 404,
                 null
             );
@@ -111,17 +104,12 @@ class PortfolioTechnicalSkillController extends Controller
             ]);
 
             return ApiResponse::error(
-                "Error al actualizar la habilidad. Intenta nuevamente.",
+                'Error al actualizar la habilidad. Intenta nuevamente.',
                 500,
                 null
             );
         }
     }
-
-
-
-
-
 
     public function destroy(Request $request, int $portfolioId)
     {
@@ -137,7 +125,7 @@ class PortfolioTechnicalSkillController extends Controller
                 ->where('technical_skill_id', $validated['technical_skill_id'])
                 ->firstOrFail();
 
-            $name = $portfolioSkill->technicalSkill->name ?? "la habilidad";
+            $name = $portfolioSkill->technicalSkill->name ?? 'la habilidad';
 
             $portfolioSkill->delete();
 
@@ -149,7 +137,7 @@ class PortfolioTechnicalSkillController extends Controller
         } catch (ModelNotFoundException $e) {
 
             return ApiResponse::error(
-                "No se pudo encontrar la habilidad que intentas eliminar.",
+                'No se pudo encontrar la habilidad que intentas eliminar.',
                 404,
                 null
             );
@@ -162,17 +150,12 @@ class PortfolioTechnicalSkillController extends Controller
             ]);
 
             return ApiResponse::error(
-                "Error al eliminar la habilidad. Intenta nuevamente.",
+                'Error al eliminar la habilidad. Intenta nuevamente.',
                 500,
                 null
             );
         }
     }
-
-
-
-
-
 
     public function index(int $portfolioId)
     {
@@ -186,26 +169,26 @@ class PortfolioTechnicalSkillController extends Controller
 
             return ApiResponse::success(
                 $skills,
-                "Habilidades cargadas correctamente "
+                'Habilidades cargadas correctamente '
             );
 
         } catch (ModelNotFoundException $e) {
 
             return ApiResponse::error(
-                "No se encontró el portafolio solicitado.",
+                'No se encontró el portafolio solicitado.',
                 404,
                 null
             );
 
         } catch (Throwable $e) {
 
-            Log::error("Error obteniendo technical skills", [
+            Log::error('Error obteniendo technical skills', [
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
             return ApiResponse::error(
-                "Error al cargar las habilidades. Intenta nuevamente más tarde.",
+                'Error al cargar las habilidades. Intenta nuevamente más tarde.',
                 500,
                 null
             );

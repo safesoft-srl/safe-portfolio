@@ -14,7 +14,7 @@ class PortfolioSkill extends Model
         'level',
     ];
 
-     public function technicalSkill()
+    public function technicalSkill()
     {
         return $this->belongsTo(TechnicalSkill::class, 'technical_skill_id');
     }
