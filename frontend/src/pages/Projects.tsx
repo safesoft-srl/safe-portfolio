@@ -26,8 +26,8 @@ type Project = {
     name: string;
     description: string;
     url_demo: string | null;
-    url_github: string | null;
-    project_image: string | null;
+    url_github: string | "";
+    url_image: string | null;
     skill_ids: number[];
     skill_projects?: { skill_name: string }[];
 };
@@ -42,7 +42,7 @@ export default function Projects() {
         description: "",
         url_demo: "",
         url_github: "",
-        project_image: "",
+        url_image: "",
         skill_ids: [] as number[],
     });
     const [errors, setErrors] = useState({
@@ -59,7 +59,8 @@ export default function Projects() {
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
-    
+    const [fileImage, setFileImage] = useState<File | null>(null);
+
     const syncSkills = async () => {
         try {
             const data = await getSkills();
@@ -142,7 +143,7 @@ export default function Projects() {
                                         description: "",
                                         url_demo: "",
                                         url_github: "",
-                                        project_image: "",
+                                        url_image: "",
                                         skill_ids: [],
                                     });
                                     setIsPublic(true);
@@ -173,7 +174,7 @@ export default function Projects() {
                                                     description: "",
                                                     url_demo: "",
                                                     url_github: "",
-                                                    project_image: "",
+                                                    url_image: "",
                                                     skill_ids: [],
                                                 });
                                                 setIsPublic(true);
@@ -221,7 +222,7 @@ export default function Projects() {
                                                                             description: project.description,
                                                                             url_demo: project.url_demo || "",
                                                                             url_github: project.url_github || "",
-                                                                            project_image: project.project_image || "",
+                                                                            url_image: project.url_image || "",
                                                                             skill_ids: skillIds,
                                                                         });
                                                                         setOpen(true);
@@ -244,7 +245,7 @@ export default function Projects() {
                                                         {/* Imagen debajo del título y antes de la descripción */}
                                                         <div style={{ margin: '16px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                                             <img
-                                                                src={project.project_image || '/src/assets/image.png'}
+                                                                src={project.url_image || '/src/assets/image.png'}
                                                                 alt={project.name}
                                                                 className="object-cover rounded-xl border border-sidebar-border bg-black/60"
                                                                 style={{ maxHeight: 350, minHeight: 120, background: '#181c2f', width: '98%', height: 'auto' }}
@@ -324,20 +325,21 @@ export default function Projects() {
                             name: form.name,
                             description: form.description,
                             url_demo: form.url_demo || null,
-                            url_github: form.url_github || null,
-                            project_image: form.project_image || null,
+                            url_github: form.url_github || "",
+                            project_image: null,
                             skill_ids: form.skill_ids,
                         };
+
                         try {
                             if (editIndex !== null) {
                                 const projectToEdit = projects[editIndex];
-                                await updateProject(projectToEdit.id, payload);
+                                await updateProject(projectToEdit.id, payload, fileImage);
                                 await syncProjects();
                             } else {
-                                await createProject(payload);
+                                await createProject(payload, fileImage);
                                 await syncProjects();
                             }
-                            setForm({ name: "", description: "", url_demo: "", url_github: "", project_image: "", skill_ids: [] });
+                            setForm({ name: "", description: "", url_demo: "", url_github: "", url_image: "", skill_ids: [] });
                             setImagePreview("/src/assets/image.png");
                             await syncProjects();
                             setEditIndex(null);
@@ -450,7 +452,7 @@ export default function Projects() {
                                                         <div className="flex flex-col items-center w-full mb-2">
                                                             <div className="w-full">
                                                                 <img
-                                                                    src={form.project_image || imagePreview}
+                                                                    src={form.url_image || imagePreview}
                                                                     alt="Vista previa"
                                                                     className="object-cover rounded-xl border border-sidebar-border bg-black/60 w-full h-60"
                                                                     style={{ minHeight: 120, background: '#181c2f' }}
@@ -460,7 +462,7 @@ export default function Projects() {
                                                             <div className="flex gap-2 mt-3">
                                                                 <label htmlFor="project-image-upload" className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-[#6c72ff] text-white text-xs font-medium cursor-pointer hover:bg-[#5c61eb]">
                                                                     <UploadSimple size={14} />
-                                                                    {form.project_image ? 'Subir Otra' : 'Subir Imagen'}
+                                                                    {form.url_image ? 'Subir Otra' : 'Subir Imagen'}
                                                                     <input
                                                                         id="project-image-upload"
                                                                         type="file"
@@ -469,10 +471,11 @@ export default function Projects() {
                                                                         onChange={e => {
                                                                             const file = e.target.files?.[0];
                                                                             if (file) {
+                                                                                setFileImage(file);
                                                                                 const reader = new FileReader();
                                                                                 reader.onload = ev => {
                                                                                     const imgData = ev.target?.result as string;
-                                                                                    setForm(f => ({ ...f, project_image: imgData }));
+                                                                                    setForm(f => ({ ...f, url_image: imgData }));
                                                                                     setImagePreview(imgData);
                                                                                 };
                                                                                 reader.readAsDataURL(file);
@@ -480,7 +483,7 @@ export default function Projects() {
                                                                         }}
                                                                     />
                                                                 </label>
-                                                                {form.project_image && (
+                                                                {form.url_image && (
                                                                     <AlertDialog>
                                                                         <AlertDialogTrigger>
                                                                             <button
@@ -598,39 +601,4 @@ export default function Projects() {
             </AlertDialog>
         </>
     );
-
-    
-    <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-[#151a3f] text-slate-900 dark:text-slate-100">
-            <AlertDialogHeader>
-                <AlertDialogTitle>¿Eliminar proyecto?</AlertDialogTitle>
-                <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">
-                    Esta acción eliminará el proyecto seleccionado y no se podrá deshacer.
-                </p>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel className="border-sidebar-border dark:border-[#2a2d46] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-slate-200">
-                    Cancelar
-                </AlertDialogCancel>
-                <Button
-                    className="bg-[#e53e3e] text-white hover:bg-[#c53030]"
-                    onClick={async () => {
-                        if (deleteIndex !== null) {
-                            const projectToDelete = projects[deleteIndex];
-                            try {
-                                await deleteProject(projectToDelete.id);
-                                await syncProjects();
-                            } catch {
-                                showErrorToast("Error al eliminar proyecto");
-                            }
-                            setDeleteIndex(null);
-                        }
-                        setDeleteDialogOpen(false);
-                    }}
-                >
-                    Eliminar
-                </Button>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
 }
