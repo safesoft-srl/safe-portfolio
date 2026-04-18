@@ -44,7 +44,6 @@ export default function RegisterPage() {
       newErrors.name = "El nombre es obligatorio.";
     }
 
-  
     if (!username.trim()) {
       newErrors.username = "El nombre de usuario es obligatorio.";
     } else if (username.length < 3) {
@@ -83,7 +82,7 @@ export default function RegisterPage() {
           headers: {
             "Content-Type": "application/json",
           },
-         
+
           body: JSON.stringify({ name, username, email, password }),
         });
 
@@ -180,7 +179,6 @@ export default function RegisterPage() {
             className="flex transition-transform duration-500 ease-in-out w-full"
             style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
           >
-            
             <div className="w-full shrink-0">
               <CardContent className="space-y-4 px-6 pt-2">
                 {step === 1 && apiError && (
@@ -284,7 +282,6 @@ export default function RegisterPage() {
               </CardContent>
             </div>
 
-            
             <div className="w-full shrink-0">
               <CardContent className="space-y-5 px-6 pt-2">
                 {step === 2 && apiError && (
