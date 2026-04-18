@@ -125,7 +125,7 @@ export default function RegisterPage() {
       if (response.ok) {
         setApiSuccess(data.message || "Correo verificado exitosamente");
         navigate("/dashboard");
-        //       setTimeout(() => { navigate("/login");  }, 1500);
+        // setTimeout(() => { navigate("/login");  }, 1500);
       } else {
         setApiError(data.message || "Error al verificar token.");
       }
@@ -179,7 +179,6 @@ export default function RegisterPage() {
             className="flex transition-transform duration-500 ease-in-out w-full"
             style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
           >
-            {/* -------------------- STEP 1: Registration Form -------------------- */}
             <div className="w-full shrink-0">
               <CardContent className="space-y-4 px-6 pt-2">
                 {step === 1 && apiError && (
@@ -283,7 +282,6 @@ export default function RegisterPage() {
               </CardContent>
             </div>
 
-            {/* -------------------- STEP 2: Token Verification -------------------- */}
             <div className="w-full shrink-0">
               <CardContent className="space-y-5 px-6 pt-2">
                 {step === 2 && apiError && (
