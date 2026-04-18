@@ -28,7 +28,7 @@ class StoreProjectRequest extends FormRequest
             'url_demo' => 'nullable|url',
             'url_github' => 'nullable|url',
             'project_image' => 'nullable|image|mimes:jpg,jpeg,png',
-            'skill_ids'=> 'nullable|array',
+            'skill_ids' => 'nullable|array',
             'skill_ids.*' => 'exists:skill_projects,id',
         ];
     }

@@ -48,7 +48,7 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
   return response.data;
 };
 
-export type UpdateProjectDTO = Omit<Partial<CreateProjectDTO>, 'portfolio_id'>;
+export type UpdateProjectDTO = Omit<Partial<CreateProjectDTO>, "portfolio_id">;
 
 export const updateProject = async (id: number, data: UpdateProjectDTO, file?: File | null) => {
   const formData = new FormData();
@@ -62,10 +62,8 @@ export const updateProject = async (id: number, data: UpdateProjectDTO, file?: F
     data.skill_ids.forEach((id) => {
       formData.append("skill_ids[]", id.toString());
     });
-    
   }
 
-  
   if (file) {
     formData.append("project_image", file);
   }
@@ -75,7 +73,6 @@ export const updateProject = async (id: number, data: UpdateProjectDTO, file?: F
 
   return response.data;
 };
-
 
 export const deleteProject = async (id: number) => {
   const response = await api.delete(`api/projects/${id}`);

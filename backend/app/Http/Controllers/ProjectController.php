@@ -13,6 +13,7 @@ class ProjectController extends Controller
     public function __construct(
         private ProjectService $projectService
     ) {}
+
     /**
      * Display a listing of the resource.
      */

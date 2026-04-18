@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Project;
-use App\Services\ImageUploadService;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProjectService
@@ -17,7 +16,7 @@ class ProjectService
         $data = $this->handleImage($data);
         $project = Project::create($data);
 
-        if (!empty($data['skill_ids'])) {
+        if (! empty($data['skill_ids'])) {
             $project->skill_projects()->sync($data['skill_ids']);
         }
 
@@ -48,7 +47,7 @@ class ProjectService
         }
         $project->update($data);
 
-        if (!empty($data['skill_ids'])) {
+        if (! empty($data['skill_ids'])) {
             $project->skill_projects()->sync($data['skill_ids']);
         }
 
@@ -58,7 +57,7 @@ class ProjectService
     public function delete(int $id)
     {
         $project = Project::findOrFail($id);
-        if (!$project) {
+        if (! $project) {
             return false;
         }
 

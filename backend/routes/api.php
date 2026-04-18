@@ -1,14 +1,13 @@
 <?php
 
-use App\Http\Controllers\EmailVerificationController;
-use App\Http\Controllers\RegisterAccountController;
-use App\Http\Controllers\ResendTokenController;
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RegisterAccountController;
+use App\Http\Controllers\ResendTokenController;
 use App\Http\Controllers\SkillProjectController;
+use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [RegisterAccountController::class, 'register']);
 // Api   http://localhost:8000/api/register   (Para registrar nuevos usuarios)  JSON(name,email,password)
@@ -67,5 +66,5 @@ Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfo
 Route::get('/portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
 Route::apiResource('/projects', ProjectController::class);
 
-//routes for skills
-Route::apiResource('/skills',SkillProjectController::class);
+// routes for skills
+Route::apiResource('/skills', SkillProjectController::class);

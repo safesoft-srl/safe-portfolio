@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ApiResponse;
+use App\Constants\ResponseMessages;
 use App\Models\SkillProject;
 use Illuminate\Http\Request;
-use App\Constants\ResponseMessages;
-use App\Constants\ApiResponse;
 
 class SkillProjectController extends Controller
 {
-   public function store(Request $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'skill_name' => 'required|string|max:255',

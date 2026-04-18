@@ -112,12 +112,8 @@ export default function DashboardHome() {
     <>
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-start lg:justify-between px-2 sm:px-3 md:px-6 py-2">
         <div className="mb-4 lg:mb-0 w-full">
-          <h1 className="text-2xl font-bold tracking-tight">
-            ¡Bienvenido, {displayName}!
-          </h1>
-          <p className="mt-1 text-sm font-sans">
-            Gestiona tu portafolio profesional
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {displayName}!</h1>
+          <p className="mt-1 text-sm font-sans">Gestiona tu portafolio profesional</p>
         </div>
 
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-3 w-full">
@@ -163,7 +159,9 @@ export default function DashboardHome() {
 
       <section className="mx-auto w-full max-w-7xl px-2 sm:px-3 md:px-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 rounded-md bg-input dark:bg-[#151a3b] px-3 py-1.5 w-full max-w-xl">
-          <p className="text-xs font-sans break-all flex-1">{portfolioUrl || "safeportfolio.url.dev"}</p>
+          <p className="text-xs font-sans break-all flex-1">
+            {portfolioUrl || "safeportfolio.url.dev"}
+          </p>
           <div className="relative group sm:ml-2 mt-2 sm:mt-0">
             <button
               type="button"
@@ -189,7 +187,7 @@ export default function DashboardHome() {
         <div className="w-full rounded-2xl bg-sidebar py-6 border border-sidebar-border px-4 sm:px-8">
           <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
             <p className="text-sm text-sidebar-foreground">
-                Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
+              Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
             </p>
             <CreateProfileModal />
           </div>

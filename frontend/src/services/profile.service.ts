@@ -90,7 +90,7 @@ export async function createProfile(
   if (file) {
     formData.append("profile_image", file);
   }
- 
+
   const response = await http.post("/api/portfolios", formData);
   return toProfileData(unwrapData(response.data));
 }

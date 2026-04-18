@@ -72,9 +72,7 @@ export default function Profile() {
 
   return (
     <div className="mx-auto w-full max-w-5xl font-sans text-slate-900 dark:text-white">
-      {!isLoading && (
-        <h1 className="mb-4 text-3xl font-semibold">Mi Perfil</h1>
-      )}
+      {!isLoading && <h1 className="mb-4 text-3xl font-semibold">Mi Perfil</h1>}
       {isLoading ? (
         <ProfileForm
           mode="edit"

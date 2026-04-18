@@ -3,7 +3,7 @@ import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
-  AlertDialogTrigger
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { X } from "@phosphor-icons/react";
 import { AxiosError } from "axios";
@@ -78,7 +78,15 @@ export default function CreateProfileModal({ onCreated }: { onCreated?: () => vo
           type="button"
           aria-label="Cerrar"
           onClick={() => setOpen(false)}
-          style={{ position: 'absolute', top: 16, right: 16, zIndex: 20, background: 'none', border: 'none', padding: 0 }}
+          style={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            zIndex: 20,
+            background: "none",
+            border: "none",
+            padding: 0,
+          }}
         >
           <X size={20} weight="bold" color="#8c91b7" />
         </button>

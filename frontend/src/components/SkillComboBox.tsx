@@ -29,9 +29,7 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
   const filtered = useMemo(() => {
     const lower = input.toLowerCase();
     return skills.filter(
-      (s) =>
-        s.skill_name.toLowerCase().includes(lower) &&
-        !selected.includes(s.id)
+      (s) => s.skill_name.toLowerCase().includes(lower) && !selected.includes(s.id)
     );
   }, [input, skills, selected]);
 
@@ -48,11 +46,16 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="block mb-1 text-xs font-semibold text-slate-900 dark:text-slate-300">{label}</label>
+        <label className="block mb-1 text-xs font-semibold text-slate-900 dark:text-slate-300">
+          {label}
+        </label>
       )}
       <div className="relative mb-2">
         <div className="relative flex items-center">
-          <MagnifyingGlass size={18} className="absolute left-3 text-[#8c91b7] pointer-events-none" />
+          <MagnifyingGlass
+            size={18}
+            className="absolute left-3 text-[#8c91b7] pointer-events-none"
+          />
           <Input
             value={input}
             onChange={(e) => {
@@ -69,8 +72,8 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
           <ul
             className="absolute z-20 mt-1 w-full bg-input dark:bg-[#1f2552] border border-input dark:border-[#2a2d46] rounded-xl shadow-xl max-h-48 overflow-auto animate-in fade-in zoom-in-95"
             style={{
-              scrollbarColor: '#23234a #181c2f',
-              scrollbarWidth: 'thin',
+              scrollbarColor: "#23234a #181c2f",
+              scrollbarWidth: "thin",
             }}
           >
             <style>{`
@@ -91,7 +94,11 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
                   onMouseDown={() => handleSelect(skill.id)}
                 >
                   {skill.logo_url && (
-                    <img src={skill.logo_url} alt={skill.skill_name} className="w-4 h-4 rounded-full" />
+                    <img
+                      src={skill.logo_url}
+                      alt={skill.skill_name}
+                      className="w-4 h-4 rounded-full"
+                    />
                   )}
                   {skill.skill_name}
                 </li>
@@ -108,10 +115,14 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
             <span
               key={id}
               className="flex items-center gap-1 px-2 py-1 rounded-lg shadow-sm text-xs"
-              style={{ background: '#6c72ff', color: '#fff' }}
+              style={{ background: "#6c72ff", color: "#fff" }}
             >
               {skill.logo_url && (
-                <img src={skill.logo_url} alt={skill.skill_name} className="w-4 h-4 rounded-full mr-1" />
+                <img
+                  src={skill.logo_url}
+                  alt={skill.skill_name}
+                  className="w-4 h-4 rounded-full mr-1"
+                />
               )}
               {skill.skill_name}
               <button

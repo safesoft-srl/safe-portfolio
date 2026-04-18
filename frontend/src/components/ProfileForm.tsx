@@ -48,16 +48,24 @@ const EMPTY_ERRORS = {
 
 type ProfileField = "fullName" | "email" | "profession" | "bio";
 
-export default function ProfileForm({ mode, initialData, onSubmit, isLoading = false, isSaving = false }: ProfileFormProps) {
+export default function ProfileForm({
+  mode,
+  initialData,
+  onSubmit,
+  isLoading = false,
+  isSaving = false,
+}: ProfileFormProps) {
   const [formData, setFormData] = useState<ProfileFormData>(initialData);
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [profileImage, setProfileImage] = useState<string>(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
+  const [profileImage, setProfileImage] = useState<string>(
+    initialData.url_photo || DEFAULT_PROFILE_IMAGE
+  );
   const [showPhotoActions, setShowPhotoActions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const photoActionsRef = useRef<HTMLDivElement>(null);
   const [prevInitialData, setPrevInitialData] = useState(initialData);
-  
+
   if (initialData !== prevInitialData) {
     setFormData(initialData);
     setProfileImage(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
@@ -65,7 +73,6 @@ export default function ProfileForm({ mode, initialData, onSubmit, isLoading = f
     setPrevInitialData(initialData);
   }
   const validateField = (field: ProfileField, value: string) => {
-    
     const trimmedValue = value.trim();
     if (field === "fullName") {
       if (!trimmedValue) return "El nombre es obligatorio.";
@@ -219,7 +226,9 @@ export default function ProfileForm({ mode, initialData, onSubmit, isLoading = f
       </h2>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
         <div className="space-y-5">
-          <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Foto de Perfil</Label>
+          <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Foto de Perfil
+          </Label>
           <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
             <Avatar className="h-60 w-60">
               <AvatarImage src={formData.url_photo} alt="Foto de perfil" />
@@ -248,7 +257,9 @@ export default function ProfileForm({ mode, initialData, onSubmit, isLoading = f
                   onClick={() => setShowPhotoActions((prev) => !prev)}
                   className="absolute bottom-2 left-2 inline-flex h-7 items-center gap-1 rounded-md border border-[#6d79ff]/70 bg-[#5562ed] px-2 text-xs font-medium text-white hover:bg-[#4d59da]"
                 >
-                  <span aria-hidden="true" className="text-xs leading-none">✎</span>
+                  <span aria-hidden="true" className="text-xs leading-none">
+                    ✎
+                  </span>
                   Editar
                 </button>
                 {showPhotoActions ? (
@@ -295,128 +306,138 @@ export default function ProfileForm({ mode, initialData, onSubmit, isLoading = f
         </div>
         <div className="space-y-5">
           <div className="space-y-2.5">
-            <Label htmlFor="fullName" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <Label
+              htmlFor="fullName"
+              className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+            >
               Nombre Completo *
-              </Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                type="text"
-                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+"
-                placeholder="Ej: Juan Perez"
-                value={formData.profile_name}
-                onChange={handleInputChange}
-                onBlur={handleFieldBlur}
-                style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
-                className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-              />
-              {errors.fullName ? (
-                <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                  {errors.fullName}
-                </p>
-              ) : null}
-            </div>
-            <div className="space-y-2.5">
-              <Label htmlFor="email" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Correo *
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Ej: example1@gmail.com"
-                pattern="[a-z0-9]+@gmail\.com"
-                value={formData.profile_email}
-                onChange={handleInputChange}
-                onBlur={handleFieldBlur}
-                style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
-                className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-              />
-              {errors.email ? (
-                <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                  {errors.email}
-                </p>
-              ) : null}
-            </div>
-            <div className="space-y-2.5">
-              <Label htmlFor="profession" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                Profesión *
-              </Label>
-              <Input
-                id="profession"
-                name="profession"
-                type="text"
-                placeholder="Ej: Desarrollador Full Stack"
-                value={formData.profession}
-                onChange={handleInputChange}
-                onBlur={handleFieldBlur}
-                style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
-                pattern=".*"
-                className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-              />
-              {errors.profession ? (
-                <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                  {errors.profession}
-                </p>
-              ) : null}
-            </div>
+            </Label>
+            <Input
+              id="fullName"
+              name="fullName"
+              type="text"
+              pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+"
+              placeholder="Ej: Juan Perez"
+              value={formData.profile_name}
+              onChange={handleInputChange}
+              onBlur={handleFieldBlur}
+              style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
+              className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            {errors.fullName ? (
+              <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                {errors.fullName}
+              </p>
+            ) : null}
+          </div>
+          <div className="space-y-2.5">
+            <Label
+              htmlFor="email"
+              className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+            >
+              Correo *
+            </Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Ej: example1@gmail.com"
+              pattern="[a-z0-9]+@gmail\.com"
+              value={formData.profile_email}
+              onChange={handleInputChange}
+              onBlur={handleFieldBlur}
+              style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
+              className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            {errors.email ? (
+              <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                {errors.email}
+              </p>
+            ) : null}
+          </div>
+          <div className="space-y-2.5">
+            <Label
+              htmlFor="profession"
+              className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+            >
+              Profesión *
+            </Label>
+            <Input
+              id="profession"
+              name="profession"
+              type="text"
+              placeholder="Ej: Desarrollador Full Stack"
+              value={formData.profession}
+              onChange={handleInputChange}
+              onBlur={handleFieldBlur}
+              style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
+              pattern=".*"
+              className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            {errors.profession ? (
+              <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                {errors.profession}
+              </p>
+            ) : null}
           </div>
         </div>
-        <div className="mt-8 space-y-2.5">
-          <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-            Biografía *
-          </Label>
-          <textarea
-            id="bio"
-            name="bio"
-            placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
-            value={formData.bio}
-            onChange={handleInputChange}
-            onBlur={handleFieldBlur}
-            rows={6}
-            style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
-            className="w-full rounded-xl border bg-input dark:bg-[#1f2552] px-4 py-3 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
-          />
-          {errors.bio ? (
-            <p className="text-xs" style={{ color: "var(--destructive)" }}>
-              {errors.bio}
-            </p>
-          ) : null}
+      </div>
+      <div className="mt-8 space-y-2.5">
+        <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+          Biografía *
+        </Label>
+        <textarea
+          id="bio"
+          name="bio"
+          placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
+          value={formData.bio}
+          onChange={handleInputChange}
+          onBlur={handleFieldBlur}
+          rows={6}
+          style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
+          className="w-full rounded-xl border bg-input dark:bg-[#1f2552] px-4 py-3 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+        />
+        {errors.bio ? (
+          <p className="text-xs" style={{ color: "var(--destructive)" }}>
+            {errors.bio}
+          </p>
+        ) : null}
+      </div>
+      <div className="mt-6">
+        <div className="flex justify-center gap-3">
+          <button
+            type="submit"
+            disabled={isSaving || !hasUnsavedChanges}
+            className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white shadow-sm transition-colors transition-transform duration-150 hover:bg-[#8b90ff] hover:shadow-lg hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff] flex items-center justify-center min-w-[150px]"
+          >
+            {isSaving ? (
+              <>
+                <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
+              </>
+            ) : mode === "edit" ? (
+              "Guardar Cambios"
+            ) : (
+              "Crear Perfil"
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setErrors(EMPTY_ERRORS);
+              setFormData(initialData);
+              setSelectedFile(null);
+              setProfileImage(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
+              if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+              }
+            }}
+            disabled={isSaving || !hasUnsavedChanges}
+            className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 transition-colors transition-transform duration-150 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-slate-200 hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:border-[#2a2d46] disabled:hover:text-slate-300"
+          >
+            Cancelar
+          </button>
         </div>
-        <div className="mt-6">
-          <div className="flex justify-center gap-3">
-            <button
-              type="submit"
-              disabled={isSaving || !hasUnsavedChanges}
-              className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white shadow-sm transition-colors transition-transform duration-150 hover:bg-[#8b90ff] hover:shadow-lg hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff] flex items-center justify-center min-w-[150px]"
-            >
-              {isSaving ? (
-                <>
-                  <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
-                  
-                </>
-              ) : (
-                mode === "edit" ? "Guardar Cambios" : "Crear Perfil"
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setErrors(EMPTY_ERRORS);
-                setFormData(initialData);
-                setSelectedFile(null);
-                setProfileImage(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
-                if (fileInputRef.current) {
-                  fileInputRef.current.value = "";
-                }
-              }}
-              disabled={isSaving || !hasUnsavedChanges}
-              className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 transition-colors transition-transform duration-150 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-slate-200 hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:border-[#2a2d46] disabled:hover:text-slate-300"
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
+      </div>
     </form>
   );
 }

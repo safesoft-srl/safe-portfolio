@@ -9,6 +9,6 @@ export function showErrorToast(message: string) {
       borderRadius: "8px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
     },
-    className: "custom-error-toast"
+    className: "custom-error-toast",
   });
 }
