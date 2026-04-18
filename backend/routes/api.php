@@ -47,9 +47,12 @@ Route::group([
 Route::apiResource('portfolios', PortfolioController::class);
 */
 
+use App\Http\Controllers\WorkExperienceController;
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
     Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
+    Route::apiResource('/me/work-experiences', WorkExperienceController::class)->except(['create', 'edit', 'show']);
     Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
     Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
     Route::post('/me/portfolio/publish', [PortfolioController::class, 'getSlug']);
