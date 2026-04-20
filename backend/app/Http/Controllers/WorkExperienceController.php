@@ -43,21 +43,21 @@ class WorkExperienceController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Usuario no autenticado',
-                'data' => null
+                'data' => null,
             ], 401);
         }
 
         $portfolio = $user->portfolios()->first();
 
-        if (!$portfolio) {
+        if (! $portfolio) {
             return response()->json([
                 'success' => false,
                 'message' => 'El usuario no tiene portfolio',
-                'data' => null
+                'data' => null,
             ], 404);
         }
         $data = $request->validated();

@@ -94,7 +94,7 @@ class PortfolioService
             [
                 'portfolioSkills',
                 'workExperiences',
-                'projects.skill_projects'
+                'projects.skill_projects',
             ]
         )
             ->where('portfolio_slug', $slug)->firstOrFail();
