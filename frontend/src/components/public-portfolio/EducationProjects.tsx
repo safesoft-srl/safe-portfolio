@@ -5,41 +5,44 @@ export default function EducationProjects() {
     {
       date: "2020-2024",
       institution: "MIT",
-      degree: "Licenciatura en Ciencias de la Computación"
+      degree: "Licenciatura en Ciencias de la Computación",
     },
     {
       date: "2018-2019",
       institution: "Universidad de Harvard",
-      degree: "Certificación en React y Redux, Curso de Desarrollador Node.js"
+      degree: "Certificación en React y Redux, Curso de Desarrollador Node.js",
     },
     {
       date: "2015-2016",
       institution: "Universidad de Stanford",
-      degree: "Certificación en desarrollo web full stack"
+      degree: "Certificación en desarrollo web full stack",
     },
     {
       date: "2013-2015",
       institution: "Universidad de Washington",
-      degree: "Certificación en React y Redux, Curso de Desarrollador Node.js"
-    }
+      degree: "Certificación en React y Redux, Curso de Desarrollador Node.js",
+    },
   ];
 
   const projects = [
     {
       date: "2023-2024",
       title: "Análisis de datos avanzado con herramientas de Big Data",
-      description: "Se utilizaron herramientas de big data para análisis y obtención de información avanzada."
+      description:
+        "Se utilizaron herramientas de big data para análisis y obtención de información avanzada.",
     },
     {
       date: "2021-2023",
       title: "Arquitecturas de aplicaciones nativas de la nube",
-      description: "Estudió las mejores prácticas para el diseño de aplicaciones nativas de la nube."
+      description:
+        "Estudió las mejores prácticas para el diseño de aplicaciones nativas de la nube.",
     },
     {
       date: "2019-2020",
       title: "Personalización de la experiencia del usuario impulsada por IA",
-      description: "Se utilizó la IA para personalizar las experiencias de los usuarios en función de su comportamiento"
-    }
+      description:
+        "Se utilizó la IA para personalizar las experiencias de los usuarios en función de su comportamiento",
+    },
   ];
 
   return (
@@ -49,15 +52,13 @@ export default function EducationProjects() {
         <div className="rounded-2xl border border-[#262b46] bg-[#13152e] p-8 md:p-10 shadow-xl">
           <div className="mb-10 flex items-center gap-3">
             <Book className="h-8 w-8 text-[#bcfd49]" weight="bold" />
-            <h2 className="font-mono text-3xl font-bold tracking-tight text-white">
-              Estudios
-            </h2>
+            <h2 className="font-mono text-3xl font-bold tracking-tight text-white">Estudios</h2>
           </div>
 
           <div className="relative space-y-10 pl-2">
             {/* Vertical Line */}
             <div className="absolute -left-px top-2 bottom-2 w-px bg-slate-800" />
-            
+
             {education.map((edu, i) => (
               <div key={i} className="relative pl-8">
                 <div className="absolute -left-1.25 top-1.5 h-2.5 w-2.5 rounded-full border-2 border-[#13152e] bg-slate-600 shadow-[0_0_0_1px_rgba(71,85,105,1)]" />
@@ -87,7 +88,7 @@ export default function EducationProjects() {
           <div className="relative space-y-10 pl-2">
             {/* Vertical Line */}
             <div className="absolute -left-px top-2 bottom-2 w-px bg-slate-800" />
-            
+
             {projects.map((proj, i) => (
               <div key={i} className="relative pl-8">
                 <div className="absolute -left-1.25 top-1.5 h-2.5 w-2.5 rounded-full border-2 border-[#13152e] bg-slate-600 shadow-[0_0_0_1px_rgba(71,85,105,1)]" />

@@ -1,23 +1,11 @@
-import { 
-  FacebookLogo, 
-  XLogo, 
-  LinkedinLogo, 
-  GithubLogo 
-} from "@phosphor-icons/react";
+import { FacebookLogo, XLogo, LinkedinLogo, GithubLogo } from "@phosphor-icons/react";
 
 interface PublicFooterProps {
   firstName: string;
 }
 
 export function PublicFooter({ firstName }: PublicFooterProps) {
-  const navLinks = [
-    "About me",
-    "Resume",
-    "Services",
-    "Portfolio",
-    "Blog",
-    "Contact"
-  ];
+  const navLinks = ["About me", "Resume", "Services", "Portfolio", "Blog", "Contact"];
 
   return (
     <footer className="mt-20 border-t border-[#1c2139] bg-[#0a0b1e] py-12">

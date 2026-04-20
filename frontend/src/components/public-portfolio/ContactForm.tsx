@@ -81,9 +81,7 @@ export default function ContactForm() {
                 <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
                   {item.label}
                 </span>
-                <span className="font-mono text-sm font-semibold text-white">
-                  {item.value}
-                </span>
+                <span className="font-mono text-sm font-semibold text-white">{item.value}</span>
               </div>
             </div>
           ))}

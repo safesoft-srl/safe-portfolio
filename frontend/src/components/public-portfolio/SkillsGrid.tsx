@@ -19,9 +19,8 @@ export default function SkillsGrid() {
     { name: "Java", category: "Backend" },
   ];
 
-  const filteredSkills = activeTab === "todos" 
-    ? skills 
-    : skills.filter(s => s.category === activeTab);
+  const filteredSkills =
+    activeTab === "todos" ? skills : skills.filter((s) => s.category === activeTab);
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
@@ -65,8 +64,8 @@ export default function SkillsGrid() {
               >
                 {/* Logo Placeholder (White block and PersonIcon as per previous instructions) */}
                 <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-white/5 p-3 group-hover:bg-white/10 transition-colors">
-                   {/* Using PersonIcon as placeholder for tech brand logo */}
-                   <PersonIcon className="h-8 w-8 text-white/20 group-hover:text-white/50 transition-colors" />
+                  {/* Using PersonIcon as placeholder for tech brand logo */}
+                  <PersonIcon className="h-8 w-8 text-white/20 group-hover:text-white/50 transition-colors" />
                 </div>
                 <span className="font-mono text-xs font-semibold text-slate-300 group-hover:text-white">
                   {skill.name}

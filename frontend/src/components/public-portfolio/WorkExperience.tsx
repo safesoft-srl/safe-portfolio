@@ -3,25 +3,36 @@ export default function WorkExperience() {
     {
       company: "Google",
       period: "2018 - Present",
-      description: "Lideré el desarrollo de aplicaciones web escalables, mejorando el rendimiento y la experiencia de usuario para millones de usuarios.",
+      description:
+        "Lideré el desarrollo de aplicaciones web escalables, mejorando el rendimiento y la experiencia de usuario para millones de usuarios.",
       achievements: [
         { symbol: "+", text: "Reconocimiento por desempeño laboral" },
-        { symbol: "+", text: "Reduccion de problemas en un 70% gracias a las aplicaciones implementadas" }
+        {
+          symbol: "+",
+          text: "Reduccion de problemas en un 70% gracias a las aplicaciones implementadas",
+        },
       ],
       color: "text-[#bcfd49]",
-      borderColor: "border-[#bcfd49]/40"
+      borderColor: "border-[#bcfd49]/40",
     },
     {
       company: "FACEBOOK",
       period: "2020-2024",
-      description: "Se implementaron algoritmos de aprendizaje automático para mejorar la funcionalidad de búsqueda.",
+      description:
+        "Se implementaron algoritmos de aprendizaje automático para mejorar la funcionalidad de búsqueda.",
       achievements: [
-        { symbol: "*", text: "Aumento de eficiencia y eficacia en un 85% en la interaccin con el navegador" },
-        { symbol: "•", text: "Mayor satisfaccoin por parte de los usuarios que intereactuaron en el web en su uso cotidiano" }
+        {
+          symbol: "*",
+          text: "Aumento de eficiencia y eficacia en un 85% en la interaccin con el navegador",
+        },
+        {
+          symbol: "•",
+          text: "Mayor satisfaccoin por parte de los usuarios que intereactuaron en el web en su uso cotidiano",
+        },
       ],
       color: "text-[#85ff4d]",
-      borderColor: "border-[#85ff4d]/40"
-    }
+      borderColor: "border-[#85ff4d]/40",
+    },
   ];
 
   return (
@@ -38,17 +49,17 @@ export default function WorkExperience() {
 
         <div className="flex flex-col gap-8">
           {experiences.map((exp, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className={`rounded-xl border ${exp.borderColor} bg-[#13152e] p-6 md:p-8 shadow-lg transition-transform hover:scale-[1.01]`}
             >
               <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-                <h3 className={`font-mono text-2xl font-bold uppercase tracking-tight ${exp.color}`}>
+                <h3
+                  className={`font-mono text-2xl font-bold uppercase tracking-tight ${exp.color}`}
+                >
                   {exp.company}
                 </h3>
-                <span className="font-mono text-sm font-semibold text-[#727bff]">
-                  {exp.period}
-                </span>
+                <span className="font-mono text-sm font-semibold text-[#727bff]">{exp.period}</span>
               </div>
 
               <p className="max-w-3xl font-mono text-sm leading-relaxed text-white">

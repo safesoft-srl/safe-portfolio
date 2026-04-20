@@ -19,20 +19,20 @@ export default function RecentWork() {
           <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#262b46] bg-[#0a0b1e] group">
             <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
             <div className="flex h-full w-full items-center justify-center p-4">
-               {/* Mockup styled placeholder */}
-               <div className="h-full w-full rounded-lg bg-[#0f1120] border border-white/5 shadow-2xl p-6 flex flex-col gap-4">
-                  <div className="flex items-center gap-2">
-                     <div className="h-2 w-2 rounded-full bg-red-400" />
-                     <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                     <div className="h-2 w-2 rounded-full bg-green-400" />
-                  </div>
-                  <div className="h-4 w-1/3 bg-white/5 rounded" />
-                  <div className="h-10 w-2/3 bg-white/10 rounded mt-4" />
-                  <div className="grid grid-cols-2 gap-4 mt-4">
-                     <div className="h-32 bg-white/5 rounded" />
-                     <div className="h-32 bg-white/5 rounded" />
-                  </div>
-               </div>
+              {/* Mockup styled placeholder */}
+              <div className="h-full w-full rounded-lg bg-[#0f1120] border border-white/5 shadow-2xl p-6 flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-red-400" />
+                  <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                  <div className="h-2 w-2 rounded-full bg-green-400" />
+                </div>
+                <div className="h-4 w-1/3 bg-white/5 rounded" />
+                <div className="h-10 w-2/3 bg-white/10 rounded mt-4" />
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div className="h-32 bg-white/5 rounded" />
+                  <div className="h-32 bg-white/5 rounded" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -44,7 +44,8 @@ export default function RecentWork() {
               electrónico
             </h3>
             <p className="mt-6 font-mono text-xs leading-relaxed text-slate-400">
-              Desarrollé una plataforma de aprendizaje en línea con gestión de cursos, cuestionarios y seguimiento del progreso.
+              Desarrollé una plataforma de aprendizaje en línea con gestión de cursos, cuestionarios
+              y seguimiento del progreso.
             </p>
 
             <div className="mt-10">
@@ -69,11 +70,17 @@ export default function RecentWork() {
 
             <div className="mt-12 flex flex-wrap items-center justify-between gap-6">
               <div className="flex gap-8">
-                <a href="#" className="flex items-center gap-2 font-mono text-[10px] text-slate-300 hover:text-white transition-colors border-b border-slate-700 pb-1">
-                   URL del proyecto en vivo <ArrowUpRight size={14} />
+                <a
+                  href="#"
+                  className="flex items-center gap-2 font-mono text-[10px] text-slate-300 hover:text-white transition-colors border-b border-slate-700 pb-1"
+                >
+                  URL del proyecto en vivo <ArrowUpRight size={14} />
                 </a>
-                <a href="#" className="flex items-center gap-2 font-mono text-[10px] text-slate-300 hover:text-white transition-colors border-b border-slate-700 pb-1">
-                   Logros <ArrowUpRight size={14} />
+                <a
+                  href="#"
+                  className="flex items-center gap-2 font-mono text-[10px] text-slate-300 hover:text-white transition-colors border-b border-slate-700 pb-1"
+                >
+                  Logros <ArrowUpRight size={14} />
                 </a>
               </div>
 

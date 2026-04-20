@@ -1,11 +1,4 @@
-import { 
-  Browser, 
-  Database, 
-  Cloud, 
-  FastForward, 
-  ShoppingCart, 
-  Brain 
-} from "@phosphor-icons/react";
+import { Browser, Database, Cloud, FastForward, ShoppingCart, Brain } from "@phosphor-icons/react";
 
 export default function BigSkilss() {
   const skills = [
@@ -53,17 +46,17 @@ export default function BigSkilss() {
 
       <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {skills.map((skill, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className="group relative overflow-hidden rounded-2xl border border-[#262b46] bg-[#13152e]/50 p-8 transition-all hover:bg-[#13152e] hover:shadow-2xl hover:shadow-[#000000]/40"
           >
             {/* Image Placeholder (White block) */}
             <div className="mb-8 flex aspect-video w-full items-center justify-center rounded-xl border border-[#262b46] bg-[#1a1d3a] p-4 grayscale opacity-60 group-hover:opacity-100 transition-opacity overflow-hidden">
-               {/* This represents the colorful illustration in the screenshot */}
-               <div className="relative h-full w-full bg-white/5 rounded-lg flex items-center justify-center">
-                  <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent" />
-                  <skill.Icon size={48} weight="thin" className="text-white/20" />
-               </div>
+              {/* This represents the colorful illustration in the screenshot */}
+              <div className="relative h-full w-full bg-white/5 rounded-lg flex items-center justify-center">
+                <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent" />
+                <skill.Icon size={48} weight="thin" className="text-white/20" />
+              </div>
             </div>
 
             <div className="flex items-start gap-4">
@@ -74,9 +67,7 @@ export default function BigSkilss() {
                 <h3 className="font-mono text-sm font-semibold uppercase tracking-wider text-white">
                   {skill.title}
                 </h3>
-                <p className="font-mono text-[11px] leading-relaxed text-slate-400">
-                  {skill.desc}
-                </p>
+                <p className="font-mono text-[11px] leading-relaxed text-slate-400">{skill.desc}</p>
               </div>
             </div>
           </div>
