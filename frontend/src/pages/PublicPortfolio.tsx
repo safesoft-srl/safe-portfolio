@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { List } from "@phosphor-icons/react";
+import { PublicNavbar } from "@/components/PublicNavbar";
+import { PublicFooter } from "@/components/PublicFooter";
 import defaultProfileImage from "@/assets/image.png";
 import { type ProfileData } from "@/services/profile.service";
 import { getPublicPortfolio } from "@/services/url.service";
+import BusinessGit from "@/components/public-portfolio/BusinessGit";
+import Stats from "@/components/public-portfolio/Stats";
+import BigSkilss from "@/components/public-portfolio/BigSkilss";
+import WorkExperience from "@/components/public-portfolio/WorkExperience";
+import EducationProjects from "@/components/public-portfolio/EducationProjects";
+import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
+import RecentWork from "@/components/public-portfolio/RecentWork";
+import ContactForm from "@/components/public-portfolio/ContactForm";
+
+// import { PersonIcon } from "@phosphor-icons/react";
 
 const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
@@ -52,34 +63,10 @@ export default function PublicPortfolio() {
 
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
-      <header className="border-b border-[#1c2139] bg-[#13152e]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#6c72ff] text-[#0a0b1e] shadow-lg shadow-[#6c72ff]/40">
-              <span className="text-xl font-bold">&lt;/&gt;</span>
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="font-semibold tracking-wide">
-                {firstName.toLowerCase()}
-                <span className="text-[#6c72ff]">.dev</span>
-              </span>
-            </div>
-          </div>
-
-          <nav className="hidden items-center gap-7 text-sm text-slate-300 md:flex">
-            <button className="text-xs font-medium text-[#6c72ff]">Sobre mi</button>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <button className="flex h-9 w-9 items-center justify-center rounded-full border border-[#262b46] bg-[#181b36] text-slate-200 hover:border-[#3b4270] md:hidden">
-              <List className="h-4 w-4" weight="bold" />
-            </button>
-          </div>
-        </div>
-      </header>
+      <PublicNavbar firstName={firstName} />
 
       <main className="pb-20 pt-20">
-        <div className="mx-auto max-w-6xl px-5 py-16 md:px-10">
+        <div id="sobre-mi" className="mx-auto max-w-6xl px-5 py-16 md:px-10">
           <div className="flex flex-col items-center gap-10 lg:flex-row-reverse lg:items-center">
             <div className="w-full max-w-md flex-shrink-0">
               <div className="relative mx-auto h-80 w-80">
@@ -114,7 +101,26 @@ export default function PublicPortfolio() {
             </div>
           </div>
         </div>
+
+        <Stats />
+        <div id="portafolio">
+          <RecentWork />
+        </div>
+        <BusinessGit />
+        <div id="servicios">
+          <BigSkilss />
+        </div>
+        <div id="resumen">
+          <WorkExperience />
+          <EducationProjects />
+        </div>
+        <SkillsGrid />
+        <div id="contacto">
+          <ContactForm />
+        </div>
       </main>
+
+      <PublicFooter firstName={firstName} />
     </div>
   );
 }
