@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWorkExperienceRequest;
 use App\Http\Requests\UpdateWorkExperienceRequest;
+use App\Models\WorkExperience;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,13 +15,24 @@ class WorkExperienceController extends Controller
      */
     public function index(): JsonResponse
     {
-        $user = Auth::user();
-        $experiences = $user->workExperiences()->orderBy('start_date', 'desc')->get();
+        $portfolio = Auth::user()->portfolios()->first();
+        $experiences = $portfolio->workExperiences()->orderBy('start_date', 'desc')->get();
 
         return response()->json([
             'success' => true,
             'data' => $experiences,
             'message' => 'Work experiences retrieved successfully.',
+        ]);
+    }
+
+    public function showAll()
+    {
+        $experiences = WorkExperience::all();
+
+        return response()->json([
+            'success' => true,
+            'data' => $experiences,
+            'message' => 'All work experiences retrieved successfully.',
         ]);
     }
 
@@ -30,9 +42,27 @@ class WorkExperienceController extends Controller
     public function store(StoreWorkExperienceRequest $request): JsonResponse
     {
         $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no autenticado',
+                'data' => null
+            ], 401);
+        }
+
+        $portfolio = $user->portfolios()->first();
+
+        if (!$portfolio) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El usuario no tiene portfolio',
+                'data' => null
+            ], 404);
+        }
         $data = $request->validated();
 
-        $experience = $user->workExperiences()->create($data);
+        $experience = $portfolio->workExperiences()->create($data);
 
         return response()->json([
             'success' => true,
@@ -46,8 +76,8 @@ class WorkExperienceController extends Controller
      */
     public function update(UpdateWorkExperienceRequest $request, int $id): JsonResponse
     {
-        $user = Auth::user();
-        $experience = $user->workExperiences()->find($id);
+        $portfolio = Auth::user()->portfolios()->first();
+        $experience = $portfolio->workExperiences()->find($id);
 
         if (! $experience) {
             return response()->json([
@@ -71,8 +101,8 @@ class WorkExperienceController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $user = Auth::user();
-        $experience = $user->workExperiences()->find($id);
+        $portfolio = Auth::user()->portfolios()->first();
+        $experience = $portfolio->workExperiences()->find($id);
 
         if (! $experience) {
             return response()->json([
