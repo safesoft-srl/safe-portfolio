@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('work_experiences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('portfolio_id')->constrained()->onDelete('cascade');
             $table->string('company');
             $table->string('position');
             $table->date('start_date');
