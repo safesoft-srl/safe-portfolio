@@ -129,6 +129,7 @@
 
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
 
   input[type="date"]::-webkit-calendar-picker-indicator {
