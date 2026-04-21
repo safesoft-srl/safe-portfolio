@@ -16,6 +16,6 @@ export type Skill = {
 };
 
 export const getSkills = async (): Promise<Skill[]> => {
-  const response = await api.get("/skills");
+  const response = await api.get("api/skills");
   return response.data.data || response.data;
 };
