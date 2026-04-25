@@ -125,6 +125,11 @@ export default function ExperiencePage() {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
     },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        setErrMsg(error?.response?.data.message || "Error al crear la experiencia");
+      }
+    },
   });
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const updateMutation = useMutation({
