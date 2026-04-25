@@ -336,6 +336,7 @@ export default function ExperiencePage() {
                   <Label className="text-slate-300">Empresa</Label>
                   <Input
                     {...register("company")}
+                    maxLength={50}
                     placeholder="Ej: Microsoft"
                     className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
                   />
@@ -348,6 +349,7 @@ export default function ExperiencePage() {
                   <Label className="text-slate-300">Cargo / Posición</Label>
                   <Input
                     {...register("position")}
+                    maxLength={70}
                     placeholder="Ej: Senior Developer"
                     className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
                   />
@@ -406,6 +408,7 @@ export default function ExperiencePage() {
                 <Label className="text-slate-300">Descripción</Label>
                 <Textarea
                   {...register("description")}
+                  maxLength={255}
                   rows={3}
                   placeholder="Describe tus responsabilidades..."
                   className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
@@ -431,6 +434,7 @@ export default function ExperiencePage() {
                       <div className="flex gap-2">
                         <Input
                           id="achievement-input"
+                          maxLength={100}
                           placeholder="Ej: Reduje los tiempos de carga en un 50%"
                           className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 font-sans"
                           onKeyDown={(e) => {
