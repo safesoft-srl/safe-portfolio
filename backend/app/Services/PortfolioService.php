@@ -92,7 +92,7 @@ class PortfolioService
     {
         return Portfolio::with(
             [
-                'portfolioSkills',
+                'portfolioSkills.technicalSkill',
                 'workExperiences',
                 'projects.skill_projects',
             ]

@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { AddTechnicalSkill } from "@/components/ui/addTechnicalSkill";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 interface UserSkill {
   id: number;
@@ -28,12 +40,25 @@ export default function Skills() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<UserSkill | null>(null);
 
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const token = localStorage.getItem("token");
+
   const fetchUserSkills = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`);
-      const result = await res.json();
+      const res = await fetch(
+        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
+      const result = await res.json();
       const skills = result.data || [];
+
       setUserSkills(skills);
     } catch (err) {
       console.error("Error cargando skills del usuario:", err);
@@ -48,11 +73,17 @@ export default function Skills() {
 
   const handleAddNewSkill = async (technical_skill_id: number, level: string) => {
     try {
-      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ technical_skill_id, level }),
-      });
+      const res = await fetch(
+        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ technical_skill_id, level }),
+        }
+      );
 
       if (res.ok) {
         await fetchUserSkills();
@@ -66,15 +97,18 @@ export default function Skills() {
   };
 
   const handleDeleteSkill = async (technical_skill_id: number) => {
-    const confirmDelete = confirm("¿Seguro que deseas eliminar esta habilidad?");
-    if (!confirmDelete) return;
-
     try {
-      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ technical_skill_id }),
-      });
+      const res = await fetch(
+        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ technical_skill_id }),
+        }
+      );
 
       if (res.ok) {
         await fetchUserSkills();
@@ -89,25 +123,39 @@ export default function Skills() {
 
   const handleOpenEdit = (skill: UserSkill) => {
     setSelectedSkill(skill);
+    setSelectedLevel(skill.level);
     setIsEditOpen(true);
   };
 
-  const handleUpdateLevel = async (level: string) => {
-    if (!selectedSkill) return;
+  const handleSelectLevel = (level: string) => {
+    setSelectedLevel(level);
+  };
+
+  const handleSaveLevel = async () => {
+    if (!selectedSkill || !selectedLevel) return;
+
+    setIsSaving(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          technical_skill_id: selectedSkill.technical_skill_id,
-          level,
-        }),
-      });
+      const res = await fetch(
+        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            technical_skill_id: selectedSkill.technical_skill_id,
+            level: selectedLevel,
+          }),
+        }
+      );
 
       if (res.ok) {
         setIsEditOpen(false);
         setSelectedSkill(null);
+        setSelectedLevel(null);
         await fetchUserSkills();
       } else {
         const errorData = await res.json();
@@ -115,18 +163,25 @@ export default function Skills() {
       }
     } catch (err) {
       console.error("Error actualizando skill:", err);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const filteredSkills = userSkills.filter(
-    (skill) => activeCategory === "Todas" || skill.technical_skill?.category === activeCategory
+    (skill) =>
+      activeCategory === "Todas" ||
+      skill.technical_skill?.category === activeCategory
   );
 
   return (
     <div className="min-h-screen bg-[#14162f] flex flex-col text-slate-100 font-heading">
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-12">
-          <h1 className="text-3xl font-bold text-white tracking-tight">Habilidades</h1>
+          <h1 className="text-3xl font-bold text-white tracking-tight">
+            Habilidades
+          </h1>
+
           <div className="w-48">
             <AddTechnicalSkill onAdd={handleAddNewSkill} />
           </div>
@@ -149,7 +204,9 @@ export default function Skills() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-20 text-slate-500">Cargando habilidades...</div>
+          <div className="text-center py-20 text-slate-500">
+            Cargando habilidades...
+          </div>
         ) : filteredSkills.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredSkills.map((skill) => (
@@ -157,12 +214,50 @@ export default function Skills() {
                 key={skill.id}
                 className="relative bg-[#13152e] border border-[#232555] rounded-2xl overflow-hidden shadow-2xl transition-all hover:border-[#6c72ff]/50"
               >
-                <button
-                  onClick={() => handleDeleteSkill(skill.technical_skill_id)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold flex items-center justify-center transition-all"
-                >
-                  ✕
-                </button>
+                <div className="absolute top-3 right-3 z-20">
+                  <AlertDialog>
+                    <AlertDialogTrigger
+                      render={
+                        <Button
+                          variant="ghost"
+                          className="w-8 h-8 rounded-full hover:bg-red-600/20 hover:text-red-500"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          ✕
+                        </Button>
+                      }
+                    />
+
+                    <AlertDialogContent className="bg-[#13152e] border border-[#232555]">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="text-white">
+                          ¿Eliminar habilidad?
+                        </AlertDialogTitle>
+
+                        <AlertDialogDescription className="text-slate-400">
+                          Esta acción no se puede deshacer. Se eliminará
+                          permanentemente la habilidad{" "}
+                          <b>{skill.technical_skill?.name}</b>.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="bg-[#1c1f38] text-white border-none hover:bg-[#232555]">
+                          Cancelar
+                        </AlertDialogCancel>
+
+                        <AlertDialogAction
+                          onClick={() =>
+                            handleDeleteSkill(skill.technical_skill_id)
+                          }
+                          className="bg-red-600 text-white hover:bg-red-700 border-none"
+                        >
+                          Eliminar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
 
                 <CardContent
                   className="p-8 flex flex-col items-center text-center cursor-pointer"
@@ -191,14 +286,18 @@ export default function Skills() {
                     Nivel {skill.level}
                   </div>
 
-                  <p className="text-slate-600 text-xs mt-2 italic">Click para editar nivel</p>
+                  <p className="text-slate-600 text-xs mt-2 italic">
+                    Click para editar nivel
+                  </p>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-32 border-2 border-dashed border-[#232555] rounded-3xl">
-            <p className="text-slate-500 text-lg italic">No hay nada que mostrar</p>
+            <p className="text-slate-500 text-lg italic">
+              No hay nada que mostrar
+            </p>
             <p className="text-slate-600 text-sm mt-2">
               Empieza agregando una habilidad técnica a tu portafolio.
             </p>
@@ -218,6 +317,7 @@ export default function Skills() {
                 onClick={() => {
                   setIsEditOpen(false);
                   setSelectedSkill(null);
+                  setSelectedLevel(null);
                 }}
                 className="text-slate-500 hover:text-white text-2xl transition-colors"
               >
@@ -225,19 +325,33 @@ export default function Skills() {
               </button>
             </div>
 
-            <p className="text-slate-400 text-sm mb-6">Selecciona tu nivel de dominio:</p>
+            <p className="text-slate-400 text-sm mb-6">
+              Selecciona tu nivel de dominio:
+            </p>
 
             <div className="flex flex-col gap-3">
               {LEVELS.map((level) => (
                 <button
                   key={level}
-                  onClick={() => handleUpdateLevel(level)}
-                  className="w-full py-4 bg-[#1c1f38] hover:bg-[#6c72ff] text-white rounded-xl font-bold transition-all border border-[#232555]"
+                  onClick={() => handleSelectLevel(level)}
+                  className={`w-full py-4 rounded-xl font-bold transition-all border ${
+                    selectedLevel === level
+                      ? "bg-[#6c72ff] text-white border-[#6c72ff]"
+                      : "bg-[#1c1f38] hover:bg-[#232555] text-white border-[#232555]"
+                  }`}
                 >
                   {level}
                 </button>
               ))}
             </div>
+
+            <Button
+              disabled={!selectedLevel || isSaving}
+              onClick={handleSaveLevel}
+              className="mt-6 w-full h-12 rounded-xl"
+            >
+              {isSaving ? "Guardando..." : "Guardar"}
+            </Button>
           </div>
         </div>
       )}
