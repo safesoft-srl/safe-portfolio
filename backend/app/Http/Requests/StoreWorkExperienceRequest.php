@@ -22,13 +22,13 @@ class StoreWorkExperienceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company' => 'required|string|max:100',
-            'position' => 'required|string|max:100',
+            'company' => 'required|string|max:50',
+            'position' => 'required|string|max:50',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'is_current' => 'boolean',
-            'description' => 'nullable|string',
-            'achievements' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
+            'achievements' => 'nullable|string|max:5',
             'is_visible' => 'boolean',
         ];
     }
