@@ -64,6 +64,19 @@ const experienceSchema = z
     is_visible: z.boolean(),
   })
   .superRefine((data, ctx) => {
+    // Obtenemos la fecha de hoy en formato "yyyy-mm-dd"
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    // 1. La fecha de inicio no puede ser futura
+    if (data.start_date && data.start_date > todayStr) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "La fecha de inicio no puede ser en el futuro",
+        path: ["start_date"],
+      });
+    }
+
+    // 2. Fecha de fin obligatoria si no es el trabajo actual
     if (!data.is_current && !data.end_date) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -71,7 +84,29 @@ const experienceSchema = z
         path: ["end_date"],
       });
     }
+
+    // 3. Validaciones sobre la fecha de fin (si existe)
+    if (data.end_date) {
+      // No puede ser futura
+      if (data.end_date > todayStr) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de fin no puede ser en el futuro (selecciona 'Actualidad')",
+          path: ["end_date"],
+        });
+      }
+
+      // No puede ser anterior a la de inicio
+      if (data.start_date && data.end_date < data.start_date) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de fin no puede ser anterior a la fecha de inicio",
+          path: ["end_date"],
+        });
+      }
+    }
   });
+
 
 type ExperienceFormData = z.infer<typeof experienceSchema>;
 
