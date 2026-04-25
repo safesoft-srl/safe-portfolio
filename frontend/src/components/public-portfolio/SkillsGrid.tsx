@@ -28,9 +28,7 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
   const filteredSkills = useMemo(() => {
     if (activeTab === "todos") return skills;
 
-    return skills.filter(
-      (s) => (s.technical_skill?.category ?? "Otros") === activeTab
-    );
+    return skills.filter((s) => (s.technical_skill?.category ?? "Otros") === activeTab);
   }, [activeTab, skills]);
 
   return (
@@ -46,9 +44,7 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
         <div className="relative z-10 flex flex-col items-center text-center">
           <span className="font-mono text-xs text-[#bcfd49]">• Skills</span>
 
-          <h2 className="mt-4 text-4xl font-bold text-white md:text-5xl">
-            Mis habilidades
-          </h2>
+          <h2 className="mt-4 text-4xl font-bold text-white md:text-5xl">Mis habilidades</h2>
 
           {/* Tabs */}
           <div className="mt-10 flex flex-wrap justify-center rounded-full border border-[#262b46] bg-[#1a1d3a]/50 p-1">
@@ -94,13 +90,10 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
 
                     {/* BACK */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl border border-[#bcfd49] bg-[#0f1224] p-4 text-center text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
-                      <p className="text-sm font-bold">
-                        {skill.technical_skill?.name ?? "Skill"}
-                      </p>
+                      <p className="text-sm font-bold">{skill.technical_skill?.name ?? "Skill"}</p>
 
                       <p className="text-xs text-slate-300">
-                        Nivel:{" "}
-                        <span className="text-[#bcfd49]">{skill.level}</span>
+                        Nivel: <span className="text-[#bcfd49]">{skill.level}</span>
                       </p>
 
                       <p className="text-[10px] text-slate-400">
@@ -115,9 +108,7 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
 
           {/* EMPTY */}
           {filteredSkills.length === 0 && (
-            <p className="mt-10 text-sm text-slate-400">
-              No hay habilidades registradas todavía.
-            </p>
+            <p className="mt-10 text-sm text-slate-400">No hay habilidades registradas todavía.</p>
           )}
         </div>
       </div>

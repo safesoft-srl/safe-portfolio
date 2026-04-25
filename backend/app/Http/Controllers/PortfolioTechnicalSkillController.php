@@ -19,7 +19,7 @@ class PortfolioTechnicalSkillController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             abort(401, 'No autenticado.');
         }
 
@@ -32,7 +32,7 @@ class PortfolioTechnicalSkillController extends Controller
             ->skip($portfolioIndex - 1)
             ->first();
 
-        if (!$portfolio) {
+        if (! $portfolio) {
             abort(404, 'No se encontró el portafolio solicitado para este usuario.');
         }
 

@@ -64,15 +64,9 @@ Route::apiResource('/portfolios', PortfolioController::class);
 
 Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);
 
-
-
-
-
-
 // Apis para manejar las skills de un portafolio
 use App\Http\Controllers\PortfolioTechnicalSkillController;
 use App\Http\Controllers\TechnicalSkillController;
-
 
 Route::get('/technical-skills', [TechnicalSkillController::class, 'index']);
 
@@ -89,20 +83,9 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
-
-
-
-
-
-
-
-
 // routes for projects
 Route::get('/portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
 Route::apiResource('/projects', ProjectController::class);
 
 // routes for skills
 Route::apiResource('/skills', SkillProjectController::class);
-
-
-

@@ -47,14 +47,11 @@ export default function Skills() {
 
   const fetchUserSkills = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const result = await res.json();
       const skills = result.data || [];
@@ -73,17 +70,14 @@ export default function Skills() {
 
   const handleAddNewSkill = async (technical_skill_id: number, level: string) => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ technical_skill_id, level }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ technical_skill_id, level }),
+      });
 
       if (res.ok) {
         await fetchUserSkills();
@@ -98,17 +92,14 @@ export default function Skills() {
 
   const handleDeleteSkill = async (technical_skill_id: number) => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ technical_skill_id }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ technical_skill_id }),
+      });
 
       if (res.ok) {
         await fetchUserSkills();
@@ -137,20 +128,17 @@ export default function Skills() {
     setIsSaving(true);
 
     try {
-      const res = await fetch(
-        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            technical_skill_id: selectedSkill.technical_skill_id,
-            level: selectedLevel,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          technical_skill_id: selectedSkill.technical_skill_id,
+          level: selectedLevel,
+        }),
+      });
 
       if (res.ok) {
         setIsEditOpen(false);
@@ -169,18 +157,14 @@ export default function Skills() {
   };
 
   const filteredSkills = userSkills.filter(
-    (skill) =>
-      activeCategory === "Todas" ||
-      skill.technical_skill?.category === activeCategory
+    (skill) => activeCategory === "Todas" || skill.technical_skill?.category === activeCategory
   );
 
   return (
     <div className="min-h-screen bg-[#14162f] flex flex-col text-slate-100 font-heading">
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-12">
-          <h1 className="text-3xl font-bold text-white tracking-tight">
-            Habilidades
-          </h1>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Habilidades</h1>
 
           <div className="w-48">
             <AddTechnicalSkill onAdd={handleAddNewSkill} />
@@ -204,9 +188,7 @@ export default function Skills() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-20 text-slate-500">
-            Cargando habilidades...
-          </div>
+          <div className="text-center py-20 text-slate-500">Cargando habilidades...</div>
         ) : filteredSkills.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredSkills.map((skill) => (
@@ -235,9 +217,8 @@ export default function Skills() {
                         </AlertDialogTitle>
 
                         <AlertDialogDescription className="text-slate-400">
-                          Esta acción no se puede deshacer. Se eliminará
-                          permanentemente la habilidad{" "}
-                          <b>{skill.technical_skill?.name}</b>.
+                          Esta acción no se puede deshacer. Se eliminará permanentemente la
+                          habilidad <b>{skill.technical_skill?.name}</b>.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
 
@@ -247,9 +228,7 @@ export default function Skills() {
                         </AlertDialogCancel>
 
                         <AlertDialogAction
-                          onClick={() =>
-                            handleDeleteSkill(skill.technical_skill_id)
-                          }
+                          onClick={() => handleDeleteSkill(skill.technical_skill_id)}
                           className="bg-red-600 text-white hover:bg-red-700 border-none"
                         >
                           Eliminar
@@ -286,18 +265,14 @@ export default function Skills() {
                     Nivel {skill.level}
                   </div>
 
-                  <p className="text-slate-600 text-xs mt-2 italic">
-                    Click para editar nivel
-                  </p>
+                  <p className="text-slate-600 text-xs mt-2 italic">Click para editar nivel</p>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-32 border-2 border-dashed border-[#232555] rounded-3xl">
-            <p className="text-slate-500 text-lg italic">
-              No hay nada que mostrar
-            </p>
+            <p className="text-slate-500 text-lg italic">No hay nada que mostrar</p>
             <p className="text-slate-600 text-sm mt-2">
               Empieza agregando una habilidad técnica a tu portafolio.
             </p>
@@ -325,9 +300,7 @@ export default function Skills() {
               </button>
             </div>
 
-            <p className="text-slate-400 text-sm mb-6">
-              Selecciona tu nivel de dominio:
-            </p>
+            <p className="text-slate-400 text-sm mb-6">Selecciona tu nivel de dominio:</p>
 
             <div className="flex flex-col gap-3">
               {LEVELS.map((level) => (

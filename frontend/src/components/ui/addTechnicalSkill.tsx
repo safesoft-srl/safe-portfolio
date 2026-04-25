@@ -29,9 +29,7 @@ export function AddTechnicalSkill({
       if (!isOpen) return;
 
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/technical-skills`
-        );
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/technical-skills`);
         const result = await response.json();
 
         let skillsArray: Skill[] = [];
@@ -41,9 +39,7 @@ export function AddTechnicalSkill({
         } else if (result && Array.isArray(result.data)) {
           skillsArray = result.data;
         } else if (typeof result === "object" && result !== null) {
-          skillsArray = Object.values(result).filter(
-            (item) => typeof item === "object"
-          ) as Skill[];
+          skillsArray = Object.values(result).filter((item) => typeof item === "object") as Skill[];
         }
 
         setCatalogo(skillsArray);
@@ -56,16 +52,12 @@ export function AddTechnicalSkill({
     fetchCatalog();
   }, [isOpen]);
 
-  const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter(
-    (skill) => {
-      if (!skill.name) return false;
-      const matchesSearch = skill.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
-      const matchesTab = activeTab === "Todas" || skill.category === activeTab;
-      return matchesSearch && matchesTab;
-    }
-  );
+  const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter((skill) => {
+    if (!skill.name) return false;
+    const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
+    const matchesTab = activeTab === "Todas" || skill.category === activeTab;
+    return matchesSearch && matchesTab;
+  });
 
   const handleSaveSkill = async () => {
     if (!selectedSkill || !selectedLevel) return;
@@ -108,9 +100,7 @@ export function AddTechnicalSkill({
           <div className="w-full max-w-4xl bg-[#13152e] border border-[#232555] rounded-3xl p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-white">
-                {selectedSkill
-                  ? `Nivel de ${selectedSkill.name}`
-                  : "Buscar Habilidad"}
+                {selectedSkill ? `Nivel de ${selectedSkill.name}` : "Buscar Habilidad"}
               </h2>
 
               <button
@@ -182,10 +172,7 @@ export function AddTechnicalSkill({
               <div className="flex flex-col items-center justify-center py-10 space-y-6 animate-in zoom-in-95 duration-200">
                 <p className="text-slate-300 text-center text-lg">
                   ¿Cuál es tu nivel de dominio en{" "}
-                  <span className="text-white font-bold">
-                    {selectedSkill.name}
-                  </span>
-                  ?
+                  <span className="text-white font-bold">{selectedSkill.name}</span>?
                 </p>
 
                 <div className="flex flex-col w-full max-w-xs gap-3">
