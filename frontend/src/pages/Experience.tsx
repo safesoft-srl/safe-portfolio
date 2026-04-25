@@ -54,13 +54,13 @@ interface WorkExperience {
 // Zod Schema
 const experienceSchema = z
   .object({
-    company: z.string().min(1, "La empresa es requerida"),
-    position: z.string().min(1, "La posición es requerida"),
+    company: z.string().min(1, "La empresa es requerida").max(50, "Máximo 50 caracteres"),
+    position: z.string().min(1, "La posición es requerida").max(70, "Máximo 70 caracteres"),
     start_date: z.string().min(1, "La fecha de inicio es requerida"),
     end_date: z.string().nullable().optional(),
     is_current: z.boolean(),
-    description: z.string().min(1, "La descripción es requerida"),
-    achievements: z.array(z.string()).nullable().optional(),
+    description: z.string().min(1, "La descripción es requerida").max(255, "Máximo 255 caracteres"),
+    achievements: z.array(z.string().max(100, "Máximo 100 caracteres por logro")).nullable().optional(),
     is_visible: z.boolean(),
   })
   .superRefine((data, ctx) => {
