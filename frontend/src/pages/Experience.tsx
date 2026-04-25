@@ -59,7 +59,7 @@ const experienceSchema = z
     start_date: z.string().min(1, "La fecha de inicio es requerida"),
     end_date: z.string().nullable().optional(),
     is_current: z.boolean(),
-    description: z.string().min(1, "La descripción es requerida").max(255, "Máximo 255 caracteres"),
+    description: z.string().max(255, "Máximo 255 caracteres"),
     achievements: z.array(z.string().max(100, "Máximo 100 caracteres por logro")).nullable().optional(),
     is_visible: z.boolean(),
   })
