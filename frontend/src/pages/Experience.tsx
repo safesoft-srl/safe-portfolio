@@ -64,19 +64,16 @@ const experienceSchema = z
     is_visible: z.boolean(),
   })
   .superRefine((data, ctx) => {
-    // Obtenemos la fecha de hoy en formato "yyyy-mm-dd"
     const todayStr = new Date().toISOString().split("T")[0];
 
-    // 1. La fecha de inicio no puede ser futura
     if (data.start_date && data.start_date > todayStr) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "La fecha de inicio no puede ser en el futuro",
+        message: "La fecha de inicio no puede ser mayor a la fecha actual",
         path: ["start_date"],
       });
     }
 
-    // 2. Fecha de fin obligatoria si no es el trabajo actual
     if (!data.is_current && !data.end_date) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -85,13 +82,12 @@ const experienceSchema = z
       });
     }
 
-    // 3. Validaciones sobre la fecha de fin (si existe)
     if (data.end_date) {
       // No puede ser futura
       if (data.end_date > todayStr) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "La fecha de fin no puede ser en el futuro (selecciona 'Actualidad')",
+          message: "La fecha de fin no puede ser mayor a la fecha actual (selecciona 'Actualidad')",
           path: ["end_date"],
         });
       }
