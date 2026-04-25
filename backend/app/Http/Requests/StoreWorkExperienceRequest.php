@@ -24,8 +24,8 @@ class StoreWorkExperienceRequest extends FormRequest
         return [
             'company' => 'required|string|max:50',
             'position' => 'required|string|max:70',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'start_date' => 'required|date|before_or_equal:today',
+            'end_date' => 'nullable|date|after_or_equal:start_date|before_or_equal:today',
             'is_current' => 'boolean',
             'description' => 'nullable|string|max:255',
             'achievements' => 'nullable|string|max:100',
