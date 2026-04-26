@@ -17,8 +17,8 @@ import {
   MedalIcon,
   GraduationCapIcon,
   BriefcaseIcon,
-  /*MedalIcon,
   GearIcon,
+  /*MedalIcon,
   BriefcaseIcon,
   /*ChartBarIcon,
   GraduationCapIcon,*/
@@ -67,12 +67,12 @@ const data = {
       url: "/dashboard/experience",
       icon: <GraduationCapIcon />,
     },
-    /*{
+    {
       title: "Configuración",
       url: "/dashboard/configuration",
       icon: <GearIcon />,
     },
-    {
+    /*{
       title: "Reportes",
       url: "/dashboard/reports",
       icon: <ChartBarIcon />,

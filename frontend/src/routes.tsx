@@ -11,6 +11,7 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
 import ExperiencePage from "./pages/Experience";
 import Skills from "./pages/Skills";
+import Configuration from "./pages/Configuration";
 
 export const router = createBrowserRouter([
   {
@@ -72,7 +73,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "configuration",
-            element: <div>Configuration Page</div>,
+            element: <Configuration/>,
           },
           {
             path: "reports",
