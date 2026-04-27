@@ -1,5 +1,5 @@
 import { http } from "@/services/http.service";
-
+import type { ApiProfilePayload, ProfileData as ProfileDataType } from "@/types/public-portfolio";
 export type ProfileData = {
   id?: number;
   profile_name: string;
@@ -10,18 +10,7 @@ export type ProfileData = {
   url_portfolio: string;
 };
 
-type ApiProfilePayload = {
-  id: number;
-  name?: string;
-  profile_name?: string;
-  profile_email?: string;
-  profession?: string | null;
-  bio?: string | null;
-  profile_image?: string | null;
-  url_portfolio?: string | null;
-};
-
-const toProfileData = (payload: ApiProfilePayload | undefined): ProfileData => ({
+const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
   id: payload?.id ?? 1,
   profile_name: payload?.profile_name ?? payload?.profile_name ?? "",
   profile_email: payload?.profile_email ?? "",
@@ -31,7 +20,7 @@ const toProfileData = (payload: ApiProfilePayload | undefined): ProfileData => (
   url_portfolio: payload?.url_portfolio ?? "",
 });
 
-const unwrapData = (responseData: unknown): ApiProfilePayload | undefined => {
+const unwrapData = (responseData: unknown): ProfileDataType | undefined => {
   if (!responseData || typeof responseData !== "object") {
     return undefined;
   }
@@ -40,15 +29,15 @@ const unwrapData = (responseData: unknown): ApiProfilePayload | undefined => {
   const nestedData = data.data;
 
   if (nestedData && typeof nestedData === "object") {
-    return nestedData as ApiProfilePayload;
+    return nestedData as ProfileDataType;
   }
 
-  return responseData as ApiProfilePayload;
+  return responseData as ProfileDataType;
 };
 
-export async function getProfile(): Promise<ProfileData> {
-  const response = await http.get("/api/me/portfolio");
-  return toProfileData(unwrapData(response.data));
+export async function getProfile(): Promise<ProfileDataType> {
+  const response = await http.get<ApiProfilePayload>("/api/me/portfolio");
+  return response.data.data;
 }
 
 export async function updateProfile(

@@ -1,5 +1,5 @@
 import { http } from "./http.service";
-import type { ProfileData } from "./profile.service";
+import type { ApiProfilePayload, ProfileData } from "@/types/public-portfolio";
 
 export async function checkSlug(slug: string) {
   const response = await http.get(`/api/me/portfolio/check-slug/${slug}`);
@@ -13,7 +13,7 @@ export async function publishPortfolio(slug: string) {
 }
 
 export async function getPublicPortfolio(slug: string): Promise<ProfileData> {
-  const response = await http.get(`/api/portfolios/slug/${slug}`);
+  const response = await http.get<ApiProfilePayload>(`/api/portfolios/slug/${slug}`);
   return response.data.data;
 }
 
