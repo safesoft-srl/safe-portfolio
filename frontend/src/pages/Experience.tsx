@@ -126,6 +126,7 @@ export default function ExperiencePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
+      toast.success("Experiencia laboral registrada correctamente");
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
