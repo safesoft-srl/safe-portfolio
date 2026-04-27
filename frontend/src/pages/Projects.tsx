@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createProject, updateProject, deleteProject } from "@/services/project.service";
+import { createProject, updateProject, deleteProject } from "@/features/projects/services/project.service";
 import { http } from "@/services/http.service";
 import { getProfile } from "@/services/profile.service";
 import { getSkills, type Skill } from "@/services/skill.service";
@@ -482,7 +482,7 @@ export default function Projects() {
                     `}</style>
                 </div>
                 <div className="-mt-2">
-                  <SkillComboBox
+                  {/*<SkillComboBox
                     skills={skills}
                     selected={form.skill_ids}
                     onChange={(ids) => {
@@ -491,7 +491,7 @@ export default function Projects() {
                     }}
                     label="Habilidades"
                     placeholder="Busca y selecciona habilidades..."
-                  />
+                  />*/}
                   {errors.skill_ids && (
                     <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
                       {errors.skill_ids}

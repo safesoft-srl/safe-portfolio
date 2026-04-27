@@ -1,17 +1,13 @@
 import React, { useState, useMemo } from "react";
 import { X, MagnifyingGlass } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/input";
+import type { Skill } from "../features/projects/types/project.types";
 
-export interface Skill {
-  id: number;
-  skill_name: string;
-  logo_url?: string;
-}
 
 interface SkillComboBoxProps {
   skills: Skill[];
-  selected: number[];
-  onChange: (ids: number[]) => void;
+  selected: Skill[];
+  onChange: (selectedSkills: Skill[]) => void;
   placeholder?: string;
   label?: string;
 }
@@ -29,18 +25,18 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
   const filtered = useMemo(() => {
     const lower = input.toLowerCase();
     return skills.filter(
-      (s) => s.skill_name.toLowerCase().includes(lower) && !selected.includes(s.id)
+      (s) => s.skill_name.toLowerCase().includes(lower) && !selected.some((sel) => sel.id === s.id)
     );
   }, [input, skills, selected]);
 
-  const handleSelect = (id: number) => {
-    onChange([...selected, id]);
+  const handleSelect = (skill: Skill) => {
+    onChange([...selected, skill]);
     setInput("");
     setIsOpen(false);
   };
 
   const handleRemove = (id: number) => {
-    onChange(selected.filter((sid) => sid !== id));
+    onChange(selected.filter((s) => s.id !== id));
   };
 
   return (
@@ -91,11 +87,11 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
                 <li
                   key={skill.id}
                   className="flex items-center gap-2 px-4 py-2 cursor-pointer text-sm text-slate-900 dark:text-slate-200 hover:bg-[#f3f4f6] dark:hover:bg-[#23234a] transition-colors"
-                  onMouseDown={() => handleSelect(skill.id)}
+                  onMouseDown={() => handleSelect(skill)}
                 >
-                  {skill.logo_url && (
+                  {skill.url_logo && (
                     <img
-                      src={skill.logo_url}
+                      src={skill.url_logo}
                       alt={skill.skill_name}
                       className="w-4 h-4 rounded-full"
                     />
@@ -108,18 +104,15 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
         )}
       </div>
       <div className="flex flex-wrap gap-2">
-        {selected.map((id) => {
-          const skill = skills.find((s) => s.id === id);
-          if (!skill) return null;
-          return (
+        {selected.map((skill) => (
             <span
-              key={id}
+              key={skill.id}
               className="flex items-center gap-1 px-2 py-1 rounded-lg shadow-sm text-xs"
               style={{ background: "#6c72ff", color: "#fff" }}
             >
-              {skill.logo_url && (
+              {skill.url_logo && (
                 <img
-                  src={skill.logo_url}
+                  src={skill.url_logo}
                   alt={skill.skill_name}
                   className="w-4 h-4 rounded-full mr-1"
                 />
@@ -128,14 +121,14 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
               <button
                 type="button"
                 className="ml-1 rounded hover:bg-[#5c61eb] p-0.5"
-                onClick={() => handleRemove(id)}
+                onClick={() => handleRemove(skill.id)}
                 aria-label="Quitar habilidad"
               >
                 <X size={12} />
               </button>
             </span>
-          );
-        })}
+          
+        ))}
       </div>
     </div>
   );
