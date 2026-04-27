@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import { PublicFooter } from "@/components/PublicFooter";
 import defaultProfileImage from "@/assets/image.png";
-import { type ProfileData } from "@/services/profile.service";
+import { type ProfileData } from "@/types/public-portfolio";
 import { getPublicPortfolio } from "@/services/url.service";
 import BusinessGit from "@/components/public-portfolio/BusinessGit";
 import Stats from "@/components/public-portfolio/Stats";
@@ -111,7 +111,7 @@ export default function PublicPortfolio() {
           <BigSkilss />
         </div>
         <div id="resumen">
-          <WorkExperience />
+          <WorkExperience workExperience={profile?.work_experiences || []} />
           <EducationProjects />
         </div>
         <SkillsGrid />
