@@ -84,7 +84,7 @@ const experienceSchema = z
       });
     }
 
-    if (data.end_date) {
+    if (data.end_date && !data.is_current) {
       // No puede ser futura
       if (data.end_date > todayStr) {
         ctx.addIssue({
@@ -227,6 +227,7 @@ export default function ExperiencePage() {
   const onSubmit = (data: ExperienceFormData) => {
     const payload = {
       ...data,
+      end_date: data.is_current ? null : data.end_date,
       achievements: data.achievements ? data.achievements.join("\n") : "",
     };
 
