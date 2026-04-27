@@ -28,7 +28,7 @@ class StoreWorkExperienceRequest extends FormRequest
             'end_date' => 'nullable|date|after_or_equal:start_date|before_or_equal:today',
             'is_current' => 'boolean',
             'description' => 'nullable|string|max:255',
-            'achievements' => 'nullable|string|max:100',
+            'achievements' => 'nullable|string|max:2000',
             'is_visible' => 'boolean',
         ];
     }
