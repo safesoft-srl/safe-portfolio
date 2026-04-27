@@ -58,6 +58,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/me/portfolio/save-url/{id}', [PortfolioController::class, 'saveUrlPortfolio']);
 });
 
+Route::get('/portfolios/work-experiences', [WorkExperienceController::class, 'showAll']);
+
 Route::apiResource('/portfolios', PortfolioController::class);
 
 Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);

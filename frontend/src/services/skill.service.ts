@@ -1,7 +1,8 @@
 import axios from "axios";
+import { env } from "@/config/env";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -15,6 +16,6 @@ export type Skill = {
 };
 
 export const getSkills = async (): Promise<Skill[]> => {
-  const response = await api.get("/skills");
+  const response = await api.get("api/skills");
   return response.data.data || response.data;
 };
