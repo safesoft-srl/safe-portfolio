@@ -18,4 +18,9 @@ class PortfolioSkill extends Model
     {
         return $this->belongsTo(TechnicalSkill::class, 'technical_skill_id');
     }
+
+    public function portfolio()
+    {
+        return $this->belongsTo(Portfolio::class, 'portfolio_id');
+    }
 }

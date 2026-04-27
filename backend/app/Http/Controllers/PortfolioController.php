@@ -76,7 +76,6 @@ class PortfolioController extends Controller
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error(
                 ResponseMessages::RESOURCE_NOT_FOUND,
-                null,
                 404
             );
         } catch (Throwable $e) {
@@ -87,7 +86,6 @@ class PortfolioController extends Controller
 
             return ApiResponse::error(
                 ResponseMessages::INTERNAL_SERVER_ERROR,
-                null,
                 500
             );
         }
@@ -145,17 +143,24 @@ class PortfolioController extends Controller
         return ApiResponse::success([
             'slug' => $portfolio->portfolio_slug,
         ], 'Portafolio publicado exitosamente');
-
     }
 
     public function publicPortfolio(string $slug)
     {
-        $portfolio = $this->portfolioService->getBySlug($slug);
+        try {
+            $portfolio = $this->portfolioService->getBySlug($slug);
 
-        return ApiResponse::success(
-            $portfolio,
-            'Portafolio público recuperado exitosamente'
-        );
+            return ApiResponse::success(
+                $portfolio,
+                'Portafolio público recuperado exitosamente',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return ApiResponse::error(
+                'No existe un portafolio publico con: '.$slug,
+                404
+            );
+        }
     }
 
     public function saveUrlPortfolio(Request $request, int $id)

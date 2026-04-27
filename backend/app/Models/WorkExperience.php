@@ -10,7 +10,7 @@ class WorkExperience extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'portfolio_id',
         'company',
         'position',
         'start_date',
@@ -28,8 +28,8 @@ class WorkExperience extends Model
         'is_visible' => 'boolean',
     ];
 
-    public function user()
+    public function portfolio()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Portfolio::class);
     }
 }
