@@ -156,6 +156,13 @@ export default function ExperiencePage() {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       toast.success("Experiencia laboral eliminada correctamente");
     },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "El registro ya no existe o hubo un error.");
+      } else {
+        toast.error("Ocurrió un error inesperado al eliminar.");
+      }
+    },
   });
 
   const {
