@@ -154,6 +154,7 @@ export default function ExperiencePage() {
     mutationFn: (id: number) => api.delete(`/api/me/work-experiences/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
+      toast.success("Experiencia laboral eliminada correctamente");
     },
   });
 
@@ -513,7 +514,7 @@ export default function ExperiencePage() {
                           {valueArray.map((achievement, idx) => (
                             <div
                               key={idx}
-                              className="flex items-start justify-between w-full bg-slate-900 border border-slate-800 text-slate-300 px-3 py-2.5 rounded-lg text-xs"
+                              className="flex items-start justify-between w-full bg-slate-900 border border-slate-800 focus-within:border-indigo-500 hover:border-slate-700 transition-colors text-slate-300 px-3 py-2.5 rounded-lg text-xs"
                             >
                               <input
                                 type="text"
