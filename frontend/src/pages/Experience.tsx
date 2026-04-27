@@ -515,7 +515,16 @@ export default function ExperiencePage() {
                               key={idx}
                               className="flex items-start justify-between w-full bg-slate-900 border border-slate-800 text-slate-300 px-3 py-2.5 rounded-lg text-xs"
                             >
-                              <span className="flex-1">{achievement}</span>
+                              <input
+                                type="text"
+                                value={achievement}
+                                maxLength={100}
+                                onChange={(e) => {
+                                  const newArr = [...valueArray];
+                                  newArr[idx] = e.target.value;
+                                  field.onChange(newArr);
+                                }}
+                                className="flex-1 bg-transparent border-none outline-none text-slate-300 focus:ring-0 p-0 text-xs truncate" />
                               <button
                                 type="button"
                                 onClick={() => {
