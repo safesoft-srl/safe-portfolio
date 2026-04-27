@@ -3,8 +3,10 @@ import { showErrorToast } from "@/components/ui/showErrorToast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {UploadSimple, TrashSimple } from "@phosphor-icons/react";
 import { SkillComboBox } from "@/components/SkillComboBox";
+import { Checkbox } from "@/components/ui/checkbox";
 import type { Skill } from "@/services/skill.service";
 import type { BaseProjectDTO, Project } from "../types/project.types";
 
@@ -120,7 +122,7 @@ export default function ProjectForm({
                 }))
               }
               placeholder="Ej: Plataforma de Portafolios"
-              className={`h-10 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-slate-900 dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50${errors.name ? " border-red-500" : ""}`}
+              className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.name ? " border-red-500" : ""}`}
             />
             {errors.name && (
               <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
@@ -135,7 +137,7 @@ export default function ProjectForm({
             >
               Descripción *
             </Label>
-            <textarea
+            <Textarea
               id="projectDescription"
               name="projectDescription"
               value={form.description}
@@ -150,8 +152,8 @@ export default function ProjectForm({
                 }))
               }
               placeholder="Describe brevemente el objetivo y alcance del proyecto."
-              rows={4}
-              className={`w-full rounded-xl border bg-input dark:bg-[#1f2552] px-4 py-2 text-sm md:text-xs/relaxed text-slate-900 dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50 custom-scrollbar resize-none${errors.description ? " border-red-500" : ""}`}
+              maxLength={245}
+                    className={`min-h-24 h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50 custom-scrollbar${errors.description ? " border-red-500" : ""}`}
               style={{
                 scrollbarColor: "#23234a #181c2f",
                 scrollbarWidth: "thin",
@@ -175,7 +177,34 @@ export default function ProjectForm({
                             }
                         `}</style>
           </div>
-          <div className="-mt-2">
+          <div className="-mt-1 space-y-1.5">
+                  <Label
+                    htmlFor="projectRole"
+                    className="text-xs font-semibold text-slate-900 dark:text-slate-300"
+                  >
+                    Rol desempeñado *
+                  </Label>
+                  <Input
+                    id="projectRole"
+                    name="projectRole"
+                    onChange={(e) => {
+                      setForm((f) => ({ ...f, role: e.target.value }));
+                      if (errors) setErrors((prev) => ({ ...prev, role: "" }));
+                    }}
+                    onBlur={(e) =>
+                      setErrors((prev) => ({
+                        ...prev,
+                        role: e.target.value.trim() ? "" : "El rol es obligatorio.",
+                      }))
+                    }
+                    placeholder="Ej: Desarrollador Frontend, Líder de proyecto, etc."
+                  />
+                  {errors && (
+                    <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
+                    </p>
+                  )}
+                </div>
+                <div className="-mt-1">
             <SkillComboBox
               skills={skills}
               selected={form.skill_projects}
@@ -199,7 +228,41 @@ export default function ProjectForm({
         </div>
         {/* Columna Derecha */}
         <div className="flex flex-col gap-4">
-          <div className="space-y-1.5">
+          {/* Fechas */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-end">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="startDate" className="text-xs font-semibold text-slate-900 dark:text-slate-300">Fecha de Inicio *</Label>
+                    <Input
+                      id="startDate"
+                      name="startDate"
+                      type="date"
+                      onChange={e => {
+                        setForm(f => ({ ...f, start_date: e.target.value }));
+                        if (errors) setErrors(prev => ({ ...prev, start_date: "" }));
+                      }}
+                      onBlur={e => setErrors(prev => ({ ...prev, start_date: e.target.value ? "" : "La fecha de inicio es obligatoria." }))}
+                    />
+                    {errors && (
+                      <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}></p>
+                    )}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="endDate" className="text-xs font-semibold text-slate-900 dark:text-slate-300">Fecha de Fin</Label>
+                    <Input
+                      id="endDate"
+                      name="endDate"
+                      type="date"
+                      onChange={e => {
+                        setForm(f => ({ ...f, end_date: e.target.value }));
+                        if (errors) setErrors(prev => ({ ...prev, end_date: "" }));
+                      }}
+                    />
+                    {errors && (
+                      <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}></p>
+                    )}
+                  </div>
+                </div>
+                <div className="space-y-1.5 mt-2">
             <Label
               htmlFor="urlGithub"
               className="text-xs font-semibold text-slate-900 dark:text-slate-300"
@@ -221,7 +284,7 @@ export default function ProjectForm({
                 }))
               }
               placeholder="https://github.com/usuario/proyecto"
-              className={`h-10 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-slate-900 dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50${errors.url_github ? " border-red-500" : ""}`}
+              className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.url_github ? " border-red-500" : ""}`}
             />
             {errors.url_github && (
               <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
@@ -242,7 +305,7 @@ export default function ProjectForm({
               value={form.url_demo}
               onChange={(e) => setForm((f) => ({ ...f, url_demo: e.target.value }))}
               placeholder="https://proyecto.com"
-              className="h-10 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-slate-900 dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
           {/* Imagen y acciones de carga/eliminar */}
@@ -323,27 +386,26 @@ export default function ProjectForm({
       </div>
 
       <div className="space-y-1.5"></div>
+      
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => setIsPublic((prev) => !prev)}
-          className={`relative inline-flex h-5 w-9 items-center rounded-full border text-[0.625rem] transition-colors ${isPublic ? "border-[#6c72ff] bg-[#6c72ff]" : "border-sidebar-border bg-input/40"
-            }`}
-        >
-          <span
-            className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${isPublic ? "translate-x-4" : "translate-x-1"
-              }`}
+        <Checkbox
+          id="is_public_cb"
+          checked={isPublic}
+          onCheckedChange={() => setIsPublic((prev) => !prev)}
           />
-        </button>
-        <span className="text-xs font-medium text-sidebar-foreground">
-          Visible en portafolio público
-        </span>
+          <Label
+            htmlFor="is_public_cb"
+              className="cursor-pointer font-medium text-sidebar-foreground text-xs"
+          >
+            Visible en portafolio público
+          </Label>
       </div>
-
+      <div className="pt-4 border-t border-slate-800 flex justify-end gap-3 mt-8"></div>
       <AlertDialogFooter className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <Button
           type="submit"
-          className="h-10 rounded-lg bg-[#6c72ff] px-5 text-sm font-medium text-white hover:bg-[#5c61eb] sm:min-w-[150px] flex items-center justify-center"
+          size="lg"
+          className="sm:min-w-[150px]"
           disabled={isSaving}
         >
           {isSaving ? (
@@ -357,7 +419,7 @@ export default function ProjectForm({
             "Agregar Proyecto"
           )}
         </Button>
-        <AlertDialogCancel className="h-10 rounded-lg border-sidebar-border text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-white sm:min-w-[110px]">
+        <AlertDialogCancel className="h-8 rounded-lg border-sidebar-border text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-white sm:min-w-[110px]">
           Cancelar
         </AlertDialogCancel>
       </AlertDialogFooter>

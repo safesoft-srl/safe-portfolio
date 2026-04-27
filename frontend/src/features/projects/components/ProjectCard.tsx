@@ -1,4 +1,4 @@
-import { PencilSimple, Trash } from "@phosphor-icons/react";
+import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import type { Project, Skill } from "../types/project.types";
 
@@ -12,15 +12,15 @@ type Props = {
 
 export default function ProjectCard({
   project,
-  skills,
-  onRefresh,
+  //skills,
+  //onRefresh,
   onEdit,
   onDelete,
 }: Props) {
 
   return (
-    <div className="max-w-3xl min-w-[250px]">
-      <div className="rounded-2xl bg-sidebar px-4 py-6 border border-sidebar-border">
+    <div className="max-w-3xl min-w-[250px] h-[720px] flex">
+      <div className="rounded-2xl bg-sidebar px-4 py-6 border border-sidebar-border w-full flex flex-col h-full">
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col flex-1 min-w-0">
             <div className="flex items-start justify-between">
@@ -33,14 +33,15 @@ export default function ProjectCard({
                   title="Editar"
                   onClick={() => { onEdit?.(project) }}
                 >
-                  <PencilSimple size={18} color="#b3b3ff" weight="bold" />
+                  <PencilSimpleIcon size={18} weight="bold" />
                 </button>
                 <button
-                  className="hover:bg-[#23234a] p-2 rounded-md"
+                  className="hover:text-red-500 hover:bg-[#23234a] cursor-pointer rounded-md p-2 transition-colors"
                   title="Eliminar"
+                  type="button"
                   onClick={() => onDelete?.(project)}
                 >
-                  <Trash size={18} color="#b3b3ff" weight="bold" />
+                  <TrashIcon size={18} weight="bold" />
                 </button>
               </div>
             </div>
@@ -51,6 +52,7 @@ export default function ProjectCard({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                height: "320px"
               }}
             >
               <img
@@ -58,11 +60,9 @@ export default function ProjectCard({
                 alt={project.name}
                 className="object-cover rounded-xl border border-sidebar-border bg-black/60"
                 style={{
-                  maxHeight: 350,
-                  minHeight: 120,
                   background: "#181c2f",
                   width: "98%",
-                  height: "auto",
+                  maxHeight: "320px",
                 }}
               />
             </div>
@@ -88,17 +88,25 @@ export default function ProjectCard({
         <div className="flex gap-3 mb-2">
           {project.url_github && (
             <a href={project.url_github} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="flex items-center gap-2">
-                <span className="i-mdi-github" />
-                GitHub
+              <Button
+                    variant="default"
+                    className="flex items-center gap-2 px-6 py-3  font-semibold shadow-lg border-2 border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
+                    style={{ minWidth: 100 }}
+              >
+                    <span className="i-mdi-github" />
+                        GitHub
               </Button>
             </a>
           )}
           {project.url_demo && (
             <a href={project.url_demo} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="flex items-center gap-2">
-                <span className="i-mdi-link-variant" />
-                Ver Demo
+              <Button
+                  variant="default"
+                  className="flex items-center gap-2 px-6 py-3 font-semibold shadow-lg border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
+                  style={{ minWidth: 100 }}
+              >
+                  <span className="i-mdi-link-variant" />
+                  Ver Demo
               </Button>
             </a>
           )}

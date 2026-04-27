@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { X } from "@phosphor-icons/react";
+import { X, PlusIcon } from "@phosphor-icons/react";
 import { AxiosError } from "axios";
 import ProfileForm, { type ProfileFormData } from "@/components/ProfileForm";
 import { getProfile, updateProfile, createProfile } from "@/services/profile.service";
@@ -66,14 +67,11 @@ export default function CreateProfileModal({ onCreated }: { onCreated?: () => vo
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger>
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 h-10 rounded-xl bg-[#6c72ff] px-5 text-xs sm:text-sm font-medium tracking-wide text-white font-heading hover:bg-[#5c61eb]"
-        >
-          <span className="mr-1">+</span> Crear un nuevo portafolio
-        </button>
+        <Button variant="default" size="lg" className="px-5 font-heading flex items-center gap-2">
+          <PlusIcon weight="bold" /> Crear un nuevo portafolio
+        </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="max-w-4xl bg-[#181c3a]">
+      <AlertDialogContent className="max-w-4xl bg-slate-900">
         <button
           type="button"
           aria-label="Cerrar"

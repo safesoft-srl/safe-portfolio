@@ -6,7 +6,7 @@ import ConfirmDialog from "../features/projects/components/ConfirmDialog";
 import { createProject, deleteProject, updateProject } from "../features/projects/services/project.service";
 import type { Project } from "../features/projects/types/project.types";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "@phosphor-icons/react";
+import { PlusIcon, X } from "@phosphor-icons/react";
 
 import {
   AlertDialog,
@@ -17,6 +17,7 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import Loading from "@/features/projects/components/Loading";
+import { toast } from "sonner";
 
 export default function ProjectsPage() {
   const {
@@ -44,13 +45,14 @@ export default function ProjectsPage() {
             <AlertDialogTrigger>
               <Button
                 type="button"
-                className="inline-flex items-center gap-2 h-9 rounded-xl bg-[#6c72ff] px-4 text-xs sm:text-sm font-medium tracking-wide text-white font-heading hover:bg-[#5c61eb]"
+                size="lg"
+                className="gap-2 font-heading"
                 onClick={() => {
                   setEditingProject(null);
                   setOpen(true);
                 }}
               >
-                <Plus weight="bold" className="size-4" />
+                <PlusIcon weight="bold" className="size-4" />
                 <span>Nuevo Proyecto</span>
               </Button>
             </AlertDialogTrigger>
@@ -66,13 +68,15 @@ export default function ProjectsPage() {
                   <AlertDialogTrigger>
                     <Button
                       type="button"
-                      className="inline-flex items-center gap-2 h-10 rounded-xl bg-[#6c72ff] px-5 text-xs sm:text-sm font-medium tracking-wide text-white font-heading hover:bg-[#5c61eb]"
+                      variant="default"
+                      size="lg"
+                      className="gap-2 font-heading"
                       onClick={() => {
                         setEditingProject(null);
                         setOpen(true);
                       }}
                     >
-                      <Plus weight="bold" className="size-4" />
+                      <PlusIcon weight="bold" className="size-4" />
                       <span>Agregar tu Primer Proyecto</span>
                     </Button>
                   </AlertDialogTrigger>
@@ -101,6 +105,7 @@ export default function ProjectsPage() {
               {editingProject !== null ? "Editar Proyecto" : "Nuevo Proyecto"}
             </AlertDialogTitle>
           </AlertDialogHeader>
+          <div className="border-b border-slate-800 mb-6"></div>
           <AlertDialogCancel className="absolute right-6 top-5 inline-flex h-7 w-7 items-center justify-center rounded-md border border-sidebar-border bg-transparent text-slate-300 hover:bg-[#6366f1] hover:text-white">
             <X className="size-4" />
             <span className="sr-only">Cerrar</span>
@@ -111,6 +116,13 @@ export default function ProjectsPage() {
             onSubmit={async (data, file) => {
               if (editingProject) {
                 await updateProject(editingProject.id, data, file);
+                toast.success("Los cambios se han guardado correctamente.", {
+                    style: {
+                      background: "#6c72ff",
+                      color: "#ffffff",
+                      border: "1px solid #8b90ff",
+                    },
+                  });
               } else {
                 await createProject(
                   {
@@ -125,6 +137,13 @@ export default function ProjectsPage() {
               setOpen(false);
               setEditingProject(null);
               await syncProjects();
+              toast.success("Proyecto guardado correctamente.", {
+                style: {
+                background: "#6c72ff",
+                color: "#ffffff",
+                border: "1px solid #8b90ff",
+                },
+            });
             }}
           />
         </AlertDialogContent>

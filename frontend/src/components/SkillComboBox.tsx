@@ -3,7 +3,6 @@ import { X, MagnifyingGlass } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/input";
 import type { Skill } from "../features/projects/types/project.types";
 
-
 interface SkillComboBoxProps {
   skills: Skill[];
   selected: Skill[];
@@ -61,7 +60,7 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
             onFocus={() => setIsOpen(true)}
             onBlur={() => setTimeout(() => setIsOpen(false), 100)}
             placeholder={placeholder}
-            className="h-10 w-full min-w-0 rounded-xl border bg-input dark:bg-[#1f2552] pl-10 text-sm text-slate-900 dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-10 w-full min-w-0 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 pl-10 text-sm disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
         {isOpen && filtered.length > 0 && (
