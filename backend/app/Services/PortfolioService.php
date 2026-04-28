@@ -93,7 +93,9 @@ class PortfolioService
         return Portfolio::with(
             [
                 'portfolioSkills',
-                'workExperiences',
+                'workExperiences' => function ($query) {
+                $query->where('is_visible', true);
+        },
                 'projects.skill_projects',
             ]
         )
