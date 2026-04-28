@@ -69,6 +69,20 @@ export default function ProjectForm({
     if (!form.name.trim()) return "El nombre del proyecto es obligatorio.";
     if (!form.description.trim()) return "La descripción es obligatoria.";
     if (!form.url_github.trim()) return "La URL de GitHub es obligatoria.";
+
+    const githubRegex = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/?$/;
+    if (!githubRegex.test(form.url_github)) {
+      return "La URL de GitHub debe tener el formato: https://github.com/usuario/proyecto";
+    }
+
+    if (form.url_demo) {
+      // Permitir cualquier dominio con www. y dominios railway/vercel
+      const demoRegex = /^https:\/\/(www\.[\w.-]+\.[a-zA-Z]{2,}(\/.*)?|[\w-]+\.railway\.app\/?|[\w-]+\.vercel\.app\/?)+$/;
+      if (!demoRegex.test(form.url_demo)) {
+        return "La URL de demo debe tener el formato: https://www.sitio.com, railway.app o vercel.app";
+      }
+    }
+
     if (form.skill_projects.length === 0) return "Selecciona al menos una habilidad.";
     return null;
   };
@@ -153,7 +167,7 @@ export default function ProjectForm({
               }
               placeholder="Describe brevemente el objetivo y alcance del proyecto."
               maxLength={245}
-                    className={`min-h-24 h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50 custom-scrollbar${errors.description ? " border-red-500" : ""}`}
+              className={`min-h-24 h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50 custom-scrollbar${errors.description ? " border-red-500" : ""}`}
               style={{
                 scrollbarColor: "#23234a #181c2f",
                 scrollbarWidth: "thin",
@@ -167,43 +181,16 @@ export default function ProjectForm({
               </p>
             )}
             <style>{`
-                            .custom-scrollbar::-webkit-scrollbar {
-                                width: 8px;
-                                background: #181c2f;
-                            }
-                            .custom-scrollbar::-webkit-scrollbar-thumb {
-                                background: #23234a;
-                                border-radius: 8px;
-                            }
-                        `}</style>
+              .custom-scrollbar::-webkit-scrollbar {
+              width: 8px;
+              background: #181c2f;
+            }
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+              background: #23234a;
+              border-radius: 8px;
+            }
+            `}</style>
           </div>
-          <div className="-mt-1 space-y-1.5">
-                  <Label
-                    htmlFor="projectRole"
-                    className="text-xs font-semibold text-slate-900 dark:text-slate-300"
-                  >
-                    Rol desempeñado *
-                  </Label>
-                  <Input
-                    id="projectRole"
-                    name="projectRole"
-                    onChange={(e) => {
-                      setForm((f) => ({ ...f, role: e.target.value }));
-                      if (errors) setErrors((prev) => ({ ...prev, role: "" }));
-                    }}
-                    onBlur={(e) =>
-                      setErrors((prev) => ({
-                        ...prev,
-                        role: e.target.value.trim() ? "" : "El rol es obligatorio.",
-                      }))
-                    }
-                    placeholder="Ej: Desarrollador Frontend, Líder de proyecto, etc."
-                  />
-                  {errors && (
-                    <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
-                    </p>
-                  )}
-                </div>
                 <div className="-mt-1">
             <SkillComboBox
               skills={skills}
@@ -216,8 +203,8 @@ export default function ProjectForm({
                  }));
                 if (errors.skill_ids) setErrors((prev) => ({ ...prev, skill_ids: "" }));
               }}
-              label="Habilidades"
-              placeholder="Busca y selecciona habilidades..."
+              label="Tecnologías"
+              placeholder="Busca y selecciona tecnologías..."
             />
             {errors.skill_ids && (
               <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
@@ -226,42 +213,8 @@ export default function ProjectForm({
             )}
           </div>
         </div>
-        {/* Columna Derecha */}
+        {/* Columna Derecha (sin fechas ni rol) */}
         <div className="flex flex-col gap-4">
-          {/* Fechas */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-end">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="startDate" className="text-xs font-semibold text-slate-900 dark:text-slate-300">Fecha de Inicio *</Label>
-                    <Input
-                      id="startDate"
-                      name="startDate"
-                      type="date"
-                      onChange={e => {
-                        setForm(f => ({ ...f, start_date: e.target.value }));
-                        if (errors) setErrors(prev => ({ ...prev, start_date: "" }));
-                      }}
-                      onBlur={e => setErrors(prev => ({ ...prev, start_date: e.target.value ? "" : "La fecha de inicio es obligatoria." }))}
-                    />
-                    {errors && (
-                      <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}></p>
-                    )}
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="endDate" className="text-xs font-semibold text-slate-900 dark:text-slate-300">Fecha de Fin</Label>
-                    <Input
-                      id="endDate"
-                      name="endDate"
-                      type="date"
-                      onChange={e => {
-                        setForm(f => ({ ...f, end_date: e.target.value }));
-                        if (errors) setErrors(prev => ({ ...prev, end_date: "" }));
-                      }}
-                    />
-                    {errors && (
-                      <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}></p>
-                    )}
-                  </div>
-                </div>
                 <div className="space-y-1.5 mt-2">
             <Label
               htmlFor="urlGithub"
@@ -370,7 +323,8 @@ export default function ProjectForm({
                       <AlertDialogAction
                         className="bg-[#e53e3e] text-white hover:bg-[#c53030]"
                         onClick={() => {
-                          setForm((f) => ({ ...f, project_image: "" }));
+                          setForm((f) => ({ ...f, url_image: "" }));
+                          setFileImage(null);
                           setImagePreview("/src/assets/image.png");
                         }}
                       >
@@ -411,9 +365,9 @@ export default function ProjectForm({
           {isSaving ? (
             <>
               <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
-              {initialData === null ? "" : ""}
+              {/* Texto mientras guarda */}
             </>
-          ) : initialData === null ? (
+          ) : initialData !== null ? (
             "Guardar Cambios"
           ) : (
             "Agregar Proyecto"

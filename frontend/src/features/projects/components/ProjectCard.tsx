@@ -19,7 +19,7 @@ export default function ProjectCard({
 }: Props) {
 
   return (
-    <div className="max-w-3xl min-w-[250px] h-[720px] flex">
+    <div className="max-w-3xl min-w-[250px] h-[620px] flex">
       <div className="rounded-2xl bg-sidebar px-4 py-6 border border-sidebar-border w-full flex flex-col h-full">
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col flex-1 min-w-0">

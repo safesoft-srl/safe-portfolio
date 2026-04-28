@@ -117,12 +117,12 @@ export default function ProjectsPage() {
               if (editingProject) {
                 await updateProject(editingProject.id, data, file);
                 toast.success("Los cambios se han guardado correctamente.", {
-                    style: {
-                      background: "#6c72ff",
-                      color: "#ffffff",
-                      border: "1px solid #8b90ff",
-                    },
-                  });
+                  style: {
+                    background: "#6c72ff",
+                    color: "#ffffff",
+                    border: "1px solid #8b90ff",
+                  },
+                });
               } else {
                 await createProject(
                   {
@@ -132,18 +132,18 @@ export default function ProjectsPage() {
                   },
                   file
                 );
+                toast.success("Proyecto guardado correctamente.", {
+                  style: {
+                    background: "#6c72ff",
+                    color: "#ffffff",
+                    border: "1px solid #8b90ff",
+                  },
+                });
               }
 
               setOpen(false);
               setEditingProject(null);
               await syncProjects();
-              toast.success("Proyecto guardado correctamente.", {
-                style: {
-                background: "#6c72ff",
-                color: "#ffffff",
-                border: "1px solid #8b90ff",
-                },
-            });
             }}
           />
         </AlertDialogContent>
