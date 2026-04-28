@@ -16,6 +16,16 @@ class TechnicalSkill extends Model
 
     protected $appends = ['icon_url'];
 
+    public function projects()
+    {
+        return $this->belongsToMany(
+            Project::class,
+            'project_skill',
+            'skill_id',
+            'project_id'
+        );
+    }
+
     public function getIconUrlAttribute()
     {
         return $this->icon_path

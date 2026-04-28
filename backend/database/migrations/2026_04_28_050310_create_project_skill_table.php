@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_skill', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->foreignId('skill_id')->constrained('skill_projects')->onDelete('cascade');
+            $table->foreignId('technical_skill_id')->constrained('technical_skills')->onDelete('cascade');
             $table->timestamps();
         });
     }

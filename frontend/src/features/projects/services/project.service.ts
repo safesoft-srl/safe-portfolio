@@ -39,6 +39,7 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
       formData.append("skill_ids[]", id.toString());
     });
   }
+  
 
   if (file) {
     formData.append("project_image", file);
@@ -63,6 +64,8 @@ export const updateProject = async (id: number, data: UpdateProjectDTO, file?: F
       formData.append("skill_ids[]", id.toString());
     });
   }
+
+  console.log('skill_ids: ', data.skill_ids);
 
   if (file) {
     formData.append("project_image", file);

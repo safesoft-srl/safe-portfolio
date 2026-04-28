@@ -17,10 +17,10 @@ class ProjectService
         $project = Project::create($data);
 
         if (! empty($data['skill_ids'])) {
-            $project->skill_projects()->sync($data['skill_ids']);
+            $project->skills()->sync($data['skill_ids']);
         }
 
-        return $project->load('skill_projects');
+        return $project->load('skills');
     }
 
     private function handleImage($data): array
@@ -48,10 +48,10 @@ class ProjectService
         $project->update($data);
 
         if (! empty($data['skill_ids'])) {
-            $project->skill_projects()->sync($data['skill_ids']);
+            $project->skills()->sync($data['skill_ids']);
         }
 
-        return $project->fresh()->load('skill_projects');
+        return $project->fresh()->load('skills');
     }
 
     public function delete(int $id)
@@ -77,19 +77,19 @@ class ProjectService
 
     public function getByPortfolio(int $portfolioId)
     {
-        return Project::with('skill_projects')
+        return Project::with('skills')
             ->where('portfolio_id', $portfolioId)
             ->get();
     }
 
     public function getById(int $id)
     {
-        return Project::with('skill_projects')->findOrFail($id);
+        return Project::with('skills')->findOrFail($id);
     }
 
     public function getAll()
     {
-        return Project::with('skill_projects')->get();
+        return Project::with('skills')->get();
     }
 
     private function deleteImage(string $imageId): void
