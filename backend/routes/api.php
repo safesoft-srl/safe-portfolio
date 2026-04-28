@@ -68,7 +68,7 @@ Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfo
 use App\Http\Controllers\PortfolioTechnicalSkillController;
 use App\Http\Controllers\TechnicalSkillController;
 
-Route::get('/technical-skills', [TechnicalSkillController::class, 'index']);
+Route::apiResource('/technical-skills', TechnicalSkillController::class);
 
 Route::middleware('auth:api')->group(function () {
 
