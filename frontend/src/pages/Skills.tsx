@@ -13,6 +13,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 
 interface UserSkill {
   id: number;
@@ -163,6 +164,7 @@ export default function Skills() {
   return (
     <div className="min-h-screen bg-[#14162f] flex flex-col text-slate-100 font-heading">
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-10">
+        {/* HEADER */}
         <div className="flex items-center justify-between mb-12">
           <h1 className="text-3xl font-bold text-white tracking-tight">Habilidades</h1>
 
@@ -171,6 +173,7 @@ export default function Skills() {
           </div>
         </div>
 
+        {/* FILTERS */}
         <div className="flex flex-wrap gap-3 mb-10 justify-center">
           {["Todas", "Frontend", "Backend", "DevOps", "Otros"].map((cat) => (
             <button
@@ -187,6 +190,7 @@ export default function Skills() {
           ))}
         </div>
 
+        {/* CONTENT */}
         {isLoading ? (
           <div className="text-center py-20 text-slate-500">Cargando habilidades...</div>
         ) : filteredSkills.length > 0 ? (
@@ -196,20 +200,32 @@ export default function Skills() {
                 key={skill.id}
                 className="relative bg-[#13152e] border border-[#232555] rounded-2xl overflow-hidden shadow-2xl transition-all hover:border-[#6c72ff]/50"
               >
-                <div className="absolute top-3 right-3 z-20">
+                <div className="absolute top-3 right-3 z-20 flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenEdit(skill);
+                    }}
+                    className="w-8 h-8 flex items-center justify-center rounded-full 
+                             text-indigo-300 hover:text-indigo-400 hover:bg-indigo-500/10 
+                             transition"
+                  >
+                    <PencilSimpleIcon size={14} weight="bold" />
+                  </button>
+
                   <AlertDialog>
                     <AlertDialogTrigger
                       render={
-                        <Button
-                          variant="ghost"
-                          className="w-8 h-8 rounded-full hover:bg-red-600/20 hover:text-red-500"
+                        <button
+                          className="w-8 h-8 flex items-center justify-center rounded-full 
+                                  text-indigo-300 hover:text-indigo-400 hover:bg-indigo-500/10 
+                                  transition"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          ✕
-                        </Button>
+                          <TrashIcon size={14} weight="bold" />
+                        </button>
                       }
                     />
-
                     <AlertDialogContent className="bg-[#13152e] border border-[#232555]">
                       <AlertDialogHeader>
                         <AlertDialogTitle className="text-white">
@@ -238,10 +254,8 @@ export default function Skills() {
                   </AlertDialog>
                 </div>
 
-                <CardContent
-                  className="p-8 flex flex-col items-center text-center cursor-pointer"
-                  onClick={() => handleOpenEdit(skill)}
-                >
+                {/* CARD CONTENT */}
+                <CardContent className="p-8 flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-[#1c1f38] border border-[#232555] shadow-inner">
                     <img
                       src={skill.technical_skill?.icon_url || "/default-skill.png"}
@@ -264,8 +278,6 @@ export default function Skills() {
                   <div className="mt-6 pt-4 border-t border-[#232555] w-full text-[#6c72ff] text-xs font-bold uppercase tracking-widest">
                     Nivel {skill.level}
                   </div>
-
-                  <p className="text-slate-600 text-xs mt-2 italic">Click para editar nivel</p>
                 </CardContent>
               </Card>
             ))}
@@ -280,8 +292,9 @@ export default function Skills() {
         )}
       </main>
 
+      {/* MODAL EDIT */}
       {isEditOpen && selectedSkill && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="w-full max-w-md bg-[#13152e] border border-[#232555] rounded-3xl p-8 shadow-2xl">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-white">
@@ -294,7 +307,8 @@ export default function Skills() {
                   setSelectedSkill(null);
                   setSelectedLevel(null);
                 }}
-                className="text-slate-500 hover:text-white text-2xl transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-full 
+                         text-slate-400 hover:text-white hover:bg-white/10 transition"
               >
                 ✕
               </button>
