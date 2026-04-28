@@ -7,7 +7,7 @@ import { CopySimple } from "@phosphor-icons/react";
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
 import { getProfile } from "@/services/profile.service";
 
-export default function DashboardHome({ isNewPortfolio }: { isNewPortfolio?: boolean }) {
+export default function DashboardHome() {
   const user = useAuthStore((state) => state.user);
 
   const displayName = user?.name ?? "Usuario";
@@ -108,23 +108,6 @@ export default function DashboardHome({ isNewPortfolio }: { isNewPortfolio?: boo
     };
   }, []);
 
-  if (isNewPortfolio) {
-    return (
-      <div className="min-h-screen flex items-center justify-center w-full">
-        <section className="w-full max-w-7xl mx-auto px-2 sm:px-3 md:px-6">
-          <div className="w-full rounded-2xl bg-sidebar py-6 border border-sidebar-border px-4 sm:px-8">
-            <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
-              <p className="text-sm text-sidebar-foreground">
-                Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
-              </p>
-              <CreateProfileModal />
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
   return (
     <>
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-start lg:justify-between px-2 sm:px-3 md:px-6 py-2">
@@ -144,10 +127,10 @@ export default function DashboardHome({ isNewPortfolio }: { isNewPortfolio?: boo
                   value={slug}
                   onChange={handleChangePortfolioUrl}
                   onBlur={handleBlurPortfolioUrl}
-                  className={`h-11 w-full lg:w-72 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                  className={`h-8 w-full lg:w-72 ${
                     portfolioUrlError
                       ? "border-red-500 focus-visible:ring-red-500"
-                      : "border-transparent focus-visible:ring-[#5d68f5]"
+                      : "border-input focus-visible:ring-[#5d68f5]"
                   }`}
                 />
                 {portfolioUrlError && (
