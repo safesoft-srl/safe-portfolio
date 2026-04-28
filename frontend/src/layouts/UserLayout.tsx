@@ -12,7 +12,11 @@ import { useQuery } from "@tanstack/react-query";
 export default function UserLayout({ children }: { children?: React.ReactNode }) {
   const { isAuthenticated, setUser, logout } = useAuthStore();
 
-  const { data: userData, isError: isUserError, isLoading: isUserLoading } = useQuery({
+  const {
+    data: userData,
+    isError: isUserError,
+    isLoading: isUserLoading,
+  } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await api.get("/api/auth/me");
@@ -21,7 +25,11 @@ export default function UserLayout({ children }: { children?: React.ReactNode })
     retry: false,
   });
 
-  const { data: portfolioData, isLoading: isPortfolioLoading, isError: isPortfolioError } = useQuery({
+  const {
+    data: portfolioData,
+    isLoading: isPortfolioLoading,
+    isError: isPortfolioError,
+  } = useQuery({
     queryKey: ["portfolio"],
     queryFn: async () => {
       const response = await api.get("/api/me/portfolio");
@@ -58,7 +66,12 @@ export default function UserLayout({ children }: { children?: React.ReactNode })
   }
 
   // If the user has no profession set in their portfolio, force them to the /new route
-  if (portfolioData && portfolioData.success && portfolioData.data && !portfolioData.data.profession) {
+  if (
+    portfolioData &&
+    portfolioData.success &&
+    portfolioData.data &&
+    !portfolioData.data.profession
+  ) {
     return <Navigate to="/new" replace />;
   }
 
