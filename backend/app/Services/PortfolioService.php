@@ -90,7 +90,7 @@ class PortfolioService
     public function getBySlug(string $slug)
     {
         return Portfolio::with([
-            'portfolioSkills.technicalSkill', // ✅ FIX IMPORTANTE
+            'portfolioSkills.technicalSkill', 
             'workExperiences' => function ($query) {
                 $query->where('is_visible', true);
             },

@@ -5,6 +5,7 @@ interface Skill {
   id: number;
   name: string;
   category: string;
+  icon_path?: string | null;
 }
 
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
@@ -29,7 +30,10 @@ export function AddTechnicalSkill({
       if (!isOpen) return;
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/technical-skills`);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/technical-skills`
+        );
+
         const result = await response.json();
 
         let skillsArray: Skill[] = [];
@@ -39,7 +43,9 @@ export function AddTechnicalSkill({
         } else if (result && Array.isArray(result.data)) {
           skillsArray = result.data;
         } else if (typeof result === "object" && result !== null) {
-          skillsArray = Object.values(result).filter((item) => typeof item === "object") as Skill[];
+          skillsArray = Object.values(result).filter(
+            (item) => typeof item === "object"
+          ) as Skill[];
         }
 
         setCatalogo(skillsArray);
@@ -52,12 +58,16 @@ export function AddTechnicalSkill({
     fetchCatalog();
   }, [isOpen]);
 
-  const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter((skill) => {
-    if (!skill.name) return false;
-    const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
-    const matchesTab = activeTab === "Todas" || skill.category === activeTab;
-    return matchesSearch && matchesTab;
-  });
+  const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter(
+    (skill) => {
+      if (!skill.name) return false;
+      const matchesSearch = skill.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+      const matchesTab = activeTab === "Todas" || skill.category === activeTab;
+      return matchesSearch && matchesTab;
+    }
+  );
 
   const handleSaveSkill = async () => {
     if (!selectedSkill || !selectedLevel) return;
@@ -100,7 +110,9 @@ export function AddTechnicalSkill({
           <div className="w-full max-w-4xl bg-[#13152e] border border-[#232555] rounded-3xl p-8 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-white">
-                {selectedSkill ? `Nivel de ${selectedSkill.name}` : "Buscar Habilidad"}
+                {selectedSkill
+                  ? `Nivel de ${selectedSkill.name}`
+                  : "Buscar Habilidad"}
               </h2>
 
               <button
@@ -148,8 +160,18 @@ export function AddTechnicalSkill({
                           setSelectedLevel(null);
                         }}
                       >
-                        <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center text-[#6c72ff] font-bold text-xl mb-3 border border-[#232555]">
-                          {skill.name.charAt(0)}
+                        <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center mb-3 border border-[#232555] overflow-hidden">
+                          {skill.icon_path ? (
+                            <img
+                              src={`${import.meta.env.VITE_API_URL}/storage/${skill.icon_path}`}
+                              alt={skill.name}
+                              className="w-8 h-8 object-contain"
+                            />
+                          ) : (
+                            <span className="text-[#6c72ff] font-bold text-xl">
+                              {skill.name.charAt(0)}
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="text-white font-bold group-hover:text-[#6c72ff] transition-colors">
@@ -170,9 +192,26 @@ export function AddTechnicalSkill({
               </>
             ) : (
               <div className="flex flex-col items-center justify-center py-10 space-y-6 animate-in zoom-in-95 duration-200">
+                <div className="w-16 h-16 bg-[#1c1f38] rounded-2xl flex items-center justify-center border border-[#232555] overflow-hidden">
+                  {selectedSkill.icon_path ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_URL}/storage/${selectedSkill.icon_path}`}
+                      alt={selectedSkill.name}
+                      className="w-10 h-10 object-contain"
+                    />
+                  ) : (
+                    <span className="text-[#6c72ff] font-bold text-2xl">
+                      {selectedSkill.name.charAt(0)}
+                    </span>
+                  )}
+                </div>
+
                 <p className="text-slate-300 text-center text-lg">
                   ¿Cuál es tu nivel de dominio en{" "}
-                  <span className="text-white font-bold">{selectedSkill.name}</span>?
+                  <span className="text-white font-bold">
+                    {selectedSkill.name}
+                  </span>
+                  ?
                 </p>
 
                 <div className="flex flex-col w-full max-w-xs gap-3">
