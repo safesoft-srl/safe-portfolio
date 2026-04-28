@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { type WorkExperience as WorkExperienceType } from "@/types/public-portfolio";
 import { PlusIcon } from "@phosphor-icons/react";
 import { formatExperienceDate } from "@/lib/format-fns";
+import { Button } from "@/components/ui/button";
 export default function WorkExperience({
   workExperience,
 }: {
   workExperience: WorkExperienceType[];
 }) {
+  const [showAll, setShowAll] = useState(false);
+
   const separeAchievements = (achievements: string): string[] => {
     const achievementsArray = achievements.split("\n");
     return achievementsArray;
@@ -31,6 +35,17 @@ export default function WorkExperience({
     );
   }
 
+  const sortedExperience = [...workExperience].sort((a, b) => {
+    // Priority to current experience
+    if (a.is_current && !b.is_current) return -1;
+    if (!a.is_current && b.is_current) return 1;
+
+    // Otherwise sort by start_date descending
+    return new Date(b.start_date).getTime() - new Date(a.start_date).getTime();
+  });
+
+  const displayedExperience = showAll ? sortedExperience : sortedExperience.slice(0, 3);
+
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
       <div className="rounded-2xl border border-[#bcfd49]/20 bg-[#13152e]/50 p-8 md:p-12 shadow-2xl">
@@ -41,7 +56,7 @@ export default function WorkExperience({
         </div>
 
         <div className="flex flex-col gap-8">
-          {workExperience.map((exp, i) => (
+          {displayedExperience.map((exp, i) => (
             <div
               key={i}
               className={`rounded-xl border bg-[#13152e] p-6 md:p-8 shadow-lg transition-transform hover:scale-[1.01]`}
@@ -80,6 +95,18 @@ export default function WorkExperience({
             </div>
           ))}
         </div>
+
+        {workExperience.length > 3 && (
+          <div className="mt-10 flex justify-center">
+            <Button
+              onClick={() => setShowAll(!showAll)}
+              variant="outline"
+              className="border-[#bcfd49] font-mono text-[#bcfd49] hover:bg-[#bcfd49] hover:text-[#13152e]"
+            >
+              {showAll ? "Ver menos" : "Ver más"}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
