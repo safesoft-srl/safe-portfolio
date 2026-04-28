@@ -104,29 +104,28 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
       </div>
       <div className="flex flex-wrap gap-2">
         {selected.map((skill) => (
-            <span
-              key={skill.id}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg shadow-sm text-xs"
-              style={{ background: "#6c72ff", color: "#fff" }}
+          <span
+            key={skill.id}
+            className="flex items-center gap-1 px-2 py-1 rounded-lg shadow-sm text-xs"
+            style={{ background: "#6c72ff", color: "#fff" }}
+          >
+            {skill.url_logo && (
+              <img
+                src={skill.url_logo}
+                alt={skill.skill_name}
+                className="w-4 h-4 rounded-full mr-1"
+              />
+            )}
+            {skill.skill_name}
+            <button
+              type="button"
+              className="ml-1 rounded hover:bg-[#5c61eb] p-0.5"
+              onClick={() => handleRemove(skill.id)}
+              aria-label="Quitar habilidad"
             >
-              {skill.url_logo && (
-                <img
-                  src={skill.url_logo}
-                  alt={skill.skill_name}
-                  className="w-4 h-4 rounded-full mr-1"
-                />
-              )}
-              {skill.skill_name}
-              <button
-                type="button"
-                className="ml-1 rounded hover:bg-[#5c61eb] p-0.5"
-                onClick={() => handleRemove(skill.id)}
-                aria-label="Quitar habilidad"
-              >
-                <X size={12} />
-              </button>
-            </span>
-          
+              <X size={12} />
+            </button>
+          </span>
         ))}
       </div>
     </div>

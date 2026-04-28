@@ -3,7 +3,11 @@ import { useProjects } from "../features/projects/hooks/useProject";
 import ProjectList from "../features/projects/components/ProjectList";
 import ProjectForm from "../features/projects/components/ProjectForm";
 import ConfirmDialog from "../features/projects/components/ConfirmDialog";
-import { createProject, deleteProject, updateProject } from "../features/projects/services/project.service";
+import {
+  createProject,
+  deleteProject,
+  updateProject,
+} from "../features/projects/services/project.service";
 import type { Project } from "../features/projects/types/project.types";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, X } from "@phosphor-icons/react";
@@ -20,12 +24,7 @@ import Loading from "@/features/projects/components/Loading";
 import { toast } from "sonner";
 
 export default function ProjectsPage() {
-  const {
-    projects,
-    skills,
-    isLoading,
-    syncProjects,
-  } = useProjects();
+  const { projects, skills, isLoading, syncProjects } = useProjects();
 
   const [open, setOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -97,7 +96,6 @@ export default function ProjectsPage() {
               />
             )}
           </section>
-
         </main>
         <AlertDialogContent className="max-w-5xl w-full rounded-2xl border-sidebar-border bg-sidebar px-10 py-8 text-sidebar-foreground max-h-[85vh] overflow-y-auto sm:max-h-none sm:overflow-visible">
           <AlertDialogHeader className="mb-2 text-left">
@@ -147,7 +145,7 @@ export default function ProjectsPage() {
             }}
           />
         </AlertDialogContent>
-      </AlertDialog >
+      </AlertDialog>
 
       <ConfirmDialog
         open={!!deleteProjectId}

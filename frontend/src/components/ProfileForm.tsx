@@ -262,7 +262,9 @@ export default function ProfileForm({
                   className="absolute bottom-2 left-2 px-2 h-7 gap-1"
                   onClick={() => setShowPhotoActions((prev) => !prev)}
                 >
-                  <span aria-hidden="true" className="text-xs leading-none">✎</span>
+                  <span aria-hidden="true" className="text-xs leading-none">
+                    ✎
+                  </span>
                   Editar
                 </Button>
                 {showPhotoActions ? (
@@ -409,11 +411,7 @@ export default function ProfileForm({
       </div>
       <div className="mt-6">
         <div className="flex justify-center gap-3">
-          <Button
-            type="submit"
-            size="lg"
-            disabled={isSaving || !hasUnsavedChanges}
-          >
+          <Button type="submit" size="lg" disabled={isSaving || !hasUnsavedChanges}>
             {isSaving ? (
               <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
             ) : mode === "edit" ? (

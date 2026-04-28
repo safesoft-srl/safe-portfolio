@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "projects",
-            element: <ProjectsPage/>,
+            element: <ProjectsPage />,
           },
           {
             path: "skills",
@@ -74,7 +74,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "configuration",
-            element: <Configuration/>,
+            element: <Configuration />,
           },
           {
             path: "reports",

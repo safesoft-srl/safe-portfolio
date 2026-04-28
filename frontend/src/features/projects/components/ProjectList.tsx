@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function ProjectList({ projects, skills, onRefresh, onEdit, onDelete }: Props) {
-    return (
+  return (
     <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
       {projects.map((p) => (
         <ProjectCard

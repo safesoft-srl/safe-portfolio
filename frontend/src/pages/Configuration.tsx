@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { SkillForm } from "@/components/SkillForm";
 import { Button } from "@/components/ui/button";
 export default function Configuration() {
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -21,9 +20,7 @@ export default function Configuration() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-lg bg-slate-900 border-slate-800">
           <DialogHeader className="border-b border-slate-800 pb-4">
-            <DialogTitle className="text-xl font-bold text-white">
-              Nueva Skill
-            </DialogTitle>
+            <DialogTitle className="text-xl font-bold text-white">Nueva Skill</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <SkillForm

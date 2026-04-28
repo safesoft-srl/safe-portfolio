@@ -17,21 +17,20 @@ export default function ProjectCard({
   onEdit,
   onDelete,
 }: Props) {
-
   return (
     <div className="max-w-3xl min-w-[250px] h-[620px] flex">
       <div className="rounded-2xl bg-sidebar px-4 py-6 border border-sidebar-border w-full flex flex-col h-full">
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col flex-1 min-w-0">
             <div className="flex items-start justify-between">
-              <h2 className="text-base sm:text-lg font-bold text-white mb-1">
-                {project.name}
-              </h2>
+              <h2 className="text-base sm:text-lg font-bold text-white mb-1">{project.name}</h2>
               <div className="flex gap-2 ml-3 shrink-0">
                 <button
                   className="hover:bg-[#23234a] p-2 rounded-md"
                   title="Editar"
-                  onClick={() => { onEdit?.(project) }}
+                  onClick={() => {
+                    onEdit?.(project);
+                  }}
                 >
                   <PencilSimpleIcon size={18} weight="bold" />
                 </button>
@@ -52,7 +51,7 @@ export default function ProjectCard({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "320px"
+                height: "320px",
               }}
             >
               <img
@@ -78,7 +77,6 @@ export default function ProjectCard({
               >
                 {skill.skill_name}
               </span>
-
             ))
           ) : (
             <span className="text-xs text-gray-400">Sin habilidades</span>
@@ -89,24 +87,24 @@ export default function ProjectCard({
           {project.url_github && (
             <a href={project.url_github} target="_blank" rel="noopener noreferrer">
               <Button
-                    variant="default"
-                    className="flex items-center gap-2 px-6 py-3  font-semibold shadow-lg border-2 border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
-                    style={{ minWidth: 100 }}
+                variant="default"
+                className="flex items-center gap-2 px-6 py-3  font-semibold shadow-lg border-2 border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
+                style={{ minWidth: 100 }}
               >
-                    <span className="i-mdi-github" />
-                        GitHub
+                <span className="i-mdi-github" />
+                GitHub
               </Button>
             </a>
           )}
           {project.url_demo && (
             <a href={project.url_demo} target="_blank" rel="noopener noreferrer">
               <Button
-                  variant="default"
-                  className="flex items-center gap-2 px-6 py-3 font-semibold shadow-lg border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
-                  style={{ minWidth: 100 }}
+                variant="default"
+                className="flex items-center gap-2 px-6 py-3 font-semibold shadow-lg border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
+                style={{ minWidth: 100 }}
               >
-                  <span className="i-mdi-link-variant" />
-                  Ver Demo
+                <span className="i-mdi-link-variant" />
+                Ver Demo
               </Button>
             </a>
           )}

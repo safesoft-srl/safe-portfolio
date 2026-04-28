@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function UserLayout({ children }: { children?: React.ReactNode }) {
   const { isAuthenticated, setUser, logout } = useAuthStore();
 
-   const { data, isError } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await api.get("/api/auth/me");
@@ -36,7 +36,6 @@ export default function UserLayout({ children }: { children?: React.ReactNode })
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
 
   return (
     <SidebarProvider>

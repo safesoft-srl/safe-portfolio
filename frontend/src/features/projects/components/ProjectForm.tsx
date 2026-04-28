@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {UploadSimple, TrashSimple } from "@phosphor-icons/react";
+import { UploadSimple, TrashSimple } from "@phosphor-icons/react";
 import { SkillComboBox } from "@/components/SkillComboBox";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Skill } from "@/services/skill.service";
@@ -21,19 +21,13 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
-
 type Props = {
   skills: Skill[];
   onSubmit: (data: BaseProjectDTO, file: File | null) => Promise<void>;
   initialData: Project | null;
 };
 
-export default function ProjectForm({
-  skills,
-  onSubmit,
-  initialData,
-}: Props) {
-
+export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
   const [form, setForm] = useState<BaseProjectDTO>({
     name: "",
     description: "",
@@ -45,10 +39,10 @@ export default function ProjectForm({
   });
 
   const [errors, setErrors] = useState({
-    name:"",
-    description:"",
-    url_github:"",
-    skill_ids:"",
+    name: "",
+    description: "",
+    url_github: "",
+    skill_ids: "",
   });
 
   const [imagePreview, setImagePreview] = useState<string>("/src/assets/image.png");
@@ -77,7 +71,8 @@ export default function ProjectForm({
 
     if (form.url_demo) {
       // Permitir cualquier dominio con www. y dominios railway/vercel
-      const demoRegex = /^https:\/\/(www\.[\w.-]+\.[a-zA-Z]{2,}(\/.*)?|[\w-]+\.railway\.app\/?|[\w-]+\.vercel\.app\/?)+$/;
+      const demoRegex =
+        /^https:\/\/(www\.[\w.-]+\.[a-zA-Z]{2,}(\/.*)?|[\w-]+\.railway\.app\/?|[\w-]+\.vercel\.app\/?)+$/;
       if (!demoRegex.test(form.url_demo)) {
         return "La URL de demo debe tener el formato: https://www.sitio.com, railway.app o vercel.app";
       }
@@ -107,10 +102,7 @@ export default function ProjectForm({
   };
 
   return (
-    <form
-      className="text-left"
-      onSubmit={handleSubmit}
-    >
+    <form className="text-left" onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Columna Izquierda */}
         <div className="flex flex-col gap-4">
@@ -191,16 +183,16 @@ export default function ProjectForm({
             }
             `}</style>
           </div>
-                <div className="-mt-1">
+          <div className="-mt-1">
             <SkillComboBox
               skills={skills}
               selected={form.skill_projects}
               onChange={(selectedSkills) => {
-                setForm((f) => ({ 
+                setForm((f) => ({
                   ...f,
                   skill_projects: selectedSkills,
-                  skill_ids: selectedSkills.map(s => s.id),
-                 }));
+                  skill_ids: selectedSkills.map((s) => s.id),
+                }));
                 if (errors.skill_ids) setErrors((prev) => ({ ...prev, skill_ids: "" }));
               }}
               label="Tecnologías"
@@ -215,7 +207,7 @@ export default function ProjectForm({
         </div>
         {/* Columna Derecha (sin fechas ni rol) */}
         <div className="flex flex-col gap-4">
-                <div className="space-y-1.5 mt-2">
+          <div className="space-y-1.5 mt-2">
             <Label
               htmlFor="urlGithub"
               className="text-xs font-semibold text-slate-900 dark:text-slate-300"
@@ -312,8 +304,7 @@ export default function ProjectForm({
                     <AlertDialogHeader>
                       <AlertDialogTitle>¿Eliminar imagen del proyecto?</AlertDialogTitle>
                       <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">
-                        Esta acción quitará la imagen actual y volverá a la imagen por
-                        defecto.
+                        Esta acción quitará la imagen actual y volverá a la imagen por defecto.
                       </p>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -340,28 +331,23 @@ export default function ProjectForm({
       </div>
 
       <div className="space-y-1.5"></div>
-      
+
       <div className="flex items-center gap-3">
         <Checkbox
           id="is_public_cb"
           checked={isPublic}
           onCheckedChange={() => setIsPublic((prev) => !prev)}
-          />
-          <Label
-            htmlFor="is_public_cb"
-              className="cursor-pointer font-medium text-sidebar-foreground text-xs"
-          >
-            Visible en portafolio público
-          </Label>
+        />
+        <Label
+          htmlFor="is_public_cb"
+          className="cursor-pointer font-medium text-sidebar-foreground text-xs"
+        >
+          Visible en portafolio público
+        </Label>
       </div>
       <div className="pt-4 border-t border-slate-800 flex justify-end gap-3 mt-8"></div>
       <AlertDialogFooter className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <Button
-          type="submit"
-          size="lg"
-          className="sm:min-w-[150px]"
-          disabled={isSaving}
-        >
+        <Button type="submit" size="lg" className="sm:min-w-[150px]" disabled={isSaving}>
           {isSaving ? (
             <>
               <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />

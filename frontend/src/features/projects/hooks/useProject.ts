@@ -24,10 +24,7 @@ export function useProjects() {
       const profile = await getProfile();
       if (profile?.id) {
         setPortfolioId(profile.id);
-        await Promise.all([
-          syncProjects(profile.id),
-          getSkills().then(setSkills),
-        ]);
+        await Promise.all([syncProjects(profile.id), getSkills().then(setSkills)]);
       }
     } finally {
       setIsLoading(false);
