@@ -10,6 +10,8 @@ import { AxiosError } from "axios";
 import ProfileForm, { type ProfileFormData } from "@/components/ProfileForm";
 import { getProfile, updateProfile, createProfile } from "@/services/profile.service";
 import { toast } from "sonner";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 import defaultProfileImage from "@/assets/image.png";
 
@@ -25,6 +27,9 @@ const EMPTY_PROFILE: ProfileFormData = {
 export default function CreateProfileModal({ onCreated }: { onCreated?: () => void }) {
   const [isSaving, setIsSaving] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (data: ProfileFormData, file: File | null) => {
     setIsSaving(true);
@@ -47,6 +52,13 @@ export default function CreateProfileModal({ onCreated }: { onCreated?: () => vo
       } else {
         await createProfile({ ...data, profile_image: null }, file);
       }
+
+      queryClient.removeQueries({ queryKey: ["portfolio"] });
+
+      if (location.pathname === "/new") {
+        navigate("/dashboard");
+      }
+
       toast.success("Perfil guardado correctamente", {
         style: {
           background: "#6c72ff",
