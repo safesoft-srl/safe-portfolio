@@ -5,9 +5,10 @@ interface Skill {
   id: number;
   name: string;
   category: string;
+  icon_path: string | "";
 }
 
-const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
+const CATEGORIES = ["todas", "frontend", "backend", "devOps", "otros"];
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
 
 export function AddTechnicalSkill({
@@ -18,7 +19,7 @@ export function AddTechnicalSkill({
   const [isOpen, setIsOpen] = useState(false);
   const [catalogo, setCatalogo] = useState<Skill[]>([]);
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("Todas");
+  const [activeTab, setActiveTab] = useState("todas");
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
@@ -55,7 +56,7 @@ export function AddTechnicalSkill({
   const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter((skill) => {
     if (!skill.name) return false;
     const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
-    const matchesTab = activeTab === "Todas" || skill.category === activeTab;
+    const matchesTab = activeTab === "todas" || skill.category === activeTab;
     return matchesSearch && matchesTab;
   });
 
@@ -71,7 +72,7 @@ export function AddTechnicalSkill({
       setSelectedSkill(null);
       setSelectedLevel(null);
       setSearch("");
-      setActiveTab("Todas");
+      setActiveTab("todas");
     } catch (err) {
       console.error("Error guardando skill:", err);
     } finally {
@@ -126,11 +127,10 @@ export function AddTechnicalSkill({
                     <button
                       key={cat}
                       onClick={() => setActiveTab(cat)}
-                      className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
-                        activeTab === cat
+                      className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${activeTab === cat
                           ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
                           : "bg-[#1c1f38] text-slate-400 hover:text-slate-200"
-                      }`}
+                        }`}
                     >
                       {cat}
                     </button>
@@ -149,7 +149,11 @@ export function AddTechnicalSkill({
                         }}
                       >
                         <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center text-[#6c72ff] font-bold text-xl mb-3 border border-[#232555]">
-                          {skill.name.charAt(0)}
+                          <img
+                            src={skill.icon_path || "/default-skill.png"}
+                            alt={skill.name || "Skill"}
+                            className="w-10 h-10 object-contain"
+                          />
                         </div>
 
                         <h3 className="text-white font-bold group-hover:text-[#6c72ff] transition-colors">
@@ -180,11 +184,10 @@ export function AddTechnicalSkill({
                     <button
                       key={level}
                       onClick={() => setSelectedLevel(level)}
-                      className={`w-full py-4 rounded-xl font-bold transition-all border hover:scale-[1.02] ${
-                        selectedLevel === level
+                      className={`w-full py-4 rounded-xl font-bold transition-all border hover:scale-[1.02] ${selectedLevel === level
                           ? "bg-[#6c72ff] text-white border-[#6c72ff]"
                           : "bg-[#1c1f38] hover:bg-[#232555] text-white border-[#232555]"
-                      }`}
+                        }`}
                     >
                       {level}
                     </button>

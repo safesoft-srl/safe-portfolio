@@ -23,7 +23,7 @@ interface UserSkill {
     id: number;
     name: string;
     category: string;
-    icon_url: string;
+    icon_path: string;
   };
 }
 
@@ -33,7 +33,7 @@ const PORTFOLIO_ID = 1;
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
 
 export default function Skills() {
-  const [activeCategory, setActiveCategory] = useState("Todas");
+  const [activeCategory, setActiveCategory] = useState("todas");
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -157,7 +157,7 @@ export default function Skills() {
   };
 
   const filteredSkills = userSkills.filter(
-    (skill) => activeCategory === "Todas" || skill.technical_skill?.category === activeCategory
+    (skill) => activeCategory === "todas" || skill.technical_skill?.category === activeCategory
   );
 
   return (
@@ -172,7 +172,7 @@ export default function Skills() {
         </div>
 
         <div className="flex flex-wrap gap-3 mb-10 justify-center">
-          {["Todas", "Frontend", "Backend", "DevOps", "Otros"].map((cat) => (
+          {["todas", "frontend", "backend", "devOps", "otros"].map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -244,7 +244,7 @@ export default function Skills() {
                 >
                   <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-[#1c1f38] border border-[#232555] shadow-inner">
                     <img
-                      src={skill.technical_skill?.icon_url || "/default-skill.png"}
+                      src={skill.technical_skill?.icon_path || "/default-skill.png"}
                       alt={skill.technical_skill?.name || "Skill"}
                       className="w-10 h-10 object-contain"
                       onError={(e) => {

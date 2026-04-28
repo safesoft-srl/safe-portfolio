@@ -5,7 +5,7 @@ type TechnicalSkill = {
   id: number;
   name: string;
   category: string;
-  icon_url: string;
+  icon_path: string;
 };
 
 type PortfolioSkill = {
@@ -23,12 +23,12 @@ type SkillsGridProps = {
 export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
   const [activeTab, setActiveTab] = useState("todos");
 
-  const tabs = ["todos", "Frontend", "Backend", "DevOps", "Otros"];
+  const tabs = ["todos", "frontend", "backend", "devOps", "otros"];
 
   const filteredSkills = useMemo(() => {
     if (activeTab === "todos") return skills;
 
-    return skills.filter((s) => (s.technical_skill?.category ?? "Otros") === activeTab);
+    return skills.filter((s) => (s.technical_skill?.category ?? "otros") === activeTab);
   }, [activeTab, skills]);
 
   return (
@@ -72,9 +72,9 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
                     {/* FRONT */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl border border-[#2a2f4a] bg-[#1a1d3a]/40 p-4 [backface-visibility:hidden]">
                       <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/5 p-2">
-                        {skill.technical_skill?.icon_url ? (
+                        {skill.technical_skill?.icon_path ? (
                           <img
-                            src={skill.technical_skill.icon_url}
+                            src={skill.technical_skill.icon_path}
                             alt={skill.technical_skill.name}
                             className="h-9 w-9 object-contain"
                           />
