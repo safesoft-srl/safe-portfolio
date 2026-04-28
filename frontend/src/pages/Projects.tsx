@@ -22,7 +22,6 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { showErrorToast } from "@/components/ui/showErrorToast";
-import { SkillComboBox } from "@/components/SkillComboBox";
 
 type Project = {
   id: number;
