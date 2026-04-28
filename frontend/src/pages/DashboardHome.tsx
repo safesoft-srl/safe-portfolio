@@ -127,10 +127,10 @@ export default function DashboardHome() {
                   value={slug}
                   onChange={handleChangePortfolioUrl}
                   onBlur={handleBlurPortfolioUrl}
-                  className={`h-11 w-full lg:w-72 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                  className={`h-8 w-full lg:w-72 ${
                     portfolioUrlError
                       ? "border-red-500 focus-visible:ring-red-500"
-                      : "border-transparent focus-visible:ring-[#5d68f5]"
+                      : "border-input focus-visible:ring-[#5d68f5]"
                   }`}
                 />
                 {portfolioUrlError && (

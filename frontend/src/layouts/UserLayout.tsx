@@ -32,6 +32,7 @@ export default function UserLayout({ children }: { children?: React.ReactNode })
       logout();
     }
   }, [isError, logout]);
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
