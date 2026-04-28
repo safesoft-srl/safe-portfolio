@@ -47,8 +47,7 @@ class PortfolioService
     private function handleProfileImage(array $data): array
     {
         if (isset($data['profile_image']) && $data['profile_image']) {
-            $upload = $this->imageUploadService
-                ->upload($data['profile_image']);
+            $upload = $this->imageUploadService->upload($data['profile_image']);
 
             $data['profile_image'] = $upload['url'];
             $data['image_id'] = $upload['image_id'];
@@ -90,16 +89,15 @@ class PortfolioService
 
     public function getBySlug(string $slug)
     {
-        return Portfolio::with(
-            [
-                'portfolioSkills',
-                'workExperiences' => function ($query) {
-                    $query->where('is_visible', true);
-                },
-                'projects.skill_projects',
-            ]
-        )
-            ->where('portfolio_slug', $slug)->firstOrFail();
+        return Portfolio::with([
+            'portfolioSkills.technicalSkill', // ✅ FIX IMPORTANTE
+            'workExperiences' => function ($query) {
+                $query->where('is_visible', true);
+            },
+            'projects.skill_projects',
+        ])
+            ->where('portfolio_slug', $slug)
+            ->firstOrFail();
     }
 
     public function saveUrlPortfolio(string $url, int $id)
