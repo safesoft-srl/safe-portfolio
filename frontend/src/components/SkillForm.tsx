@@ -9,7 +9,8 @@ import { CircleNotchIcon, UploadSimple, Trash } from "@phosphor-icons/react";
 
 const skillSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
-  logo: z.any(),
+  category: z.string().min(1, "La categoría es requerida"),
+  logo: z.any().optional(),
 });
 
 type SkillFormData = z.infer<typeof skillSchema>;
@@ -29,7 +30,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
     formState: { errors },
   } = useForm<SkillFormData>({
     resolver: zodResolver(skillSchema),
-    defaultValues: { name: "", logo: undefined },
+    defaultValues: { name: "", category: "", logo: undefined },
   });
 
   const [preview, setPreview] = useState<string | null>(null);
@@ -44,6 +45,16 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
       setPreview(null);
     }
   };
+
+  const onSubmitForm = (data: SkillFormData) => {
+    const file = data.logo?.[0];
+
+    onSubmit({
+      name: data.name,
+      category: data.category,
+      logo: file,
+    });
+  }
 
   {/*Cuando se suelta un archivo*/}
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
@@ -64,7 +75,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-6">
       <div className="space-y-2">
         <Label className="text-slate-300">Nombre de la Skill</Label>
         <Input
@@ -73,6 +84,15 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
           className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
         />
         {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
+      </div>
+      <div className="space-y-2">
+        <Label className="text-slate-300">Categoría</Label>
+        <Input
+          {...register("category")}
+          placeholder="Ej: backend, frontend"
+          className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
+        />
+        {errors.category && <span className="text-xs text-red-500">{errors.category.message}</span>}
       </div>
       <div className="space-y-2">
         <Label className="text-slate-300">Logo</Label>
