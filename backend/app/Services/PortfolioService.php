@@ -94,8 +94,8 @@ class PortfolioService
             [
                 'portfolioSkills',
                 'workExperiences' => function ($query) {
-                $query->where('is_visible', true);
-        },
+                    $query->where('is_visible', true);
+                },
                 'projects.skill_projects',
             ]
         )
