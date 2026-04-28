@@ -90,7 +90,16 @@ class PortfolioService
 
     public function getBySlug(string $slug)
     {
-        return Portfolio::where('portfolio_slug', $slug)->firstOrFail();
+        return Portfolio::with(
+            [
+                'portfolioSkills',
+                'workExperiences' => function ($query) {
+                    $query->where('is_visible', true);
+                },
+                'projects.skill_projects',
+            ]
+        )
+            ->where('portfolio_slug', $slug)->firstOrFail();
     }
 
     public function saveUrlPortfolio(string $url, int $id)

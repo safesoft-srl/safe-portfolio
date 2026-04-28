@@ -7,11 +7,11 @@ interface PublicNavbarProps {
 export function PublicNavbar({ firstName }: PublicNavbarProps) {
   const navLinks = [
     { name: "Sobre Mi", href: "#sobre-mi" },
-    { name: "Resumen", href: "#resumen" },
-    { name: "Servicios", href: "#servicios" },
-    { name: "Portafolio", href: "#portafolio" },
-    { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog
-    { name: "Contacto", href: "#contacto" },
+    { name: "Proyectos", href: "#projects" },
+    { name: "Experiencia", href: "#experience" },
+    { name: "Habilidades", href: "#skills" },
+    // { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog
+    // { name: "Contacto", href: "#contacto" },
   ];
 
   return (
