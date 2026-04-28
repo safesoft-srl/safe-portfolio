@@ -124,7 +124,7 @@ export default function RegisterPage() {
 
       if (response.ok) {
         setApiSuccess(data.message || "Correo verificado exitosamente");
-        navigate("/dashboard");
+        navigate("/new");
         // setTimeout(() => { navigate("/login");  }, 1500);
       } else {
         setApiError(data.message || "Error al verificar token.");
