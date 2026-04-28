@@ -7,7 +7,7 @@ import { CopySimple } from "@phosphor-icons/react";
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
 import { getProfile } from "@/services/profile.service";
 
-export default function DashboardHome({ isNewPortfolio }: { isNewPortfolio?: boolean }) {
+export default function DashboardHome() {
   const user = useAuthStore((state) => state.user);
 
   const displayName = user?.name ?? "Usuario";
@@ -107,23 +107,6 @@ export default function DashboardHome({ isNewPortfolio }: { isNewPortfolio?: boo
       isMounted = false;
     };
   }, []);
-
-  if (isNewPortfolio) {
-    return (
-      <div className="min-h-screen flex items-center justify-center w-full">
-        <section className="w-full max-w-7xl mx-auto px-2 sm:px-3 md:px-6">
-          <div className="w-full rounded-2xl bg-sidebar py-6 border border-sidebar-border px-4 sm:px-8">
-            <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
-              <p className="text-sm text-sidebar-foreground">
-                Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
-              </p>
-              <CreateProfileModal />
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
 
   return (
     <>

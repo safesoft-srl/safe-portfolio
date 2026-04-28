@@ -12,7 +12,7 @@ import ExperiencePage from "./pages/Experience";
 import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
 import ProjectsPage from "./pages/ProjectsPage";
-import Projects from "./pages/Projects";
+//import Projects from "./pages/Projects";
 
 export const router = createBrowserRouter([
   {
@@ -40,16 +40,6 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Register />,
-      },
-    ],
-  },
-  {
-    path: "/new",
-    element: <ProtectedRoute />,
-    children: [
-      {
-        path: "",
-        element: <DashboardHome isNewPortfolio={true} />,
       },
     ],
   },

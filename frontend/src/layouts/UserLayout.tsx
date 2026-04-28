@@ -12,11 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function UserLayout({ children }: { children?: React.ReactNode }) {
   const { isAuthenticated, setUser, logout } = useAuthStore();
 
-  const {
-    data: userData,
-    isError: isUserError,
-    isLoading: isUserLoading,
-  } = useQuery({
+   const { data, isError } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await api.get("/api/auth/me");
@@ -25,55 +21,22 @@ export default function UserLayout({ children }: { children?: React.ReactNode })
     retry: false,
   });
 
-  const {
-    data: portfolioData,
-    isLoading: isPortfolioLoading,
-    isError: isPortfolioError,
-  } = useQuery({
-    queryKey: ["portfolio"],
-    queryFn: async () => {
-      const response = await api.get("/api/me/portfolio");
-      return response.data;
-    },
-    // Only run this query if the user is authenticated
-    enabled: isAuthenticated,
-    retry: false,
-  });
-
   useEffect(() => {
-    if (userData) {
-      setUser(userData);
+    if (data) {
+      setUser(data);
     }
-  }, [userData, setUser]);
+  }, [data, setUser]);
 
   useEffect(() => {
-    if (isUserError || isPortfolioError) {
+    if (isError) {
       logout();
     }
-  }, [isUserError, isPortfolioError, logout]);
+  }, [isError, logout]);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  // Prevent flicker by waiting for the queries to complete
-  if (isUserLoading || isPortfolioLoading) {
-    return (
-      <div className="min-h-screen bg-[#14162f] flex items-center justify-center text-slate-100">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-      </div>
-    );
-  }
-
-  // If the user has no profession set in their portfolio, force them to the /new route
-  if (
-    portfolioData &&
-    portfolioData.success &&
-    portfolioData.data &&
-    !portfolioData.data.profession
-  ) {
-    return <Navigate to="/new" replace />;
-  }
 
   return (
     <SidebarProvider>
