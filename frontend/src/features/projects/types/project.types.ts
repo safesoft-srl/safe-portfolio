@@ -22,6 +22,7 @@ export type BaseProjectDTO = {
 
 export type Skill = {
     id: number;
-    skill_name: string;
-    url_logo: string | "";
+    name: string;
+    category: string;
+    icon_path: string | "";
 }

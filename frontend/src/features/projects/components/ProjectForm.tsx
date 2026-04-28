@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {UploadSimple, TrashSimple } from "@phosphor-icons/react";
 import { SkillComboBox } from "@/components/SkillComboBox";
-import type { Skill } from "@/services/skill.service";
+import type { Skill }  from "../types/project.types";
 import type { BaseProjectDTO, Project } from "../types/project.types";
 
 import {

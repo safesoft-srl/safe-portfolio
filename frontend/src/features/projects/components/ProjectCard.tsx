@@ -76,7 +76,7 @@ export default function ProjectCard({
                 key={skill.id}
                 className="bg-[#6c72ff] text-white text-xs px-3 py-1 rounded-full"
               >
-                {skill.skill_name}
+                {skill.name}
               </span>
 
             ))
