@@ -42,6 +42,16 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    path: "/new",
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "",
+        element: <DashboardHome isNewPortfolio={true} />,
+      },
+    ],
+  },
+  {
     path: "/dashboard",
     element: <ProtectedRoute />,
     children: [
