@@ -12,38 +12,66 @@ use Throwable;
 
 class PortfolioTechnicalSkillController extends Controller
 {
+    /**
+     * Obtiene el portafolio real del usuario según el número recibido (1,2,3...)
+     */
+    private function getUserPortfolioByIndex(int $portfolioIndex)
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            abort(401, 'No autenticado.');
+        }
+
+        if ($portfolioIndex < 1) {
+            abort(400, 'El portfolioId debe ser mayor o igual a 1.');
+        }
+
+        $portfolio = Portfolio::where('user_id', $user->id)
+            ->orderBy('id', 'asc')
+            ->skip($portfolioIndex - 1)
+            ->first();
+
+        if (! $portfolio) {
+            abort(404, 'No se encontró el portafolio solicitado para este usuario.');
+        }
+
+        return $portfolio;
+    }
+
     public function store(Request $request, int $portfolioId)
     {
-        Portfolio::findOrFail($portfolioId);
-
-        $validated = $request->validate([
-            'technical_skill_id' => 'required|exists:technical_skills,id',
-            'level' => 'required|string|max:50',
-        ]);
-
         try {
 
-            $exists = PortfolioSkill::where('portfolio_id', $portfolioId)
+            // portfolioId ahora es índice (1,2,3...)
+            $portfolio = $this->getUserPortfolioByIndex($portfolioId);
+
+            $validated = $request->validate([
+                'technical_skill_id' => 'required|exists:technical_skills,id',
+                'level' => 'required|string|max:50',
+            ]);
+
+            $exists = PortfolioSkill::where('portfolio_id', $portfolio->id)
                 ->where('technical_skill_id', $validated['technical_skill_id'])
                 ->exists();
 
             if ($exists) {
                 return ApiResponse::error(
-                    'Esta habilidad ya está agregada en tu portafolio. ',
+                    'Esta habilidad ya está agregada en tu portafolio.',
                     409,
                     null
                 );
             }
 
             $skill = PortfolioSkill::create([
-                'portfolio_id' => $portfolioId,
+                'portfolio_id' => $portfolio->id,
                 'technical_skill_id' => $validated['technical_skill_id'],
                 'level' => $validated['level'],
             ]);
 
             return ApiResponse::success(
                 $skill,
-                'Habilidad agregada correctamente a tu portafolio ',
+                'Habilidad agregada correctamente a tu portafolio.',
                 201
             );
 
@@ -64,16 +92,16 @@ class PortfolioTechnicalSkillController extends Controller
 
     public function update(Request $request, int $portfolioId)
     {
-        Portfolio::findOrFail($portfolioId);
-
-        $validated = $request->validate([
-            'technical_skill_id' => 'required|exists:technical_skills,id',
-            'level' => 'required|string|max:50',
-        ]);
-
         try {
 
-            $portfolioSkill = PortfolioSkill::where('portfolio_id', $portfolioId)
+            $portfolio = $this->getUserPortfolioByIndex($portfolioId);
+
+            $validated = $request->validate([
+                'technical_skill_id' => 'required|exists:technical_skills,id',
+                'level' => 'required|string|max:50',
+            ]);
+
+            $portfolioSkill = PortfolioSkill::where('portfolio_id', $portfolio->id)
                 ->where('technical_skill_id', $validated['technical_skill_id'])
                 ->firstOrFail();
 
@@ -113,15 +141,15 @@ class PortfolioTechnicalSkillController extends Controller
 
     public function destroy(Request $request, int $portfolioId)
     {
-        Portfolio::findOrFail($portfolioId);
-
-        $validated = $request->validate([
-            'technical_skill_id' => 'required|exists:technical_skills,id',
-        ]);
-
         try {
 
-            $portfolioSkill = PortfolioSkill::where('portfolio_id', $portfolioId)
+            $portfolio = $this->getUserPortfolioByIndex($portfolioId);
+
+            $validated = $request->validate([
+                'technical_skill_id' => 'required|exists:technical_skills,id',
+            ]);
+
+            $portfolioSkill = PortfolioSkill::where('portfolio_id', $portfolio->id)
                 ->where('technical_skill_id', $validated['technical_skill_id'])
                 ->firstOrFail();
 
@@ -161,23 +189,15 @@ class PortfolioTechnicalSkillController extends Controller
     {
         try {
 
-            Portfolio::findOrFail($portfolioId);
+            $portfolio = $this->getUserPortfolioByIndex($portfolioId);
 
-            $skills = PortfolioSkill::where('portfolio_id', $portfolioId)
+            $skills = PortfolioSkill::where('portfolio_id', $portfolio->id)
                 ->with('technicalSkill')
                 ->get();
 
             return ApiResponse::success(
                 $skills,
-                'Habilidades cargadas correctamente '
-            );
-
-        } catch (ModelNotFoundException $e) {
-
-            return ApiResponse::error(
-                'No se encontró el portafolio solicitado.',
-                404,
-                null
+                'Habilidades cargadas correctamente'
             );
 
         } catch (Throwable $e) {

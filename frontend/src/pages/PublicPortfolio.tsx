@@ -61,6 +61,13 @@ export default function PublicPortfolio() {
     );
   }
 
+  const portfolioSkills =
+    profile && typeof profile === "object" && "portfolio_skills" in profile
+      ? (profile as { portfolio_skills?: unknown }).portfolio_skills
+      : [];
+
+  const safeSkills = Array.isArray(portfolioSkills) ? portfolioSkills : [];
+
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
       <PublicNavbar firstName={firstName} />
@@ -115,7 +122,7 @@ export default function PublicPortfolio() {
           {/* <EducationProjects /> */}
         </div>
         <div id="skills">
-          <SkillsGrid />
+          <SkillsGrid skills={safeSkills} />
         </div>
         {/* <div id="contacto">
           <ContactForm />
