@@ -5,6 +5,7 @@ interface Skill {
   id: number;
   name: string;
   category: string;
+  icon_url?: string;
 }
 
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
@@ -118,7 +119,7 @@ export function AddTechnicalSkill({
                   placeholder="Buscar habilidad técnica..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full h-12 bg-white text-slate-900 rounded-xl px-4 mb-6 font-sans focus:ring-2 focus:ring-[#6c72ff] outline-none"
+                  className="w-full h-12 bg-[#1c1f38] text-white rounded-xl px-4 mb-6 font-sans border border-[#232555] focus:ring-2 focus:ring-[#6c72ff] outline-none placeholder:text-slate-500"
                 />
 
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -148,8 +149,18 @@ export function AddTechnicalSkill({
                           setSelectedLevel(null);
                         }}
                       >
-                        <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center text-[#6c72ff] font-bold text-xl mb-3 border border-[#232555]">
-                          {skill.name.charAt(0)}
+                        <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center mb-3 border border-[#232555]">
+                          {skill.icon_url ? (
+                            <img
+                              src={skill.icon_url}
+                              alt={skill.name}
+                              className="w-8 h-8 object-contain"
+                            />
+                          ) : (
+                            <span className="text-[#6c72ff] font-bold text-xl">
+                              {skill.name.charAt(0)}
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="text-white font-bold group-hover:text-[#6c72ff] transition-colors">
