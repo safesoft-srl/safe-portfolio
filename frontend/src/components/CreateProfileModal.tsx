@@ -7,48 +7,31 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { X, PlusIcon } from "@phosphor-icons/react";
-import { AxiosError } from "axios";
 import ProfileForm, { type ProfileFormData } from "@/components/ProfileForm";
-import { getProfile, updateProfile, createProfile } from "@/services/profile.service";
+import { createProfile } from "@/services/profile.service";
 import { toast } from "sonner";
+import { useAuthStore } from "@/lib/auth-store";
 
 import defaultProfileImage from "@/assets/image.png";
 
-const EMPTY_PROFILE: ProfileFormData = {
-  profile_name: "",
-  profile_email: "",
-  profession: "",
-  bio: "",
-  url_photo: defaultProfileImage,
-  url_portfolio: "",
-};
-
 export default function CreateProfileModal({ onCreated }: { onCreated?: () => void }) {
+  const user = useAuthStore((state) => state.user);
   const [isSaving, setIsSaving] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const EMPTY_PROFILE: ProfileFormData = {
+    profile_name: user?.name || "",
+    profile_email: user?.email || "",
+    profession: "",
+    bio: "",
+    profile_image: defaultProfileImage,
+    url_portfolio: "",
+  };
 
   const handleSubmit = async (data: ProfileFormData, file: File | null) => {
     setIsSaving(true);
     try {
-      // obtener el perfil
-      let exists = true;
-      try {
-        await getProfile();
-      } catch (e: unknown) {
-        const axiosError = e as AxiosError;
-        if (axiosError.response?.status === 404) {
-          exists = false;
-        } else {
-          throw e;
-        }
-      }
-      //  Crear o actualizar según corresponda
-      if (exists) {
-        await updateProfile({ ...data, profile_image: null }, file);
-      } else {
-        await createProfile({ ...data, profile_image: null }, file);
-      }
-
+      await createProfile(data, file);
       toast.success("Perfil guardado correctamente", {
         style: {
           background: "#6c72ff",
@@ -95,6 +78,7 @@ export default function CreateProfileModal({ onCreated }: { onCreated?: () => vo
           initialData={EMPTY_PROFILE}
           onSubmit={handleSubmit}
           isSaving={isSaving}
+          idPortfolio={0}
         />
       </AlertDialogContent>
     </AlertDialog>

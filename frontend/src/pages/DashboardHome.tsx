@@ -9,7 +9,6 @@ import { getProfile } from "@/services/profile.service";
 
 export default function DashboardHome() {
   const user = useAuthStore((state) => state.user);
-
   const displayName = user?.name ?? "Usuario";
   const [portfolioUrl, setPortfolioUrl] = useState("");
   const [slug, setSlug] = useState("");
@@ -182,7 +181,6 @@ export default function DashboardHome() {
           </div>
         </div>
       </section>
-      {/* este es mi cuadro nuevo para agregar proyectos */}
       <section className="mt-8 w-full max-w-7xl mx-auto px-2 sm:px-3 md:px-6">
         <div className="w-full rounded-2xl bg-sidebar py-6 border border-sidebar-border px-4 sm:px-8">
           <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
