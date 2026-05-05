@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import { useAuthStore } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
-import CreateProfileModal from "@/components/CreateProfileModal";
 import { Input } from "@/components/ui/input";
 import { CopySimple } from "@phosphor-icons/react";
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
 import { getProfile } from "@/services/profile.service";
 
 export default function DashboardHome() {
-  const user = useAuthStore((state) => state.user);
-  const displayName = user?.name ?? "Usuario";
   const [portfolioUrl, setPortfolioUrl] = useState("");
   const [slug, setSlug] = useState("");
   const [portfolioUrlError, setPortfolioUrlError] = useState("");
@@ -111,7 +107,7 @@ export default function DashboardHome() {
     <>
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-start lg:justify-between px-2 sm:px-3 md:px-6 py-2">
         <div className="mb-4 lg:mb-0 w-full">
-          <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {displayName}!</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
           <p className="mt-1 text-sm font-sans">Gestiona tu portafolio profesional</p>
         </div>
 
@@ -181,16 +177,7 @@ export default function DashboardHome() {
           </div>
         </div>
       </section>
-      <section className="mt-8 w-full max-w-7xl mx-auto px-2 sm:px-3 md:px-6">
-        <div className="w-full rounded-2xl bg-sidebar py-6 border border-sidebar-border px-4 sm:px-8">
-          <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
-            <p className="text-sm text-sidebar-foreground">
-              Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
-            </p>
-            <CreateProfileModal />
-          </div>
-        </div>
-      </section>
+      {/* Card moved to Welcome page */}
     </>
   );
 }
