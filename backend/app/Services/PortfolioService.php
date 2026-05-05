@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Portfolio;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use App\Models\User;
+use Illuminate\Http\UploadedFile;
 
 class PortfolioService
 {
@@ -11,11 +13,11 @@ class PortfolioService
         private ImageUploadService $imageUploadService
     ) {}
 
-    public function create(array $data)
+    public function create(array $data, User $user)
     {
         $data = $this->handleProfileImage($data);
 
-        return Portfolio::create($data);
+        return $user->portfolios()->create($data);
     }
 
     public function getAll()
@@ -32,13 +34,17 @@ class PortfolioService
 
     public function getByUserId(int $userId)
     {
-        return Portfolio::where('user_id', $userId)->firstOrFail();
+        return Portfolio::where('user_id', $userId)->first();
     }
 
-    public function update(int $user_id, array $data)
+    public function update(int $id_portfolio, array $data)
     {
-        $portfolio = Portfolio::where('user_id', $user_id)->firstOrFail();
-        $data = $this->handleProfileImage($data);
+        $portfolio = Portfolio::where('id', $id_portfolio)->firstOrFail();
+        if(isset($data['profile_image']) && $data['profile_image'] instanceof UploadedFile) {
+            $this->deletePhoto($portfolio->id);
+            $data = $this->handleProfileImage($data);
+        }
+       
         $portfolio->update($data);
 
         return $portfolio->fresh();
@@ -70,6 +76,7 @@ class PortfolioService
 
         if (! $portfolio->image_id) {
             return $portfolio;
+
         }
 
         Cloudinary::destroy($portfolio->image_id);
