@@ -1,5 +1,5 @@
 import { http } from "@/services/http.service";
-import type { ApiProfilePayload, ProfileData as ProfileDataType } from "@/types/public-portfolio";
+import type { ProfileData as ProfileDataType } from "@/types/public-portfolio";
 export type ProfileData = {
   id?: number;
   profile_name: string;
@@ -35,10 +35,15 @@ const unwrapData = (responseData: unknown): ProfileDataType | undefined => {
   return responseData as ProfileDataType;
 };
 
-export async function getProfile(): Promise<ProfileDataType> {
-  const response = await http.get<ApiProfilePayload>("/api/me/portfolio");
-  return response.data.data;
-}
+export const getProfile = async () => {
+  try {
+    const { data } = await http.get("/api/me/portfolio");
+    return data.data ?? null;
+  } catch (error: any) {
+    console.error("Error getProfile:", error.response?.data);
+    return null
+  }
+};
 
 export async function updateProfile(
   payload: ProfileData,
@@ -52,13 +57,16 @@ export async function updateProfile(
   formData.append("bio", payload.bio);
   formData.append("url_portfolio", payload.url_portfolio);
 
+  if (payload.id) {
+    formData.append("id_portfolio",payload.id.toString());
+  }
+
   if (file) {
     formData.append("profile_image", file);
   }
 
   formData.append("_method", "PUT");
   const response = await http.post("/api/me/portfolio", formData);
-  console.log("API Response:", response);
   return toProfileData(unwrapData(response.data));
 }
 
@@ -75,11 +83,10 @@ export async function createProfile(
   formData.append("profile_email", payload.profile_email);
   formData.append("profession", payload.profession);
   formData.append("bio", payload.bio);
-  formData.append("url_portfolio", payload.url_portfolio);
   if (file) {
     formData.append("profile_image", file);
   }
 
-  const response = await http.post("/api/portfolios", formData);
+  const response = await http.post("api/me/portfolio", formData);
   return toProfileData(unwrapData(response.data));
 }
