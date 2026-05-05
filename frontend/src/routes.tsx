@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import DashboardHome from "./pages/DashboardHome";
+import Portfolios from "./pages/Portfolios";
 import PublicPortfolio from "./pages/PublicPortfolio";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
@@ -43,6 +44,17 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/portfolios",
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "",
+        element: <Portfolios />,
+      },
+    ],
+  },
+
   {
     path: "/dashboard",
     element: <ProtectedRoute />,
