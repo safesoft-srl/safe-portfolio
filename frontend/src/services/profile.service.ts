@@ -1,5 +1,6 @@
 import { http } from "@/services/http.service";
 import type { ProfileData as ProfileDataType } from "@/types/public-portfolio";
+import { id } from "date-fns/locale";
 export type ProfileData = {
   id?: number;
   profile_name: string;
@@ -41,6 +42,26 @@ export const getProfile = async () => {
     return data.data ?? null;
   } catch (error: any) {
     console.error("Error getProfile:", error.response?.data);
+    return null
+  }
+};
+
+export const getPortfolio = async (idPortfolio: number) => {
+  try {
+    const { data } = await http.get(`/api/me/portfolio/${idPortfolio}`);
+    return data.data ?? null;
+  } catch (error: any) {
+    console.error("Error getProfile:", error.response?.data);
+    return null
+  }
+};
+
+export const getPortfolios = async (options = {}) => {
+  try {
+    const { data } = await http.get("/api/me/portfolios", options);
+    return data.data ?? null;
+  } catch (error: any) {
+    console.error("Error getPortfolios:", error.response?.data);
     return null
   }
 };

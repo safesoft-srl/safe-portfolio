@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CopySimple } from "@phosphor-icons/react";
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
-import { getProfile } from "@/services/profile.service";
+import { getPortfolio } from "@/services/profile.service";
 
 export default function DashboardHome() {
+  const { idPortfolio } = useParams();
   const [portfolioUrl, setPortfolioUrl] = useState("");
   const [slug, setSlug] = useState("");
   const [portfolioUrlError, setPortfolioUrlError] = useState("");
@@ -78,9 +80,9 @@ export default function DashboardHome() {
   useEffect(() => {
     let isMounted = true;
 
-    const getPortfolio = async () => {
+    const loadPortfolio = async () => {
       try {
-        const portfolio = await getProfile();
+        const portfolio = await getPortfolio(parseInt(idPortfolio!));
 
         if (!isMounted) return;
 
@@ -96,7 +98,7 @@ export default function DashboardHome() {
       }
     };
 
-    getPortfolio();
+    loadPortfolio();
 
     return () => {
       isMounted = false;
@@ -177,7 +179,6 @@ export default function DashboardHome() {
           </div>
         </div>
       </section>
-      {/* Card moved to Welcome page */}
     </>
   );
 }
