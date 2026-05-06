@@ -34,6 +34,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 // Types
 interface WorkExperience {
@@ -54,22 +55,55 @@ interface WorkExperience {
 // Zod Schema
 const experienceSchema = z
   .object({
-    company: z.string().min(1, "La empresa es requerida"),
-    position: z.string().min(1, "La posición es requerida"),
+    company: z.string().min(1, "La empresa es requerida").max(50, "Máximo 50 caracteres"),
+    position: z.string().min(1, "La posición es requerida").max(70, "Máximo 70 caracteres"),
     start_date: z.string().min(1, "La fecha de inicio es requerida"),
     end_date: z.string().nullable().optional(),
     is_current: z.boolean(),
-    description: z.string().min(1, "La descripción es requerida"),
-    achievements: z.array(z.string()).nullable().optional(),
+    description: z.string().max(255, "Máximo 255 caracteres"),
+    achievements: z
+      .array(z.string().max(100, "Máximo 100 caracteres por logro"))
+      .nullable()
+      .optional(),
     is_visible: z.boolean(),
   })
   .superRefine((data, ctx) => {
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    if (data.start_date && data.start_date > todayStr) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "La fecha de inicio no puede ser mayor a la fecha actual",
+        path: ["start_date"],
+      });
+    }
+
     if (!data.is_current && !data.end_date) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "La fecha de fin es requerida si no es su trabajo actual",
         path: ["end_date"],
       });
+    }
+
+    if (data.end_date && !data.is_current) {
+      // No puede ser futura
+      if (data.end_date > todayStr) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de fin no puede ser mayor a la fecha actual (selecciona 'Actualidad')",
+          path: ["end_date"],
+        });
+      }
+
+      // No puede ser anterior a la de inicio
+      if (data.start_date && data.end_date < data.start_date) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de fin no puede ser anterior a la fecha de inicio",
+          path: ["end_date"],
+        });
+      }
     }
   });
 
@@ -93,6 +127,12 @@ export default function ExperiencePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
+      toast.success("Experiencia laboral registrada correctamente");
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        setErrMsg(error?.response?.data.message || "Error al crear la experiencia");
+      }
     },
   });
   const [errMsg, setErrMsg] = useState<string | null>(null);
@@ -102,6 +142,7 @@ export default function ExperiencePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
+      toast.success("Experiencia laboral actualizada correctamente");
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -114,6 +155,14 @@ export default function ExperiencePage() {
     mutationFn: (id: number) => api.delete(`/api/me/work-experiences/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
+      toast.success("Experiencia laboral eliminada correctamente");
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "El registro ya no existe o hubo un error.");
+      } else {
+        toast.error("Ocurrió un error inesperado al eliminar.");
+      }
     },
   });
 
@@ -179,6 +228,7 @@ export default function ExperiencePage() {
   const onSubmit = (data: ExperienceFormData) => {
     const payload = {
       ...data,
+      end_date: data.is_current ? null : data.end_date,
       achievements: data.achievements ? data.achievements.join("\n") : "",
     };
 
@@ -336,6 +386,7 @@ export default function ExperiencePage() {
                   <Label className="text-slate-300">Empresa</Label>
                   <Input
                     {...register("company")}
+                    maxLength={50}
                     placeholder="Ej: Microsoft"
                     className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
                   />
@@ -348,6 +399,7 @@ export default function ExperiencePage() {
                   <Label className="text-slate-300">Cargo / Posición</Label>
                   <Input
                     {...register("position")}
+                    maxLength={70}
                     placeholder="Ej: Senior Developer"
                     className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
                   />
@@ -406,6 +458,7 @@ export default function ExperiencePage() {
                 <Label className="text-slate-300">Descripción</Label>
                 <Textarea
                   {...register("description")}
+                  maxLength={255}
                   rows={3}
                   placeholder="Describe tus responsabilidades..."
                   className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
@@ -431,6 +484,7 @@ export default function ExperiencePage() {
                       <div className="flex gap-2">
                         <Input
                           id="achievement-input"
+                          maxLength={100}
                           placeholder="Ej: Reduje los tiempos de carga en un 50%"
                           className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 font-sans"
                           onKeyDown={(e) => {
@@ -469,9 +523,19 @@ export default function ExperiencePage() {
                           {valueArray.map((achievement, idx) => (
                             <div
                               key={idx}
-                              className="flex items-start justify-between w-full bg-slate-900 border border-slate-800 text-slate-300 px-3 py-2.5 rounded-lg text-xs"
+                              className="flex items-start justify-between w-full bg-slate-900 border border-slate-800 focus-within:border-indigo-500 hover:border-slate-700 transition-colors text-slate-300 px-3 py-2.5 rounded-lg text-xs"
                             >
-                              <span className="flex-1">{achievement}</span>
+                              <input
+                                type="text"
+                                value={achievement}
+                                maxLength={100}
+                                onChange={(e) => {
+                                  const newArr = [...valueArray];
+                                  newArr[idx] = e.target.value;
+                                  field.onChange(newArr);
+                                }}
+                                className="flex-1 bg-transparent border-none outline-none text-slate-300 focus:ring-0 p-0 text-xs truncate"
+                              />
                               <button
                                 type="button"
                                 onClick={() => {
