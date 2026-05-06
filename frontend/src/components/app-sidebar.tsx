@@ -42,39 +42,39 @@ const data = {
   navMain: [
     {
       title: "Panel",
-      url: "/dashboard",
+      url: "",
       icon: <LayoutIcon />,
     },
     {
       title: "Perfil",
-      url: "/dashboard/profile",
+      url: "profile",
       icon: <UserIcon />,
     },
     {
       title: "Habilidades",
-      url: "/dashboard/skills",
+      url: "skills",
       icon: <MedalIcon />,
     },
 
     {
       title: "Proyectos",
-      url: "/dashboard/projects",
+      url: "projects",
       icon: <BriefcaseIcon />,
     },
 
     {
       title: "Experiencia",
-      url: "/dashboard/experience",
+      url: "experience",
       icon: <GraduationCapIcon />,
     },
     {
       title: "Configuración",
-      url: "/dashboard/configuration",
+      url: "configuration",
       icon: <GearIcon />,
     },
     /*{
       title: "Reportes",
-      url: "/dashboard/reports",
+      url: "reports",
       icon: <ChartBarIcon />,
     },
     */
