@@ -36,7 +36,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
-
 // Types
 interface WorkExperience {
   id: number;
@@ -62,7 +61,10 @@ const experienceSchema = z
     end_date: z.string().nullable().optional(),
     is_current: z.boolean(),
     description: z.string().max(255, "Máximo 255 caracteres"),
-    achievements: z.array(z.string().max(100, "Máximo 100 caracteres por logro")).nullable().optional(),
+    achievements: z
+      .array(z.string().max(100, "Máximo 100 caracteres por logro"))
+      .nullable()
+      .optional(),
     is_visible: z.boolean(),
   })
   .superRefine((data, ctx) => {
@@ -104,7 +106,6 @@ const experienceSchema = z
       }
     }
   });
-
 
 type ExperienceFormData = z.infer<typeof experienceSchema>;
 
@@ -533,7 +534,8 @@ export default function ExperiencePage() {
                                   newArr[idx] = e.target.value;
                                   field.onChange(newArr);
                                 }}
-                                className="flex-1 bg-transparent border-none outline-none text-slate-300 focus:ring-0 p-0 text-xs truncate" />
+                                className="flex-1 bg-transparent border-none outline-none text-slate-300 focus:ring-0 p-0 text-xs truncate"
+                              />
                               <button
                                 type="button"
                                 onClick={() => {
