@@ -18,6 +18,15 @@ class PortfolioController extends Controller
         private PortfolioService $portfolioService
     ) {}
 
+    public function showAll() {
+        $portfolios = $this->portfolioService->showAll();
+
+        return ApiResponse::success(
+            $portfolios,
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
     public function store(StorePortfolioRequest $request)
     {
         $user = auth()->user();
@@ -36,7 +45,15 @@ class PortfolioController extends Controller
 
     public function index()
     {
-        $portfolios = $this->portfolioService->getAll();
+        $userId = auth()->id();
+        if ($userId === null) {
+            return ApiResponse::error(
+                ResponseMessages::UNAUTHORIZED,
+                401
+            );
+        }
+
+        $portfolios = $this->portfolioService->getAll($userId);
 
         return ApiResponse::success(
             $portfolios,
@@ -71,6 +88,16 @@ class PortfolioController extends Controller
     public function show(int $id)
     {
         $portfolio = $this->portfolioService->getById($id);
+
+        return ApiResponse::success(
+            $portfolio,
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
+    public function getPortfolio(int $id) 
+    {
+        $portfolio = $this->portfolioService->getPortfolio($id);
 
         return ApiResponse::success(
             $portfolio,

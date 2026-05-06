@@ -49,6 +49,8 @@ Route::apiResource('portfolios', PortfolioController::class);
 use App\Http\Controllers\WorkExperienceController;
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('/me/portfolios', [PortfolioController::class, 'index']);
+    Route::get('/me/portfolio/{id}', [PortfolioController::class, 'getPortfolio']);
     Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
     Route::post('/me/portfolio', [PortfolioController::class, 'store']);
     Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
@@ -61,9 +63,9 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('/portfolios/work-experiences', [WorkExperienceController::class, 'showAll']);
 
-Route::apiResource('/portfolios', PortfolioController::class);
-
 Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);
+
+Route::get('/portfolios', [PortfolioController::class, 'showAll']);
 
 // Apis para manejar las skills de un portafolio
 use App\Http\Controllers\PortfolioTechnicalSkillController;

@@ -12,6 +12,10 @@ class PortfolioService
     public function __construct(
         private ImageUploadService $imageUploadService
     ) {}
+    public function showAll() 
+    {
+        return Portfolio::all();
+    }
 
     public function create(array $data, User $user)
     {
@@ -20,9 +24,16 @@ class PortfolioService
         return $user->portfolios()->create($data);
     }
 
-    public function getAll()
+    public function getAll(int $userId)
     {
-        return Portfolio::all();
+        return Portfolio::query() 
+            -> with([
+                'portfolioSkills.technicalSkill:id,name',
+                'workExperiences',
+                'projects',
+            ])  
+            -> where('user_id', $userId)
+            ->get();
     }
 
     public function getById(int $id)
@@ -32,8 +43,13 @@ class PortfolioService
         }])->findOrFail($id);
     }
 
-    public function getByUserId(int $userId)
+    public function getPortfolio(int $id) 
     {
+        return Portfolio::findOrFail($id);      
+    }
+
+    public function getByUserId(int $userId)
+    {   
         return Portfolio::where('user_id', $userId)->first();
     }
 
