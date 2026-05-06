@@ -16,6 +16,7 @@ import defaultProfileImage from "@/assets/image.png";
 
 export default function CreateProfileModal({ onCreated }: { onCreated?: () => void }) {
   const user = useAuthStore((state) => state.user);
+  console.log('user:', user);
   const [isSaving, setIsSaving] = useState(false);
   const [open, setOpen] = useState(false);
 

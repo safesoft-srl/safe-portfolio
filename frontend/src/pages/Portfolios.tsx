@@ -1,71 +1,39 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/lib/auth-store";
 import CreateProfileModal from "@/components/CreateProfileModal";
 import PortfolioGrid from "@/features/portfolios/components/PortfolioGrid";
 import PortfolioToolbar from "@/features/portfolios/components/PortfolioToolbar";
 import { usePortfolio } from "@/features/portfolios/hooks/usePortfolio";
-import { api } from "@/lib/axios";
 
 export default function Portfolios() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
-  const setUser = useAuthStore((state) => state.setUser);
-  const logout = useAuthStore((state) => state.logout);
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
-
   const displayName = user?.name ?? "Usuario";
 
-  const handlePortfolioCreated = () => {
-    navigate("/dashboard");
-  };
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadUser = async () => {
-      try {
-        const response = await api.get("/api/auth/me");
-        if (!isMounted) return;
-        if (response?.data?.data) {
-          setUser(response.data.data);
-        }
-      } catch (error) {
-        console.error("Error al cargar usuario:", error);
-        logout();
-      }
-    };
-
-    if (!user) {
-      loadUser();
-    }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [user, setUser, logout]);
-
-  const { profile, isLoading } = usePortfolio();
-  const filteredProfile = useMemo(() => {
-    if (!profile) return null;
+  const { portfolios, isLoading } = usePortfolio();
+  const filteredPortfolios = useMemo(() => {
+    if (!portfolios) return [];
     const search = query.trim().toLowerCase();
-    if (!search) return profile;
+    if (!search) return portfolios;
 
-    const haystack = [
-      profile.profile_name,
-      profile.profession,
-      profile.bio,
-      ...(profile.portfolio_skills?.map((skill) => skill.level) || []),
-      ...(profile.projects?.map((project) => project.name) || []),
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
+    return portfolios.filter((portfolio) => {
+      const haystack = [
+        portfolio.profile_name,
+        portfolio.profession,
+        portfolio.bio,
+        ...(portfolio.projects?.map((project) => project.name) || []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
 
-    return haystack.includes(search) ? profile : null;
-  }, [profile, query]);
-
+      return haystack.includes(search);
+    });
+  }, [portfolios, query]); 
   return (
     <>
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-start lg:justify-between px-2 sm:px-3 md:px-6 py-6">
@@ -80,7 +48,7 @@ export default function Portfolios() {
             <p className="text-sm text-sidebar-foreground">
               Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
             </p>
-            <CreateProfileModal onCreated={handlePortfolioCreated} />
+            <CreateProfileModal />
           </div>
         </div>
 
@@ -88,14 +56,14 @@ export default function Portfolios() {
           <PortfolioToolbar
             query={query}
             onQueryChange={setQuery}
-            portfoliosCount={profile ? 1 : 0}
+            portfoliosCount={filteredPortfolios.length ? 1 : 0}
             view={view}
             onViewChange={setView}
           />
           {isLoading ? (
             <div className="text-sm text-slate-400">Cargando portafolio...</div>
           ) : (
-            <PortfolioGrid profile={filteredProfile} view={view} />
+            <PortfolioGrid portfolios={filteredPortfolios} view={view} />
           )}
         </div>
       </section>

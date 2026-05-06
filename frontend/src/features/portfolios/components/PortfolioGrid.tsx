@@ -1,14 +1,14 @@
-import type { ProfileData } from "@/types/public-portfolio";
+import type { Portfolio } from "@/features/portfolios/types/portfolios.type";
 import PortfolioCard from "./PortfolioCard";
 
 export default function PortfolioGrid({
-  profile,
+  portfolios,
   view = "grid",
 }: {
-  profile: ProfileData | null;
+  portfolios: Portfolio[] | null;
   view?: "grid" | "list";
 }) {
-  if (!profile) {
+  if (!portfolios || portfolios.length === 0) {
     return <div className="text-sm text-slate-400">No hay portafolios para mostrar.</div>;
   }
 
@@ -16,7 +16,13 @@ export default function PortfolioGrid({
 
   return (
     <div className={isListView ? "mt-6" : "mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"}>
-      <PortfolioCard profile={profile} variant={view} />
+      {portfolios.map((portfolio) => (
+        <PortfolioCard
+          key={portfolio.id}
+          portfolio={portfolio}
+          variant={view}
+        />
+      ))}
     </div>
   );
 }

@@ -1,23 +1,23 @@
-import type { ProfileData } from "@/types/public-portfolio";
+import type { Portfolio } from "@/features/portfolios/types/portfolios.type";
 import { MedalIcon, GraduationCapIcon, CodeIcon } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 
 export default function PortfolioCard({
-  profile,
+  portfolio,
   variant = "grid",
 }: {
-  profile: ProfileData;
+  portfolio: Portfolio;
   variant?: "grid" | "list";
 }) {
   const navigate = useNavigate();
-  const projectsCount = profile.projects?.length ?? 0;
-  const skillsCount = profile.portfolio_skills?.length ?? 0;
-  const experiencesCount = profile.work_experiences?.length ?? 0;
+  const projectsCount = portfolio.projects?.length ?? 0;
+  const skillsCount = portfolio.skills?.length ?? 0;
+  const experiencesCount = portfolio.experiences?.length ?? 0;
 
   const isListView = variant === "list";
 
   const handleCardClick = () => {
-    navigate("/dashboard");
+    navigate(`/dashboard/${portfolio.id}`);
   };
 
   return (
@@ -34,24 +34,24 @@ export default function PortfolioCard({
               isListView ? "mx-auto lg:mx-0" : ""
             }`}
           >
-            <span>{profile.profile_name ? profile.profile_name.charAt(0) : "U"}</span>
+            <span>{portfolio.profile_name ? portfolio.profile_name.charAt(0) : "U"}</span>
           </div>
         </div>
 
         <div className={isListView ? "flex min-w-0 flex-1 flex-col gap-4 lg:flex-row lg:items-center" : "w-full"}>
           <div className={isListView ? "min-w-0 flex-1 text-center lg:text-left" : "w-full"}>
             <h3 className={`font-semibold text-white ${isListView ? "text-lg" : "text-lg"}`}>
-              {profile.profile_name || "Nombre"}
+              {portfolio.profile_name || "Nombre"}
             </h3>
             <p className="text-xs text-slate-300">
-              {profile.profession || "Profesión ejemplo"}
+              {portfolio.profession || "Profesión ejemplo"}
             </p>
             <p
               className={`mt-2 text-xs text-sidebar-foreground ${
                 isListView ? "max-w-2xl lg:pr-8" : "max-w-[36rem]"
               }`}
             >
-              {profile.bio || "Ejemplo de descripción sobre mi."}
+              {portfolio.bio || "Ejemplo de descripción sobre mi."}
             </p>
           </div>
 
