@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { getProfile, updateProfile } from "@/services/profile.service";
+import { getPortfolio, updateProfile } from "@/services/profile.service";
 import ProfileForm, { type ProfileFormData } from "@/components/ProfileForm";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 export default function Profile() {
+  const idPortfolio = usePortfolioId();
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [idPortfolio, setIdPortfolio] = useState<number>(1);
   const [initialFormData, setInitialFormData] = useState<ProfileFormData>({
     profile_name: "",
     profile_email: "",
@@ -19,8 +20,7 @@ export default function Profile() {
   const loadProfile = useCallback(async () => {
     setIsLoading(true);
     try {
-      const profile = await getProfile();
-      setIdPortfolio(profile.id);
+      const profile = await getPortfolio(idPortfolio);
       setInitialFormData({
         profile_name: profile.profile_name,
         profile_email: profile.profile_email,

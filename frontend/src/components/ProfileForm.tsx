@@ -61,7 +61,7 @@ export default function ProfileForm({
   onSubmit,
   isLoading = false,
   isSaving = false,
-  idPortfolio = 1,
+  idPortfolio,
 }: ProfileFormProps) {
   const [formData, setFormData] = useState<ProfileFormData>(initialData);
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
