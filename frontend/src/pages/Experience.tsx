@@ -113,6 +113,8 @@ export default function ExperiencePage() {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState<WorkExperience | null>(null);
+  const [duplicateWarning, setDuplicateWarning] = useState(false);
+  const [pendingSubmitData, setPendingSubmitData] = useState<ExperienceFormData | null>(null);
 
   const { data: experiences, isLoading } = useQuery({
     queryKey: ["work-experiences"],
@@ -188,6 +190,7 @@ export default function ExperiencePage() {
   });
 
   const isCurrent = watch("is_current");
+  const startDate = watch("start_date");
 
   const handleOpenModal = (exp?: WorkExperience) => {
     if (exp) {
@@ -222,10 +225,12 @@ export default function ExperiencePage() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingExperience(null);
+    setDuplicateWarning(false);
+    setPendingSubmitData(null);
     reset();
   };
 
-  const onSubmit = (data: ExperienceFormData) => {
+  const executeSubmit = (data: ExperienceFormData) => {
     const payload = {
       ...data,
       end_date: data.is_current ? null : data.end_date,
@@ -240,6 +245,31 @@ export default function ExperiencePage() {
     } else {
       createMutation.mutate(payload as unknown as ExperienceFormData);
     }
+
+    setDuplicateWarning(false);
+    setPendingSubmitData(null);
+  };
+
+  const onSubmit = (data: ExperienceFormData) => {
+    const isDuplicate = experiences?.some((exp) => {
+      if (editingExperience && exp.id === editingExperience.id) return false;
+      const existingName = exp.company.toLowerCase().trim();
+      const newName = data.company.toLowerCase().trim();
+      return (
+        existingName === newName ||
+        (existingName.length > 3 &&
+          newName.length > 3 &&
+          (existingName.includes(newName) || newName.includes(existingName)))
+      );
+    });
+
+    if (isDuplicate) {
+      setPendingSubmitData(data);
+      setDuplicateWarning(true);
+      return;
+    }
+
+    executeSubmit(data);
   };
 
   return (
@@ -599,6 +629,39 @@ export default function ExperiencePage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={duplicateWarning} onOpenChange={setDuplicateWarning}>
+        <AlertDialogContent className="bg-slate-900 border-slate-800 w-[60%] sm:w-full">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Posible Duplicado</AlertDialogTitle>
+            <AlertDialogDescription className="text-slate-400">
+              Parece que ya existe una experiencia laboral registrada en una empresa con un nombre
+              similar. ¿Deseas guardarla de todos modos?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setDuplicateWarning(false);
+                setPendingSubmitData(null);
+              }}
+              className="bg-slate-800 text-white border-none hover:bg-slate-700 hover:text-white"
+            >
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pendingSubmitData) {
+                  executeSubmit(pendingSubmitData);
+                }
+              }}
+              className="bg-indigo-600 text-white hover:bg-indigo-700 border-none"
+            >
+              Aceptar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
