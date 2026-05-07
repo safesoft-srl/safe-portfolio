@@ -10,6 +10,7 @@ import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
 import ExperiencePage from "./pages/Experience";
+import FormationPage from "./pages/Formation";
 import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
 import ProjectsPage from "./pages/ProjectsPage";
@@ -83,6 +84,10 @@ export const router = createBrowserRouter([
           {
             path: "experience",
             element: <ExperiencePage />,
+          },
+          {
+            path: "formation",
+            element: <FormationPage />,
           },
           {
             path: "configuration",
