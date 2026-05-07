@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { PlusIcon } from "@phosphor-icons/react";
 
 interface Skill {
   id: number;
@@ -89,12 +90,15 @@ export function AddTechnicalSkill({
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="w-full bg-[#6c72ff] hover:bg-[#5a60d6] text-white h-12 rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-indigo-500/20"
-      >
-        + Agregar Habilidad
-      </button>
+      <Button
+      type="button"
+      size="lg"
+      onClick={() => setIsOpen(true)}
+      className="w-full gap-2 font-heading px-6 h-9" 
+    >
+      <PlusIcon weight="bold" className="size-4" />
+      <span>Agregar Habilidad</span>
+    </Button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">

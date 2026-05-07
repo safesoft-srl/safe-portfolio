@@ -39,7 +39,6 @@ class SoftSkillController extends Controller
         return $portfolio;
     }
 
-
     public function index(int $portfolioId)
     {
         try {
@@ -86,7 +85,7 @@ class SoftSkillController extends Controller
             ]);
 
             $exists = SoftSkill::where('portfolio_id', $portfolio->id)
-                ->where('name', $validated['name'])
+                ->whereRaw('LOWER(name) = ?', [strtolower($validated['name'])])
                 ->exists();
 
             if ($exists) {
@@ -144,7 +143,7 @@ class SoftSkillController extends Controller
             ]);
 
             $exists = SoftSkill::where('portfolio_id', $portfolio->id)
-                ->where('name', $validated['name'])
+                ->whereRaw('LOWER(name) = ?', [strtolower($validated['name'])])
                 ->where('id', '!=', $softSkill->id)
                 ->exists();
 

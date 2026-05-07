@@ -90,12 +90,6 @@ Route::apiResource('/projects', ProjectController::class);
 // routes for skills
 Route::apiResource('/skills', SkillProjectController::class);
 
-
-
-
-
-
-
 // Apis for soft skills
 use App\Http\Controllers\SoftSkillController;
 
@@ -111,11 +105,3 @@ Route::middleware('auth:api')->group(function () {
     // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para eliminar una soft skill de un portafolio)
 
 });
-
-
-
-
-
-
-
-
