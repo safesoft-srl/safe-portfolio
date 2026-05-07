@@ -199,6 +199,7 @@ export default function ProjectsPage() {
           <ProjectForm
             skills={skills}
             initialData={editingProject}
+            existingProjects={projects}
             onSubmit={async (data, file) => {
               if (editingProject) {
                 await updateProject(editingProject.id, data, file);
