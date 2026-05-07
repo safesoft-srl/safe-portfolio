@@ -476,6 +476,7 @@ export default function ExperiencePage() {
                     type="date"
                     {...register("end_date")}
                     disabled={isCurrent}
+                    min={startDate || undefined}
                     className="bg-slate-950 border-slate-800 text-white disabled:opacity-50 focus-visible:ring-indigo-500"
                   />
                   {errors.end_date && (
