@@ -21,3 +21,8 @@ export async function saveUrlPortfolio(url: string, id: number) {
   const response = await http.post(`/api/me/portfolio/save-url/${id}`, { url });
   return response.data.data;
 }
+
+export async function getPublicWorkExperiences(slug: string) {
+  const response = await http.get(`/api/portfolios/slug/${slug}/work-experiences`);
+  return response.data.data;
+}

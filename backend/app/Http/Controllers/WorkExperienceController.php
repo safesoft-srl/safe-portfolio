@@ -120,4 +120,31 @@ class WorkExperienceController extends Controller
             'message' => 'Experiencia laboral eliminada correctamente.',
         ]);
     }
+
+    /**
+     * HU18: Mostrar experiencia laboral de un portafolio público por su slug.
+     */
+    public function publicBySlug(string $slug): JsonResponse
+    {
+        $portfolio = \App\Models\Portfolio::where('portfolio_slug', $slug)->first();
+
+        if (! $portfolio) {
+            return response()->json([
+                'success' => false,
+                'data' => null,
+                'message' => 'Portafolio no encontrado.',
+            ], 404);
+        }
+
+        $experiences = $portfolio->workExperiences()
+            ->where('is_visible', true)
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $experiences,
+            'message' => 'Experiencias laborales públicas obtenidas correctamente.',
+        ]);
+    }
 }
