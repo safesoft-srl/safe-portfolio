@@ -26,7 +26,7 @@ export default function Profile() {
         profile_email: profile.profile_email ?? "",
         profession: profile.profession ?? "",
         bio: profile.bio ?? "",
-        profile_image: profile.profile_image ?? "",
+        url_photo: profile.profile_image ?? "",
         url_portfolio: profile.url_portfolio ?? "",
       });
     } finally {
