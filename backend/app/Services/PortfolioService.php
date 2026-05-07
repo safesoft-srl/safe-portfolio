@@ -12,6 +12,7 @@ class PortfolioService
     public function __construct(
         private ImageUploadService $imageUploadService
     ) {}
+    
     public function showAll() 
     {
         return Portfolio::all();

@@ -7,6 +7,7 @@ use App\Constants\ResponseMessages;
 use App\Http\Requests\StorePortfolioRequest;
 use App\Http\Requests\UpdatePortfolioRequest;
 use App\Services\PortfolioService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +19,8 @@ class PortfolioController extends Controller
         private PortfolioService $portfolioService
     ) {}
 
-    public function showAll() {
+    public function showAll()
+    {
         $portfolios = $this->portfolioService->showAll();
 
         return ApiResponse::success(
@@ -30,7 +32,7 @@ class PortfolioController extends Controller
     public function store(StorePortfolioRequest $request)
     {
         $user = auth()->user();
-        
+
         $portfolio = $this->portfolioService->create(
             $request->validated(),
             $user
@@ -95,14 +97,22 @@ class PortfolioController extends Controller
         );
     }
 
-    public function getPortfolio(int $id) 
+    public function getPortfolio(int $id)
     {
-        $portfolio = $this->portfolioService->getPortfolio($id);
+        try {
+            $portfolio = $this->portfolioService->getPortfolio($id);
 
-        return ApiResponse::success(
-            $portfolio,
-            ResponseMessages::FETCHED_SUCCESSFULLY
-        );
+
+            return ApiResponse::success(
+                $portfolio,
+                ResponseMessages::FETCHED_SUCCESSFULLY
+            );
+        } catch (ModelNotFoundException $e) {
+            return  ApiResponse::error(
+                "error al obtener portafolio: ".$e->getMessage(),
+                404
+            );
+        }
     }
 
     public function updateMyPortfolio(UpdatePortfolioRequest $request)
