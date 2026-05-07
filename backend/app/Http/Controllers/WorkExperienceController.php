@@ -13,9 +13,11 @@ class WorkExperienceController extends Controller
     /**
      * HU15: Mostrar la lista de experiencias laborales del usuario autenticado (panel privado).
      */
-    public function index(): JsonResponse
+    public function index(int $portfolioId): JsonResponse
     {
-        $portfolio = Auth::user()->portfolios()->first();
+         /** @var \App\Models\User $user */
+         $user = Auth::user();
+        $portfolio = $user->portfolios()->findOrFail($portfolioId);
         $experiences = $portfolio->workExperiences()->orderBy('start_date', 'desc')->get();
 
         return response()->json([
@@ -39,8 +41,9 @@ class WorkExperienceController extends Controller
     /**
      * HU12: Registrar experiencia laboral.
      */
-    public function store(StoreWorkExperienceRequest $request): JsonResponse
-    {
+    public function store(int $portfolioId, StoreWorkExperienceRequest $request): JsonResponse
+    {   
+         /** @var \App\Models\User $user */
         $user = Auth::user();
 
         if (! $user) {
@@ -51,7 +54,7 @@ class WorkExperienceController extends Controller
             ], 401);
         }
 
-        $portfolio = $user->portfolios()->first();
+        $portfolio = $user->portfolios()->find($portfolioId);
 
         if (! $portfolio) {
             return response()->json([
@@ -74,9 +77,12 @@ class WorkExperienceController extends Controller
     /**
      * HU13: Editar experiencia laboral.
      */
-    public function update(UpdateWorkExperienceRequest $request, int $id): JsonResponse
+    public function update(int $portfolioId, UpdateWorkExperienceRequest $request, int $id): JsonResponse
     {
-        $portfolio = Auth::user()->portfolios()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $portfolio = $user->portfolios()->findOrFail($portfolioId);
         $experience = $portfolio->workExperiences()->find($id);
 
         if (! $experience) {
@@ -99,9 +105,11 @@ class WorkExperienceController extends Controller
     /**
      * HU14: Eliminar experiencia laboral.
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $portfolioId, int $id): JsonResponse
     {
-        $portfolio = Auth::user()->portfolios()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $portfolio = $user->portfolios()->findOrFail($portfolioId);
         $experience = $portfolio->workExperiences()->find($id);
 
         if (! $experience) {
