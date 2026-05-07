@@ -1,31 +1,32 @@
 import { useEffect, useState } from "react";
 import { createProject, updateProject, deleteProject } from "../services/project.service";
-import { getProfile } from "@/services/profile.service";
 import { getSkills, type Skill } from "@/services/skill.service";
 import { http } from "@/services/http.service";
 import type { Project } from "../types/project.types";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 export function useProjects() {
+  const portfolioId = usePortfolioId();
   const [projects, setProjects] = useState<Project[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
-  const [portfolioId, setPortfolioId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const syncProjects = async (pid?: number) => {
-    const id = pid ?? portfolioId;
-    if (!id) return;
+  const syncProjects = async () => {
+    if (!portfolioId) return;
 
-    const res = await http.get(`/api/portfolios/${id}/projects`);
+    const res = await http.get(
+      `/api/portfolios/${portfolioId}/projects`
+    );
+
     setProjects(res.data.data || res.data);
   };
 
   const init = async () => {
     try {
-      const profile = await getProfile();
-      if (profile?.id) {
-        setPortfolioId(profile.id);
-        await Promise.all([syncProjects(profile.id), getSkills().then(setSkills)]);
-      }
+      await Promise.all([
+        syncProjects(),
+        getSkills().then(setSkills),
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -33,7 +34,7 @@ export function useProjects() {
 
   useEffect(() => {
     init();
-  }, []);
+  }, [portfolioId]);
 
   return {
     projects,

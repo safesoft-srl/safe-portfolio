@@ -22,10 +22,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import Loading from "@/features/projects/components/Loading";
 import { toast } from "sonner";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 export default function ProjectsPage() {
   const { projects, skills, isLoading, syncProjects } = useProjects();
 
+  const portfolioId = usePortfolioId();
   const [open, setOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [deleteProjectId, setDeleteProjectId] = useState<number | null>(null);
@@ -125,7 +127,7 @@ export default function ProjectsPage() {
                 await createProject(
                   {
                     ...data,
-                    portfolio_id: 1,
+                    portfolio_id: portfolioId,
                     project_image: null,
                   },
                   file
