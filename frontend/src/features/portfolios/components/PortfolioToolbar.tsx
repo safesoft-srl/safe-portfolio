@@ -23,7 +23,7 @@ export default function PortfolioToolbar({
   return (
     <div className="w-full space-y-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="w-full max-w-xl">
+        <div className="w-full max-w-4xl">
             <p className="mb-2 text-lg text-slate-300 font-bold">Mi Lista de Portafolios</p>
           <div className="relative">
             <MagnifyingGlass
@@ -34,7 +34,7 @@ export default function PortfolioToolbar({
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
               placeholder="Buscar por profesion, habilidades, proyectos o experiencias..."
-              className="h-8 rounded-xl border border-[#2a2d58] bg-[#171a3a] pl-12 pr-4 text-base text-slate-100 placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-[#6c72ff]"
+              className="h-9 rounded-xl border border-[#2a2d58] bg-[#171a3a] pl-12 pr-4 text-base text-slate-100 placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-[#6c72ff]"
             />
           </div>
         </div>

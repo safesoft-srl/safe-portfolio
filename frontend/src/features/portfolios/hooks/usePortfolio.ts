@@ -31,5 +31,6 @@ export function usePortfolio() {
   return {
     portfolios,
     isLoading,
+    addPortfolio: (portfolio: Portfolio) => setPortfolios((prev) => [portfolio, ...prev]),
   };
 }
