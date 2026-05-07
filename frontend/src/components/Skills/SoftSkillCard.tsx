@@ -28,7 +28,6 @@ interface SoftSkillCardProps {
 export function SoftSkillCard({ skill, onEdit, onDelete }: SoftSkillCardProps) {
   return (
     <Card className="relative bg-[#13152e] border border-[#232555] rounded-2xl overflow-hidden shadow-2xl transition-all hover:border-[#6c72ff]/50 group h-full flex flex-col">
-      
       {/* BOTONES DE ACCIÓN */}
       <div className="absolute top-3 right-3 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <Button
@@ -52,7 +51,9 @@ export function SoftSkillCard({ skill, onEdit, onDelete }: SoftSkillCardProps) {
           />
           <AlertDialogContent className="bg-[#13152e] border border-[#232555]">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-white">¿Eliminar habilidad blanda?</AlertDialogTitle>
+              <AlertDialogTitle className="text-white">
+                ¿Eliminar habilidad blanda?
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-slate-400">
                 Se eliminará permanentemente <b>{skill.name}</b> de tu portafolio.
               </AlertDialogDescription>
@@ -77,7 +78,9 @@ export function SoftSkillCard({ skill, onEdit, onDelete }: SoftSkillCardProps) {
           <h3 className="text-[#6c72ff] font-bold text-xl">{skill.name}</h3>
         </div>
         <p className="text-slate-300 text-sm leading-relaxed flex-1">
-          {skill.description || <span className="text-slate-600 italic">Sin descripción proporcionada.</span>}
+          {skill.description || (
+            <span className="text-slate-600 italic">Sin descripción proporcionada.</span>
+          )}
         </p>
       </CardContent>
     </Card>

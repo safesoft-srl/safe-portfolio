@@ -20,14 +20,11 @@ export function SoftSkillsSection() {
     try {
       setIsLoading(true);
 
-      const res = await fetch(
-        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const result = await res.json();
 
@@ -43,11 +40,7 @@ export function SoftSkillsSection() {
     fetchSoftSkills();
   }, [fetchSoftSkills]);
 
-
-  const handleSaveSkill = async (data: {
-    name: string;
-    description: string;
-  }) => {
+  const handleSaveSkill = async (data: { name: string; description: string }) => {
     const isEditing = !!skillToEdit;
 
     const method = isEditing ? "PUT" : "POST";
@@ -82,15 +75,12 @@ export function SoftSkillsSection() {
 
   const handleDeleteSkill = async (id: number) => {
     try {
-      const res = await fetch(
-        `${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (res.ok) {
         await fetchSoftSkills();
@@ -112,22 +102,16 @@ export function SoftSkillsSection() {
 
   return (
     <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
-
       {/* HEADER */}
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h2 className="text-2xl font-bold text-white">
-            Habilidades Blandas
-          </h2>
+          <h2 className="text-2xl font-bold text-white">Habilidades Blandas</h2>
           <p className="text-slate-400 text-sm mt-1">
             Competencias interpersonales y cualidades que te hacen destacar.
           </p>
         </div>
 
-        <Button
-          onClick={openCreateModal}
-          className="gap-2 font-heading px-6 h-9"
-        >
+        <Button onClick={openCreateModal} className="gap-2 font-heading px-6 h-9">
           <PlusIcon weight="bold" size={16} />
           Agregar Habilidad
         </Button>
@@ -135,9 +119,7 @@ export function SoftSkillsSection() {
 
       {/* GRID */}
       {isLoading ? (
-        <div className="text-center py-20 text-slate-500">
-          Cargando habilidades...
-        </div>
+        <div className="text-center py-20 text-slate-500">Cargando habilidades...</div>
       ) : softSkills.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {softSkills.map((skill) => (
@@ -150,9 +132,7 @@ export function SoftSkillsSection() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-32 text-slate-500">
-          No tienes habilidades registradas.
-        </div>
+        <div className="text-center py-32 text-slate-500">No tienes habilidades registradas.</div>
       )}
 
       {/* MODAL */}

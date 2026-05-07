@@ -3,7 +3,6 @@ import { SkillCard, type UserSkill } from "./SkillCard";
 import { EditLevelModal } from "./EditLevelModal";
 import { AddTechnicalSkill } from "./addTechnicalSkill";
 
-
 const API_URL = import.meta.env.VITE_API_URL;
 const PORTFOLIO_ID = 1;
 
@@ -15,7 +14,6 @@ export function TechnicalSkillsSection() {
   const [skillToEdit, setSkillToEdit] = useState<UserSkill | null>(null);
 
   const token = localStorage.getItem("token");
-
 
   const fetchUserSkills = useCallback(async () => {
     try {
@@ -33,7 +31,7 @@ export function TechnicalSkillsSection() {
     } finally {
       setIsLoading(false);
     }
-  }, [token]); 
+  }, [token]);
 
   useEffect(() => {
     fetchUserSkills();
@@ -107,7 +105,7 @@ export function TechnicalSkillsSection() {
       if (res.ok) {
         setIsEditModalOpen(false);
         setSkillToEdit(null);
-        await fetchUserSkills(); 
+        await fetchUserSkills();
       } else {
         const errorData = await res.json();
         console.error("Error al actualizar:", errorData.message);
@@ -118,19 +116,14 @@ export function TechnicalSkillsSection() {
   };
 
   const filteredSkills = userSkills.filter(
-    (skill) =>
-      activeCategory === "Todas" ||
-      skill.technical_skill?.category === activeCategory
+    (skill) => activeCategory === "Todas" || skill.technical_skill?.category === activeCategory
   );
 
   return (
     <div className="w-full animate-in fade-in duration-300">
-      
       {/* HEADER TÉCNICO */}
       <div className="flex items-center justify-between mb-12">
-        <h2 className="text-2xl font-bold text-white tracking-tight">
-          Habilidades Técnicas
-        </h2>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Habilidades Técnicas</h2>
         <div className="w-56">
           <AddTechnicalSkill onAdd={handleAddNewSkill} />
         </div>

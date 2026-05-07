@@ -13,7 +13,6 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
-
 export interface UserSkill {
   id: number;
   technical_skill_id: number;
@@ -41,10 +40,8 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
 
   return (
     <Card className="relative bg-[#13152e] border border-[#232555] rounded-2xl overflow-hidden shadow-2xl transition-all hover:border-[#6c72ff]/50 group">
-      
       {/* CONTENEDOR DE ACCIONES (Lápiz y Basura) */}
       <div className="absolute top-3 right-3 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        
         {/* BOTÓN EDITAR */}
         <Button
           variant="ghost"
@@ -75,9 +72,7 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
 
           <AlertDialogContent className="bg-[#13152e] border border-[#232555]">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-white">
-                ¿Eliminar habilidad?
-              </AlertDialogTitle>
+              <AlertDialogTitle className="text-white">¿Eliminar habilidad?</AlertDialogTitle>
               <AlertDialogDescription className="text-slate-400">
                 Esta acción no se puede deshacer. Se eliminará permanentemente la habilidad{" "}
                 <b className="text-white">{skillName}</b> de tu portafolio.
@@ -85,12 +80,10 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
             </AlertDialogHeader>
 
             <AlertDialogFooter>
-              <AlertDialogCancel 
-                className="bg-[#1c1f38] text-white border-none hover:bg-[#232555]"
-              >
+              <AlertDialogCancel className="bg-[#1c1f38] text-white border-none hover:bg-[#232555]">
                 Cancelar
               </AlertDialogCancel>
-              
+
               <AlertDialogAction
                 onClick={() => onDelete(skill.technical_skill_id)}
                 className="bg-red-600 text-white hover:bg-red-700 border-none"
@@ -116,11 +109,9 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
         </div>
 
         <h3 className="text-white font-bold text-xl mb-1">{skillName}</h3>
-        
-        <p className="text-slate-500 text-xs uppercase tracking-widest">
-          {skillCategory}
-        </p>
-        
+
+        <p className="text-slate-500 text-xs uppercase tracking-widest">{skillCategory}</p>
+
         <div className="mt-6 pt-4 border-t border-[#232555] w-full text-[#6c72ff] text-xs font-bold uppercase tracking-widest">
           Nivel {skill.level}
         </div>

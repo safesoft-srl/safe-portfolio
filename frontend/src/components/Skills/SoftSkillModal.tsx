@@ -10,12 +10,7 @@ interface SoftSkillModalProps {
   onSave: (data: { name: string; description: string }) => Promise<void>;
 }
 
-export function SoftSkillModal({
-  isOpen,
-  skill,
-  onClose,
-  onSave,
-}: SoftSkillModalProps) {
+export function SoftSkillModal({ isOpen, skill, onClose, onSave }: SoftSkillModalProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -75,10 +70,7 @@ export function SoftSkillModal({
 
       onClose();
     } catch (error: unknown) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Error al guardar la habilidad.";
+      const message = error instanceof Error ? error.message : "Error al guardar la habilidad.";
 
       showErrorToast(message);
     } finally {
@@ -92,9 +84,7 @@ export function SoftSkillModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-
       <div className="w-full max-w-lg bg-[#13152e] border border-[#232555] rounded-3xl p-8 shadow-2xl flex flex-col">
-
         {/* HEADER */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-white">
@@ -112,7 +102,6 @@ export function SoftSkillModal({
 
         {/* FORM */}
         <div className="space-y-5">
-
           {/* NAME */}
           <div>
             <div className="flex justify-between items-center mb-2">
@@ -133,9 +122,7 @@ export function SoftSkillModal({
               placeholder="Ej: Comunicación, Liderazgo..."
             />
 
-            {nameError && (
-              <p className="text-red-500 text-sm mt-2">{nameError}</p>
-            )}
+            {nameError && <p className="text-red-500 text-sm mt-2">{nameError}</p>}
           </div>
 
           {/* DESCRIPTION */}
@@ -158,11 +145,7 @@ export function SoftSkillModal({
               placeholder="Describe cómo aplicas esta habilidad..."
             />
 
-            {descriptionError && (
-              <p className="text-red-500 text-sm mt-2">
-                {descriptionError}
-              </p>
-            )}
+            {descriptionError && <p className="text-red-500 text-sm mt-2">{descriptionError}</p>}
           </div>
         </div>
 

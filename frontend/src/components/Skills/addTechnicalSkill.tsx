@@ -91,14 +91,14 @@ export function AddTechnicalSkill({
   return (
     <>
       <Button
-      type="button"
-      size="lg"
-      onClick={() => setIsOpen(true)}
-      className="w-full gap-2 font-heading px-6 h-9" 
-    >
-      <PlusIcon weight="bold" className="size-4" />
-      <span>Agregar Habilidad</span>
-    </Button>
+        type="button"
+        size="lg"
+        onClick={() => setIsOpen(true)}
+        className="w-full gap-2 font-heading px-6 h-9"
+      >
+        <PlusIcon weight="bold" className="size-4" />
+        <span>Agregar Habilidad</span>
+      </Button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">

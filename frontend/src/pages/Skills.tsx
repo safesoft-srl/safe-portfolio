@@ -8,16 +8,11 @@ export default function Skills() {
   return (
     <div className="min-h-screen bg-[#14162f] flex flex-col text-slate-100 font-heading">
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-10">
-
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-12">
-
-          <h1 className="text-3xl font-bold text-white tracking-tight">
-            Habilidades
-          </h1>
+          <h1 className="text-3xl font-bold text-white tracking-tight">Habilidades</h1>
 
           {/* TABS */}
           <div className="bg-[#1c1f38] border border-[#232555] rounded-full p-1 flex gap-2 shadow-lg w-fit">
-            
             <button
               onClick={() => setActiveTab("technical")}
               className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${
@@ -39,16 +34,10 @@ export default function Skills() {
             >
               Blandas
             </button>
-
           </div>
         </div>
 
-        {activeTab === "technical" ? (
-          <TechnicalSkillsSection />
-        ) : (
-          <SoftSkillsSection />
-        )}
-
+        {activeTab === "technical" ? <TechnicalSkillsSection /> : <SoftSkillsSection />}
       </main>
     </div>
   );
