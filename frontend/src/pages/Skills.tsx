@@ -13,6 +13,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 interface UserSkill {
   id: number;
@@ -28,11 +29,11 @@ interface UserSkill {
 }
 
 const API_URL = import.meta.env.VITE_API_URL;
-const PORTFOLIO_ID = 1;
 
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
 
 export default function Skills() {
+  const PORTFOLIO_ID = usePortfolioId();
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
