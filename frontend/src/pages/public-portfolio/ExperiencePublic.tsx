@@ -46,7 +46,7 @@ export default function ExperiencePublic() {
   if (!isLoading && experiences?.length === 0 && slug) {
     return (
       <div className="min-h-screen bg-[#0a0b1e] text-slate-100 flex flex-col">
-        <PublicNavbar firstName={firstName} slug={slug || ""} />
+        <PublicNavbar firstName={firstName} slug={slug} />
         <main className="pb-20 pt-20 flex-1">
           <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
             <div className="rounded-2xl border border-[#bcfd49]/20 bg-[#13152e]/50 p-8 md:p-12 shadow-2xl">
