@@ -70,7 +70,7 @@ export default function PublicPortfolio() {
 
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
-      <PublicNavbar firstName={firstName} />
+      <PublicNavbar firstName={firstName} slug={slug || ""} />
 
       <main className="pb-20 pt-20">
         <div id="sobre-mi" className="mx-auto max-w-6xl px-5 py-16 md:px-10">
