@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class WorkExperienceController extends Controller
 {
     /**
-     * HU15: Mostrar la lista de experiencias laborales del usuario autenticado (panel privado).
+     * HU18: Mostrar la lista de experiencias laborales del usuario autenticado (panel privado).
      */
     public function index(int $portfolioId): JsonResponse
     {
@@ -23,7 +23,7 @@ class WorkExperienceController extends Controller
         return response()->json([
             'success' => true,
             'data' => $experiences,
-            'message' => 'Work experiences retrieved successfully.',
+            'message' => 'Experiencia laboral obtenida correctamente.',
         ]);
     }
 
@@ -34,12 +34,12 @@ class WorkExperienceController extends Controller
         return response()->json([
             'success' => true,
             'data' => $experiences,
-            'message' => 'All work experiences retrieved successfully.',
+            'message' => 'Todas las experiencias laborales fueron obtenidas correctamente.',
         ]);
     }
 
     /**
-     * HU12: Registrar experiencia laboral.
+     * HU15: Registrar experiencia laboral.
      */
     public function store(int $portfolioId, StoreWorkExperienceRequest $request): JsonResponse
     {   
@@ -70,12 +70,12 @@ class WorkExperienceController extends Controller
         return response()->json([
             'success' => true,
             'data' => $experience,
-            'message' => 'Work experience created successfully.',
+            'message' => 'Experiencia laboral creada correctamente..',
         ], 201);
     }
 
     /**
-     * HU13: Editar experiencia laboral.
+     * HU16: Editar experiencia laboral.
      */
     public function update(int $portfolioId, UpdateWorkExperienceRequest $request, int $id): JsonResponse
     {
@@ -89,7 +89,7 @@ class WorkExperienceController extends Controller
             return response()->json([
                 'success' => false,
                 'data' => null,
-                'message' => 'Work experience not found or unauthorized.',
+                'message' => 'La experiencia laboral no fue encontrada o no estás autorizado.',
             ], 404);
         }
 
@@ -98,12 +98,12 @@ class WorkExperienceController extends Controller
         return response()->json([
             'success' => true,
             'data' => $experience,
-            'message' => 'Work experience updated successfully.',
+            'message' => 'Experiencia laboral actualizada correctamente.',
         ]);
     }
 
     /**
-     * HU14: Eliminar experiencia laboral.
+     * HU17: Eliminar experiencia laboral.
      */
     public function destroy(int $portfolioId, int $id): JsonResponse
     {
@@ -116,7 +116,7 @@ class WorkExperienceController extends Controller
             return response()->json([
                 'success' => false,
                 'data' => null,
-                'message' => 'Work experience not found or unauthorized.',
+                'message' => 'La experiencia laboral no fue encontrada o no estás autorizado.',
             ], 404);
         }
 
@@ -125,7 +125,34 @@ class WorkExperienceController extends Controller
         return response()->json([
             'success' => true,
             'data' => null,
-            'message' => 'Work experience deleted successfully.',
+            'message' => 'Experiencia laboral eliminada correctamente.',
+        ]);
+    }
+
+    /**
+     * HU18: Mostrar experiencia laboral de un portafolio público por su slug.
+     */
+    public function publicBySlug(string $slug): JsonResponse
+    {
+        $portfolio = \App\Models\Portfolio::where('portfolio_slug', $slug)->first();
+
+        if (! $portfolio) {
+            return response()->json([
+                'success' => false,
+                'data' => null,
+                'message' => 'Portafolio no encontrado.',
+            ], 404);
+        }
+
+        $experiences = $portfolio->workExperiences()
+            ->where('is_visible', true)
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $experiences,
+            'message' => 'Experiencias laborales públicas obtenidas correctamente.',
         ]);
     }
 }

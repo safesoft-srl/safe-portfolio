@@ -22,12 +22,12 @@ export default function Profile() {
     try {
       const profile = await getPortfolio(idPortfolio);
       setInitialFormData({
-        profile_name: profile.profile_name,
-        profile_email: profile.profile_email,
-        profession: profile.profession,
-        bio: profile.bio,
+        profile_name: profile.profile_name ?? "",
+        profile_email: profile.profile_email ?? "",
+        profession: profile.profession ?? "",
+        bio: profile.bio ?? "",
         profile_image: profile.profile_image ?? null,
-        url_portfolio: profile.url_portfolio,
+        url_portfolio: profile.url_portfolio ?? "",
       });
     } finally {
       setIsLoading(false);

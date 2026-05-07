@@ -23,13 +23,13 @@ class UpdateWorkExperienceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company' => 'sometimes|required|string|max:255',
-            'position' => 'sometimes|required|string|max:255',
-            'start_date' => 'sometimes|required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'company' => 'required|string|max:50',
+            'position' => 'required|string|max:70',
+            'start_date' => 'required|date|before_or_equal:today',
+            'end_date' => 'nullable|date|after_or_equal:start_date|before_or_equal:today',
             'is_current' => 'boolean',
-            'description' => 'nullable|string',
-            'achievements' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
+            'achievements' => 'nullable|string|max:2000',
             'is_visible' => 'boolean',
         ];
     }
