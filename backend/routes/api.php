@@ -63,6 +63,7 @@ Route::get('/portfolios/work-experiences', [WorkExperienceController::class, 'sh
 Route::apiResource('/portfolios', PortfolioController::class);
 
 Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);
+Route::get('/portfolios/slug/{slug}/work-experiences', [WorkExperienceController::class, 'publicBySlug']);
 
 // Apis para manejar las skills de un portafolio
 use App\Http\Controllers\PortfolioTechnicalSkillController;
