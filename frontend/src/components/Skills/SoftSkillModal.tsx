@@ -80,7 +80,6 @@ export function SoftSkillModal({
           ? error.message
           : "Error al guardar la habilidad.";
 
-      // 🔥 AQUÍ YA SE MUESTRA EL 409 BIEN
       showErrorToast(message);
     } finally {
       setIsSaving(false);

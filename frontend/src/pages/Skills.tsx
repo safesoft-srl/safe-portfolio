@@ -9,10 +9,8 @@ export default function Skills() {
     <div className="min-h-screen bg-[#14162f] flex flex-col text-slate-100 font-heading">
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-10">
 
-        {/* HEADER + TABS (MISMA FILA) */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-12">
 
-          {/* TÍTULO */}
           <h1 className="text-3xl font-bold text-white tracking-tight">
             Habilidades
           </h1>
@@ -45,7 +43,6 @@ export default function Skills() {
           </div>
         </div>
 
-        {/* CONTENIDO */}
         {activeTab === "technical" ? (
           <TechnicalSkillsSection />
         ) : (

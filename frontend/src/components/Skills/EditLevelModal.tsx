@@ -15,7 +15,6 @@ export function EditLevelModal({ isOpen, skill, onClose, onSave }: EditLevelModa
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
- { /* syncronyze level data with the skill prop */}
   useEffect(() => {
     if (skill) {
       setSelectedLevel(skill.level);

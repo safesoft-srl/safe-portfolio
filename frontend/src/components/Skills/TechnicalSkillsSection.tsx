@@ -11,15 +11,12 @@ export function TechnicalSkillsSection() {
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Estados para el Modal de Edición
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [skillToEdit, setSkillToEdit] = useState<UserSkill | null>(null);
 
   const token = localStorage.getItem("token");
 
 
-// 1. CARGAR HABILIDADES 
   const fetchUserSkills = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -36,13 +33,12 @@ export function TechnicalSkillsSection() {
     } finally {
       setIsLoading(false);
     }
-  }, [token]); // <- Le decimos que dependa del token
+  }, [token]); 
 
   useEffect(() => {
     fetchUserSkills();
   }, [fetchUserSkills]);
 
-  // 2. AGREGAR HABILIDAD
   const handleAddNewSkill = async (technical_skill_id: number, level: string) => {
     try {
       const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
@@ -65,7 +61,6 @@ export function TechnicalSkillsSection() {
     }
   };
 
-  // 3. ELIMINAR HABILIDAD
   const handleDeleteSkill = async (technical_skill_id: number) => {
     try {
       const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
@@ -88,13 +83,11 @@ export function TechnicalSkillsSection() {
     }
   };
 
-  // 4. EDITAR HABILIDAD (Abre el modal)
   const handleOpenEdit = (skill: UserSkill) => {
     setSkillToEdit(skill);
     setIsEditModalOpen(true);
   };
 
-  // 5. GUARDAR EDICIÓN (Llamado desde el modal)
   const handleSaveLevel = async (newLevel: string) => {
     if (!skillToEdit) return;
 
@@ -114,7 +107,7 @@ export function TechnicalSkillsSection() {
       if (res.ok) {
         setIsEditModalOpen(false);
         setSkillToEdit(null);
-        await fetchUserSkills(); // Refresca la lista completa
+        await fetchUserSkills(); 
       } else {
         const errorData = await res.json();
         console.error("Error al actualizar:", errorData.message);
@@ -124,7 +117,6 @@ export function TechnicalSkillsSection() {
     }
   };
 
-  // Filtrado local
   const filteredSkills = userSkills.filter(
     (skill) =>
       activeCategory === "Todas" ||
