@@ -3,7 +3,6 @@ import { TechnicalSkillsSection } from "@/components/Skills/TechnicalSkillsSecti
 import { SoftSkillsSection } from "@/components/Skills/SoftSkillsSection";
 
 export default function Skills() {
-  const PORTFOLIO_ID = usePortfolioId();
   const [activeTab, setActiveTab] = useState<"technical" | "soft">("technical");
 
   return (

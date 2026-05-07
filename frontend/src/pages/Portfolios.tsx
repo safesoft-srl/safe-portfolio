@@ -7,7 +7,6 @@ import PortfolioToolbar from "@/features/portfolios/components/PortfolioToolbar"
 import { usePortfolio } from "@/features/portfolios/hooks/usePortfolio";
 
 export default function Portfolios() {
-  const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -38,7 +37,7 @@ export default function Portfolios() {
     <>
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-start lg:justify-between px-2 sm:px-3 md:px-6 py-6">
         <div className="mb-4 lg:mb-0 w-full">
-          <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {displayName}!</h1>
+          <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {JSON.stringify(user)}!</h1>
           <p className="mt-1 text-sm font-sans">Gestiona tus portafolios</p>
         </div>
       </section>

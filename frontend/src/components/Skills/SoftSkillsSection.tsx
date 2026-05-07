@@ -3,11 +3,12 @@ import { PlusIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { SoftSkillCard, type SoftSkill } from "./SoftSkillCard";
 import { SoftSkillModal } from "./SoftSkillModal";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const PORTFOLIO_ID = 1;
 
 export function SoftSkillsSection() {
+  const PORTFOLIO_ID = usePortfolioId();
   const [softSkills, setSoftSkills] = useState<SoftSkill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
