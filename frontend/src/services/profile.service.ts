@@ -1,6 +1,7 @@
 import { http } from "@/services/http.service";
+import axios from "axios";
 import type { ProfileData as ProfileDataType } from "@/types/public-portfolio";
-import { id } from "date-fns/locale";
+
 export type ProfileData = {
   id?: number;
   profile_name: string;
@@ -40,9 +41,12 @@ export const getProfile = async () => {
   try {
     const { data } = await http.get("/api/me/portfolio");
     return data.data ?? null;
-  } catch (error: any) {
-    console.error("Error getProfile:", error.response?.data);
-    return null
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error Failed to load resource:", error.response?.data);
+    } else {
+      console.error("Unexpected error:", error);
+    }
   }
 };
 
@@ -50,8 +54,12 @@ export const getPortfolio = async (idPortfolio: number) => {
   try {
     const { data } = await http.get(`/api/me/portfolio/${idPortfolio}`);
     return data.data ?? null;
-  } catch (error: any) {
-    console.error("Error getProfile:", error.response?.data);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error Failed to load resource:", error.response?.data);
+    } else {
+      console.error("Unexpected error:", error);
+    }
     return null
   }
 };
@@ -60,8 +68,12 @@ export const getPortfolios = async (options = {}) => {
   try {
     const { data } = await http.get("/api/me/portfolios", options);
     return data.data ?? null;
-  } catch (error: any) {
-    console.error("Error getPortfolios:", error.response?.data);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error Failed to load resource:", error.response?.data);
+    } else {
+      console.error("Unexpected error:", error);
+    }
     return null
   }
 };
@@ -79,7 +91,7 @@ export async function updateProfile(
   formData.append("url_portfolio", payload.url_portfolio);
 
   if (payload.id) {
-    formData.append("id_portfolio",payload.id.toString());
+    formData.append("id_portfolio", payload.id.toString());
   }
 
   if (file) {
