@@ -6,7 +6,6 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Outlet } from "react-router-dom";
 
 export default function UserLayout({ children }: { children?: React.ReactNode }) {
-
   return (
     <SidebarProvider>
       <AppSidebar />
