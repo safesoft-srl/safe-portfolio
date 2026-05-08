@@ -20,6 +20,9 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import defaultProjectImage from "@/assets/image.png";
+
+const DEFAULT_PROJECT_IMAGE = defaultProjectImage;
 
 type Props = {
   skills: Skill[];
@@ -51,7 +54,7 @@ export default function ProjectForm({
     skill_ids: "",
   });
 
-  const [imagePreview, setImagePreview] = useState<string>("/src/assets/image.png");
+  const [imagePreview, setImagePreview] = useState<string>(DEFAULT_PROJECT_IMAGE);
   const [fileImage, setFileImage] = useState<File | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
