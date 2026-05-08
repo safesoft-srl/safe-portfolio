@@ -152,7 +152,7 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                   }}
                 >
                   <img
-                    src={project.url_image || "/src/assets/image.png"}
+                    src={project.url_image || DEFAULT_PROJECT_IMAGE}
                     alt={project.name}
                     className="object-cover rounded-xl border border-sidebar-border bg-black/60"
                     style={{
