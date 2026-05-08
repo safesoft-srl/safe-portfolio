@@ -12,12 +12,7 @@ export default function AcademicList({ academics, onEdit, onDelete }: Props) {
   return (
     <div className="space-y-6">
       {academics.map((academic) => (
-        <AcademicCard
-          key={academic.id}
-          academic={academic}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
+        <AcademicCard key={academic.id} academic={academic} onEdit={onEdit} onDelete={onDelete} />
       ))}
     </div>
   );

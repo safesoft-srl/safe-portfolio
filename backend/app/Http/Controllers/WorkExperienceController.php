@@ -15,8 +15,8 @@ class WorkExperienceController extends Controller
      */
     public function index(int $portfolioId): JsonResponse
     {
-         /** @var \App\Models\User $user */
-         $user = Auth::user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
         $portfolio = $user->portfolios()->findOrFail($portfolioId);
         $experiences = $portfolio->workExperiences()->orderBy('start_date', 'desc')->get();
 
@@ -42,8 +42,8 @@ class WorkExperienceController extends Controller
      * HU15: Registrar experiencia laboral.
      */
     public function store(int $portfolioId, StoreWorkExperienceRequest $request): JsonResponse
-    {   
-         /** @var \App\Models\User $user */
+    {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         if (! $user) {

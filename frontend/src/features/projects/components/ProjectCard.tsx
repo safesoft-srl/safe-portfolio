@@ -11,12 +11,7 @@ type Props = {
   variant?: "grid" | "list";
 };
 
-export default function ProjectCard({
-  project,
-  onEdit,
-  onDelete,
-  variant = "grid",
-}: Props) {
+export default function ProjectCard({ project, onEdit, onDelete, variant = "grid" }: Props) {
   const isListView = variant === "list";
 
   return (

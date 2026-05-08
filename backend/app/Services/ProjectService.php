@@ -41,10 +41,10 @@ class ProjectService
         $project = Project::findOrFail($id);
 
         if (isset($data['project_image'])) {
-            if($data['project_image'] instanceof UploadedFile) {
+            if ($data['project_image'] instanceof UploadedFile) {
                 $this->deleteImage($project->image_id);
             }
-            
+
             $data = $this->handleImage($data);
         }
 

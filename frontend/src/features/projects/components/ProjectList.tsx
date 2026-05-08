@@ -21,7 +21,11 @@ export default function ProjectList({
   const isListView = view === "list";
 
   return (
-    <div className={isListView ? "w-full flex flex-col gap-4" : "w-full grid grid-cols-1 sm:grid-cols-2 gap-4"}>
+    <div
+      className={
+        isListView ? "w-full flex flex-col gap-4" : "w-full grid grid-cols-1 sm:grid-cols-2 gap-4"
+      }
+    >
       {projects.map((p) => (
         <ProjectCard
           key={p.id}

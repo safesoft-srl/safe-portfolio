@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SkillCard, type UserSkill } from "./SkillCard";
 import { EditLevelModal } from "./EditLevelModal";
 import { AddTechnicalSkill } from "./addTechnicalSkill";
-import { usePortfolioId  } from "@/hooks/usePortfolio";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

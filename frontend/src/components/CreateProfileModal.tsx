@@ -27,7 +27,7 @@ export default function CreateProfileModal({
   hideTrigger?: boolean;
 }) {
   const user = useAuthStore((state) => state.user);
-  console.log('user:', user);
+  console.log("user:", user);
   const [isSaving, setIsSaving] = useState(false);
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;

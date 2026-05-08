@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getPortfolios } from "@/services/profile.service";
-import type { Portfolio } from "../types/portfolios.type"
+import type { Portfolio } from "../types/portfolios.type";
 
 export function usePortfolio() {
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);

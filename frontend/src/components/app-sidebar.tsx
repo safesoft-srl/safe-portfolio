@@ -18,7 +18,7 @@ import {
   GraduationCapIcon,
   BriefcaseIcon,
   GearIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
   /*MedalIcon,
   BriefcaseIcon,
   /*ChartBarIcon,

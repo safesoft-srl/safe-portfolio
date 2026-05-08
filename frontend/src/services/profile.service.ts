@@ -60,7 +60,7 @@ export const getPortfolio = async (idPortfolio: number) => {
     } else {
       console.error("Unexpected error:", error);
     }
-    return null
+    return null;
   }
 };
 
@@ -74,7 +74,7 @@ export const getPortfolios = async (options = {}) => {
     } else {
       console.error("Unexpected error:", error);
     }
-    return null
+    return null;
   }
 };
 

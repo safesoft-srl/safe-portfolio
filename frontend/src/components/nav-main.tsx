@@ -39,15 +39,11 @@ export function NavMain({
 
           const basePath = `/dashboard/${idPortfolio}`;
 
-          const isItemActive = 
-            item.url === ""
-              ? pathname === basePath
-              : pathname === `${basePath}/${item.url}`;
-          
-          const isSubItemActive = 
-            item.items?.some(
-              (subItem) => pathname === `${basePath}/${subItem.url}`
-            )?? false;
+          const isItemActive =
+            item.url === "" ? pathname === basePath : pathname === `${basePath}/${item.url}`;
+
+          const isSubItemActive =
+            item.items?.some((subItem) => pathname === `${basePath}/${subItem.url}`) ?? false;
           const isActive = isItemActive || isSubItemActive;
 
           if (!hasSubItems) {

@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdatePortfolioRequest extends FormRequest
@@ -56,9 +56,9 @@ class UpdatePortfolioRequest extends FormRequest
     {
         throw new HttpResponseException(
             response()->json([
-            'success' => false,
-            'message' => 'Error de validación',
-            'errors' => $validator->errors(),
-        ], 422));
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $validator->errors(),
+            ], 422));
     }
 }

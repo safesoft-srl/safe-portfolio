@@ -245,7 +245,10 @@ export default function ProfileForm({
           </Label>
           <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
             <Avatar className="h-60 w-60">
-              <AvatarImage src={formData.profile_image || DEFAULT_PROFILE_IMAGE} alt="Foto de perfil" />
+              <AvatarImage
+                src={formData.profile_image || DEFAULT_PROFILE_IMAGE}
+                alt="Foto de perfil"
+              />
               <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white"></AvatarFallback>
             </Avatar>
             <input

@@ -15,7 +15,6 @@ export default function Portfolios() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const displayName = user?.name ?? "Usuario";
 
-
   const { portfolios, isLoading, addPortfolio } = usePortfolio();
   const [createOpen, setCreateOpen] = useState(false);
   const filteredPortfolios = useMemo(() => {
@@ -36,7 +35,7 @@ export default function Portfolios() {
 
       return haystack.includes(search);
     });
-  }, [portfolios, query]); 
+  }, [portfolios, query]);
   return (
     <>
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-2 sm:px-3 md:px-6 py-6">
@@ -45,7 +44,12 @@ export default function Portfolios() {
           <p className="mt-1 text-sm font-sans">Gestiona tus portafolios</p>
         </div>
         <div>
-          <Button onClick={() => setCreateOpen(true)} variant="default" size="lg" className="px-5 font-heading flex items-center gap-2">
+          <Button
+            onClick={() => setCreateOpen(true)}
+            variant="default"
+            size="lg"
+            className="px-5 font-heading flex items-center gap-2"
+          >
             <PlusIcon weight="bold" /> Crear nuevo portafolio
           </Button>
         </div>
@@ -57,7 +61,12 @@ export default function Portfolios() {
               <p className="text-sm text-sidebar-foreground">
                 Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
               </p>
-              <Button onClick={() => setCreateOpen(true)} variant="default" size="lg" className="px-5 font-heading flex items-center gap-2">
+              <Button
+                onClick={() => setCreateOpen(true)}
+                variant="default"
+                size="lg"
+                className="px-5 font-heading flex items-center gap-2"
+              >
                 <PlusIcon weight="bold" /> Crear un nuevo portafolio
               </Button>
             </div>

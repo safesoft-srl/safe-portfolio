@@ -14,19 +14,14 @@ export function useProjects() {
   const syncProjects = async () => {
     if (!portfolioId) return;
 
-    const res = await http.get(
-      `/api/portfolios/${portfolioId}/projects`
-    );
+    const res = await http.get(`/api/portfolios/${portfolioId}/projects`);
 
     setProjects(res.data.data || res.data);
   };
 
   const init = async () => {
     try {
-      await Promise.all([
-        syncProjects(),
-        getSkills().then(setSkills),
-      ]);
+      await Promise.all([syncProjects(), getSkills().then(setSkills)]);
     } finally {
       setIsLoading(false);
     }

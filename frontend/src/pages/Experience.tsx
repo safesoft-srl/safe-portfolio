@@ -121,13 +121,16 @@ export default function ExperiencePage() {
   const { data: experiences, isLoading } = useQuery({
     queryKey: ["work-experiences"],
     queryFn: async () => {
-      const response = await api.get<{ data: WorkExperience[] }>(`/api/me/portfolios/${portfoliId}/work-experiences`);
+      const response = await api.get<{ data: WorkExperience[] }>(
+        `/api/me/portfolios/${portfoliId}/work-experiences`
+      );
       return response.data.data;
     },
   });
 
   const createMutation = useMutation({
-    mutationFn: (newExp: ExperienceFormData) => api.post(`/api/me/portfolios/${portfoliId}/work-experiences`, newExp),
+    mutationFn: (newExp: ExperienceFormData) =>
+      api.post(`/api/me/portfolios/${portfoliId}/work-experiences`, newExp),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
@@ -156,7 +159,8 @@ export default function ExperiencePage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => api.delete(`/api/me/portfolios/${portfoliId}/work-experiences/${id}`),
+    mutationFn: (id: number) =>
+      api.delete(`/api/me/portfolios/${portfoliId}/work-experiences/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       toast.success("Experiencia laboral eliminada correctamente");

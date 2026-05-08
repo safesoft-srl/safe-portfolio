@@ -23,10 +23,14 @@ export default function PortfolioCard({
   return (
     <div
       onClick={handleCardClick}
-      className={`rounded-2xl border border-sidebar-border bg-[#0f1224] shadow-sm cursor-pointer transition-all hover:border-[#6c72ff] hover:shadow-lg ${ isListView ? "p-4 sm:p-5" : "p-6"}`}
+      className={`rounded-2xl border border-sidebar-border bg-[#0f1224] shadow-sm cursor-pointer transition-all hover:border-[#6c72ff] hover:shadow-lg ${isListView ? "p-4 sm:p-5" : "p-6"}`}
     >
       <div
-        className={ isListView? "flex flex-col gap-5 lg:flex-row lg:items-center" : "flex flex-col items-center text-center gap-3"}
+        className={
+          isListView
+            ? "flex flex-col gap-5 lg:flex-row lg:items-center"
+            : "flex flex-col items-center text-center gap-3"
+        }
       >
         <div className="flex-shrink-0">
           <div
@@ -38,14 +42,16 @@ export default function PortfolioCard({
           </div>
         </div>
 
-        <div className={isListView ? "flex min-w-0 flex-1 flex-col gap-4 lg:flex-row lg:items-center" : "w-full"}>
+        <div
+          className={
+            isListView ? "flex min-w-0 flex-1 flex-col gap-4 lg:flex-row lg:items-center" : "w-full"
+          }
+        >
           <div className={isListView ? "min-w-0 flex-1 text-center lg:text-left" : "w-full"}>
             <h3 className={`font-semibold text-white ${isListView ? "text-lg" : "text-lg"}`}>
               {portfolio.profile_name || "Nombre"}
             </h3>
-            <p className="text-xs text-slate-300">
-              {portfolio.profession || "Profesión ejemplo"}
-            </p>
+            <p className="text-xs text-slate-300">{portfolio.profession || "Profesión ejemplo"}</p>
             <p
               className={`mt-2 text-xs text-sidebar-foreground ${
                 isListView ? "max-w-2xl lg:pr-8" : "max-w-[36rem]"
@@ -66,7 +72,8 @@ export default function PortfolioCard({
 
             <div
               className={`grid grid-cols-3 gap-4 text-center ${
-                isListView ? "w-full max-w-[230px]" : ""}
+                isListView ? "w-full max-w-[230px]" : ""
+              }
               `}
             >
               <div>

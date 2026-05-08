@@ -9,10 +9,11 @@ use Illuminate\Validation\ValidationException;
 
 class RegisterAccountController extends Controller
 {
-    public function getUser() {
+    public function getUser()
+    {
         $user = auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Usuario no autenticado',

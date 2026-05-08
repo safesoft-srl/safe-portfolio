@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ApiResponse;
-use App\Models\Portfolio;
 use App\Models\PortfolioSkill;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -15,7 +14,6 @@ class PortfolioTechnicalSkillController extends Controller
     /**
      * Obtiene el portafolio real del usuario según el número recibido (1,2,3...)
      */
-    
     private function getUserPortfolioByIndex(int $portfolioId)
     {
         /** @var \App\Models\User $user */
@@ -26,7 +24,6 @@ class PortfolioTechnicalSkillController extends Controller
         }
 
         $portfolio = $user->portfolios()->find($portfolioId);
-            
 
         if (! $portfolio) {
             abort(404, 'No se encontró el portafolio solicitado para este usuario.');

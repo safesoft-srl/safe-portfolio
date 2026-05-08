@@ -15,13 +15,15 @@ export default function PortfolioGrid({
   const isListView = view === "list";
 
   return (
-    <div className={isListView ? "mt-6 flex flex-col gap-4" : "mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"}>
+    <div
+      className={
+        isListView
+          ? "mt-6 flex flex-col gap-4"
+          : "mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      }
+    >
       {portfolios.map((portfolio) => (
-        <PortfolioCard
-          key={portfolio.id}
-          portfolio={portfolio}
-          variant={view}
-        />
+        <PortfolioCard key={portfolio.id} portfolio={portfolio} variant={view} />
       ))}
     </div>
   );

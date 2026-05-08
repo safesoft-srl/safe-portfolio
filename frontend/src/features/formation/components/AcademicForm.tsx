@@ -152,11 +152,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
             name="is_current"
             control={control}
             render={({ field }) => (
-              <Checkbox
-                id="is_current_cb"
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
+              <Checkbox id="is_current_cb" checked={field.value} onCheckedChange={field.onChange} />
             )}
           />
           <Label htmlFor="is_current_cb" className="cursor-pointer text-xs text-slate-300">
@@ -208,11 +204,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
           name="is_visible"
           control={control}
           render={({ field }) => (
-            <Checkbox
-              id="is_visible_cb"
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
+            <Checkbox id="is_visible_cb" checked={field.value} onCheckedChange={field.onChange} />
           )}
         />
         <Label htmlFor="is_visible_cb" className="cursor-pointer font-medium text-slate-300">
@@ -221,12 +213,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
       </div>
 
       <div className="mb-3 pt-7 border-t border-slate-800 flex justify-end gap-3">
-        <Button 
-          type="button" 
-          variant="outline" 
-          className="w-28" 
-          onClick={onCancel}
-        >
+        <Button type="button" variant="outline" className="w-28" onClick={onCancel}>
           Cancelar
         </Button>
         <Button type="submit" className="w-28" disabled={isSaving} form="academic-form">

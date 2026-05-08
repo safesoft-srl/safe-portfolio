@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Portfolio;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Models\User;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\UploadedFile;
 
 class PortfolioService
@@ -12,8 +12,8 @@ class PortfolioService
     public function __construct(
         private ImageUploadService $imageUploadService
     ) {}
-    
-    public function showAll() 
+
+    public function showAll()
     {
         return Portfolio::all();
     }
@@ -27,13 +27,13 @@ class PortfolioService
 
     public function getAll(int $userId)
     {
-        return Portfolio::query() 
-            -> with([
+        return Portfolio::query()
+            ->with([
                 'portfolioSkills.technicalSkill:id,name',
                 'workExperiences',
                 'projects',
-            ])  
-            -> where('user_id', $userId)
+            ])
+            ->where('user_id', $userId)
             ->get();
     }
 
@@ -44,24 +44,24 @@ class PortfolioService
         }])->findOrFail($id);
     }
 
-    public function getPortfolio(int $id) 
+    public function getPortfolio(int $id)
     {
-        return Portfolio::findOrFail($id);      
+        return Portfolio::findOrFail($id);
     }
 
     public function getByUserId(int $userId)
-    {   
+    {
         return Portfolio::where('user_id', $userId)->first();
     }
 
     public function update(int $id_portfolio, array $data)
     {
         $portfolio = Portfolio::where('id', $id_portfolio)->firstOrFail();
-        if(isset($data['profile_image']) && $data['profile_image'] instanceof UploadedFile) {
+        if (isset($data['profile_image']) && $data['profile_image'] instanceof UploadedFile) {
             $this->deletePhoto($portfolio->id);
             $data = $this->handleProfileImage($data);
         }
-       
+
         $portfolio->update($data);
 
         return $portfolio->fresh();

@@ -65,8 +65,7 @@ export default function ProjectsPage() {
           <header className="flex items-start justify-between gap-3">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Proyectos</h1>
-              <p className="mt-1 text-sm text-slate-400">
-              </p>
+              <p className="mt-1 text-sm text-slate-400"></p>
             </div>
 
             <AlertDialogTrigger>
@@ -109,7 +108,8 @@ export default function ProjectsPage() {
                     type="button"
                     variant="ghost"
                     onClick={() => setView("grid")}
-                    className={view === "grid"
+                    className={
+                      view === "grid"
                         ? "bg-indigo-600 text-white hover:bg-[#5c61eb] hover:text-white"
                         : "text-slate-300 hover:bg-[#23284f] hover:text-white"
                     }
@@ -121,7 +121,8 @@ export default function ProjectsPage() {
                     type="button"
                     variant="ghost"
                     onClick={() => setView("list")}
-                    className={view === "list"
+                    className={
+                      view === "list"
                         ? "bg-indigo-600 text-white hover:bg-[#5c61eb] hover:text-white"
                         : "text-slate-300 hover:bg-[#23284f] hover:text-white"
                     }

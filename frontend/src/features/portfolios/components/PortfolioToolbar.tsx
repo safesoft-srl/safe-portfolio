@@ -18,13 +18,15 @@ export default function PortfolioToolbar({
   onViewChange,
 }: PortfolioToolbarProps) {
   const countLabel =
-    portfoliosCount === 1 ? "1 portafolio encontrado" : `${portfoliosCount} portafolios encontrados`;
+    portfoliosCount === 1
+      ? "1 portafolio encontrado"
+      : `${portfoliosCount} portafolios encontrados`;
 
   return (
     <div className="w-full space-y-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="w-full max-w-4xl">
-            <p className="mb-2 text-lg text-slate-300 font-bold">Mi Lista de Portafolios</p>
+          <p className="mb-2 text-lg text-slate-300 font-bold">Mi Lista de Portafolios</p>
           <div className="relative">
             <MagnifyingGlass
               size={20}
