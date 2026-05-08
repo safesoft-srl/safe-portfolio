@@ -1,6 +1,9 @@
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import type { Project, Skill } from "../types/project.types";
+import defaultProjectImage from "@/assets/image.png";
+
+const DEFAULT_PROJECT_IMAGE = defaultProjectImage;
 
 type Props = {
   project: Project;
@@ -28,7 +31,7 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
             <div className="shrink-0 w-[140px] sm:w-[170px]">
               <div className="flex items-center justify-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60 h-[110px] sm:h-[130px]">
                 <img
-                  src={project.url_image || "/src/assets/image.png"}
+                  src={project.url_image || DEFAULT_PROJECT_IMAGE}
                   alt={project.name}
                   className="h-full w-full object-cover"
                   style={{ background: "#181c2f" }}
