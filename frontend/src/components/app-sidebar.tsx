@@ -18,12 +18,15 @@ import {
   GraduationCapIcon,
   BriefcaseIcon,
   GearIcon,
+  ArrowLeftIcon
   /*MedalIcon,
   BriefcaseIcon,
   /*ChartBarIcon,
   GraduationCapIcon,*/
 } from "@phosphor-icons/react";
 import { useAuthStore } from "@/lib/auth-store";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 // This is sample data.
 const data = {
@@ -67,11 +70,11 @@ const data = {
       url: "experience",
       icon: <GraduationCapIcon />,
     },
-    {
+    /*{
       title: "Formación",
       url: "formation",
       icon: <GraduationCapIcon />,
-    },
+    },*/
     {
       title: "Configuración",
       url: "configuration",
@@ -88,6 +91,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuthStore();
+  const navigate = useNavigate();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -98,6 +102,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user || {}} />
+        <Button
+          onClick={() => navigate("/portfolios")}
+          className="gap-2 bg-[#0A0B1E] hover:bg-[#5c61eb] text-white rounded-ms h-10 mb-2 px-15 py-2 w-fit mx-auto"
+        >
+          <ArrowLeftIcon size={16} weight="bold" />
+          <span>Ir a Portafolios</span>
+        </Button>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
