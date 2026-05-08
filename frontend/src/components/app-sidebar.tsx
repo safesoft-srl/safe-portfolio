@@ -68,6 +68,11 @@ const data = {
       icon: <GraduationCapIcon />,
     },
     {
+      title: "Formación",
+      url: "formation",
+      icon: <GraduationCapIcon />,
+    },
+    {
       title: "Configuración",
       url: "configuration",
       icon: <GearIcon />,

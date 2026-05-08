@@ -25,9 +25,10 @@ type Props = {
   skills: Skill[];
   onSubmit: (data: BaseProjectDTO, file: File | null) => Promise<void>;
   initialData: Project | null;
+  existingProjects?: Project[];
 };
 
-export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
+export default function ProjectForm({ skills, onSubmit, initialData, existingProjects = [] }: Props) {
   const [form, setForm] = useState<BaseProjectDTO>({
     name: "",
     description: "",
@@ -49,6 +50,7 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
   const [fileImage, setFileImage] = useState<File | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
+  const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -70,7 +72,6 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
     }
 
     if (form.url_demo) {
-      // Permitir cualquier dominio con www. y dominios railway/vercel
       const demoRegex =
         /^https:\/\/(www\.[\w.-]+\.[a-zA-Z]{2,}(\/.*)?|[\w-]+\.railway\.app\/?|[\w-]+\.vercel\.app\/?)+$/;
       if (!demoRegex.test(form.url_demo)) {
@@ -82,6 +83,18 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
     return null;
   };
 
+  const checkDuplicateName = (): boolean => {
+    const currentNameLower = form.name.trim().toLowerCase();
+    
+    return existingProjects.some((project) => {
+      if (initialData && project.id === initialData.id) {
+        return false;
+      }
+      
+      return project.name.toLowerCase() === currentNameLower;
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const error = validate();
@@ -90,8 +103,15 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
       return;
     }
 
-    setIsSaving(true);
+    if (checkDuplicateName()) {
+      setShowDuplicateWarning(true);
+      return;
+    }
+    await proceedWithSubmit();
+  };
 
+  const proceedWithSubmit = async () => {
+    setIsSaving(true);
     try {
       await onSubmit(form, fileImage);
     } catch {
@@ -103,7 +123,8 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
 
   return (
     <form className="text-left" onSubmit={handleSubmit}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className={`transition-all duration-200 ${showDuplicateWarning ? "blur-sm pointer-events-none" : ""}`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Columna Izquierda */}
         <div className="flex flex-col gap-4">
           <div className="space-y-1.5">
@@ -205,7 +226,7 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
             )}
           </div>
         </div>
-        {/* Columna Derecha (sin fechas ni rol) */}
+        {/* Columna Derecha */}
         <div className="flex flex-col gap-4">
           <div className="space-y-1.5 mt-2">
             <Label
@@ -351,7 +372,6 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
           {isSaving ? (
             <>
               <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
-              {/* Texto mientras guarda */}
             </>
           ) : initialData !== null ? (
             "Guardar Cambios"
@@ -363,6 +383,35 @@ export default function ProjectForm({ skills, onSubmit, initialData }: Props) {
           Cancelar
         </AlertDialogCancel>
       </AlertDialogFooter>
+      </div>
+
+      {/* Modal de advertencia de proyecto duplicado */}
+      <AlertDialog open={showDuplicateWarning} onOpenChange={setShowDuplicateWarning}>
+        <AlertDialogContent className="border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-[#151a3f] text-slate-900 dark:text-slate-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Proyecto con nombre duplicado</AlertDialogTitle>
+            <p className="text-slate-600 dark:text-slate-300 text-sm mt-2">
+              Ya existe un proyecto registrado con el nombre "{form.name}". ¿Deseas continuar de todas formas?
+            </p>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-sidebar-border dark:border-[#2a2d46] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-slate-200">
+              Cancelar
+            </AlertDialogCancel>
+
+            <AlertDialogAction
+              className="bg-[#6c72ff] text-white hover:bg-[#5c61eb]"
+              onClick={async () => {
+                setShowDuplicateWarning(false);
+                await proceedWithSubmit();
+              }}
+            >
+              Continuar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </form>
   );
 }
