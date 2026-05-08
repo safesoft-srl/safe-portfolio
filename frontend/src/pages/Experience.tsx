@@ -35,6 +35,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 // Types
 interface WorkExperience {
@@ -110,6 +111,7 @@ const experienceSchema = z
 type ExperienceFormData = z.infer<typeof experienceSchema>;
 
 export default function ExperiencePage() {
+  const portfoliId = usePortfolioId();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState<WorkExperience | null>(null);
@@ -119,13 +121,16 @@ export default function ExperiencePage() {
   const { data: experiences, isLoading } = useQuery({
     queryKey: ["work-experiences"],
     queryFn: async () => {
-      const response = await api.get<{ data: WorkExperience[] }>("/api/me/work-experiences");
+      const response = await api.get<{ data: WorkExperience[] }>(
+        `/api/me/portfolios/${portfoliId}/work-experiences`
+      );
       return response.data.data;
     },
   });
 
   const createMutation = useMutation({
-    mutationFn: (newExp: ExperienceFormData) => api.post("/api/me/work-experiences", newExp),
+    mutationFn: (newExp: ExperienceFormData) =>
+      api.post(`/api/me/portfolios/${portfoliId}/work-experiences`, newExp),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
@@ -140,7 +145,7 @@ export default function ExperiencePage() {
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const updateMutation = useMutation({
     mutationFn: (data: { id: number; exp: ExperienceFormData }) =>
-      api.put(`/api/me/work-experiences/${data.id}`, data.exp),
+      api.put(`/api/me/portfolios/${portfoliId}/work-experiences/${data.id}`, data.exp),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
@@ -154,7 +159,8 @@ export default function ExperiencePage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => api.delete(`/api/me/work-experiences/${id}`),
+    mutationFn: (id: number) =>
+      api.delete(`/api/me/portfolios/${portfoliId}/work-experiences/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       toast.success("Experiencia laboral eliminada correctamente");

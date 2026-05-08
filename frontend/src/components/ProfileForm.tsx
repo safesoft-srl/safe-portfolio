@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
+import { PencilSimpleLineIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
+
+import { deleteProfilePhoto } from "@/services/profile.service";
 import defaultProfileImage from "@/assets/image.png";
 import {
   AlertDialog,
@@ -16,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
@@ -29,7 +33,7 @@ export type ProfileFormData = {
   profile_email: string;
   profession: string;
   bio: string;
-  url_photo: string;
+  profile_image: string;
   url_portfolio: string;
 };
 
@@ -39,6 +43,7 @@ export type ProfileFormProps = {
   onSubmit: (data: ProfileFormData, file: File | null) => void | Promise<void>;
   isLoading?: boolean;
   isSaving?: boolean;
+  idPortfolio: number;
 };
 
 const EMPTY_ERRORS = {
@@ -56,12 +61,13 @@ export default function ProfileForm({
   onSubmit,
   isLoading = false,
   isSaving = false,
+  idPortfolio,
 }: ProfileFormProps) {
   const [formData, setFormData] = useState<ProfileFormData>(initialData);
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [profileImage, setProfileImage] = useState<string>(
-    initialData.url_photo || DEFAULT_PROFILE_IMAGE
+    initialData.profile_image || DEFAULT_PROFILE_IMAGE
   );
   const [showPhotoActions, setShowPhotoActions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -70,7 +76,7 @@ export default function ProfileForm({
 
   if (initialData !== prevInitialData) {
     setFormData(initialData);
-    setProfileImage(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
+    setProfileImage(initialData.profile_image || DEFAULT_PROFILE_IMAGE);
     setSelectedFile(null);
     setPrevInitialData(initialData);
   }
@@ -176,21 +182,27 @@ export default function ProfileForm({
     setProfileImage(URL.createObjectURL(file));
     setFormData({
       ...formData,
-      url_photo: URL.createObjectURL(file),
+      profile_image: URL.createObjectURL(file),
     });
     setShowPhotoActions(false);
   };
 
-  const handleRemovePhoto = () => {
-    setSelectedFile(null);
-    setFormData({
-      ...formData,
-      url_photo: DEFAULT_PROFILE_IMAGE,
-    });
-    setProfileImage(DEFAULT_PROFILE_IMAGE);
-    setShowPhotoActions(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const handleRemovePhoto = async () => {
+    try {
+      setSelectedFile(null);
+      setFormData({
+        ...formData,
+        profile_image: DEFAULT_PROFILE_IMAGE,
+      });
+      setProfileImage(DEFAULT_PROFILE_IMAGE);
+      await deleteProfilePhoto(idPortfolio);
+      setShowPhotoActions(false);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch {
+      toast.error("Error al eliminar la foto de perfil");
     }
   };
 
@@ -233,7 +245,10 @@ export default function ProfileForm({
           </Label>
           <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
             <Avatar className="h-60 w-60">
-              <AvatarImage src={formData.url_photo} alt="Foto de perfil" />
+              <AvatarImage
+                src={formData.profile_image || DEFAULT_PROFILE_IMAGE}
+                alt="Foto de perfil"
+              />
               <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white"></AvatarFallback>
             </Avatar>
             <input
@@ -262,9 +277,7 @@ export default function ProfileForm({
                   className="absolute bottom-2 left-2 px-2 h-7 gap-1"
                   onClick={() => setShowPhotoActions((prev) => !prev)}
                 >
-                  <span aria-hidden="true" className="text-xs leading-none">
-                    ✎
-                  </span>
+                  <PencilSimpleLineIcon size={32} />
                   Editar
                 </Button>
                 {showPhotoActions ? (
@@ -327,6 +340,7 @@ export default function ProfileForm({
               value={formData.profile_name}
               onChange={handleInputChange}
               onBlur={handleFieldBlur}
+              disabled={mode !== "create"}
               style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
               className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             />
@@ -352,6 +366,7 @@ export default function ProfileForm({
               value={formData.profile_email}
               onChange={handleInputChange}
               onBlur={handleFieldBlur}
+              required
               style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
               className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             />
@@ -378,6 +393,7 @@ export default function ProfileForm({
               onBlur={handleFieldBlur}
               style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
               pattern=".*"
+              required
               className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.profession ? (
@@ -400,6 +416,7 @@ export default function ProfileForm({
           onChange={handleInputChange}
           onBlur={handleFieldBlur}
           rows={6}
+          required
           style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
           className="h-24 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
         />
@@ -428,7 +445,7 @@ export default function ProfileForm({
               setErrors(EMPTY_ERRORS);
               setFormData(initialData);
               setSelectedFile(null);
-              setProfileImage(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
+              setProfileImage(initialData.profile_image || DEFAULT_PROFILE_IMAGE);
               if (fileInputRef.current) {
                 fileInputRef.current.value = "";
               }

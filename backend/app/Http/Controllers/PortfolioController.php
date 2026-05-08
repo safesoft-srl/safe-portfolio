@@ -18,9 +18,24 @@ class PortfolioController extends Controller
         private PortfolioService $portfolioService
     ) {}
 
+    public function showAll()
+    {
+        $portfolios = $this->portfolioService->showAll();
+
+        return ApiResponse::success(
+            $portfolios,
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
     public function store(StorePortfolioRequest $request)
     {
-        $portfolio = $this->portfolioService->create($request->validated());
+        $user = auth()->user();
+
+        $portfolio = $this->portfolioService->create(
+            $request->validated(),
+            $user
+        );
 
         return ApiResponse::success(
             $portfolio,
@@ -31,7 +46,15 @@ class PortfolioController extends Controller
 
     public function index()
     {
-        $portfolios = $this->portfolioService->getAll();
+        $userId = auth()->id();
+        if ($userId === null) {
+            return ApiResponse::error(
+                ResponseMessages::UNAUTHORIZED,
+                401
+            );
+        }
+
+        $portfolios = $this->portfolioService->getAll($userId);
 
         return ApiResponse::success(
             $portfolios,
@@ -42,7 +65,20 @@ class PortfolioController extends Controller
     public function getMyPortfolio()
     {
         $userId = auth()->id();
+        if ($userId === null) {
+            return ApiResponse::error(
+                ResponseMessages::UNAUTHORIZED,
+                401
+            );
+        }
         $portfolio = $this->portfolioService->getByUserId($userId);
+
+        if ($portfolio === null) {
+            return ApiResponse::success(
+                null,
+                ResponseMessages::FETCHED_SUCCESSFULLY
+            );
+        }
 
         return ApiResponse::success(
             $portfolio,
@@ -60,12 +96,28 @@ class PortfolioController extends Controller
         );
     }
 
+    public function getPortfolio(int $id)
+    {
+        try {
+            $portfolio = $this->portfolioService->getPortfolio($id);
+
+            return ApiResponse::success(
+                $portfolio,
+                ResponseMessages::FETCHED_SUCCESSFULLY
+            );
+        } catch (ModelNotFoundException $e) {
+            return ApiResponse::error(
+                'error al obtener portafolio: '.$e->getMessage(),
+                404
+            );
+        }
+    }
+
     public function updateMyPortfolio(UpdatePortfolioRequest $request)
     {
-        $userId = auth()->id();
         try {
             $portfolio = $this->portfolioService->update(
-                $userId,
+                $request->id_portfolio,
                 $request->validated()
             );
 
@@ -75,7 +127,7 @@ class PortfolioController extends Controller
             );
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error(
-                ResponseMessages::RESOURCE_NOT_FOUND,
+                'No existe un portafolio con el ID: '.$request->id_portfolio,
                 404
             );
         } catch (Throwable $e) {
