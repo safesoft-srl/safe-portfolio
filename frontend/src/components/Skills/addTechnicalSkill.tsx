@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { PlusIcon } from "@phosphor-icons/react";
 
 interface Skill {
   id: number;
   name: string;
   category: string;
-  icon_path: string | "";
+  icon_url?: string;
 }
 
 const CATEGORIES = ["todas", "frontend", "backend", "devOps", "otros"];
@@ -89,12 +90,15 @@ export function AddTechnicalSkill({
 
   return (
     <>
-      <button
+      <Button
+        type="button"
+        size="lg"
         onClick={() => setIsOpen(true)}
-        className="w-full bg-[#6c72ff] hover:bg-[#5a60d6] text-white h-12 rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-indigo-500/20"
+        className="w-full gap-2 font-heading px-6 h-9"
       >
-        + Agregar Habilidad
-      </button>
+        <PlusIcon weight="bold" className="size-4" />
+        <span>Agregar Habilidad</span>
+      </Button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
@@ -119,7 +123,7 @@ export function AddTechnicalSkill({
                   placeholder="Buscar habilidad técnica..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full h-12 bg-white text-slate-900 rounded-xl px-4 mb-6 font-sans focus:ring-2 focus:ring-[#6c72ff] outline-none"
+                  className="w-full h-12 bg-[#1c1f38] text-white rounded-xl px-4 mb-6 font-sans border border-[#232555] focus:ring-2 focus:ring-[#6c72ff] outline-none placeholder:text-slate-500"
                 />
 
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -148,12 +152,18 @@ export function AddTechnicalSkill({
                           setSelectedLevel(null);
                         }}
                       >
-                        <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center text-[#6c72ff] font-bold text-xl mb-3 border border-[#232555]">
-                          <img
-                            src={skill.icon_path || "/default-skill.png"}
-                            alt={skill.name || "Skill"}
-                            className="w-10 h-10 object-contain"
-                          />
+                        <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center mb-3 border border-[#232555]">
+                          {skill.icon_url ? (
+                            <img
+                              src={skill.icon_url}
+                              alt={skill.name}
+                              className="w-8 h-8 object-contain"
+                            />
+                          ) : (
+                            <span className="text-[#6c72ff] font-bold text-xl">
+                              {skill.name.charAt(0)}
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="text-white font-bold group-hover:text-[#6c72ff] transition-colors">

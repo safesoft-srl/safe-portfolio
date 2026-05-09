@@ -6,7 +6,7 @@ export const GuestRoute = () => {
 
   if (isAuthenticated) {
     // Redirect to home/dashboard if they are already authenticated
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/portfolios" replace />;
   }
 
   return <Outlet />;

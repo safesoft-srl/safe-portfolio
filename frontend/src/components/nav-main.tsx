@@ -34,8 +34,16 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => {
           const hasSubItems = Boolean(item.items?.length);
-          const isItemActive = pathname === item.url;
-          const isSubItemActive = item.items?.some((subItem) => pathname === subItem.url) ?? false;
+          const segments = pathname.split("/");
+          const idPortfolio = segments[2];
+
+          const basePath = `/dashboard/${idPortfolio}`;
+
+          const isItemActive =
+            item.url === "" ? pathname === basePath : pathname === `${basePath}/${item.url}`;
+
+          const isSubItemActive =
+            item.items?.some((subItem) => pathname === `${basePath}/${subItem.url}`) ?? false;
           const isActive = isItemActive || isSubItemActive;
 
           if (!hasSubItems) {

@@ -7,11 +7,25 @@ type Props = {
   onRefresh: () => Promise<void>;
   onEdit: (project: Project) => void;
   onDelete: (project: Project) => void;
+  view?: "grid" | "list";
 };
 
-export default function ProjectList({ projects, skills, onRefresh, onEdit, onDelete }: Props) {
-    return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+export default function ProjectList({
+  projects,
+  skills,
+  onRefresh,
+  onEdit,
+  onDelete,
+  view = "grid",
+}: Props) {
+  const isListView = view === "list";
+
+  return (
+    <div
+      className={
+        isListView ? "w-full flex flex-col gap-4" : "w-full grid grid-cols-1 sm:grid-cols-2 gap-4"
+      }
+    >
       {projects.map((p) => (
         <ProjectCard
           key={p.id}
@@ -20,6 +34,7 @@ export default function ProjectList({ projects, skills, onRefresh, onEdit, onDel
           onRefresh={onRefresh}
           onEdit={onEdit}
           onDelete={onDelete}
+          variant={view}
         />
       ))}
     </div>

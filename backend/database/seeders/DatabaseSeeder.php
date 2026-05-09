@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Portfolio;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create a test user for development and frontend testing
-        \App\Models\User::factory()->create([
+        User::factory()->create([
             'name' => 'Admin SafePortfolio',
             'username' => 'admin_safe',
             'email' => 'admin@safeportfolio.com',

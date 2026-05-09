@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import Cookies from "js-cookie";
 import type { User } from "@/types/users";
+import { queryClient } from "@/lib/react-query";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -27,5 +28,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     Cookies.remove("access_token");
     set({ isAuthenticated: false, user: null });
+    queryClient.clear();
   },
 }));

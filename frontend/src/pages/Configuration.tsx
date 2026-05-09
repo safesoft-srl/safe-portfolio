@@ -23,9 +23,7 @@ export default function Configuration() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-lg bg-slate-900 border-slate-800">
           <DialogHeader className="border-b border-slate-800 pb-4">
-            <DialogTitle className="text-xl font-bold text-white">
-              Nueva Skill
-            </DialogTitle>
+            <DialogTitle className="text-xl font-bold text-white">Nueva Skill</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <SkillForm

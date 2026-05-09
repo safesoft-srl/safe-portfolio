@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { X, MagnifyingGlass } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/input";
-import type { Skill } from "@/services/skill.service";
-
+import type { Skill } from "../features/projects/types/project.types";
 
 interface SkillComboBoxProps {
   skills: Skill[];
@@ -67,7 +66,7 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
             onFocus={() => setIsOpen(true)}
             onBlur={() => setTimeout(() => setIsOpen(false), 100)}
             placeholder={placeholder}
-            className="h-10 w-full min-w-0 rounded-xl border bg-input dark:bg-[#1f2552] pl-10 text-sm text-slate-900 dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-10 w-full min-w-0 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 pl-10 text-sm disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
         {isOpen && filtered.length > 0 && (
@@ -116,14 +115,14 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
             className="flex items-center gap-1 px-2 py-1 rounded-lg shadow-sm text-xs"
             style={{ background: "#6c72ff", color: "#fff" }}
           >
-            {skill.icon_path && (
+            {skill.url_logo && (
               <img
-                src={skill.icon_path}
-                alt={skill.name}
+                src={skill.url_logo}
+                alt={skill.skill_name}
                 className="w-4 h-4 rounded-full mr-1"
               />
             )}
-            {skill.name}
+            {skill.skill_name}
             <button
               type="button"
               className="ml-1 rounded hover:bg-[#5c61eb] p-0.5"
@@ -133,7 +132,6 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
               <X size={12} />
             </button>
           </span>
-
         ))}
       </div>
     </div>

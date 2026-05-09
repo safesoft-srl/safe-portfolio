@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Project;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Http\UploadedFile;
 
 class ProjectService
 {
@@ -23,7 +24,7 @@ class ProjectService
         return $project->load('skills');
     }
 
-    private function handleImage($data): array
+    private function handleImage(array $data): array
     {
         if (isset($data['project_image']) && $data['project_image']) {
             $upload = $this->imageUploadService->upload($data['project_image']);
@@ -39,12 +40,14 @@ class ProjectService
     {
         $project = Project::findOrFail($id);
 
-        if ($data['project_image'] ?? false) {
-            if ($project->image_id) {
-                $this->deleteImage($project->id);
+        if (isset($data['project_image'])) {
+            if ($data['project_image'] instanceof UploadedFile) {
+                $this->deleteImage($project->image_id);
             }
+
             $data = $this->handleImage($data);
         }
+
         $project->update($data);
 
         if (! empty($data['skill_ids'])) {

@@ -21,7 +21,7 @@ export type CreateProjectDTO = {
 
 export const getProjects = async () => {
   const response = await api.get("api/projects");
-  return response.data ?? [];
+  return response.data?.data ?? [];
 };
 
 export const createProject = async (data: CreateProjectDTO, file?: File | null) => {
@@ -55,9 +55,7 @@ export const updateProject = async (id: number, data: UpdateProjectDTO, file?: F
   const formData = new FormData();
   formData.append("name", data.name ?? "");
   formData.append("description", data.description ?? "");
-  if (data.url_demo) {
-    formData.append("url_demo", data.url_demo);
-  }
+  formData.append("url_demo", data.url_demo ?? "");
   formData.append("url_github", data.url_github ?? "");
   if (data.skill_ids) {
     data.skill_ids.forEach((id) => {

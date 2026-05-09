@@ -4,15 +4,18 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import DashboardHome from "./pages/DashboardHome";
+import Portfolios from "./pages/Portfolios";
 import PublicPortfolio from "./pages/PublicPortfolio";
+import ExperiencePublic from "./pages/public-portfolio/ExperiencePublic";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
 import ExperiencePage from "./pages/Experience";
+import FormationPage from "./pages/Formation";
 import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
 import ProjectsPage from "./pages/ProjectsPage";
-import Projects from "./pages/Projects";
+//import Projects from "./pages/Projects";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +25,10 @@ export const router = createBrowserRouter([
   {
     path: "/p/:slug",
     element: <PublicPortfolio />,
+  },
+  {
+    path: "/p/:slug/experience",
+    element: <ExperiencePublic />,
   },
   {
     path: "/login",
@@ -44,7 +51,18 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard",
+    path: "/portfolios",
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "",
+        element: <Portfolios />,
+      },
+    ],
+  },
+
+  {
+    path: "/dashboard/:idPortfolio",
     element: <ProtectedRoute />,
     children: [
       {
@@ -62,7 +80,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "projects",
-            element: <ProjectsPage/>,
+            element: <ProjectsPage />,
           },
           {
             path: "skills",
@@ -73,8 +91,12 @@ export const router = createBrowserRouter([
             element: <ExperiencePage />,
           },
           {
+            path: "formation",
+            element: <FormationPage />,
+          },
+          {
             path: "configuration",
-            element: <Configuration/>,
+            element: <Configuration />,
           },
           {
             path: "reports",

@@ -21,10 +21,12 @@ interface SkillFormProps {
   onCancel?: () => void;
 }
 
-{/*Componente del formulario*/}
+{
+  /*Componente del formulario*/
+}
 export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
-    //inicializacion del formulario.
-    const {
+  //inicializacion del formulario.
+  const {
     register,
     handleSubmit,
     formState: { errors },
@@ -36,7 +38,9 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  {/*Cuando se selecciona un archivo*/}
+  {
+    /*Cuando se selecciona un archivo*/
+  }
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -99,17 +103,27 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
         <label
           htmlFor="logo-input"
           className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all h-32 bg-slate-950 border-slate-800 hover:border-indigo-500 focus-within:border-indigo-500 relative ${dragActive ? "border-indigo-500 bg-slate-900/60" : ""}`}
-          onDragOver={e => { e.preventDefault(); setDragActive(true); }}
-          onDragLeave={e => { e.preventDefault(); setDragActive(false); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragActive(true);
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            setDragActive(false);
+          }}
           onDrop={handleDrop}
         >
           {preview ? (
             <div className="flex flex-col items-center gap-2">
-              <img src={preview} alt="Preview" className="h-16 rounded shadow border border-slate-800 object-contain" />
+              <img
+                src={preview}
+                alt="Preview"
+                className="h-16 rounded shadow border border-slate-800 object-contain"
+              />
               <button
                 type="button"
                 className="absolute top-2 right-2 bg-slate-800 hover:bg-red-600 text-white rounded-full p-1 shadow"
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   setPreview(null);
                   const input = document.getElementById("logo-input") as HTMLInputElement;
@@ -131,7 +145,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
             type="file"
             accept="image/*"
             {...register("logo")}
-            onChange={e => {
+            onChange={(e) => {
               handleLogoChange(e);
               register("logo").onChange(e);
             }}
@@ -140,12 +154,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
         </label>
       </div>
       <div className="flex justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-24"
-          onClick={onCancel}
-        >
+        <Button type="button" variant="outline" className="w-24" onClick={onCancel}>
           Cancelar
         </Button>
         <Button type="submit" className="w-24" disabled={isLoading}>
