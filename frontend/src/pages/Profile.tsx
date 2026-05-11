@@ -74,19 +74,17 @@ export default function Profile() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-5xl font-sans text-slate-900 dark:text-white">
-      {!isLoading && <h1 className="mb-4 text-3xl font-semibold">Mi Perfil</h1>}
-      <div className="w-full rounded-2xl border border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-[#13152e] px-7 py-8">
-        <ProfileForm
-          mode="edit"
-          initialData={initialFormData}
-          onSubmit={handleSubmit}
-          isLoading={isLoading}
-          isSaving={isSaving}
-          idPortfolio={idPortfolio}
-          key={JSON.stringify(initialFormData)}
-        />
-      </div>
+    <div className="mx-auto w-full max-w-4xl font-sans text-slate-900 dark:text-white">
+      {!isLoading && <h1 className="mb-4 text-3xl font-semibold">Editar Perfil</h1>}
+      <ProfileForm
+        mode="edit"
+        initialData={initialFormData}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        isSaving={isSaving}
+        idPortfolio={idPortfolio}
+        key={JSON.stringify(initialFormData)}
+      />
     </div>
   );
 }

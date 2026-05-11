@@ -78,22 +78,22 @@ export default function CreateProfileModal({
           </Button>
         </AlertDialogTrigger>
       )}
-      <AlertDialogContent className="max-w-4xl bg-slate-900">
+      <AlertDialogContent className="max-w-4xl bg-slate-900 p-0 overflow-hidden border-slate-800">
         <button
           type="button"
           aria-label="Cerrar"
           onClick={() => setOpen(false)}
           style={{
             position: "absolute",
-            top: 16,
-            right: 16,
+            right: 10,
+            top: 12,
             zIndex: 20,
             background: "none",
             border: "none",
-            padding: 0,
+            padding: 8,
           }}
         >
-          <X size={20} weight="bold" color="#8c91b7" />
+          <X size={16} weight="bold" color="#eeeff4"/>
         </button>
         <AlertDialogHeader />
         <ProfileForm
