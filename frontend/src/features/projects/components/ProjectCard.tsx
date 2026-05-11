@@ -142,7 +142,10 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                   </div>
                 </div>
                 {/* Imagen debajo del título y antes de la descripción */}
-                <div className="w-full my-4 flex justify-center items-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60" style={{ background: "#181c2f" }}>
+                <div
+                  className="w-full my-4 flex justify-center items-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60"
+                  style={{ background: "#181c2f" }}
+                >
                   <img
                     src={project.url_image || "/src/assets/image.png"}
                     alt={project.name}

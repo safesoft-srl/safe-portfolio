@@ -93,7 +93,7 @@ export default function CreateProfileModal({
             padding: 8,
           }}
         >
-          <X size={16} weight="bold" color="#eeeff4"/>
+          <X size={16} weight="bold" color="#eeeff4" />
         </button>
         <AlertDialogHeader />
         <ProfileForm

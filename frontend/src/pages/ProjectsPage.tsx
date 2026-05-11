@@ -30,7 +30,9 @@ export default function ProjectsPage() {
 
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
-  const [isNarrow, setIsNarrow] = useState<boolean>(typeof window !== "undefined" ? window.innerWidth < 900 : false);
+  const [isNarrow, setIsNarrow] = useState<boolean>(
+    typeof window !== "undefined" ? window.innerWidth < 900 : false
+  );
   const portfolioId = usePortfolioId();
   const [open, setOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -261,11 +263,11 @@ export default function ProjectsPage() {
           await deleteProject(deleteProjectId);
           toast.success("El proyecto se ha eliminado correctamente.", {
             style: {
-                background: "#6c72ff",
-                color: "#ffffff",
-                border: "1px solid #8b90ff",
-                },
-            });
+              background: "#6c72ff",
+              color: "#ffffff",
+              border: "1px solid #8b90ff",
+            },
+          });
           await syncProjects();
           setDeleteProjectId(null);
         }}

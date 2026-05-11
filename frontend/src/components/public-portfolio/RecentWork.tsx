@@ -76,16 +76,16 @@ export default function RecentWork() {
             Mis Trabajos Recientes
           </h2>
           {slug && (
-           <a
-            href={`/p/${slug}/projects`}
-            className="group font-mono text-sm font-semibold text-slate-300 hover:text-[#bcfd49] transition-colors underline inline-flex items-center gap-1"
+            <a
+              href={`/p/${slug}/projects`}
+              className="group font-mono text-sm font-semibold text-slate-300 hover:text-[#bcfd49] transition-colors underline inline-flex items-center gap-1"
             >
-            Ver Todos los Proyectos
-            <ArrowUpRight 
-                size={14} 
-                weight="bold" 
-                className="text-slate-300 transition-colors group-hover:text-[#bcfd49]" 
-            />
+              Ver Todos los Proyectos
+              <ArrowUpRight
+                size={14}
+                weight="bold"
+                className="text-slate-300 transition-colors group-hover:text-[#bcfd49]"
+              />
             </a>
           )}
         </div>
@@ -99,7 +99,10 @@ export default function RecentWork() {
               className={`grid grid-cols-1 items-start gap-6 min-[518px]:gap-0 min-[1024px]:grid-cols-[1fr_1.3fr] transition-opacity duration-300 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
             >
               {/* Project Image */}
-              <div className="relative w-full max-w-48 min-[518px]:max-w-sm min-[1024px]:max-w-full overflow-hidden rounded-xl border border-[#262b46] bg-[#0a0b1e] group mx-auto min-[518px]:mr-3 min-[1024px]:mr-0" style={{ aspectRatio: "1 / 1" }}>
+              <div
+                className="relative w-full max-w-48 min-[518px]:max-w-sm min-[1024px]:max-w-full overflow-hidden rounded-xl border border-[#262b46] bg-[#0a0b1e] group mx-auto min-[518px]:mr-3 min-[1024px]:mr-0"
+                style={{ aspectRatio: "1 / 1" }}
+              >
                 <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
                 {project.url_image ? (
                   <img

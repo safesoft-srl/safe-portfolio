@@ -238,7 +238,7 @@ export default function ProfileForm({
       <h2 className="mb-4 text-2xl font-semibold">
         {mode === "edit" ? "Información Básica" : "Crear Perfil"}
       </h2>
-        <div className="border-b border-slate-800 mb-8"></div>
+      <div className="border-b border-slate-800 mb-8"></div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
         <div className="space-y-5">
           <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">

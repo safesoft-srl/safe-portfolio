@@ -23,7 +23,9 @@ export default function ProjectList({
   return (
     <div
       className={
-        isListView ? "w-full flex flex-col gap-4" : "w-full grid grid-cols-1 min-[940px]:grid-cols-2 gap-4"
+        isListView
+          ? "w-full flex flex-col gap-4"
+          : "w-full grid grid-cols-1 min-[940px]:grid-cols-2 gap-4"
       }
     >
       {projects.map((p) => (
