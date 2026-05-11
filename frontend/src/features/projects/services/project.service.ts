@@ -15,7 +15,9 @@ export type CreateProjectDTO = {
   description: string;
   url_demo: string | null;
   url_github: string;
+  url_image:string;
   project_image: string | null;
+  visible: boolean;
   skill_ids: number[];
 };
 
@@ -29,6 +31,7 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
   formData.append("portfolio_id", data.portfolio_id.toString());
   formData.append("name", data.name);
   formData.append("description", data.description);
+  formData.append("visible", data.visible ? "1" : "0");
   if (data.url_demo) {
     formData.append("url_demo", data.url_demo);
   }
@@ -51,22 +54,25 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
 
 export type UpdateProjectDTO = Omit<Partial<CreateProjectDTO>, "portfolio_id">;
 
-export const updateProject = async (id: number, data: UpdateProjectDTO, file?: File | null) => {
+export const updateProject = async (id: number, data: UpdateProjectDTO, deleteImage: boolean, file?: File | null) => {
   const formData = new FormData();
   formData.append("name", data.name ?? "");
   formData.append("description", data.description ?? "");
   formData.append("url_demo", data.url_demo ?? "");
   formData.append("url_github", data.url_github ?? "");
+  formData.append("visible", data.visible ? "1" : "0");
   if (data.skill_ids) {
     data.skill_ids.forEach((id) => {
       formData.append("skill_ids[]", id.toString());
     });
   }
 
-  console.log('skill_ids: ', data.skill_ids);
-
   if (file) {
     formData.append("project_image", file);
+  }
+
+  if(deleteImage) {
+    await api.delete(`api/projects/${id}/image`);
   }
 
   formData.append("_method", "PUT");
