@@ -12,21 +12,30 @@ export type Skill = {
   id: number;
   name: string;
   category: string;
-  icon_path: string;
+  urls: {
+    light: string;
+    dark: string;
+  };
 };
 
 export async function createSkill(data: {
   name: string;
   category: string;
-  logo?: File;
+  logo_light?: File;
+  logo_dark?: File;
 }) {
+  console.log('data: ', data);
   const formData = new FormData();
+  const name = data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase();
+  formData.append("name", name);
+  formData.append("category", data.category);
 
-  formData.append("name", data.name.toUpperCase());
-  formData.append("category", data.category.toLowerCase());
+  if (data.logo_light) {
+    formData.append("logo_light", data.logo_light);
+  }
 
-  if (data.logo) {
-    formData.append("logo", data.logo);
+  if (data.logo_dark) {
+    formData.append("logo_dark", data.logo_dark);
   }
 
   const response = await api.post("/api/technical-skills", formData);
