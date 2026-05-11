@@ -91,6 +91,7 @@ Route::middleware('auth:api')->group(function () {
 // routes for projects
 Route::get('portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
 Route::apiResource('/projects', ProjectController::class);
+Route::delete('/projects/{id}/image', [ProjectController::class, 'deleteImageProject']);
 
 // routes for skills
 Route::apiResource('/skills', SkillProjectController::class);

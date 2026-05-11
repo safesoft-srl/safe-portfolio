@@ -7,6 +7,7 @@ use App\Constants\ResponseMessages;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProyectRequest;
 use App\Services\ProjectService;
+use App\Http\Resources\ProjectResource;
 
 class ProjectController extends Controller
 {
@@ -84,11 +85,21 @@ class ProjectController extends Controller
 
     public function getByPortfolio(int $portfolioId)
     {
-        $proyects = $this->projectService->getByPortfolio($portfolioId);
+        $projects = $this->projectService->getByPortfolio($portfolioId);
 
         return ApiResponse::success(
-            $proyects,
+            ProjectResource::collection($projects),
             ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
+    public function deleteImageProject(int $id)
+    {
+        $project = $this->projectService->deleteImageProject($id);
+
+        return ApiResponse::success(
+            $project,
+            ResponseMessages::DELETED_SUCCESSFULLY
         );
     }
 }

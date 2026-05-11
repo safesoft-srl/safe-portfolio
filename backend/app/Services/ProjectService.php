@@ -42,7 +42,9 @@ class ProjectService
 
         if (isset($data['project_image'])) {
             if ($data['project_image'] instanceof UploadedFile) {
-                $this->deleteImage($project->image_id);
+                if($project->image_id) {
+                    $this->deleteImage($project->image_id);
+                }
             }
 
             $data = $this->handleImage($data);
@@ -82,6 +84,7 @@ class ProjectService
     {
         return Project::with('skills')
             ->where('portfolio_id', $portfolioId)
+            ->latest()
             ->get();
     }
 
@@ -93,6 +96,21 @@ class ProjectService
     public function getAll()
     {
         return Project::with('skills')->get();
+    }
+
+    public function deleteImageProject(int $id)
+    {
+        $project = Project::findOrFail($id);
+
+        if ($project->image_id) {
+            $this->deleteImage($project->image_id);
+            $project->update([
+                'url_image' => null,
+                'image_id' => null,
+            ]);
+        }
+
+        return $project;
     }
 
     private function deleteImage(string $imageId): void
