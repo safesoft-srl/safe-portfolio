@@ -6,10 +6,13 @@ interface Skill {
   id: number;
   name: string;
   category: string;
-  icon_url?: string;
+  urls: {
+    light: string;
+    dark: string;
+  }
 }
 
-const CATEGORIES = ["todas", "frontend", "backend", "devOps", "otros"];
+const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
 
 export function AddTechnicalSkill({
@@ -20,7 +23,7 @@ export function AddTechnicalSkill({
   const [isOpen, setIsOpen] = useState(false);
   const [catalogo, setCatalogo] = useState<Skill[]>([]);
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("todas");
+  const [activeTab, setActiveTab] = useState("Todas");
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
@@ -57,7 +60,7 @@ export function AddTechnicalSkill({
   const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter((skill) => {
     if (!skill.name) return false;
     const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
-    const matchesTab = activeTab === "todas" || skill.category === activeTab;
+    const matchesTab = activeTab === "Todas" || skill.category === activeTab;
     return matchesSearch && matchesTab;
   });
 
@@ -73,7 +76,7 @@ export function AddTechnicalSkill({
       setSelectedSkill(null);
       setSelectedLevel(null);
       setSearch("");
-      setActiveTab("todas");
+      setActiveTab("Todas");
     } catch (err) {
       console.error("Error guardando skill:", err);
     } finally {
@@ -153,9 +156,9 @@ export function AddTechnicalSkill({
                         }}
                       >
                         <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center mb-3 border border-[#232555]">
-                          {skill.icon_url ? (
+                          {skill.urls?.dark ? (
                             <img
-                              src={skill.icon_url}
+                              src={skill.urls.dark}
                               alt={skill.name}
                               className="w-8 h-8 object-contain"
                             />
