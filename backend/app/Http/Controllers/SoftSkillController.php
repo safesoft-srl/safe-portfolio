@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ApiResponse;
-use App\Models\Portfolio;
 use App\Models\SoftSkill;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -15,22 +14,16 @@ class SoftSkillController extends Controller
     /**
      * Obtiene el portafolio real del usuario según el número recibido (1,2,3...)
      */
-    private function getUserPortfolioByIndex(int $portfolioIndex)
+    private function getUserPortfolioByIndex(int $portfolioId)
     {
+        /** @var \App\Models\User $user */
         $user = auth()->user();
 
         if (! $user) {
             abort(401, 'No autenticado.');
         }
 
-        if ($portfolioIndex < 1) {
-            abort(400, 'El portfolioId debe ser mayor o igual a 1.');
-        }
-
-        $portfolio = Portfolio::where('user_id', $user->id)
-            ->orderBy('id', 'asc')
-            ->skip($portfolioIndex - 1)
-            ->first();
+        $portfolio = $user->portfolios()->find($portfolioId);
 
         if (! $portfolio) {
             abort(404, 'No se encontró el portafolio solicitado para este usuario.');
