@@ -118,7 +118,7 @@ class PortfolioService
             'workExperiences' => function ($query) {
                 $query->where('is_visible', true);
             },
-            'projects.skill_projects',
+            'projects.skills',
         ])
             ->where('portfolio_slug', $slug)
             ->firstOrFail();

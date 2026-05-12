@@ -26,7 +26,7 @@ class Project extends Model
             TechnicalSkill::class,
             'project_skill',
             'project_id',
-            'skill_id'
+            'technical_skill_id'
         );
     }
 }
