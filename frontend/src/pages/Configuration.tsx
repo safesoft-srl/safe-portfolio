@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { createSkill } from "@/services/skill.service";
 
 export default function Configuration() {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

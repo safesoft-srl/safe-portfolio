@@ -19,7 +19,6 @@ export default function RecentWork({ projects }: Props) {
   const MAX_LINES = 4;
   const [showSeeMore, setShowSeeMore] = useState(false);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
-  
 
   // Carrusel automático
   useEffect(() => {
@@ -104,17 +103,16 @@ export default function RecentWork({ projects }: Props) {
               >
                 <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
                 <img
-                    src={project.url_image || DEFAULT_PROJECT_IMAGE}
-                    alt={project.name}
-                    className="object-cover w-full h-full rounded-xl"
-                  />
-                
+                  src={project.url_image || DEFAULT_PROJECT_IMAGE}
+                  alt={project.name}
+                  className="object-cover w-full h-full rounded-xl"
+                />
               </div>
 
               {/* Project Content */}
               <div className="flex flex-col text-left w-full p-4 sm:p-8 m-0">
                 <h3 className="font-mono text-2xl font-bold leading-tight text-[#727bff] lg:text-3xl">
-                  { project.name }
+                  {project.name}
                 </h3>
                 <div className="relative mt-4">
                   <p
@@ -203,7 +201,8 @@ export default function RecentWork({ projects }: Props) {
                     <Button
                       className="w-full min-[518px]:w-auto px-6 py-3 font-mono text-sm font-bold text-white bg-[#727bff] hover:bg-[#5a5fd1] transition-all flex items-center justify-center min-[518px]:justify-start gap-2 rounded-lg border border-[#727bff]"
                       style={{ fontSize: "10px", padding: "0.5rem 1.5rem", height: "auto" }}
-                      disabled={!project.url_demo}>
+                      disabled={!project.url_demo}
+                    >
                       <a
                         href={project.url_demo || "#"}
                         target="_blank"
@@ -221,14 +220,14 @@ export default function RecentWork({ projects }: Props) {
                     <button
                       className="flex h-10 w-10 items-center justify-center rounded-full border border-[#727bff] bg-white/5 text-slate-400 hover:border-[#5a5fd1] hover:text-white transition-all"
                       onClick={handlePrev}
-                      disabled= { projects.length === 0 }
+                      disabled={projects.length === 0}
                     >
                       <ArrowLeft size={18} />
                     </button>
                     <button
                       className="flex h-10 w-10 items-center justify-center rounded-full border border-[#727bff] bg-white/5 text-slate-400 hover:border-[#5a5fd1] hover:text-white transition-all"
                       onClick={handleNext}
-                      disabled={ projects.length === 0 }
+                      disabled={projects.length === 0}
                     >
                       <ArrowRight size={18} />
                     </button>

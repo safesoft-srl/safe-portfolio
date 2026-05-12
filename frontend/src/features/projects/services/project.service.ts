@@ -15,7 +15,7 @@ export type CreateProjectDTO = {
   description: string;
   url_demo: string | null;
   url_github: string;
-  url_image:string;
+  url_image: string;
   project_image: string | null;
   visible: boolean;
   skill_ids: number[];
@@ -42,7 +42,6 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
       formData.append("skill_ids[]", id.toString());
     });
   }
-  
 
   if (file) {
     formData.append("project_image", file);
@@ -54,7 +53,12 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
 
 export type UpdateProjectDTO = Omit<Partial<CreateProjectDTO>, "portfolio_id">;
 
-export const updateProject = async (id: number, data: UpdateProjectDTO, deleteImage: boolean, file?: File | null) => {
+export const updateProject = async (
+  id: number,
+  data: UpdateProjectDTO,
+  deleteImage: boolean,
+  file?: File | null
+) => {
   const formData = new FormData();
   formData.append("name", data.name ?? "");
   formData.append("description", data.description ?? "");
@@ -71,7 +75,7 @@ export const updateProject = async (id: number, data: UpdateProjectDTO, deleteIm
     formData.append("project_image", file);
   }
 
-  if(deleteImage) {
+  if (deleteImage) {
     await api.delete(`api/projects/${id}/image`);
   }
 

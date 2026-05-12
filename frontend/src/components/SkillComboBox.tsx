@@ -27,10 +27,7 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
     return (skills || []).filter((s) => {
       const name = s?.name?.toLowerCase?.() || "";
 
-      return (
-        name.includes(lower) &&
-        !selected.some((sel) => sel.id === s?.id)
-      );
+      return name.includes(lower) && !selected.some((sel) => sel.id === s?.id);
     });
   }, [input, skills, selected]);
 
@@ -95,11 +92,7 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
                   onMouseDown={() => handleSelect(skill)}
                 >
                   {skill.urls.dark && (
-                    <img
-                      src={skill.urls.dark}
-                      alt={skill.name}
-                      className="w-4 h-4 rounded-full"
-                    />
+                    <img src={skill.urls.dark} alt={skill.name} className="w-4 h-4 rounded-full" />
                   )}
                   {skill.name}
                 </li>
@@ -116,11 +109,7 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
             style={{ background: "#6c72ff", color: "#fff" }}
           >
             {skill.urls.dark && (
-              <img
-                src={skill.urls.dark}
-                alt={skill.name}
-                className="w-4 h-4 rounded-full mr-1"
-              />
+              <img src={skill.urls.dark} alt={skill.name} className="w-4 h-4 rounded-full mr-1" />
             )}
             {skill.name}
             <button

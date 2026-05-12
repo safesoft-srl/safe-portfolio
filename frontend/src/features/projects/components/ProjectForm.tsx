@@ -32,7 +32,7 @@ const PROJECT_DESCRIPTION_REQUIRED_ERROR = "La descripción es obligatoria.";
 
 type Props = {
   skills: Skill[];
-  onSubmit: (data: BaseProjectDTO, file: File | null, deleteImage:boolean) => Promise<void>;
+  onSubmit: (data: BaseProjectDTO, file: File | null, deleteImage: boolean) => Promise<void>;
   initialData: Project | null;
   existingProjects?: Project[];
 };

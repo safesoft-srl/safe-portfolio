@@ -24,7 +24,7 @@ export async function createSkill(data: {
   logo_light?: File;
   logo_dark?: File;
 }) {
-  console.log('data: ', data);
+  console.log("data: ", data);
   const formData = new FormData();
   const name = data.name.charAt(0).toUpperCase() + data.name.slice(1).toLowerCase();
   formData.append("name", name);

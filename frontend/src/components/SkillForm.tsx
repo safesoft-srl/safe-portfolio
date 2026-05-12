@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CircleNotchIcon, UploadSimple, Trash } from "@phosphor-icons/react";
 
-
 const skillSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   category: z.string().min(1, "La categoría es requerida"),
@@ -38,10 +37,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
   const [previewLight, setPreviewLight] = useState<string | null>(null);
   const [previewDark, setPreviewDark] = useState<string | null>(null);
 
-  const handleLogoChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: "light" | "dark"
-  ) => {
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>, type: "light" | "dark") => {
     const file = e.target.files?.[0];
 
     if (!file) return;
@@ -56,8 +52,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
   };
 
   const clearLogo = (type: "light" | "dark") => {
-    const input = document.getElementById(
-      `logo-${type}-input`) as HTMLInputElement;
+    const input = document.getElementById(`logo-${type}-input`) as HTMLInputElement;
     if (input) {
       input.value = "";
     }
@@ -75,22 +70,16 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
       logo_light: data.logo_light?.[0],
       logo_dark: data.logo_dark?.[0],
     });
-  }
+  };
 
-  const renderUploader = (
-    type: "light" | "dark",
-    preview: string | null
-  ) => {
-    const fieldName =
-      type === "light" ? "logo_light" : "logo_dark";
+  const renderUploader = (type: "light" | "dark", preview: string | null) => {
+    const fieldName = type === "light" ? "logo_light" : "logo_dark";
 
     const logoField = register(fieldName);
 
     return (
       <div className="space-y-2">
-        <Label className="text-slate-300">
-          Logo ({type === "light" ? "Claro" : "Oscuro"})
-        </Label>
+        <Label className="text-slate-300">Logo ({type === "light" ? "Claro" : "Oscuro"})</Label>
 
         <label
           htmlFor={`${type}-logo-input`}
@@ -118,9 +107,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
           ) : (
             <div className="flex flex-col items-center gap-2 text-slate-400">
               <UploadSimple size={32} />
-              <span className="text-xs">
-                Arrastra o selecciona imagen
-              </span>
+              <span className="text-xs">Arrastra o selecciona imagen</span>
             </div>
           )}
 
@@ -164,20 +151,13 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
           </option>
 
           {categories.map((category) => (
-            <option
-              key={category}
-              value={category}
-            >
+            <option key={category} value={category}>
               {category}
             </option>
           ))}
         </select>
 
-        {errors.category && (
-          <span className="text-xs text-red-500">
-            {errors.category.message}
-          </span>
-        )}
+        {errors.category && <span className="text-xs text-red-500">{errors.category.message}</span>}
       </div>
       {renderUploader("light", previewLight)}
       {renderUploader("dark", previewDark)}

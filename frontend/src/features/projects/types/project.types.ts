@@ -23,4 +23,3 @@ export type BaseProjectDTO = {
   skill_projects: Skill[];
   visible: boolean;
 };
-
