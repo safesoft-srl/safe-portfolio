@@ -4,9 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { SkillForm } from "@/components/SkillForm";
 import { Button } from "@/components/ui/button";
 import { createSkill } from "@/services/skill.service";
+import { toast } from "sonner";
 
 export default function Configuration() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreatingSkill, setIsCreatingSkill] = useState(false);
 
   return (
     <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
@@ -27,15 +29,26 @@ export default function Configuration() {
           <div className="py-4">
             <SkillForm
               onSubmit={async (data) => {
+                  setIsCreatingSkill(true);
                 try {
                   await createSkill(data);
+                    toast.success("La tecnologia se ha agregado correctamente.", {
+                      style: {
+                        background: "#6c72ff",
+                        color: "#ffffff",
+                        border: "1px solid #8b90ff",
+                      },
+                    });
                   setIsModalOpen(false);
                 } catch (error) {
                   console.error("Error creating skill:", error);
+                    toast.error("Error al crear la skill.");
+                  } finally {
+                    setIsCreatingSkill(false);
                 }
               }}
               onCancel={() => setIsModalOpen(false)}
-              isLoading={false}
+                isLoading={isCreatingSkill}
             />
           </div>
         </DialogContent>
