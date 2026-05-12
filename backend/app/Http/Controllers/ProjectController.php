@@ -6,8 +6,8 @@ use App\Constants\ApiResponse;
 use App\Constants\ResponseMessages;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProyectRequest;
-use App\Services\ProjectService;
 use App\Http\Resources\ProjectResource;
+use App\Services\ProjectService;
 
 class ProjectController extends Controller
 {

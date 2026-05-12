@@ -120,7 +120,7 @@ class PortfolioService
             'projects' => function ($query) {
                 $query->where('visible', true);
             },
-            'projects.skills'
+            'projects.skills',
         ])
             ->where('portfolio_slug', $slug)
             ->firstOrFail();
