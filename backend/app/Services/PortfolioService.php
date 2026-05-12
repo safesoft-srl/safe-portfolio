@@ -93,7 +93,6 @@ class PortfolioService
 
         if (! $portfolio->image_id) {
             return $portfolio;
-
         }
 
         Cloudinary::destroy($portfolio->image_id);
@@ -118,7 +117,10 @@ class PortfolioService
             'workExperiences' => function ($query) {
                 $query->where('is_visible', true);
             },
-            'projects.skills',
+            'projects' => function ($query) {
+                $query->where('visible', true);
+            },
+            'projects.skills'
         ])
             ->where('portfolio_slug', $slug)
             ->firstOrFail();
