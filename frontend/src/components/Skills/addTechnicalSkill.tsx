@@ -9,7 +9,7 @@ interface Skill {
   urls: {
     light: string;
     dark: string;
-  }
+  };
 }
 
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
@@ -134,10 +134,11 @@ export function AddTechnicalSkill({
                     <button
                       key={cat}
                       onClick={() => setActiveTab(cat)}
-                      className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${activeTab === cat
+                      className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
+                        activeTab === cat
                           ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
                           : "bg-[#1c1f38] text-slate-400 hover:text-slate-200"
-                        }`}
+                      }`}
                     >
                       {cat}
                     </button>
@@ -197,10 +198,11 @@ export function AddTechnicalSkill({
                     <button
                       key={level}
                       onClick={() => setSelectedLevel(level)}
-                      className={`w-full py-4 rounded-xl font-bold transition-all border hover:scale-[1.02] ${selectedLevel === level
+                      className={`w-full py-4 rounded-xl font-bold transition-all border hover:scale-[1.02] ${
+                        selectedLevel === level
                           ? "bg-[#6c72ff] text-white border-[#6c72ff]"
                           : "bg-[#1c1f38] hover:bg-[#232555] text-white border-[#232555]"
-                        }`}
+                      }`}
                     >
                       {level}
                     </button>

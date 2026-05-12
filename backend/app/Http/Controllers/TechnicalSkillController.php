@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Constants\ApiResponse;
 use App\Constants\ResponseMessages;
+use App\Http\Resources\TechnicalSkillResource;
 use App\Models\TechnicalSkill;
 use App\Services\ImageUploadService;
-use App\Http\Resources\TechnicalSkillResource;
 
 class TechnicalSkillController extends Controller
 {

@@ -174,7 +174,7 @@ class PortfolioController extends Controller
         );
     }
 
-    public function getSlug(Request $request)
+    public function getSlug(int $idPortfolio, Request $request)
     {
         $validateData = $request->validate([
             'slug' => 'required|string',
@@ -186,7 +186,7 @@ class PortfolioController extends Controller
             error_log('User ID: '.$userId);
         }
 
-        $portfolio = $this->portfolioService->getByUserId($userId);
+        $portfolio = $this->portfolioService->getPortfolio($idPortfolio);
 
         $portfolio->update([
             'is_public' => true,

@@ -21,7 +21,7 @@ class TechnicalSkillPortfolioResource extends JsonResource
             'level' => $this->level,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'technical_skill'=> new TechnicalSkillResource($this->whenLoaded('technicalSkill')),
+            'technical_skill' => new TechnicalSkillResource($this->whenLoaded('technicalSkill')),
         ];
     }
 }

@@ -6,9 +6,8 @@ export async function checkSlug(slug: string) {
   return response.data.data.available;
 }
 
-export async function publishPortfolio(slug: string) {
-  const response = await http.post("/api/me/portfolio/publish", { slug });
-  console.log("response:", response);
+export async function publishPortfolio(slug: string, idPortfolio: number) {
+  const response = await http.post(`/api/me/portfolio/publish/${idPortfolio}`, { slug });
   return response.data.data.slug;
 }
 

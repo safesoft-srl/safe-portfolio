@@ -30,7 +30,7 @@ class UpdateProyectRequest extends FormRequest
             'project_image' => 'nullable|image|mimes:jpg,jpeg,png',
             'skill_ids' => 'nullable|array',
             'skill_ids.*' => 'exists:technical_skills,id',
-            'visible'=> 'boolean',
+            'visible' => 'boolean',
         ];
     }
 }

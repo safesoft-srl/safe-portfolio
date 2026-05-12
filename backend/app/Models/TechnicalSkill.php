@@ -26,5 +26,4 @@ class TechnicalSkill extends Model
             'project_id'
         );
     }
-
 }

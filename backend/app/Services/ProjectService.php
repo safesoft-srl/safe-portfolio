@@ -42,7 +42,7 @@ class ProjectService
 
         if (isset($data['project_image'])) {
             if ($data['project_image'] instanceof UploadedFile) {
-                if($project->image_id) {
+                if ($project->image_id) {
                     $this->deleteImage($project->image_id);
                 }
             }

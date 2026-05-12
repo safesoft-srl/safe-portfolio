@@ -8,7 +8,7 @@ type TechnicalSkill = {
   urls: {
     light: string;
     dark: string;
-  }
+  };
 };
 
 type PortfolioSkill = {

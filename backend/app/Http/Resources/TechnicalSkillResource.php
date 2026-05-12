@@ -18,7 +18,7 @@ class TechnicalSkillResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'category' => $this->category,
-            'urls'=> [
+            'urls' => [
                 'light' => $this->url_light,
                 'dark' => $this->url_dark,
             ],
