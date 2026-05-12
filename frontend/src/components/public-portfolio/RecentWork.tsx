@@ -66,6 +66,23 @@ export default function RecentWork({ projects }: Props) {
     }, 250);
   };
 
+  if (projects.length === 0) {
+    return (
+      <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
+        <div className="rounded-2xl border border-[#bcfd49]/20 bg-[#13152e]/50 p-8 md:p-12 shadow-2xl">
+          <div className="mb-10">
+            <h2 className="font-mono text-4xl font-bold tracking-tight text-[#bcfd49]">
+              Mis Trabajos Recientes
+            </h2>
+          </div>
+          <p className="font-mono text-sm leading-relaxed text-gray-400">
+            Aun no he registrado proyectos realizados, puedes seguir explorando mi portafolio para más información sobre mis habilidades y experiencia. Estoy trabajando constantemente en nuevos proyectos que compartiré pronto.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
       <div className="rounded-3xl border border-[#262b46] bg-[#111327] p-6 lg:p-10 shadow-2xl">
