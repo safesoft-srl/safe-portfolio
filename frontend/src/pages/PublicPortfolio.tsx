@@ -111,7 +111,7 @@ export default function PublicPortfolio() {
 
         {/* <Stats /> */}
         <div id="projects">
-          <RecentWork />
+          <RecentWork projects={profile?.projects || []} />
         </div>
         {/* <BusinessGit />
         <div id="servicios">

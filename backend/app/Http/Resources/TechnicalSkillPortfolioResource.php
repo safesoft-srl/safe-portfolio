@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TechnicalSkillResource extends JsonResource
+class TechnicalSkillPortfolioResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,14 +16,12 @@ class TechnicalSkillResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'category' => $this->category,
-            'urls'=> [
-                'light' => $this->url_light,
-                'dark' => $this->url_dark,
-            ],
+            'portfolio_id' => $this->portfolio_id,
+            'technical_skill_id' => $this->technical_skill_id,
+            'level' => $this->level,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'technical_skill'=> new TechnicalSkillResource($this->whenLoaded('technicalSkill')),
         ];
     }
 }

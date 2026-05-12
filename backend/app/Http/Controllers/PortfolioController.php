@@ -6,6 +6,7 @@ use App\Constants\ApiResponse;
 use App\Constants\ResponseMessages;
 use App\Http\Requests\StorePortfolioRequest;
 use App\Http\Requests\UpdatePortfolioRequest;
+use App\Http\Resources\PortfolioResource;
 use App\Services\PortfolioService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -203,7 +204,7 @@ class PortfolioController extends Controller
             $portfolio = $this->portfolioService->getBySlug($slug);
 
             return ApiResponse::success(
-                $portfolio,
+                new PortfolioResource($portfolio),
                 'Portafolio público recuperado exitosamente',
                 200
             );
