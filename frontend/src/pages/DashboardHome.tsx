@@ -13,7 +13,6 @@ export default function DashboardHome() {
   const [portfolioUrlError, setPortfolioUrlError] = useState("");
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [id_portfolio, setIdPortfolio] = useState<number>(1);
   const validatePortfolioUrl = (value: string) => {
     const trimmed = value.trim();
 
@@ -69,7 +68,7 @@ export default function DashboardHome() {
       const frontendUrl = `${window.location.origin}/p/${url}`;
       setPortfolioUrl(frontendUrl);
 
-      await saveUrlPortfolio(frontendUrl, id_portfolio);
+      await saveUrlPortfolio(frontendUrl, Number(idPortfolio!));
     } catch (error) {
       console.error(error);
     } finally {
@@ -85,10 +84,6 @@ export default function DashboardHome() {
         const portfolio = await getPortfolio(parseInt(idPortfolio!));
 
         if (!isMounted) return;
-
-        if (portfolio?.id) {
-          setIdPortfolio(portfolio.id);
-        }
 
         if (portfolio?.url_portfolio) {
           setPortfolioUrl(portfolio.url_portfolio);
