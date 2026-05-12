@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import DashboardHome from "./pages/DashboardHome";
 import Portfolios from "./pages/Portfolios";
 import PublicPortfolio from "./pages/PublicPortfolio";
+import ProjectsPublic from "./pages/public-portfolio/ProjectsPublic";
 import ExperiencePublic from "./pages/public-portfolio/ExperiencePublic";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
   {
     path: "/p/:slug/experience",
     element: <ExperiencePublic />,
+  },
+  {
+    path: "/p/:slug/projects",
+    element: <ProjectsPublic />,
   },
   {
     path: "/login",

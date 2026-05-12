@@ -8,7 +8,7 @@ interface PublicNavbarProps {
 export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
   const navLinks = [
     { name: "Sobre Mi", href: "#sobre-mi" },
-    { name: "Proyectos", href: "#projects" },
+    { name: "Proyectos", href: `/p/${slug}/projects` },
     { name: "Experiencia", href: `/p/${slug}/experience` },
     { name: "Habilidades", href: "#skills" },
     // { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog

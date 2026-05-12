@@ -219,6 +219,7 @@ export default function ProjectForm({
                 onChange={(e) => handleNameChange(e.target.value)}
                 onBlur={(e) => handleNameBlur(e.target.value)}
                 placeholder="Ej: Plataforma de Portafolios"
+                disabled={!!initialData}
                 className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.name ? " border-red-500" : ""}`}
               />
               {errors.name && (
