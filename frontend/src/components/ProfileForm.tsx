@@ -234,10 +234,11 @@ export default function ProfileForm({
   const hasCustomPhoto = profileImage !== DEFAULT_PROFILE_IMAGE;
 
   return (
-    <form onSubmit={handleSubmit} className="w-full bg-slate-900 rounded-2xl p-6">
-      <h2 className="mb-8 text-2xl font-semibold">
+    <form onSubmit={handleSubmit} className="w-full bg-slate-900 rounded-2xl p-4 sm:p-5">
+      <h2 className="mb-4 text-2xl font-semibold">
         {mode === "edit" ? "Información Básica" : "Crear Perfil"}
       </h2>
+      <div className="border-b border-slate-800 mb-8"></div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
         <div className="space-y-5">
           <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -297,7 +298,7 @@ export default function ProfileForm({
                       >
                         Eliminar foto
                       </AlertDialogTrigger>
-                      <AlertDialogContent className="border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-[#151a3f] text-slate-900 dark:text-slate-100">
+                      <AlertDialogContent className="border-sidebar-border dark:border-bg-slate-900 bg-white dark:bg-[#151a3f] text-slate-900 dark:text-slate-100">
                         <AlertDialogHeader>
                           <AlertDialogTitle>¿Eliminar foto de perfil?</AlertDialogTitle>
                           <AlertDialogDescription className="text-slate-600 dark:text-slate-300">
@@ -426,6 +427,7 @@ export default function ProfileForm({
           </p>
         ) : null}
       </div>
+      <div className="border-b border-slate-800 my-6"></div>
       <div className="mt-6">
         <div className="flex justify-center gap-3">
           <Button type="submit" size="lg" disabled={isSaving || !hasUnsavedChanges}>
