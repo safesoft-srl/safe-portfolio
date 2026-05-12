@@ -6,6 +6,7 @@ use App\Constants\ApiResponse;
 use App\Constants\ResponseMessages;
 use App\Http\Requests\StorePortfolioRequest;
 use App\Http\Requests\UpdatePortfolioRequest;
+use App\Http\Resources\PortfolioResource;
 use App\Services\PortfolioService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -173,7 +174,7 @@ class PortfolioController extends Controller
         );
     }
 
-    public function getSlug(Request $request)
+    public function getSlug(int $idPortfolio, Request $request)
     {
         $validateData = $request->validate([
             'slug' => 'required|string',
@@ -185,7 +186,7 @@ class PortfolioController extends Controller
             error_log('User ID: '.$userId);
         }
 
-        $portfolio = $this->portfolioService->getByUserId($userId);
+        $portfolio = $this->portfolioService->getPortfolio($idPortfolio);
 
         $portfolio->update([
             'is_public' => true,
@@ -203,7 +204,7 @@ class PortfolioController extends Controller
             $portfolio = $this->portfolioService->getBySlug($slug);
 
             return ApiResponse::success(
-                $portfolio,
+                new PortfolioResource($portfolio),
                 'Portafolio público recuperado exitosamente',
                 200
             );

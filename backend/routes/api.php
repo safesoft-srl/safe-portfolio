@@ -58,7 +58,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('/me/portfolios.work-experiences', WorkExperienceController::class)->except(['create', 'edit', 'show']);
     Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
     Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
-    Route::post('/me/portfolio/publish', [PortfolioController::class, 'getSlug']);
+    Route::post('/me/portfolio/publish/{idPortfolio}', [PortfolioController::class, 'getSlug']);
     Route::post('/me/portfolio/save-url/{id}', [PortfolioController::class, 'saveUrlPortfolio']);
 });
 
@@ -73,7 +73,7 @@ Route::get('/portfolios', [PortfolioController::class, 'showAll']);
 use App\Http\Controllers\PortfolioTechnicalSkillController;
 use App\Http\Controllers\TechnicalSkillController;
 
-Route::get('/technical-skills', [TechnicalSkillController::class, 'index']);
+Route::apiResource('/technical-skills', TechnicalSkillController::class);
 
 Route::middleware('auth:api')->group(function () {
 
@@ -91,6 +91,7 @@ Route::middleware('auth:api')->group(function () {
 // routes for projects
 Route::get('portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
 Route::apiResource('/projects', ProjectController::class);
+Route::delete('/projects/{id}/image', [ProjectController::class, 'deleteImageProject']);
 
 // routes for skills
 Route::apiResource('/skills', SkillProjectController::class);

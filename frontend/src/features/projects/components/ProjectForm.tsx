@@ -32,7 +32,7 @@ const PROJECT_DESCRIPTION_REQUIRED_ERROR = "La descripción es obligatoria.";
 
 type Props = {
   skills: Skill[];
-  onSubmit: (data: BaseProjectDTO, file: File | null) => Promise<void>;
+  onSubmit: (data: BaseProjectDTO, file: File | null, deleteImage: boolean) => Promise<void>;
   initialData: Project | null;
   existingProjects?: Project[];
 };
@@ -51,6 +51,7 @@ export default function ProjectForm({
     url_image: "",
     skill_ids: [],
     skill_projects: [],
+    visible: true,
   });
 
   const [errors, setErrors] = useState({
@@ -65,10 +66,12 @@ export default function ProjectForm({
   const [isSaving, setIsSaving] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
+  const [deleteImage, setDeleteImage] = useState(false);
 
   useEffect(() => {
     if (initialData) {
       setForm(initialData);
+      setIsPublic(initialData.visible);
       if (initialData.url_image) {
         setImagePreview(initialData.url_image);
       }
@@ -186,7 +189,7 @@ export default function ProjectForm({
   const proceedWithSubmit = async () => {
     setIsSaving(true);
     try {
-      await onSubmit(form, fileImage);
+      await onSubmit(form, fileImage, deleteImage);
     } catch {
       showErrorToast("Error al guardar proyecto");
     } finally {
@@ -340,7 +343,7 @@ export default function ProjectForm({
                   alt="Vista previa"
                   className="object-cover rounded-xl border border-sidebar-border bg-black/60 w-full h-60"
                   style={{ minHeight: 120, background: "#181c2f" }}
-                  onError={(e) => (e.currentTarget.src = "/src/assets/image.png")}
+                  onError={(e) => (e.currentTarget.src = DEFAULT_PROJECT_IMAGE)}
                 />
               </div>
               <div className="flex gap-2 mt-3">
@@ -395,7 +398,8 @@ export default function ProjectForm({
                           onClick={() => {
                             setForm((f) => ({ ...f, url_image: "" }));
                             setFileImage(null);
-                            setImagePreview("/src/assets/image.png");
+                            setImagePreview(DEFAULT_PROJECT_IMAGE);
+                            setDeleteImage(true);
                           }}
                         >
                           Eliminar
@@ -415,7 +419,10 @@ export default function ProjectForm({
           <Checkbox
             id="is_public_cb"
             checked={isPublic}
-            onCheckedChange={() => setIsPublic((prev) => !prev)}
+            onCheckedChange={() => {
+              setIsPublic((prev) => !prev);
+              setForm((f) => ({ ...f, visible: !isPublic }));
+            }}
           />
           <Label
             htmlFor="is_public_cb"

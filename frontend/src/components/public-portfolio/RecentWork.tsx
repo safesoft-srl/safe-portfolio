@@ -1,11 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getProjects } from "@/features/projects/services/project.service";
 import { ArrowUpRight, ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { Button } from "../ui/button";
+import type { Project } from "@/features/projects/types/project.types";
+import defaultProjectImage from "@/assets/image.png";
 
-export default function RecentWork() {
+const DEFAULT_PROJECT_IMAGE = defaultProjectImage;
+
+interface Props {
+  projects: Project[];
+}
+
+export default function RecentWork({ projects }: Props) {
   const { slug } = useParams<{ slug: string }>();
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(false);
@@ -13,14 +19,6 @@ export default function RecentWork() {
   const MAX_LINES = 4;
   const [showSeeMore, setShowSeeMore] = useState(false);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
-  const {
-    data: projects = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["projects"],
-    queryFn: getProjects,
-  });
 
   // Carrusel automático
   useEffect(() => {
@@ -104,25 +102,18 @@ export default function RecentWork() {
                 style={{ aspectRatio: "1 / 1" }}
               >
                 <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
-                {project.url_image ? (
-                  <img
-                    src={project.url_image}
-                    alt={project.name || "Imagen del proyecto"}
-                    className="object-cover w-full h-full rounded-xl"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center p-4 text-slate-500">
-                    Sin imagen
-                  </div>
-                )}
+                <img
+                  src={project.url_image || DEFAULT_PROJECT_IMAGE}
+                  alt={project.name}
+                  className="object-cover w-full h-full rounded-xl"
+                />
               </div>
 
               {/* Project Content */}
               <div className="flex flex-col text-left w-full p-4 sm:p-8 m-0">
                 <h3 className="font-mono text-2xl font-bold leading-tight text-[#727bff] lg:text-3xl">
-                  {isLoading ? "Cargando..." : isError ? "Error al cargar proyectos" : project.name}
+                  {project.name}
                 </h3>
-
                 <div className="relative mt-4">
                   <p
                     ref={descriptionRef}
@@ -139,11 +130,7 @@ export default function RecentWork() {
                         : {}
                     }
                   >
-                    {isLoading
-                      ? "Cargando..."
-                      : isError
-                        ? "No se pudo cargar la descripción."
-                        : project.description}
+                    {project.description}
                   </p>
                   {showSeeMore && !expanded && (
                     <span className="absolute right-0 bottom-0 flex items-center bg-[#111327]">
@@ -167,9 +154,9 @@ export default function RecentWork() {
                           project.skill_projects.length > 0
                             ? project.skill_projects
                                 .slice(0, 5)
-                                .map((skill: { skill_name: string }, idx: number) => (
-                                  <span key={skill.skill_name}>
-                                    {skill.skill_name}
+                                .map((skill: { name: string }, idx: number) => (
+                                  <span key={skill.name}>
+                                    {skill.name}
                                     {idx < Math.min(4, project.skill_projects.length - 1)
                                       ? ", "
                                       : ""}
@@ -182,9 +169,9 @@ export default function RecentWork() {
                             <span className="text-slate-400 w-full text-right">
                               {project.skill_projects
                                 .slice(5)
-                                .map((skill: { skill_name: string }, idx: number) => (
-                                  <span key={skill.skill_name}>
-                                    {skill.skill_name}
+                                .map((skill: { name: string }, idx: number) => (
+                                  <span key={skill.name}>
+                                    {skill.name}
                                     {idx < project.skill_projects.length - 6 ? ", " : ""}
                                   </span>
                                 ))}
@@ -200,7 +187,6 @@ export default function RecentWork() {
                     <Button
                       className="w-full min-[518px]:w-auto px-6 py-3 font-mono text-sm font-bold text-white bg-[#727bff] hover:bg-[#5a5fd1] transition-all flex items-center justify-center min-[518px]:justify-start gap-2 rounded-lg border border-[#727bff]"
                       style={{ fontSize: "10px", padding: "0.5rem 1.5rem", height: "auto" }}
-                      disabled={isLoading || isError || !project.url_github}
                     >
                       <a
                         href={project.url_github || "#"}
@@ -215,7 +201,7 @@ export default function RecentWork() {
                     <Button
                       className="w-full min-[518px]:w-auto px-6 py-3 font-mono text-sm font-bold text-white bg-[#727bff] hover:bg-[#5a5fd1] transition-all flex items-center justify-center min-[518px]:justify-start gap-2 rounded-lg border border-[#727bff]"
                       style={{ fontSize: "10px", padding: "0.5rem 1.5rem", height: "auto" }}
-                      disabled={isLoading || isError || !project.url_demo}
+                      disabled={!project.url_demo}
                     >
                       <a
                         href={project.url_demo || "#"}
@@ -234,14 +220,14 @@ export default function RecentWork() {
                     <button
                       className="flex h-10 w-10 items-center justify-center rounded-full border border-[#727bff] bg-white/5 text-slate-400 hover:border-[#5a5fd1] hover:text-white transition-all"
                       onClick={handlePrev}
-                      disabled={isLoading || isError || projects.length === 0}
+                      disabled={projects.length === 0}
                     >
                       <ArrowLeft size={18} />
                     </button>
                     <button
                       className="flex h-10 w-10 items-center justify-center rounded-full border border-[#727bff] bg-white/5 text-slate-400 hover:border-[#5a5fd1] hover:text-white transition-all"
                       onClick={handleNext}
-                      disabled={isLoading || isError || projects.length === 0}
+                      disabled={projects.length === 0}
                     >
                       <ArrowRight size={18} />
                     </button>

@@ -6,7 +6,10 @@ interface Skill {
   id: number;
   name: string;
   category: string;
-  icon_url?: string;
+  urls: {
+    light: string;
+    dark: string;
+  };
 }
 
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
@@ -154,9 +157,9 @@ export function AddTechnicalSkill({
                         }}
                       >
                         <div className="w-12 h-12 bg-[#13152e] rounded-xl flex items-center justify-center mb-3 border border-[#232555]">
-                          {skill.icon_url ? (
+                          {skill.urls?.dark ? (
                             <img
-                              src={skill.icon_url}
+                              src={skill.urls.dark}
                               alt={skill.name}
                               className="w-8 h-8 object-contain"
                             />

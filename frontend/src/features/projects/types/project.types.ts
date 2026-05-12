@@ -1,3 +1,5 @@
+import type { Skill } from "@/services/skill.service";
+
 export type Project = {
   id: number;
   portfolio_id: number;
@@ -8,6 +10,7 @@ export type Project = {
   url_image: string | "";
   skill_ids: number[];
   skill_projects: Skill[];
+  visible: boolean;
 };
 
 export type BaseProjectDTO = {
@@ -18,10 +21,5 @@ export type BaseProjectDTO = {
   url_image: string | "";
   skill_ids: number[];
   skill_projects: Skill[];
-};
-
-export type Skill = {
-  id: number;
-  skill_name: string;
-  url_logo: string | "";
+  visible: boolean;
 };

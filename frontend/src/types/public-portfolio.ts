@@ -1,3 +1,5 @@
+import type { Project } from "@/features/projects/types/project.types";
+
 export type PortfolioSkill = {
   id: number;
   portfolio_id: number;
@@ -22,27 +24,6 @@ export type WorkExperience = {
   updated_at: Date;
 };
 
-export type SkillProject = {
-  id: number;
-  skill_name: string;
-  url_log: string;
-  created_at: Date;
-  updated_at: Date;
-};
-
-export type Project = {
-  id: number;
-  portfolio_id: number;
-  name: string;
-  description: string | null;
-  url_demo: string | null;
-  url_github: string | null;
-  url_image: string | null;
-  image_id: string | null;
-  created_at: Date;
-  updated_at: Date;
-  skill_projects: SkillProject[];
-};
 export type ProfileData = {
   id: number;
   user_id: number;

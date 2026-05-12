@@ -22,7 +22,8 @@ export interface UserSkill {
     id: number;
     name: string;
     category: string;
-    icon_url: string;
+    url_light: string;
+    url_dark: string;
   };
 }
 
@@ -36,7 +37,7 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
   // Valores por defecto por si alguna relación viene vacía
   const skillName = skill.technical_skill?.name || "Sin nombre";
   const skillCategory = skill.technical_skill?.category || "Sin categoría";
-  const skillIcon = skill.technical_skill?.icon_url || "/default-skill.png";
+  const skillIcon = skill.technical_skill?.url_dark || "/default-skill.png";
 
   return (
     <Card className="relative bg-[#13152e] border border-[#232555] rounded-2xl overflow-hidden shadow-2xl transition-all hover:border-[#6c72ff]/50 group">

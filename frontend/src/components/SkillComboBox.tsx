@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { X, MagnifyingGlass } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/input";
-import type { Skill } from "../features/projects/types/project.types";
+import type { Skill } from "@/services/skill.service";
 
 interface SkillComboBoxProps {
   skills: Skill[];
@@ -22,10 +22,13 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const filtered = useMemo(() => {
-    const lower = input.toLowerCase();
-    return skills.filter(
-      (s) => s.skill_name.toLowerCase().includes(lower) && !selected.some((sel) => sel.id === s.id)
-    );
+    const lower = (input || "").toLowerCase();
+
+    return (skills || []).filter((s) => {
+      const name = s?.name?.toLowerCase?.() || "";
+
+      return name.includes(lower) && !selected.some((sel) => sel.id === s?.id);
+    });
   }, [input, skills, selected]);
 
   const handleSelect = (skill: Skill) => {
@@ -88,14 +91,10 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
                   className="flex items-center gap-2 px-4 py-2 cursor-pointer text-sm text-slate-900 dark:text-slate-200 hover:bg-[#f3f4f6] dark:hover:bg-[#23234a] transition-colors"
                   onMouseDown={() => handleSelect(skill)}
                 >
-                  {skill.url_logo && (
-                    <img
-                      src={skill.url_logo}
-                      alt={skill.skill_name}
-                      className="w-4 h-4 rounded-full"
-                    />
+                  {skill.urls.dark && (
+                    <img src={skill.urls.dark} alt={skill.name} className="w-4 h-4 rounded-full" />
                   )}
-                  {skill.skill_name}
+                  {skill.name}
                 </li>
               ))}
             </div>
@@ -109,14 +108,10 @@ export const SkillComboBox: React.FC<SkillComboBoxProps> = ({
             className="flex items-center gap-1 px-2 py-1 rounded-lg shadow-sm text-xs"
             style={{ background: "#6c72ff", color: "#fff" }}
           >
-            {skill.url_logo && (
-              <img
-                src={skill.url_logo}
-                alt={skill.skill_name}
-                className="w-4 h-4 rounded-full mr-1"
-              />
+            {skill.urls.dark && (
+              <img src={skill.urls.dark} alt={skill.name} className="w-4 h-4 rounded-full mr-1" />
             )}
-            {skill.skill_name}
+            {skill.name}
             <button
               type="button"
               className="ml-1 rounded hover:bg-[#5c61eb] p-0.5"

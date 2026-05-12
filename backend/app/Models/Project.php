@@ -10,7 +10,7 @@ class Project extends Model
     use HasFactory;
 
     protected $guarded = [
-        'proyect_id',
+        'project_id',
         'updated_at',
         'created_at',
     ];
@@ -20,13 +20,13 @@ class Project extends Model
         return $this->belongsTo(Portfolio::class);
     }
 
-    public function skill_projects()
+    public function skills()
     {
         return $this->belongsToMany(
-            SkillProject::class,
+            TechnicalSkill::class,
             'project_skill',
             'project_id',
-            'skill_id'
+            'technical_skill_id'
         );
     }
 }
