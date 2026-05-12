@@ -2,16 +2,17 @@ import { List, FacebookLogo, XLogo, LinkedinLogo, GithubLogo } from "@phosphor-i
 
 interface PublicNavbarProps {
   firstName: string;
+  slug: string;
 }
 
-export function PublicNavbar({ firstName }: PublicNavbarProps) {
+export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
   const navLinks = [
     { name: "Sobre Mi", href: "#sobre-mi" },
-    { name: "Resumen", href: "#resumen" },
-    { name: "Servicios", href: "#servicios" },
-    { name: "Portafolio", href: "#portafolio" },
-    { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog
-    { name: "Contacto", href: "#contacto" },
+    { name: "Proyectos", href: "#projects" },
+    { name: "Experiencia", href: `/p/${slug}/experience` },
+    { name: "Habilidades", href: "#skills" },
+    // { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog
+    // { name: "Contacto", href: "#contacto" },
   ];
 
   return (

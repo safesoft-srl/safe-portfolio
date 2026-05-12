@@ -11,15 +11,20 @@ class TechnicalSkill extends Model
     protected $fillable = [
         'name',
         'category',
-        'icon_path',
+        'url_light',
+        'url_dark',
     ];
 
-    protected $appends = ['icon_url'];
+    protected $hidden = ['pivot'];
 
-    public function getIconUrlAttribute()
+    public function projects()
     {
-        return $this->icon_path
-            ? url('storage/'.$this->icon_path)
-            : null;
+        return $this->belongsToMany(
+            Project::class,
+            'project_skill',
+            'technical_skill_id',
+            'project_id'
+        );
     }
+
 }

@@ -1,7 +1,12 @@
 import { useRef, useState } from "react";
+import { PencilSimpleLineIcon } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
+
+import { deleteProfilePhoto } from "@/services/profile.service";
 import defaultProfileImage from "@/assets/image.png";
 import {
   AlertDialog,
@@ -14,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
@@ -27,7 +33,7 @@ export type ProfileFormData = {
   profile_email: string;
   profession: string;
   bio: string;
-  url_photo: string;
+  profile_image: string;
   url_portfolio: string;
 };
 
@@ -37,6 +43,7 @@ export type ProfileFormProps = {
   onSubmit: (data: ProfileFormData, file: File | null) => void | Promise<void>;
   isLoading?: boolean;
   isSaving?: boolean;
+  idPortfolio: number;
 };
 
 const EMPTY_ERRORS = {
@@ -54,12 +61,13 @@ export default function ProfileForm({
   onSubmit,
   isLoading = false,
   isSaving = false,
+  idPortfolio,
 }: ProfileFormProps) {
   const [formData, setFormData] = useState<ProfileFormData>(initialData);
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [profileImage, setProfileImage] = useState<string>(
-    initialData.url_photo || DEFAULT_PROFILE_IMAGE
+    initialData.profile_image || DEFAULT_PROFILE_IMAGE
   );
   const [showPhotoActions, setShowPhotoActions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,7 +76,7 @@ export default function ProfileForm({
 
   if (initialData !== prevInitialData) {
     setFormData(initialData);
-    setProfileImage(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
+    setProfileImage(initialData.profile_image || DEFAULT_PROFILE_IMAGE);
     setSelectedFile(null);
     setPrevInitialData(initialData);
   }
@@ -174,21 +182,27 @@ export default function ProfileForm({
     setProfileImage(URL.createObjectURL(file));
     setFormData({
       ...formData,
-      url_photo: URL.createObjectURL(file),
+      profile_image: URL.createObjectURL(file),
     });
     setShowPhotoActions(false);
   };
 
-  const handleRemovePhoto = () => {
-    setSelectedFile(null);
-    setFormData({
-      ...formData,
-      url_photo: DEFAULT_PROFILE_IMAGE,
-    });
-    setProfileImage(DEFAULT_PROFILE_IMAGE);
-    setShowPhotoActions(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const handleRemovePhoto = async () => {
+    try {
+      setSelectedFile(null);
+      setFormData({
+        ...formData,
+        profile_image: DEFAULT_PROFILE_IMAGE,
+      });
+      setProfileImage(DEFAULT_PROFILE_IMAGE);
+      await deleteProfilePhoto(idPortfolio);
+      setShowPhotoActions(false);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch {
+      toast.error("Error al eliminar la foto de perfil");
     }
   };
 
@@ -220,10 +234,11 @@ export default function ProfileForm({
   const hasCustomPhoto = profileImage !== DEFAULT_PROFILE_IMAGE;
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <h2 className="mb-8 text-2xl font-semibold">
+    <form onSubmit={handleSubmit} className="w-full bg-slate-900 rounded-2xl p-4 sm:p-5">
+      <h2 className="mb-4 text-2xl font-semibold">
         {mode === "edit" ? "Información Básica" : "Crear Perfil"}
       </h2>
+      <div className="border-b border-slate-800 mb-8"></div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
         <div className="space-y-5">
           <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -231,7 +246,10 @@ export default function ProfileForm({
           </Label>
           <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
             <Avatar className="h-60 w-60">
-              <AvatarImage src={formData.url_photo} alt="Foto de perfil" />
+              <AvatarImage
+                src={formData.profile_image || DEFAULT_PROFILE_IMAGE}
+                alt="Foto de perfil"
+              />
               <AvatarFallback className="bg-[#21264f] text-[6.5rem] font-semibold text-white"></AvatarFallback>
             </Avatar>
             <input
@@ -242,35 +260,37 @@ export default function ProfileForm({
               className="hidden"
             />
             {mode === "create" ? (
-              <button
+              <Button
                 type="button"
+                size="sm"
+                variant="default"
+                className="absolute bottom-2 left-2 px-2 h-7"
                 onClick={handleUploadPhoto}
-                className="absolute bottom-2 left-2 inline-flex h-7 items-center gap-1 rounded-md border border-[#6d79ff]/70 bg-[#5562ed] px-2 text-xs font-medium text-white hover:bg-[#4d59da]"
               >
-                <span aria-hidden="true" className="text-xs leading-none"></span>
                 Subir foto
-              </button>
+              </Button>
             ) : (
               <>
-                <button
+                <Button
                   type="button"
+                  size="sm"
+                  variant="default"
+                  className="absolute bottom-2 left-2 px-2 h-7 gap-1"
                   onClick={() => setShowPhotoActions((prev) => !prev)}
-                  className="absolute bottom-2 left-2 inline-flex h-7 items-center gap-1 rounded-md border border-[#6d79ff]/70 bg-[#5562ed] px-2 text-xs font-medium text-white hover:bg-[#4d59da]"
                 >
-                  <span aria-hidden="true" className="text-xs leading-none">
-                    ✎
-                  </span>
+                  <PencilSimpleLineIcon size={32} />
                   Editar
-                </button>
+                </Button>
                 {showPhotoActions ? (
                   <div className="absolute left-2 top-full z-10 mt-2 w-36 rounded-md border border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-[#151a3f] p-1 shadow-lg">
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      className="w-full rounded px-2 py-1.5 text-left text-xs justify-start text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#232a5a]"
                       onClick={handleUploadPhoto}
-                      className="w-full rounded px-2 py-1.5 text-left text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#232a5a]"
                     >
                       {hasCustomPhoto ? "Actualizar foto" : "Subir foto"}
-                    </button>
+                    </Button>
                     <AlertDialog>
                       <AlertDialogTrigger
                         disabled={!hasCustomPhoto}
@@ -278,7 +298,7 @@ export default function ProfileForm({
                       >
                         Eliminar foto
                       </AlertDialogTrigger>
-                      <AlertDialogContent className="border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-[#151a3f] text-slate-900 dark:text-slate-100">
+                      <AlertDialogContent className="border-sidebar-border dark:border-bg-slate-900 bg-white dark:bg-[#151a3f] text-slate-900 dark:text-slate-100">
                         <AlertDialogHeader>
                           <AlertDialogTitle>¿Eliminar foto de perfil?</AlertDialogTitle>
                           <AlertDialogDescription className="text-slate-600 dark:text-slate-300">
@@ -321,8 +341,9 @@ export default function ProfileForm({
               value={formData.profile_name}
               onChange={handleInputChange}
               onBlur={handleFieldBlur}
+              disabled={mode !== "create"}
               style={errors.fullName ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.fullName ? (
               <p className="text-xs" style={{ color: "var(--destructive)" }}>
@@ -346,8 +367,9 @@ export default function ProfileForm({
               value={formData.profile_email}
               onChange={handleInputChange}
               onBlur={handleFieldBlur}
+              required
               style={errors.email ? { borderColor: "var(--destructive)" } : undefined}
-              className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.email ? (
               <p className="text-xs" style={{ color: "var(--destructive)" }}>
@@ -372,7 +394,8 @@ export default function ProfileForm({
               onBlur={handleFieldBlur}
               style={errors.profession ? { borderColor: "var(--destructive)" } : undefined}
               pattern=".*"
-              className="h-11 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+              required
+              className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.profession ? (
               <p className="text-xs" style={{ color: "var(--destructive)" }}>
@@ -384,9 +407,9 @@ export default function ProfileForm({
       </div>
       <div className="mt-8 space-y-2.5">
         <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-          Biografía *
+          Sobre mi *
         </Label>
-        <textarea
+        <Textarea
           id="bio"
           name="bio"
           placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
@@ -394,8 +417,9 @@ export default function ProfileForm({
           onChange={handleInputChange}
           onBlur={handleFieldBlur}
           rows={6}
+          required
           style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
-          className="w-full rounded-xl border bg-input dark:bg-[#1f2552] px-4 py-3 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5d68f5] disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-24 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
         />
         {errors.bio ? (
           <p className="text-xs" style={{ color: "var(--destructive)" }}>
@@ -403,39 +427,35 @@ export default function ProfileForm({
           </p>
         ) : null}
       </div>
+      <div className="border-b border-slate-800 my-6"></div>
       <div className="mt-6">
         <div className="flex justify-center gap-3">
-          <button
-            type="submit"
-            disabled={isSaving || !hasUnsavedChanges}
-            className="h-11 rounded-lg bg-[#6c72ff] px-4 text-sm font-medium text-white shadow-sm transition-colors transition-transform duration-150 hover:bg-[#8b90ff] hover:shadow-lg hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#6c72ff] flex items-center justify-center min-w-[150px]"
-          >
+          <Button type="submit" size="lg" disabled={isSaving || !hasUnsavedChanges}>
             {isSaving ? (
-              <>
-                <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
-              </>
+              <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
             ) : mode === "edit" ? (
               "Guardar Cambios"
             ) : (
               "Crear Perfil"
             )}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            size="lg"
+            variant="outline"
             onClick={() => {
               setErrors(EMPTY_ERRORS);
               setFormData(initialData);
               setSelectedFile(null);
-              setProfileImage(initialData.url_photo || DEFAULT_PROFILE_IMAGE);
+              setProfileImage(initialData.profile_image || DEFAULT_PROFILE_IMAGE);
               if (fileInputRef.current) {
                 fileInputRef.current.value = "";
               }
             }}
             disabled={isSaving || !hasUnsavedChanges}
-            className="h-11 rounded-lg border border-[#2a2d46] px-4 text-sm font-medium text-slate-300 transition-colors transition-transform duration-150 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-slate-200 hover:-translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:border-[#2a2d46] disabled:hover:text-slate-300"
           >
             Cancelar
-          </button>
+          </Button>
         </div>
       </div>
     </form>

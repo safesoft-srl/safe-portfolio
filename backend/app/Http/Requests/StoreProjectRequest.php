@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProjectRequest extends FormRequest
@@ -17,7 +18,7 @@ class StoreProjectRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -29,7 +30,8 @@ class StoreProjectRequest extends FormRequest
             'url_github' => 'nullable|url',
             'project_image' => 'nullable|image|mimes:jpg,jpeg,png',
             'skill_ids' => 'nullable|array',
-            'skill_ids.*' => 'exists:skill_projects,id',
+            'skill_ids.*' => 'exists:technical_skills,id',
+            'visible'=> 'boolean',
         ];
     }
 }

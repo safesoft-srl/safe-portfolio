@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('url_github')->nullable();
             $table->string('url_image')->unique()->nullable();
             $table->string('image_id')->unique()->nullable();
+            $table->boolean('visible')->default(true);
             $table->timestamps();
         });
     }

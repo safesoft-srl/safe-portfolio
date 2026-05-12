@@ -3,8 +3,10 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { SkillForm } from "@/components/SkillForm";
 import { Button } from "@/components/ui/button";
+import { createSkill } from "@/services/skill.service";
+
 export default function Configuration() {
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -21,14 +23,17 @@ export default function Configuration() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-lg bg-slate-900 border-slate-800">
           <DialogHeader className="border-b border-slate-800 pb-4">
-            <DialogTitle className="text-xl font-bold text-white">
-              Nueva Skill
-            </DialogTitle>
+            <DialogTitle className="text-xl font-bold text-white">Nueva Skill</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <SkillForm
-              onSubmit={() => {
-                setIsModalOpen(false);
+              onSubmit={async (data) => {
+                try {
+                  await createSkill(data);
+                  setIsModalOpen(false);
+                } catch (error) {
+                  console.error("Error creating skill:", error);
+                }
               }}
               onCancel={() => setIsModalOpen(false)}
               isLoading={false}

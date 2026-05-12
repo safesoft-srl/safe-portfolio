@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Portfolio;
+use App\Models\User;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Http\UploadedFile;
 
 class PortfolioService
 {
@@ -11,16 +13,28 @@ class PortfolioService
         private ImageUploadService $imageUploadService
     ) {}
 
-    public function create(array $data)
+    public function showAll()
+    {
+        return Portfolio::all();
+    }
+
+    public function create(array $data, User $user)
     {
         $data = $this->handleProfileImage($data);
 
-        return Portfolio::create($data);
+        return $user->portfolios()->create($data);
     }
 
-    public function getAll()
+    public function getAll(int $userId)
     {
-        return Portfolio::all();
+        return Portfolio::query()
+            ->with([
+                'portfolioSkills.technicalSkill:id,name',
+                'workExperiences',
+                'projects',
+            ])
+            ->where('user_id', $userId)
+            ->get();
     }
 
     public function getById(int $id)
@@ -30,15 +44,24 @@ class PortfolioService
         }])->findOrFail($id);
     }
 
-    public function getByUserId(int $userId)
+    public function getPortfolio(int $id)
     {
-        return Portfolio::where('user_id', $userId)->firstOrFail();
+        return Portfolio::findOrFail($id);
     }
 
-    public function update(int $user_id, array $data)
+    public function getByUserId(int $userId)
     {
-        $portfolio = Portfolio::where('user_id', $user_id)->firstOrFail();
-        $data = $this->handleProfileImage($data);
+        return Portfolio::where('user_id', $userId)->first();
+    }
+
+    public function update(int $id_portfolio, array $data)
+    {
+        $portfolio = Portfolio::where('id', $id_portfolio)->firstOrFail();
+        if (isset($data['profile_image']) && $data['profile_image'] instanceof UploadedFile) {
+            $this->deletePhoto($portfolio->id);
+            $data = $this->handleProfileImage($data);
+        }
+
         $portfolio->update($data);
 
         return $portfolio->fresh();
@@ -47,8 +70,7 @@ class PortfolioService
     private function handleProfileImage(array $data): array
     {
         if (isset($data['profile_image']) && $data['profile_image']) {
-            $upload = $this->imageUploadService
-                ->upload($data['profile_image']);
+            $upload = $this->imageUploadService->upload($data['profile_image']);
 
             $data['profile_image'] = $upload['url'];
             $data['image_id'] = $upload['image_id'];
@@ -71,6 +93,7 @@ class PortfolioService
 
         if (! $portfolio->image_id) {
             return $portfolio;
+
         }
 
         Cloudinary::destroy($portfolio->image_id);
@@ -90,14 +113,15 @@ class PortfolioService
 
     public function getBySlug(string $slug)
     {
-        return Portfolio::with(
-            [
-                'portfolioSkills',
-                'workExperiences',
-                'projects.skill_projects',
-            ]
-        )
-            ->where('portfolio_slug', $slug)->firstOrFail();
+        return Portfolio::with([
+            'portfolioSkills.technicalSkill',
+            'workExperiences' => function ($query) {
+                $query->where('is_visible', true);
+            },
+            'projects.skills',
+        ])
+            ->where('portfolio_slug', $slug)
+            ->firstOrFail();
     }
 
     public function saveUrlPortfolio(string $url, int $id)

@@ -1,53 +1,59 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { X } from "@phosphor-icons/react";
-import { AxiosError } from "axios";
+import { X, PlusIcon } from "@phosphor-icons/react";
 import ProfileForm, { type ProfileFormData } from "@/components/ProfileForm";
-import { getProfile, updateProfile, createProfile } from "@/services/profile.service";
+import { createProfile } from "@/services/profile.service";
 import { toast } from "sonner";
+import { useAuthStore } from "@/lib/auth-store";
 
 import defaultProfileImage from "@/assets/image.png";
+import type { ProfileData } from "@/services/profile.service";
 
-const EMPTY_PROFILE: ProfileFormData = {
-  profile_name: "",
-  profile_email: "",
-  profession: "",
-  bio: "",
-  url_photo: defaultProfileImage,
-  url_portfolio: "",
-};
-
-export default function CreateProfileModal({ onCreated }: { onCreated?: () => void }) {
+export default function CreateProfileModal({
+  onCreated,
+  open: controlledOpen,
+  onOpenChange,
+  hideTrigger,
+}: {
+  onCreated?: (profile?: ProfileData) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
+}) {
+  const user = useAuthStore((state) => state.user);
+  console.log("user:", user);
   const [isSaving, setIsSaving] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = (v: boolean) => {
+    if (isControlled) {
+      onOpenChange?.(v);
+    } else {
+      setInternalOpen(v);
+    }
+  };
+
+  const EMPTY_PROFILE: ProfileFormData = {
+    profile_name: user?.name || "",
+    profile_email: user?.email || "",
+    profession: "",
+    bio: "",
+    profile_image: defaultProfileImage,
+    url_portfolio: "",
+  };
 
   const handleSubmit = async (data: ProfileFormData, file: File | null) => {
     setIsSaving(true);
     try {
-      // obtener el perfil
-      let exists = true;
-      try {
-        await getProfile();
-      } catch (e: unknown) {
-        const axiosError = e as AxiosError;
-        if (axiosError.response?.status === 404) {
-          exists = false;
-        } else {
-          throw e;
-        }
-      }
-      //  Crear o actualizar según corresponda
-      if (exists) {
-        await updateProfile({ ...data, profile_image: null }, file);
-      } else {
-        await createProfile({ ...data, profile_image: null }, file);
-      }
-      toast.success("Perfil guardado correctamente", {
+      const created = await createProfile(data, file);
+      toast.success("Portafolio creado correctamente", {
         style: {
           background: "#6c72ff",
           color: "#ffffff",
@@ -55,40 +61,39 @@ export default function CreateProfileModal({ onCreated }: { onCreated?: () => vo
         },
       });
       setOpen(false);
-      if (onCreated) onCreated();
+      if (onCreated) onCreated(created ?? undefined);
     } catch (e) {
       console.error(e);
-      toast.error("Error al guardar el perfil");
+      toast.error("Error al crear el portafolio");
     }
     setIsSaving(false);
   };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger>
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 h-10 rounded-xl bg-[#6c72ff] px-5 text-xs sm:text-sm font-medium tracking-wide text-white font-heading hover:bg-[#5c61eb]"
-        >
-          <span className="mr-1">+</span> Crear un nuevo portafolio
-        </button>
-      </AlertDialogTrigger>
-      <AlertDialogContent className="max-w-4xl bg-[#181c3a]">
+      {!hideTrigger && (
+        <AlertDialogTrigger>
+          <Button variant="default" size="lg" className="px-5 font-heading flex items-center gap-2">
+            <PlusIcon weight="bold" /> Crear un nuevo portafolio
+          </Button>
+        </AlertDialogTrigger>
+      )}
+      <AlertDialogContent className="max-w-4xl bg-slate-900 p-0 overflow-hidden border-slate-800">
         <button
           type="button"
           aria-label="Cerrar"
           onClick={() => setOpen(false)}
           style={{
             position: "absolute",
-            top: 16,
-            right: 16,
+            right: 10,
+            top: 12,
             zIndex: 20,
             background: "none",
             border: "none",
-            padding: 0,
+            padding: 8,
           }}
         >
-          <X size={20} weight="bold" color="#8c91b7" />
+          <X size={16} weight="bold" color="#eeeff4" />
         </button>
         <AlertDialogHeader />
         <ProfileForm
@@ -96,6 +101,7 @@ export default function CreateProfileModal({ onCreated }: { onCreated?: () => vo
           initialData={EMPTY_PROFILE}
           onSubmit={handleSubmit}
           isSaving={isSaving}
+          idPortfolio={0}
         />
       </AlertDialogContent>
     </AlertDialog>

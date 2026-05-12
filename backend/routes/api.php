@@ -49,9 +49,13 @@ Route::apiResource('portfolios', PortfolioController::class);
 use App\Http\Controllers\WorkExperienceController;
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('/me/portfolios', [PortfolioController::class, 'index']);
+    Route::get('/me/portfolio/{id}', [PortfolioController::class, 'getPortfolio']);
     Route::get('/me/portfolio', [PortfolioController::class, 'getMyPortfolio']);
+    Route::post('/me/portfolio', [PortfolioController::class, 'store']);
     Route::put('/me/portfolio', [PortfolioController::class, 'updateMyPortfolio']);
-    Route::apiResource('/me/work-experiences', WorkExperienceController::class)->except(['create', 'edit', 'show']);
+    // url: /portfolios/${portfolioId}/work-experiences
+    Route::apiResource('/me/portfolios.work-experiences', WorkExperienceController::class)->except(['create', 'edit', 'show']);
     Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
     Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
     Route::post('/me/portfolio/publish', [PortfolioController::class, 'getSlug']);
@@ -60,28 +64,50 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('/portfolios/work-experiences', [WorkExperienceController::class, 'showAll']);
 
-Route::apiResource('/portfolios', PortfolioController::class);
-
 Route::get('/portfolios/slug/{slug}', [PortfolioController::class, 'publicPortfolio']);
+Route::get('/portfolios/slug/{slug}/work-experiences', [WorkExperienceController::class, 'publicBySlug']);
+
+Route::get('/portfolios', [PortfolioController::class, 'showAll']);
 
 // Apis para manejar las skills de un portafolio
 use App\Http\Controllers\PortfolioTechnicalSkillController;
 use App\Http\Controllers\TechnicalSkillController;
 
-Route::get('/technical-skills', [TechnicalSkillController::class, 'index']);
-// Api: http://localhost:8000/api/technical-skills  (Para obtener el listado de skills disponibles)
-Route::post('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'store']);
-// Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para agregar una skill a un portafolio) JSON(technical_skill_id, level)
-Route::put('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'update']);
-// Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para actualizar el nivel de una skill en un portafolio) JSON(technical_skill_id, level)
-Route::delete('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'destroy']);
-// Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para eliminar una skill de un portafolio) JSON(technical_skill_id)
-Route::get('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'index']);
-// Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para obtener las skills registradas en un portafolio)
+Route::apiResource('/technical-skills', TechnicalSkillController::class);
+
+Route::middleware('auth:api')->group(function () {
+
+    Route::post('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'store']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para agregar una skill a un portafolio) JSON(technical_skill_id, level)
+    Route::put('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'update']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para actualizar el nivel de una skill en un portafolio) JSON(technical_skill_id, level)
+    Route::delete('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'destroy']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para eliminar una skill de un portafolio) JSON(technical_skill_id)
+    Route::get('/portfolios/{portfolioId}/technical-skills', [PortfolioTechnicalSkillController::class, 'index']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/technical-skills  (Para obtener las skills registradas en un portafolio)
+
+});
 
 // routes for projects
-Route::get('/portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
+Route::get('portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
 Route::apiResource('/projects', ProjectController::class);
+Route::delete('/projects/{id}/image', [ProjectController::class, 'deleteImageProject']);
 
 // routes for skills
 Route::apiResource('/skills', SkillProjectController::class);
+
+// Apis for soft skills
+use App\Http\Controllers\SoftSkillController;
+
+Route::middleware('auth:api')->group(function () {
+
+    Route::get('/portfolios/{portfolioId}/soft-skills', [SoftSkillController::class, 'index']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills  (Para obtener las soft skills registradas en un portafolio)
+    Route::post('/portfolios/{portfolioId}/soft-skills', [SoftSkillController::class, 'store']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills  (Para agregar una soft skill a un portafolio) JSON(name)
+    Route::put('/portfolios/{portfolioId}/soft-skills/{id}', [SoftSkillController::class, 'update']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para actualizar el nombre de una soft skill en un portafolio) JSON(name)
+    Route::delete('/portfolios/{portfolioId}/soft-skills/{id}', [SoftSkillController::class, 'destroy']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para eliminar una soft skill de un portafolio)
+
+});

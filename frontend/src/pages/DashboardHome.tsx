@@ -1,22 +1,18 @@
 import { useEffect, useState } from "react";
-import { useAuthStore } from "@/lib/auth-store";
+import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import CreateProfileModal from "@/components/CreateProfileModal";
 import { Input } from "@/components/ui/input";
 import { CopySimple } from "@phosphor-icons/react";
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
-import { getProfile } from "@/services/profile.service";
+import { getPortfolio } from "@/services/profile.service";
 
 export default function DashboardHome() {
-  const user = useAuthStore((state) => state.user);
-
-  const displayName = user?.name ?? "Usuario";
+  const { idPortfolio } = useParams();
   const [portfolioUrl, setPortfolioUrl] = useState("");
   const [slug, setSlug] = useState("");
   const [portfolioUrlError, setPortfolioUrlError] = useState("");
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [id_portfolio, setIdPortfolio] = useState<number>(1);
   const validatePortfolioUrl = (value: string) => {
     const trimmed = value.trim();
 
@@ -72,7 +68,7 @@ export default function DashboardHome() {
       const frontendUrl = `${window.location.origin}/p/${url}`;
       setPortfolioUrl(frontendUrl);
 
-      await saveUrlPortfolio(frontendUrl, id_portfolio);
+      await saveUrlPortfolio(frontendUrl, Number(idPortfolio!));
     } catch (error) {
       console.error(error);
     } finally {
@@ -83,15 +79,11 @@ export default function DashboardHome() {
   useEffect(() => {
     let isMounted = true;
 
-    const getPortfolio = async () => {
+    const loadPortfolio = async () => {
       try {
-        const portfolio = await getProfile();
+        const portfolio = await getPortfolio(parseInt(idPortfolio!));
 
         if (!isMounted) return;
-
-        if (portfolio?.id) {
-          setIdPortfolio(portfolio.id);
-        }
 
         if (portfolio?.url_portfolio) {
           setPortfolioUrl(portfolio.url_portfolio);
@@ -101,7 +93,7 @@ export default function DashboardHome() {
       }
     };
 
-    getPortfolio();
+    loadPortfolio();
 
     return () => {
       isMounted = false;
@@ -112,7 +104,7 @@ export default function DashboardHome() {
     <>
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:flex-row lg:items-start lg:justify-between px-2 sm:px-3 md:px-6 py-2">
         <div className="mb-4 lg:mb-0 w-full">
-          <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {displayName}!</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
           <p className="mt-1 text-sm font-sans">Gestiona tu portafolio profesional</p>
         </div>
 
@@ -127,10 +119,10 @@ export default function DashboardHome() {
                   value={slug}
                   onChange={handleChangePortfolioUrl}
                   onBlur={handleBlurPortfolioUrl}
-                  className={`h-11 w-full lg:w-72 rounded-xl border bg-input dark:bg-[#1f2552] px-4 text-sm text-black dark:text-slate-200 placeholder:text-[#8c91b7] focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                  className={`h-8 w-full lg:w-72 ${
                     portfolioUrlError
                       ? "border-red-500 focus-visible:ring-red-500"
-                      : "border-transparent focus-visible:ring-[#5d68f5]"
+                      : "border-input focus-visible:ring-[#5d68f5]"
                   }`}
                 />
                 {portfolioUrlError && (
@@ -179,17 +171,6 @@ export default function DashboardHome() {
             <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black px-2 py-1 text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
               {copied ? "Copiado!" : "Copiar"}
             </span>
-          </div>
-        </div>
-      </section>
-      {/* este es mi cuadro nuevo para agregar proyectos */}
-      <section className="mt-8 w-full max-w-7xl mx-auto px-2 sm:px-3 md:px-6">
-        <div className="w-full rounded-2xl bg-sidebar py-6 border border-sidebar-border px-4 sm:px-8">
-          <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
-            <p className="text-sm text-sidebar-foreground">
-              Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
-            </p>
-            <CreateProfileModal />
           </div>
         </div>
       </section>

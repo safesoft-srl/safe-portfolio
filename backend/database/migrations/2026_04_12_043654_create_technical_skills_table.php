@@ -10,9 +10,10 @@ return new class extends Migration
     {
         Schema::create('technical_skills', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
-            $table->string('category', 50)->nullable();
-            $table->string('icon_path')->nullable()->unique();
+            $table->string('name', 30)->unique();
+            $table->string('category', 30)->nullable();
+            $table->string('url_light')->nullable()->unique();
+            $table->string('url_dark')->nullable()->unique();
             $table->timestamps();
         });
     }

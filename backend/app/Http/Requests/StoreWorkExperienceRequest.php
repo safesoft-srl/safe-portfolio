@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreWorkExperienceRequest extends FormRequest
@@ -17,18 +18,18 @@ class StoreWorkExperienceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'company' => 'required|string|max:255',
-            'position' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'company' => 'required|string|max:50',
+            'position' => 'required|string|max:70',
+            'start_date' => 'required|date|before_or_equal:today',
+            'end_date' => 'nullable|date|after_or_equal:start_date|before_or_equal:today',
             'is_current' => 'boolean',
-            'description' => 'nullable|string',
-            'achievements' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
+            'achievements' => 'nullable|string|max:2000',
             'is_visible' => 'boolean',
         ];
     }
