@@ -64,7 +64,7 @@ export default function DashboardHome() {
         return;
       }
 
-      const url = await publishPortfolio(slug);
+      const url = await publishPortfolio(slug, Number(idPortfolio!));
       const frontendUrl = `${window.location.origin}/p/${url}`;
       setPortfolioUrl(frontendUrl);
 
