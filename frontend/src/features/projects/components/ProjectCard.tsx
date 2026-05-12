@@ -19,12 +19,12 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
   const isListView = variant === "list";
 
   return (
-    <div className={isListView ? "w-full" : "max-w-3xl min-w-[250px] h-[620px] flex"}>
+    <div className={isListView ? "w-full" : "w-full flex"}>
       <div
         className={
           isListView
             ? "rounded-2xl bg-sidebar px-4 py-4 border border-sidebar-border w-full flex flex-row gap-4 items-start"
-            : "rounded-2xl bg-sidebar px-4 py-6 border border-sidebar-border w-full flex flex-col h-full"
+            : "rounded-2xl bg-sidebar px-4 py-6 border border-sidebar-border w-full flex flex-col"
         }
       >
         {isListView ? (
@@ -144,23 +144,14 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                 </div>
                 {/* Imagen debajo del título y antes de la descripción */}
                 <div
-                  style={{
-                    margin: "16px 0",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "320px",
-                  }}
+                  className="w-full my-4 flex justify-center items-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60"
+                  style={{ background: "#181c2f" }}
                 >
                   <img
                     src={project.url_image || DEFAULT_PROJECT_IMAGE}
                     alt={project.name}
-                    className="object-cover rounded-xl border border-sidebar-border bg-black/60"
-                    style={{
-                      background: "#181c2f",
-                      width: "98%",
-                      maxHeight: "320px",
-                    }}
+                    className="w-full h-auto max-h-[320px] object-cover rounded-xl"
+                    style={{ background: "#181c2f" }}
                   />
                 </div>
               </div>

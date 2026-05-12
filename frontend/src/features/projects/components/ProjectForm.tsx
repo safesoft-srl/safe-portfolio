@@ -23,6 +23,12 @@ import {
 import defaultProjectImage from "@/assets/image.png";
 
 const DEFAULT_PROJECT_IMAGE = defaultProjectImage;
+const PROJECT_NAME_MAX_LENGTH = 70;
+const PROJECT_DESCRIPTION_MAX_LENGTH = 240;
+const PROJECT_NAME_MAX_ERROR = "Solo se permite 70 letras en el nombre del proyecto.";
+const PROJECT_DESCRIPTION_MAX_ERROR = "Solo se permite 240 letras en la descripción.";
+const PROJECT_NAME_REQUIRED_ERROR = "El nombre del proyecto es obligatorio.";
+const PROJECT_DESCRIPTION_REQUIRED_ERROR = "La descripción es obligatoria.";
 
 type Props = {
   skills: Skill[];
@@ -51,8 +57,8 @@ export default function ProjectForm({
   const [errors, setErrors] = useState({
     name: "",
     description: "",
-    url_github: "",
     skill_ids: "",
+    url_github: "",
   });
 
   const [imagePreview, setImagePreview] = useState<string>(DEFAULT_PROJECT_IMAGE);
@@ -73,13 +79,20 @@ export default function ProjectForm({
   }, [initialData]);
 
   const validate = () => {
-    if (!form.name.trim()) return "El nombre del proyecto es obligatorio.";
-    if (!form.description.trim()) return "La descripción es obligatoria.";
-    if (!form.url_github.trim()) return "La URL de GitHub es obligatoria.";
+    if (!form.name.trim()) return PROJECT_NAME_REQUIRED_ERROR;
+    if (form.name.length > PROJECT_NAME_MAX_LENGTH) {
+      return PROJECT_NAME_MAX_ERROR;
+    }
+    if (!form.description.trim()) return PROJECT_DESCRIPTION_REQUIRED_ERROR;
+    if (form.description.length > PROJECT_DESCRIPTION_MAX_LENGTH) {
+      return PROJECT_DESCRIPTION_MAX_ERROR;
+    }
 
-    const githubRegex = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/?$/;
-    if (!githubRegex.test(form.url_github)) {
-      return "La URL de GitHub debe tener el formato: https://github.com/usuario/proyecto";
+    if (form.url_github.trim()) {
+      const githubRegex = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/?$/;
+      if (!githubRegex.test(form.url_github)) {
+        return "La URL de GitHub debe tener el formato: https://github.com/usuario/proyecto";
+      }
     }
 
     if (form.url_demo) {
@@ -90,7 +103,7 @@ export default function ProjectForm({
       }
     }
 
-    if (form.skill_projects.length === 0) return "Selecciona al menos una habilidad.";
+    if (form.skill_projects.length === 0) return "Selecciona al menos una tecnología.";
     return null;
   };
 
@@ -104,6 +117,58 @@ export default function ProjectForm({
 
       return project.name.toLowerCase() === currentNameLower;
     });
+  };
+
+  const handleNameChange = (value: string) => {
+    const limitedValue = value.slice(0, PROJECT_NAME_MAX_LENGTH);
+    setForm((f) => ({ ...f, name: limitedValue }));
+
+    if (value.length > PROJECT_NAME_MAX_LENGTH) {
+      setErrors((prev) => ({
+        ...prev,
+        name: PROJECT_NAME_MAX_ERROR,
+      }));
+      return;
+    }
+
+    if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+  };
+
+  const handleNameBlur = (value: string) => {
+    setErrors((prev) => ({
+      ...prev,
+      name: !value.trim()
+        ? PROJECT_NAME_REQUIRED_ERROR
+        : value.length > PROJECT_NAME_MAX_LENGTH
+          ? PROJECT_NAME_MAX_ERROR
+          : "",
+    }));
+  };
+
+  const handleDescriptionChange = (value: string) => {
+    const limitedValue = value.slice(0, PROJECT_DESCRIPTION_MAX_LENGTH);
+    setForm((f) => ({ ...f, description: limitedValue }));
+
+    if (value.length > PROJECT_DESCRIPTION_MAX_LENGTH) {
+      setErrors((prev) => ({
+        ...prev,
+        description: PROJECT_DESCRIPTION_MAX_ERROR,
+      }));
+      return;
+    }
+
+    if (errors.description) setErrors((prev) => ({ ...prev, description: "" }));
+  };
+
+  const handleDescriptionBlur = (value: string) => {
+    setErrors((prev) => ({
+      ...prev,
+      description: !value.trim()
+        ? PROJECT_DESCRIPTION_REQUIRED_ERROR
+        : value.length > PROJECT_DESCRIPTION_MAX_LENGTH
+          ? PROJECT_DESCRIPTION_MAX_ERROR
+          : "",
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -151,16 +216,8 @@ export default function ProjectForm({
                 id="projectName"
                 name="projectName"
                 value={form.name}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, name: e.target.value }));
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
-                }}
-                onBlur={(e) =>
-                  setErrors((prev) => ({
-                    ...prev,
-                    name: e.target.value.trim() ? "" : "El nombre del proyecto es obligatorio.",
-                  }))
-                }
+                onChange={(e) => handleNameChange(e.target.value)}
+                onBlur={(e) => handleNameBlur(e.target.value)}
                 placeholder="Ej: Plataforma de Portafolios"
                 className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.name ? " border-red-500" : ""}`}
               />
@@ -181,18 +238,9 @@ export default function ProjectForm({
                 id="projectDescription"
                 name="projectDescription"
                 value={form.description}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, description: e.target.value }));
-                  if (errors.description) setErrors((prev) => ({ ...prev, description: "" }));
-                }}
-                onBlur={(e) =>
-                  setErrors((prev) => ({
-                    ...prev,
-                    description: e.target.value.trim() ? "" : "La descripción es obligatoria.",
-                  }))
-                }
+                onChange={(e) => handleDescriptionChange(e.target.value)}
+                onBlur={(e) => handleDescriptionBlur(e.target.value)}
                 placeholder="Describe brevemente el objetivo y alcance del proyecto."
-                maxLength={245}
                 className={`min-h-24 h-8 rounded-xl border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50 custom-scrollbar${errors.description ? " border-red-500" : ""}`}
                 style={{
                   scrollbarColor: "#23234a #181c2f",
@@ -246,7 +294,7 @@ export default function ProjectForm({
                 htmlFor="urlGithub"
                 className="text-xs font-semibold text-slate-900 dark:text-slate-300"
               >
-                URL GitHub
+                URL GitHub (Opcional)
               </Label>
               <Input
                 id="urlGithub"
@@ -256,10 +304,10 @@ export default function ProjectForm({
                   setForm((f) => ({ ...f, url_github: e.target.value }));
                   if (errors.url_github) setErrors((prev) => ({ ...prev, url_github: "" }));
                 }}
-                onBlur={(e) =>
+                onBlur={() =>
                   setErrors((prev) => ({
                     ...prev,
-                    url_github: e.target.value.trim() ? "" : "La URL de GitHub es obligatoria.",
+                    url_github: "",
                   }))
                 }
                 placeholder="https://github.com/usuario/proyecto"

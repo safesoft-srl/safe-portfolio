@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProjects } from "@/features/projects/services/project.service";
 import { ArrowUpRight, ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { Button } from "../ui/button";
 
 export default function RecentWork() {
+  const { slug } = useParams<{ slug: string }>();
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -69,10 +71,23 @@ export default function RecentWork() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
       <div className="rounded-3xl border border-[#262b46] bg-[#111327] p-6 lg:p-10 shadow-2xl">
-        <div className="mb-10">
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
-            Mis trabajos recientes
+        <div className="mb-10 flex items-center justify-between">
+          <h2 className="text-2xl font-mono font-bold tracking-tight text-[#bcfd49] md:text-4xl">
+            Mis Trabajos Recientes
           </h2>
+          {slug && (
+            <a
+              href={`/p/${slug}/projects`}
+              className="group font-mono text-sm font-semibold text-slate-300 hover:text-[#bcfd49] transition-colors underline inline-flex items-center gap-1"
+            >
+              Ver Todos los Proyectos
+              <ArrowUpRight
+                size={14}
+                weight="bold"
+                className="text-slate-300 transition-colors group-hover:text-[#bcfd49]"
+              />
+            </a>
+          )}
         </div>
 
         <div className="relative overflow-hidden rounded-2xl p-[1px] shadow-2xl">
@@ -81,10 +96,13 @@ export default function RecentWork() {
 
           <div className="relative h-full w-full rounded-2xl border border-[#262b46] bg-[#111327] p-6 lg:p-10">
             <div
-              className={`grid grid-cols-1 items-center gap-0 lg:grid-cols-[1fr_1.3fr] lg:gap-0 transition-opacity duration-300 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
+              className={`grid grid-cols-1 items-start gap-6 min-[518px]:gap-0 min-[1024px]:grid-cols-[1fr_1.3fr] transition-opacity duration-300 ${isTransitioning ? "opacity-0" : "opacity-100"}`}
             >
               {/* Project Image */}
-              <div className="relative aspect-square w-full max-w-sm overflow-hidden rounded-xl border border-[#262b46] bg-[#0a0b1e] group mx-auto mr-1 lg:mr-3">
+              <div
+                className="relative w-full max-w-48 min-[518px]:max-w-sm min-[1024px]:max-w-full overflow-hidden rounded-xl border border-[#262b46] bg-[#0a0b1e] group mx-auto min-[518px]:mr-3 min-[1024px]:mr-0"
+                style={{ aspectRatio: "1 / 1" }}
+              >
                 <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
                 {project.url_image ? (
                   <img
@@ -132,13 +150,6 @@ export default function RecentWork() {
                       <span className="font-mono text-xs leading-relaxed text-slate-400">
                         ...&nbsp;
                       </span>
-                      <button
-                        className="text-[#727bff] hover:underline font-mono text-xs leading-relaxed px-1"
-                        type="button"
-                        onClick={() => setExpanded(true)}
-                      >
-                        Ver más
-                      </button>
                     </span>
                   )}
                 </div>
@@ -185,9 +196,9 @@ export default function RecentWork() {
                 </div>
 
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-6">
-                  <div className="flex gap-2">
+                  <div className="flex w-full min-[518px]:w-auto flex-col min-[518px]:flex-row gap-2">
                     <Button
-                      className="px-6 py-3 font-mono text-sm font-bold text-white bg-[#727bff] hover:bg-[#5a5fd1] transition-all flex items-center gap-2 self-start rounded-lg border border-[#727bff]"
+                      className="w-full min-[518px]:w-auto px-6 py-3 font-mono text-sm font-bold text-white bg-[#727bff] hover:bg-[#5a5fd1] transition-all flex items-center justify-center min-[518px]:justify-start gap-2 rounded-lg border border-[#727bff]"
                       style={{ fontSize: "10px", padding: "0.5rem 1.5rem", height: "auto" }}
                       disabled={isLoading || isError || !project.url_github}
                     >
@@ -195,14 +206,14 @@ export default function RecentWork() {
                         href={project.url_github || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-white"
+                        className="flex items-center justify-center gap-2 text-white w-full"
                       >
                         <span>URL Github</span>
                         <ArrowUpRight size={14} weight="bold" className="text-white" />
                       </a>
                     </Button>
                     <Button
-                      className="px-6 py-3 font-mono text-sm font-bold text-white bg-[#727bff] hover:bg-[#5a5fd1] transition-all flex items-center gap-2 self-start rounded-lg border border-[#727bff]"
+                      className="w-full min-[518px]:w-auto px-6 py-3 font-mono text-sm font-bold text-white bg-[#727bff] hover:bg-[#5a5fd1] transition-all flex items-center justify-center min-[518px]:justify-start gap-2 rounded-lg border border-[#727bff]"
                       style={{ fontSize: "10px", padding: "0.5rem 1.5rem", height: "auto" }}
                       disabled={isLoading || isError || !project.url_demo}
                     >
@@ -210,7 +221,7 @@ export default function RecentWork() {
                         href={project.url_demo || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-white"
+                        className="flex items-center justify-center gap-2 text-white w-full"
                       >
                         <span>URL Demo</span>
                         <ArrowUpRight size={14} weight="bold" className="text-white" />
@@ -219,7 +230,7 @@ export default function RecentWork() {
                   </div>
 
                   {/* Navigation Indicators */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 w-full min-[518px]:w-auto justify-end">
                     <button
                       className="flex h-10 w-10 items-center justify-center rounded-full border border-[#727bff] bg-white/5 text-slate-400 hover:border-[#5a5fd1] hover:text-white transition-all"
                       onClick={handlePrev}

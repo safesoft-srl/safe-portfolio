@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useProjects } from "../features/projects/hooks/useProject";
 import ProjectList from "../features/projects/components/ProjectList";
 import ProjectForm from "../features/projects/components/ProjectForm";
@@ -11,7 +11,7 @@ import {
 import type { Project } from "../features/projects/types/project.types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { List, MagnifyingGlass, PlusIcon, SquaresFour, X } from "@phosphor-icons/react";
+import { List, MagnifyingGlass, PlusIcon, SquaresFour, XIcon } from "@phosphor-icons/react";
 
 import {
   AlertDialog,
@@ -30,6 +30,9 @@ export default function ProjectsPage() {
 
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
+  const [isNarrow, setIsNarrow] = useState<boolean>(
+    typeof window !== "undefined" ? window.innerWidth < 900 : false
+  );
   const portfolioId = usePortfolioId();
   const [open, setOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -55,6 +58,15 @@ export default function ProjectsPage() {
       return haystack.includes(search);
     });
   }, [projects, query]);
+
+  useEffect(() => {
+    const onResize = () => setIsNarrow(window.innerWidth < 900);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const effectiveView: "grid" | "list" = isNarrow ? "grid" : view;
 
   if (isLoading) return <Loading />;
 
@@ -109,7 +121,7 @@ export default function ProjectsPage() {
                     variant="ghost"
                     onClick={() => setView("grid")}
                     className={
-                      view === "grid"
+                      effectiveView === "grid"
                         ? "bg-indigo-600 text-white hover:bg-[#5c61eb] hover:text-white"
                         : "text-slate-300 hover:bg-[#23284f] hover:text-white"
                     }
@@ -117,19 +129,21 @@ export default function ProjectsPage() {
                   >
                     <SquaresFour size={18} weight="bold" />
                   </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setView("list")}
-                    className={
-                      view === "list"
-                        ? "bg-indigo-600 text-white hover:bg-[#5c61eb] hover:text-white"
-                        : "text-slate-300 hover:bg-[#23284f] hover:text-white"
-                    }
-                    aria-label="Vista de lista"
-                  >
-                    <List size={18} weight="bold" />
-                  </Button>
+                  {!isNarrow && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setView("list")}
+                      className={
+                        effectiveView === "list"
+                          ? "bg-indigo-600 text-white hover:bg-[#5c61eb] hover:text-white"
+                          : "text-slate-300 hover:bg-[#23284f] hover:text-white"
+                      }
+                      aria-label="Vista de lista"
+                    >
+                      <List size={18} weight="bold" />
+                    </Button>
+                  )}
                 </div>
               </div>
 
@@ -175,7 +189,7 @@ export default function ProjectsPage() {
               <ProjectList
                 projects={filteredProjects}
                 skills={skills}
-                view={view}
+                view={effectiveView}
                 onRefresh={syncProjects}
                 onEdit={(project) => {
                   setEditingProject(project);
@@ -188,15 +202,15 @@ export default function ProjectsPage() {
             )}
           </section>
         </main>
-        <AlertDialogContent className="max-w-5xl w-full rounded-2xl border-sidebar-border bg-sidebar px-10 py-8 text-sidebar-foreground max-h-[85vh] overflow-y-auto sm:max-h-none sm:overflow-visible">
+        <AlertDialogContent className="max-w-4xl w-full rounded-2xl border-sidebar-border bg-slate-900 p-0 sm:p-6 text-sidebar-foreground max-h-[85vh] overflow-y-auto sm:max-h-none sm:overflow-visible">
           <AlertDialogHeader className="mb-2 text-left">
             <AlertDialogTitle className="text-lg font-semibold text-slate-900 dark:text-sidebar-foreground">
               {editingProject !== null ? "Editar Proyecto" : "Nuevo Proyecto"}
             </AlertDialogTitle>
           </AlertDialogHeader>
           <div className="border-b border-slate-800 mb-6"></div>
-          <AlertDialogCancel className="absolute right-6 top-5 inline-flex h-7 w-7 items-center justify-center rounded-md border border-sidebar-border bg-transparent text-slate-300 hover:bg-[#6366f1] hover:text-white">
-            <X className="size-4" />
+          <AlertDialogCancel className="absolute right-6 top-5 inline-flex items-center justify-center text-slate-500 hover:bg-slate-800 hover:text-slate-400 p-1 transition-colors ml-3 shrink-0 mt-0.5">
+            <XIcon weight="bold" size={16} />
             <span className="sr-only">Cerrar</span>
           </AlertDialogCancel>
           <ProjectForm
@@ -222,7 +236,7 @@ export default function ProjectsPage() {
                   },
                   file
                 );
-                toast.success("Proyecto guardado correctamente.", {
+                toast.success("Proyecto creado correctamente.", {
                   style: {
                     background: "#6c72ff",
                     color: "#ffffff",
@@ -247,6 +261,13 @@ export default function ProjectsPage() {
         onConfirm={async () => {
           if (!deleteProjectId) return;
           await deleteProject(deleteProjectId);
+          toast.success("El proyecto se ha eliminado correctamente.", {
+            style: {
+              background: "#6c72ff",
+              color: "#ffffff",
+              border: "1px solid #8b90ff",
+            },
+          });
           await syncProjects();
           setDeleteProjectId(null);
         }}
