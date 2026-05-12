@@ -16,7 +16,6 @@ type Props = {
 };
 
 export default function ProjectCard({ project, onEdit, onDelete, variant = "grid" }: Props) {
-  console.log('project card: ', project);
   const isListView = variant === "list";
 
   return (
