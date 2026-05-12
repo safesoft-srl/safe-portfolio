@@ -29,26 +29,26 @@ export default function Configuration() {
           <div className="py-4">
             <SkillForm
               onSubmit={async (data) => {
-                  setIsCreatingSkill(true);
+                setIsCreatingSkill(true);
                 try {
                   await createSkill(data);
-                    toast.success("La tecnologia se ha agregado correctamente.", {
-                      style: {
-                        background: "#6c72ff",
-                        color: "#ffffff",
-                        border: "1px solid #8b90ff",
-                      },
-                    });
+                  toast.success("La tecnologia se ha agregado correctamente.", {
+                    style: {
+                      background: "#6c72ff",
+                      color: "#ffffff",
+                      border: "1px solid #8b90ff",
+                    },
+                  });
                   setIsModalOpen(false);
                 } catch (error) {
                   console.error("Error creating skill:", error);
-                    toast.error("Error al crear la skill.");
-                  } finally {
-                    setIsCreatingSkill(false);
+                  toast.error("Error al crear la skill.");
+                } finally {
+                  setIsCreatingSkill(false);
                 }
               }}
               onCancel={() => setIsModalOpen(false)}
-                isLoading={isCreatingSkill}
+              isLoading={isCreatingSkill}
             />
           </div>
         </DialogContent>

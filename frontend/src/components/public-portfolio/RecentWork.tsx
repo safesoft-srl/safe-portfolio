@@ -76,7 +76,9 @@ export default function RecentWork({ projects }: Props) {
             </h2>
           </div>
           <p className="font-mono text-sm leading-relaxed text-gray-400">
-            Aun no he registrado proyectos realizados, puedes seguir explorando mi portafolio para más información sobre mis habilidades y experiencia. Estoy trabajando constantemente en nuevos proyectos que compartiré pronto.
+            Aun no he registrado proyectos realizados, puedes seguir explorando mi portafolio para
+            más información sobre mis habilidades y experiencia. Estoy trabajando constantemente en
+            nuevos proyectos que compartiré pronto.
           </p>
         </div>
       </section>

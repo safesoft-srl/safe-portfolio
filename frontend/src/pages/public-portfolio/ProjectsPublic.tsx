@@ -44,9 +44,15 @@ export default function ProjectsPublic() {
           <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
             <div className="rounded-2xl border border-[#262b46] bg-[#111327] p-8 md:p-12 shadow-2xl">
               <div className="mb-6">
-                <h2 className="font-mono text-4xl font-bold tracking-tight text-[#bcfd49]">Proyectos</h2>
+                <h2 className="font-mono text-4xl font-bold tracking-tight text-[#bcfd49]">
+                  Proyectos
+                </h2>
               </div>
-              <p className="font-mono text-sm leading-relaxed text-gray-400">Aun no he registrado proyectos realizados, puedes seguir explorando mi portafolio para más información sobre mis habilidades y experiencia. Estoy trabajando constantemente en nuevos proyectos que compartiré pronto..</p>
+              <p className="font-mono text-sm leading-relaxed text-gray-400">
+                Aun no he registrado proyectos realizados, puedes seguir explorando mi portafolio
+                para más información sobre mis habilidades y experiencia. Estoy trabajando
+                constantemente en nuevos proyectos que compartiré pronto..
+              </p>
             </div>
           </section>
         </main>
@@ -63,7 +69,9 @@ export default function ProjectsPublic() {
         <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
           <div className="rounded-2xl border border-[#262b46] bg-[#111327] p-6 md:p-10 shadow-2xl">
             <div className="mb-8">
-              <h2 className="font-mono text-4xl font-bold tracking-tight text-[#bcfd49]">Proyectos</h2>
+              <h2 className="font-mono text-4xl font-bold tracking-tight text-[#bcfd49]">
+                Proyectos
+              </h2>
             </div>
 
             {isLoading ? (
@@ -71,7 +79,10 @@ export default function ProjectsPublic() {
             ) : (
               <div className="flex flex-col gap-8">
                 {displayedProjects.map((project, idx) => (
-                  <div key={idx} className="relative overflow-hidden rounded-2xl p-[1px] shadow-2xl">
+                  <div
+                    key={idx}
+                    className="relative overflow-hidden rounded-2xl p-[1px] shadow-2xl"
+                  >
                     <div className="absolute inset-[-1000%] animate-[spin_8s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#5E66D1_10%,transparent_20%)]" />
 
                     <div className="relative h-full w-full rounded-2xl border border-[#262b46] bg-[#111327] p-6 lg:p-10">
@@ -117,7 +128,8 @@ export default function ProjectsPublic() {
                                           .map((skill, skillIndex) => (
                                             <span key={skill.name + skillIndex}>
                                               {skill.name}
-                                              {skillIndex < Math.min(4, project.skill_projects.length - 1)
+                                              {skillIndex <
+                                              Math.min(4, project.skill_projects.length - 1)
                                                 ? ", "
                                                 : ""}
                                             </span>
