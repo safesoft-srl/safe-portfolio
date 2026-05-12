@@ -1,6 +1,7 @@
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import type { Project, Skill } from "../types/project.types";
+import type { Project } from "../types/project.types";
+import type { Skill } from "@/services/skill.service";
 import defaultProjectImage from "@/assets/image.png";
 
 const DEFAULT_PROJECT_IMAGE = defaultProjectImage;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export default function ProjectCard({ project, onEdit, onDelete, variant = "grid" }: Props) {
+  console.log('project card: ', project);
   const isListView = variant === "list";
 
   return (
@@ -56,7 +58,7 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                         key={skill.id}
                         className="bg-[#6c72ff] text-white text-xs px-3 py-1 rounded-full"
                       >
-                        {skill.skill_name}
+                        {skill.name}
                       </span>
                     ))
                   ) : (
@@ -152,7 +154,7 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                   }}
                 >
                   <img
-                    src={project.url_image || "/src/assets/image.png"}
+                    src={project.url_image || DEFAULT_PROJECT_IMAGE}
                     alt={project.name}
                     className="object-cover rounded-xl border border-sidebar-border bg-black/60"
                     style={{
@@ -172,7 +174,7 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                     key={skill.id}
                     className="bg-[#6c72ff] text-white text-xs px-3 py-1 rounded-full"
                   >
-                    {skill.skill_name}
+                    {skill.name}
                   </span>
                 ))
               ) : (

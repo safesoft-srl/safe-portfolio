@@ -15,6 +15,7 @@ export function useProjects() {
     if (!portfolioId) return;
 
     const res = await http.get(`/api/portfolios/${portfolioId}/projects`);
+    console.log('projects:', res.data.data);
 
     setProjects(res.data.data || res.data);
   };

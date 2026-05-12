@@ -46,7 +46,7 @@ export default function ProjectsPage() {
       const haystack = [
         project.name,
         project.description,
-        ...(project.skill_projects?.map((skill) => skill.skill_name) || []),
+        ...(project.skill_projects?.map((skill) => skill.name) || []),
       ]
         .filter(Boolean)
         .join(" ")
@@ -203,9 +203,9 @@ export default function ProjectsPage() {
             skills={skills}
             initialData={editingProject}
             existingProjects={projects}
-            onSubmit={async (data, file) => {
+            onSubmit={async (data, file, deleteImage) => {
               if (editingProject) {
-                await updateProject(editingProject.id, data, file);
+                await updateProject(editingProject.id, data, deleteImage, file);
                 toast.success("Los cambios se han guardado correctamente.", {
                   style: {
                     background: "#6c72ff",

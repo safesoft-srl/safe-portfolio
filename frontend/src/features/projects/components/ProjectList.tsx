@@ -1,5 +1,7 @@
 import ProjectCard from "./ProjectCard";
-import type { Project, Skill } from "../types/project.types";
+import type {Project} from "../types/project.types";
+import type {Skill} from "@/services/skill.service";
+
 
 type Props = {
   projects: Project[];
