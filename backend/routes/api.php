@@ -8,6 +8,7 @@ use App\Http\Controllers\RegisterAccountController;
 use App\Http\Controllers\ResendTokenController;
 use App\Http\Controllers\SkillProjectController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AcademicController;
 
 Route::post('/register', [RegisterAccountController::class, 'register']);
 // Api   http://localhost:8000/api/register   (Para registrar nuevos usuarios)  JSON(name,email,password)
@@ -110,4 +111,13 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/portfolios/{portfolioId}/soft-skills/{id}', [SoftSkillController::class, 'destroy']);
     // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para eliminar una soft skill de un portafolio)
 
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/academics', [AcademicController::class, 'index']);
+    Route::post('/portfolios/{portfolioId}/academics', [AcademicController::class, 'store']);
+    Route::get('/academics/{id}', [AcademicController::class, 'show']);
+    Route::put('/academics/{id}', [AcademicController::class, 'update']);
+    Route::delete('/academics/{id}', [AcademicController::class, 'destroy']);
+    Route::get('/academics/portfolio/{portfolioId}', [AcademicController::class, 'getByPortfolio']);
 });

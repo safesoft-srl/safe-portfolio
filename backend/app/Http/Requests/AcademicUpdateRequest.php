@@ -43,7 +43,7 @@ class AcademicUpdateRequest extends FormRequest
             'start_date.date' => 'La fecha de inicio debe ser una fecha válida.',
             'end_date.date' => 'La fecha fin debe ser una fecha válida.',
             'end_date.after' => 'La fecha fin debe ser posterior a la fecha de inicio.',
-            'is_current.boolean' => 'El campo "is_current" debe ser un valor booleano.',
+            'is_current.boolean' => 'El campo "actual" debe ser un valor booleano.',
             'description.string' => 'La descripción debe ser una cadena de texto.',
         ];
     }
