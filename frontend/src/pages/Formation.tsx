@@ -17,6 +17,7 @@ import {
   updateAcademic,
 } from "@/features/formation/services/academic.service";
 import type { AcademicFormData, AcademicRecord } from "@/features/formation/types/academic.types";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof AxiosError) {
@@ -31,8 +32,9 @@ const getErrorMessage = (error: unknown, fallback: string) => {
 };
 
 export default function FormationPage() {
+  const portfolioId = usePortfolioId();
   const queryClient = useQueryClient();
-  const { academics, portfolioId } = useAcademic();
+  const { academics} = useAcademic();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAcademic, setEditingAcademic] = useState<AcademicRecord | null>(null);
@@ -62,7 +64,7 @@ export default function FormationPage() {
         throw new Error("No hay portafolio disponible");
       }
 
-      return updateAcademic(portfolioId, payload.id, payload.data);
+      return updateAcademic(payload.id, payload.data);
     },
   });
 
@@ -72,7 +74,7 @@ export default function FormationPage() {
         throw new Error("No hay portafolio disponible");
       }
 
-      return deleteAcademic(portfolioId, id);
+      return deleteAcademic(id);
     },
   });
 

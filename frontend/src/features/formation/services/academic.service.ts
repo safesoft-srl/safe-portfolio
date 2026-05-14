@@ -2,7 +2,7 @@ import { http } from "@/services/http.service";
 
 import type { AcademicFormData, AcademicRecord } from "../types/academic.types";
 
-const buildAcademicEndpoint = (portfolioId: number) => `/api/me/portfolio/${portfolioId}/academic`;
+const buildAcademicEndpoint = (portfolioId: number) => `/api/portfolios/${portfolioId}/academics`;
 
 const mapAcademicFormData = (data: AcademicFormData) => {
   const formData = new FormData();
@@ -40,7 +40,7 @@ const unwrapAcademicList = (responseData: unknown): AcademicRecord[] => {
 };
 
 export const getAcademics = async (portfolioId: number) => {
-  const response = await http.get(buildAcademicEndpoint(portfolioId));
+  const response = await http.get(`/api/academics/portfolio/${portfolioId}`);
   return unwrapAcademicList(response.data);
 };
 
@@ -50,18 +50,17 @@ export const createAcademic = async (portfolioId: number, data: AcademicFormData
 };
 
 export const updateAcademic = async (
-  portfolioId: number,
   academicId: number,
   data: AcademicFormData
 ) => {
   const formData = mapAcademicFormData(data);
   formData.append("_method", "PUT");
 
-  const response = await http.post(`${buildAcademicEndpoint(portfolioId)}/${academicId}`, formData);
+  const response = await http.post(`api/academics/${academicId}`, formData);
   return response.data;
 };
 
-export const deleteAcademic = async (portfolioId: number, academicId: number) => {
-  const response = await http.delete(`${buildAcademicEndpoint(portfolioId)}/${academicId}`);
+export const deleteAcademic = async ( academicId: number) => {
+  const response = await http.delete(`api/academics/${academicId}`);
   return response.data;
 };
