@@ -9,6 +9,7 @@ import { getPublicPortfolio } from "@/services/url.service";
 // import Stats from "@/components/public-portfolio/Stats";
 // import BigSkilss from "@/components/public-portfolio/BigSkilss";
 import WorkExperience from "@/components/public-portfolio/WorkExperience";
+import BusinessGit from "@/components/public-portfolio/BusinessGit";
 // import EducationProjects from "@/components/public-portfolio/EducationProjects";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
 import RecentWork from "@/components/public-portfolio/RecentWork";
@@ -112,6 +113,9 @@ export default function PublicPortfolio() {
         {/* <Stats /> */}
         <div id="projects">
           <RecentWork projects={profile?.projects || []} />
+        </div>
+        <div id="github">
+          <BusinessGit githubUsername={profile?.github_username} />
         </div>
         {/* <BusinessGit />
         <div id="servicios">
