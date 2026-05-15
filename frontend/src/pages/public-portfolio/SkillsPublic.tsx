@@ -7,9 +7,6 @@ import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 
 import type { PortfolioSkill } from "@/types/public-portfolio";
 
-/* =========================
-   TYPES
-========================= */
 type SoftSkill = {
   id: number;
   name: string;
@@ -19,16 +16,10 @@ type SoftSkill = {
 export default function SkillsPublic() {
   const { slug } = useParams();
 
-  /* =========================
-     STATE
-  ========================= */
   const [skills, setSkills] = useState<PortfolioSkill[]>([]);
   const [softSkills, setSoftSkills] = useState<SoftSkill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  /* =========================
-     FETCH DATA
-  ========================= */
   useEffect(() => {
     if (!slug) return;
 
@@ -45,13 +36,7 @@ export default function SkillsPublic() {
         const softJson = await softRes.json();
 
         if (!isMounted) return;
-
-        /* =========================
-           NORMALIZAR RESPUESTAS
-        ========================= */
-
         const techData = Array.isArray(techJson) ? techJson : (techJson?.data ?? []);
-
         const softData = Array.isArray(softJson) ? softJson : (softJson?.data ?? []);
 
         setSkills(techData);
@@ -72,9 +57,6 @@ export default function SkillsPublic() {
 
   const firstName = "Usuario";
 
-  /* =========================
-     LOADING
-  ========================= */
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0a0b1e] text-slate-100 flex items-center justify-center">
@@ -86,9 +68,6 @@ export default function SkillsPublic() {
     );
   }
 
-  /* =========================
-     UI
-  ========================= */
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
       <PublicNavbar firstName={firstName} slug={slug || ""} />

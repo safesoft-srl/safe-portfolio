@@ -36,7 +36,6 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
           </p>
         </div>
 
-        {/* GRID SELECTOR */}
         <div className="relative z-10 mt-12 flex flex-wrap justify-center gap-3">
           {data.map((skill) => {
             const isActive = selected?.id === skill.id;
@@ -64,7 +63,6 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
           })}
         </div>
 
-        {/* DETAIL PANEL */}
         <div className="relative z-10 mt-12">
           <div
             className="
@@ -87,7 +85,6 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
                     "Esta habilidad refleja tu forma de trabajar y relacionarte en entornos profesionales."}
                 </p>
 
-                {/* mini highlight bar */}
                 <div className="mt-6 h-1 w-24 rounded-full bg-[#bcfd49]/70" />
               </div>
             ) : (
@@ -96,7 +93,6 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
           </div>
         </div>
 
-        {/* EMPTY STATE */}
         {data.length === 0 && (
           <p className="mt-10 text-center text-sm text-slate-400">
             No hay habilidades blandas registradas todavía.
