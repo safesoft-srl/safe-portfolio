@@ -10,6 +10,7 @@ export type ProfileData = {
   bio: string;
   profile_image: string | null;
   url_portfolio: string;
+  github_username?: string | null;
 };
 
 const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
@@ -20,6 +21,7 @@ const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
   bio: payload?.bio ?? "",
   profile_image: payload?.profile_image ?? null,
   url_portfolio: payload?.url_portfolio ?? "",
+  github_username: payload?.github_username ?? null,
 });
 
 const unwrapData = (responseData: unknown): ProfileDataType | undefined => {
@@ -89,6 +91,10 @@ export async function updateProfile(
   formData.append("profession", payload.profession);
   formData.append("bio", payload.bio);
   formData.append("url_portfolio", payload.url_portfolio);
+
+  if (payload.github_username !== undefined) {
+    formData.append("github_username", payload.github_username ?? "");
+  }
 
   if (payload.id) {
     formData.append("id_portfolio", payload.id.toString());
