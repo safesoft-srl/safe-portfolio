@@ -27,6 +27,7 @@ class PortfolioResource extends JsonResource
             'portfolio_slug' => $this->portfolio_slug,
             'is_public' => $this->is_public,
             'github_username' => $this->github_username,
+            'linkedin_url' => $this->linkedin_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'projects' => ProjectResource::collection($this->projects),
