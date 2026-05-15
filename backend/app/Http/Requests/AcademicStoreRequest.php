@@ -30,6 +30,7 @@ class AcademicStoreRequest extends FormRequest
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after:start_date',
             'is_current' => 'boolean',
+            'is_visible' => 'boolean',
             'description' => 'nullable|string',
         ];
     }
@@ -48,6 +49,7 @@ class AcademicStoreRequest extends FormRequest
             'end_date.date' => 'La fecha fin debe ser una fecha válida.',
             'end_date.after' => 'La fecha fin debe ser posterior a la fecha de inicio.',
             'is_current.boolean' => 'El campo "actual" debe ser un valor booleano.',
+            'is_visible.boolean' => 'El campo "visible" debe ser un valor booleano.',
             'description.string' => 'La descripción debe ser una cadena de texto.',
         ];
     }
