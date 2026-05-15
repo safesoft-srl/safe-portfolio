@@ -101,7 +101,7 @@ export default function FormationPage() {
         });
       } else {
         await createMutation.mutateAsync(data);
-        toast.success("Formación guardada correctamente.", {
+        toast.success("Formación registrada correctamente.", {
           style: {
             background: "#6c72ff",
             color: "#ffffff",
@@ -150,7 +150,7 @@ export default function FormationPage() {
         }}
       >
         <main className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl flex-col px-1 pb-4 text-foreground font-sans">
-          <header className="flex items-start justify-between gap-3">
+          <header className="mt-8 flex items-start justify-between gap-3">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Formación Académica</h1>
               <p className="mt-1 text-sm text-slate-400"></p>
