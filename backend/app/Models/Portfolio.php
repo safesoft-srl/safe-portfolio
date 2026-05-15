@@ -20,6 +20,7 @@ class Portfolio extends Model
         'url_portfolio',
         'portfolio_slug',
         'is_public',
+        'github_username',
     ];
 
     public function user()
