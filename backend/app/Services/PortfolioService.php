@@ -117,6 +117,9 @@ class PortfolioService
             'workExperiences' => function ($query) {
                 $query->where('is_visible', true);
             },
+            'academycTrainings' => function ($query) {
+                $query->where('is_visible', true);
+            },
             'projects' => function ($query) {
                 $query->where('visible', true);
             },

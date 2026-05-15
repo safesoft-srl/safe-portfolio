@@ -31,6 +31,7 @@ class PortfolioResource extends JsonResource
             'projects' => ProjectResource::collection($this->projects),
             'portfolio_skills' => TechnicalSkillPortfolioResource::collection($this->portfolioSkills),
             'work_experiences' => ExperienceResource::collection($this->workExperiences),
+            'academyc_trainings' => AcademicResource::collection($this->academycTrainings),
         ];
     }
 }
