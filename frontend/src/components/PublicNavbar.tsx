@@ -10,7 +10,7 @@ export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
     { name: "Sobre Mi", href: "#sobre-mi" },
     { name: "Proyectos", href: `/p/${slug}/projects` },
     { name: "Experiencia", href: `/p/${slug}/experience` },
-    { name: "Habilidades", href: "#skills" },
+    { name: "Habilidades", href: `/p/${slug}/skills` },
     // { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog
     // { name: "Contacto", href: "#contacto" },
   ];

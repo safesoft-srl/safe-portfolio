@@ -1,5 +1,15 @@
 import type { Project } from "@/features/projects/types/project.types";
 
+export type TechnicalSkill = {
+  id: number;
+  name: string;
+  category: string;
+  urls?: {
+    light?: string;
+    dark?: string;
+  };
+};
+
 export type PortfolioSkill = {
   id: number;
   portfolio_id: number;
@@ -7,6 +17,8 @@ export type PortfolioSkill = {
   level: string;
   created_at: Date;
   updated_at: Date;
+  technical_skill?: TechnicalSkill;
+  technicalSkill?: TechnicalSkill;
 };
 
 export type WorkExperience = {

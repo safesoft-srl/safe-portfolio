@@ -5,9 +5,9 @@ type TechnicalSkill = {
   id: number;
   name: string;
   category: string;
-  urls: {
-    light: string;
-    dark: string;
+  urls?: {
+    light?: string;
+    dark?: string;
   };
 };
 
