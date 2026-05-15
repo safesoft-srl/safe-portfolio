@@ -11,6 +11,7 @@ export type ProfileData = {
   profile_image: string | null;
   url_portfolio: string;
   github_username?: string | null;
+  linkedin_url?: string | null;
 };
 
 const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
@@ -22,6 +23,7 @@ const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
   profile_image: payload?.profile_image ?? null,
   url_portfolio: payload?.url_portfolio ?? "",
   github_username: payload?.github_username ?? null,
+  linkedin_url: payload?.linkedin_url ?? null,
 });
 
 const unwrapData = (responseData: unknown): ProfileDataType | undefined => {
@@ -94,6 +96,10 @@ export async function updateProfile(
 
   if (payload.github_username !== undefined) {
     formData.append("github_username", payload.github_username ?? "");
+  }
+
+  if (payload.linkedin_url !== undefined) {
+    formData.append("linkedin_url", payload.linkedin_url ?? "");
   }
 
   if (payload.id) {

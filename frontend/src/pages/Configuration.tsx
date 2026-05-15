@@ -1,4 +1,4 @@
-import { GithubLogo, PlusIcon } from "@phosphor-icons/react";
+import { GithubLogo, LinkedinLogo, PlusIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -19,13 +19,21 @@ export default function Configuration() {
   const [githubError, setGithubError] = useState("");
   const [isSavingGithub, setIsSavingGithub] = useState(false);
 
-  // Load current portfolio data to pre-fill the field
+  // LinkedIn URL state
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [linkedinError, setLinkedinError] = useState("");
+  const [isSavingLinkedin, setIsSavingLinkedin] = useState(false);
+
+  // Load current portfolio data to pre-fill the fields
   useEffect(() => {
     const loadPortfolio = async () => {
       if (!idPortfolio) return;
       const portfolio = await getPortfolio(parseInt(idPortfolio));
       if (portfolio?.github_username) {
         setGithubUsername(portfolio.github_username);
+      }
+      if (portfolio?.linkedin_url) {
+        setLinkedinUrl(portfolio.linkedin_url);
       }
     };
     void loadPortfolio();
@@ -38,6 +46,14 @@ export default function Configuration() {
       return "Solo se permiten letras, números y guiones (-)";
     if (value.startsWith("-") || value.endsWith("-"))
       return "El username no puede comenzar ni terminar con un guión.";
+    return "";
+  };
+
+  const validateLinkedinUrl = (value: string) => {
+    if (!value) return "";
+    if (!/^https?:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/.test(value)) {
+      return "Debe ser una URL válida de perfil de LinkedIn (ej: https://www.linkedin.com/in/usuario)";
+    }
     return "";
   };
 
@@ -63,6 +79,7 @@ export default function Configuration() {
         url_portfolio: portfolio.url_portfolio ?? "",
         profile_image: portfolio.profile_image ?? null,
         github_username: githubUsername.trim() || null,
+        linkedin_url: portfolio.linkedin_url ?? null,
       });
 
       toast.success("Username de GitHub guardado correctamente.", {
@@ -72,6 +89,41 @@ export default function Configuration() {
       toast.error("Error al guardar el username de GitHub.");
     } finally {
       setIsSavingGithub(false);
+    }
+  };
+
+  const handleSaveLinkedin = async () => {
+    const error = validateLinkedinUrl(linkedinUrl);
+    if (error) {
+      setLinkedinError(error);
+      return;
+    }
+    if (!idPortfolio) return;
+
+    setIsSavingLinkedin(true);
+    try {
+      const portfolio = await getPortfolio(parseInt(idPortfolio));
+      if (!portfolio) return;
+
+      await updateProfile({
+        id: portfolio.id,
+        profile_name: portfolio.profile_name ?? "",
+        profile_email: portfolio.profile_email ?? "",
+        profession: portfolio.profession ?? "",
+        bio: portfolio.bio ?? "",
+        url_portfolio: portfolio.url_portfolio ?? "",
+        profile_image: portfolio.profile_image ?? null,
+        github_username: portfolio.github_username ?? null,
+        linkedin_url: linkedinUrl.trim() || null,
+      });
+
+      toast.success("URL de LinkedIn guardada correctamente.", {
+        style: { background: "#6c72ff", color: "#ffffff", border: "1px solid #8b90ff" },
+      });
+    } catch {
+      toast.error("Error al guardar la URL de LinkedIn.");
+    } finally {
+      setIsSavingLinkedin(false);
     }
   };
 
@@ -143,6 +195,63 @@ export default function Configuration() {
             >
               <GithubLogo size={13} />
               Ver perfil: github.com/{githubUsername}
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* LinkedIn Section */}
+      <div className="rounded-2xl border border-[#262b46] bg-[#13152e] p-6 space-y-5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1d3a] border border-[#262b46]">
+            <LinkedinLogo size={22} weight="fill" className="text-white" />
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-white">Integración con LinkedIn</h2>
+            <p className="text-xs text-slate-400">
+              Agrega tu perfil de LinkedIn para que los reclutadores puedan contactarte.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="linkedin-url" className="text-sm text-slate-300 font-medium">
+            URL del perfil de LinkedIn
+          </label>
+          <div className="flex gap-3 flex-col sm:flex-row">
+            <div className="relative flex-1">
+              <Input
+                id="linkedin-url"
+                type="text"
+                placeholder="https://www.linkedin.com/in/tu-perfil"
+                value={linkedinUrl}
+                onChange={(e) => {
+                  setLinkedinUrl(e.target.value);
+                  setLinkedinError(validateLinkedinUrl(e.target.value));
+                }}
+                className={`bg-[#1a1d3a] border-[#262b46] text-white placeholder:text-slate-600 focus-visible:ring-[#6c72ff] ${
+                  linkedinError ? "border-red-500 focus-visible:ring-red-500" : ""
+                }`}
+              />
+            </div>
+            <Button
+              onClick={() => void handleSaveLinkedin()}
+              disabled={isSavingLinkedin || !!linkedinError}
+              className="bg-[#6c72ff] hover:bg-[#5c61eb] text-white min-w-[120px]"
+            >
+              {isSavingLinkedin ? "Guardando..." : "Guardar"}
+            </Button>
+          </div>
+          {linkedinError && <p className="text-xs text-red-400">{linkedinError}</p>}
+          {linkedinUrl && !linkedinError && (
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-[#6c72ff] hover:text-[#8b90ff] transition-colors"
+            >
+              <LinkedinLogo size={13} />
+              Ver perfil: {linkedinUrl}
             </a>
           )}
         </div>

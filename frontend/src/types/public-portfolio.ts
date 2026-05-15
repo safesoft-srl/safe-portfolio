@@ -37,6 +37,7 @@ export type ProfileData = {
   portfolio_slug: string | null;
   is_public: boolean;
   github_username?: string | null;
+  linkedin_url?: string | null;
   created_at: Date;
   updated_at: Date;
   portfolio_skills: PortfolioSkill[];
