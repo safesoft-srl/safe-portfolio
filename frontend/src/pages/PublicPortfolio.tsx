@@ -5,6 +5,7 @@ import { PublicFooter } from "@/components/PublicFooter";
 import defaultProfileImage from "@/assets/image.png";
 import { type ProfileData } from "@/types/public-portfolio";
 import { getPublicPortfolio } from "@/services/url.service";
+import { generateLatexPdf } from "@/lib/latex";
 // import BusinessGit from "@/components/public-portfolio/BusinessGit";
 // import Stats from "@/components/public-portfolio/Stats";
 // import BigSkilss from "@/components/public-portfolio/BigSkilss";
@@ -14,6 +15,7 @@ import AcademicFormation from "@/components/public-portfolio/AcademicFormation";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
 import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 import RecentWork from "@/components/public-portfolio/RecentWork";
+import { Button } from "@/components/ui/button";
 // import ContactForm from "@/components/public-portfolio/ContactForm";
 
 // import { PersonIcon } from "@phosphor-icons/react";
@@ -76,6 +78,7 @@ export default function PublicPortfolio() {
 
   const safeSoftSkills = Array.isArray(softSkills) ? softSkills : [];
 
+  const portfolioPdfUrl = generateLatexPdf(profile);
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
       <PublicNavbar firstName={firstName} slug={slug || ""} />
@@ -101,6 +104,7 @@ export default function PublicPortfolio() {
               <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-white">
                 Hola, soy {firstName}!
               </p>
+              <Button onClick={() => window.open(portfolioPdfUrl, "_blank")}>Descargar PDF</Button>
 
               <h1 className="text-3xl font-semibold leading-snug text-white sm:text-4xl md:text-5xl">
                 <span className="block">
