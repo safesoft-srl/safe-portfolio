@@ -68,7 +68,9 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
 
         // 1. Intentar obtener los Pinned Repositories (Usando la API comunitaria)
         try {
-          const pinnedRes = await fetch(`https://gh-pinned-repos.egoist.dev/?username=${githubUsername}`);
+          const pinnedRes = await fetch(
+            `https://gh-pinned-repos.egoist.dev/?username=${githubUsername}`
+          );
           if (pinnedRes.ok) {
             const pinnedData = await pinnedRes.json();
             if (Array.isArray(pinnedData) && pinnedData.length > 0) {
@@ -194,7 +196,11 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
                           <Circle
                             size={10}
                             weight="fill"
-                            color={repo.languageColor || defaultLanguageColors[repo.language] || "#8b949e"}
+                            color={
+                              repo.languageColor ||
+                              defaultLanguageColors[repo.language] ||
+                              "#8b949e"
+                            }
                           />
                           <span>{repo.language}</span>
                         </div>
