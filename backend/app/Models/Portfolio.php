@@ -46,4 +46,9 @@ class Portfolio extends Model
     {
         return $this->hasMany(Academyc_Training::class);
     }
+
+    public function softSkills()
+    {
+        return $this->hasMany(SoftSkill::class);
+    }
 }

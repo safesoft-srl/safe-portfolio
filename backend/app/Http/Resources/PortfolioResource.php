@@ -30,6 +30,7 @@ class PortfolioResource extends JsonResource
             'updated_at' => $this->updated_at,
             'projects' => ProjectResource::collection($this->projects),
             'portfolio_skills' => TechnicalSkillPortfolioResource::collection($this->portfolioSkills),
+            'soft_skills' => SoftSkillResource::collection($this->softSkills),
             'work_experiences' => ExperienceResource::collection($this->workExperiences),
             'academyc_trainings' => AcademicResource::collection($this->academycTrainings),
         ];

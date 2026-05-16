@@ -113,6 +113,9 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
+Route::get('/portfolios/slug/{slug}/skills', [PortfolioTechnicalSkillController::class, 'publicBySlug']);
+Route::get('/portfolios/slug/{slug}/soft-skills', [SoftSkillController::class, 'publicBySlug']);
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/academics', [AcademicController::class, 'index']);
     Route::post('/portfolios/{portfolioId}/academics', [AcademicController::class, 'store']);

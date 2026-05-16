@@ -13,4 +13,9 @@ class SoftSkill extends Model
         'name',
         'description',
     ];
+
+    public function portfolio()
+    {
+        return $this->belongsTo(Portfolio::class, 'portfolio_id');
+    }
 }

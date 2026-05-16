@@ -114,6 +114,7 @@ class PortfolioService
     {
         return Portfolio::with([
             'portfolioSkills.technicalSkill',
+            'softSkills',
             'workExperiences' => function ($query) {
                 $query->where('is_visible', true);
             },
