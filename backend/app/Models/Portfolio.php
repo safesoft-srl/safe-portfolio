@@ -41,4 +41,9 @@ class Portfolio extends Model
     {
         return $this->hasMany(WorkExperience::class);
     }
+
+    public function softSkills()
+    {
+        return $this->hasMany(SoftSkill::class);
+    }
 }

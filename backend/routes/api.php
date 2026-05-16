@@ -111,3 +111,6 @@ Route::middleware('auth:api')->group(function () {
     // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para eliminar una soft skill de un portafolio)
 
 });
+
+Route::get('/portfolios/slug/{slug}/skills', [PortfolioTechnicalSkillController::class, 'publicBySlug']);
+Route::get('/portfolios/slug/{slug}/soft-skills', [SoftSkillController::class, 'publicBySlug']);
