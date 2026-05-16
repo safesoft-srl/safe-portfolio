@@ -16,6 +16,26 @@ interface DisplayRepo {
   languageColor?: string;
 }
 
+interface PinnedRepo {
+  repo: string;
+  description: string;
+  link: string;
+  stars: string | number;
+  forks: string | number;
+  language: string;
+  languageColor?: string;
+}
+
+interface GithubApiRepo {
+  id: number;
+  name: string;
+  description: string | null;
+  html_url: string;
+  stargazers_count: number;
+  forks_count: number;
+  language: string | null;
+}
+
 // Map of colors for common languages (fallback when API doesn't provide them)
 const defaultLanguageColors: Record<string, string> = {
   JavaScript: "#f1e05a",
@@ -52,7 +72,7 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
           if (pinnedRes.ok) {
             const pinnedData = await pinnedRes.json();
             if (Array.isArray(pinnedData) && pinnedData.length > 0) {
-              displayRepos = pinnedData.map((repo: any, index: number) => ({
+              displayRepos = pinnedData.map((repo: PinnedRepo, index: number) => ({
                 id: `pinned-${index}`,
                 name: repo.repo,
                 description: repo.description || "",
@@ -77,7 +97,7 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
           if (!searchRes.ok) throw new Error("Error fetching fallback repos");
 
           const searchData = await searchRes.json();
-          displayRepos = searchData.items.map((repo: any) => ({
+          displayRepos = searchData.items.map((repo: GithubApiRepo) => ({
             id: repo.id,
             name: repo.name,
             description: repo.description || "",

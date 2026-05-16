@@ -42,7 +42,7 @@ export default function Configuration() {
   const validateGithubUsername = (value: string) => {
     if (!value) return "";
     if (value.length > 39) return "El username no puede superar los 39 caracteres.";
-    if (!/^[a-zA-Z0-9\-]+$/.test(value))
+    if (!/^[a-zA-Z0-9-]+$/.test(value))
       return "Solo se permiten letras, números y guiones (-)";
     if (value.startsWith("-") || value.endsWith("-"))
       return "El username no puede comenzar ni terminar con un guión.";
