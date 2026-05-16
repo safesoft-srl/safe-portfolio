@@ -6,6 +6,7 @@ import defaultProfileImage from "@/assets/image.png";
 import { type ProfileData } from "@/types/public-portfolio";
 import { getPublicPortfolio } from "@/services/url.service";
 import BusinessGit from "@/components/public-portfolio/BusinessGit";
+import { generateLatexPdf } from "@/lib/latex";
 // import Stats from "@/components/public-portfolio/Stats";
 // import BigSkilss from "@/components/public-portfolio/BigSkilss";
 import WorkExperience from "@/components/public-portfolio/WorkExperience";
@@ -15,6 +16,10 @@ import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
 import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 import RecentWork from "@/components/public-portfolio/RecentWork";
 import { LinkedinLogo } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+// import ContactForm from "@/components/public-portfolio/ContactForm";
+
+// import { PersonIcon } from "@phosphor-icons/react";
 
 const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
@@ -74,6 +79,7 @@ export default function PublicPortfolio() {
 
   const safeSoftSkills = Array.isArray(softSkills) ? softSkills : [];
 
+  const portfolioPdfUrl = generateLatexPdf(profile);
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
       <PublicNavbar firstName={firstName} slug={slug || ""} />
@@ -96,9 +102,12 @@ export default function PublicPortfolio() {
             </div>
 
             <div className="w-full max-w-xl text-left lg:pl-4">
-              <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-white">
-                Hola, soy {firstName}!
-              </p>
+              <div className="flex justify-between items-center gap-4 mb-3">
+                <p className=" font-mono text-xs uppercase tracking-[0.3em] text-white">
+                  Hola, soy {firstName}!
+                </p>
+                <Button onClick={() => window.open(portfolioPdfUrl, "_blank")}>Descargar CV</Button>
+              </div>
 
               <h1 className="text-3xl font-semibold leading-snug text-white sm:text-4xl md:text-5xl">
                 <span className="block">
