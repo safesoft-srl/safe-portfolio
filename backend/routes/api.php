@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PortfolioController;
@@ -114,3 +115,12 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('/portfolios/slug/{slug}/skills', [PortfolioTechnicalSkillController::class, 'publicBySlug']);
 Route::get('/portfolios/slug/{slug}/soft-skills', [SoftSkillController::class, 'publicBySlug']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/academics', [AcademicController::class, 'index']);
+    Route::post('/portfolios/{portfolioId}/academics', [AcademicController::class, 'store']);
+    Route::get('/academics/{id}', [AcademicController::class, 'show']);
+    Route::put('/academics/{id}', [AcademicController::class, 'update']);
+    Route::delete('/academics/{id}', [AcademicController::class, 'destroy']);
+    Route::get('/academics/portfolio/{portfolioId}', [AcademicController::class, 'getByPortfolio']);
+});

@@ -28,12 +28,10 @@ export default function AcademicCard({ academic, onEdit, onDelete }: Props) {
       : "";
 
   return (
-    <div className="group relative flex flex-col bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl p-5 pr-16 sm:p-6 sm:pr-6 transition-all hover:bg-slate-900/80 hover:border-indigo-500/50 overflow-hidden">
+    <div className="group relative flex w-full flex-col bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl p-5 pr-16 sm:p-6 sm:pr-6 transition-all hover:bg-slate-900/80 hover:border-indigo-500/50 overflow-hidden">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="bg-indigo-900 text-white px-4 py-1.5 rounded-full font-bold text-sm sm:text-base shadow-sm">
-            {academic.title}
-          </span>
+          <span className="text-white  py-1.5  font-bold text-xl">{academic.title}</span>
           {!academic.is_visible && (
             <span className="bg-slate-800 text-slate-100 px-3 py-1.5 rounded-full font-semibold text-xs sm:text-sm whitespace-nowrap">
               Oculto

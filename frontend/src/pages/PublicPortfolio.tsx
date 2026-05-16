@@ -9,6 +9,7 @@ import { getPublicPortfolio } from "@/services/url.service";
 // import Stats from "@/components/public-portfolio/Stats";
 // import BigSkilss from "@/components/public-portfolio/BigSkilss";
 import WorkExperience from "@/components/public-portfolio/WorkExperience";
+import AcademicFormation from "@/components/public-portfolio/AcademicFormation";
 // import EducationProjects from "@/components/public-portfolio/EducationProjects";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
 import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
@@ -127,6 +128,10 @@ export default function PublicPortfolio() {
         <div id="experience">
           <WorkExperience workExperience={profile?.work_experiences || []} />
           {/* <EducationProjects /> */}
+        </div>
+        <div id="formation">
+          <AcademicFormation academics={profile?.academyc_trainings || []} />
+          {/* <AcademicFormation /> */}
         </div>
         <div id="skills">
           <SkillsGrid skills={safeSkills} />

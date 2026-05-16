@@ -36,6 +36,21 @@ export type WorkExperience = {
   updated_at: Date;
 };
 
+export type AcademicTraining = {
+  id: number;
+  portfolio_id: number;
+  institution_name: string;
+  title: string;
+  field_of_study: string;
+  start_date: string;
+  end_date: string | null;
+  is_current: boolean;
+  description: string;
+  is_visible: boolean;
+  created_at: Date;
+  updated_at: Date;
+};
+
 export type ProfileData = {
   id: number;
   user_id: number;
@@ -52,6 +67,7 @@ export type ProfileData = {
   updated_at: Date;
   portfolio_skills: PortfolioSkill[];
   work_experiences: WorkExperience[];
+  academyc_trainings: AcademicTraining[];
   projects: Project[];
 };
 export type ApiProfilePayload = {
