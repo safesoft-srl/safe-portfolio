@@ -20,6 +20,11 @@ export type PortfolioSkill = {
   technical_skill?: TechnicalSkill;
   technicalSkill?: TechnicalSkill;
 };
+export type SoftSkill = {
+  id: number;
+  name: string;
+  description: string;
+};
 
 export type WorkExperience = {
   id: number;
@@ -66,6 +71,7 @@ export type ProfileData = {
   created_at: Date;
   updated_at: Date;
   portfolio_skills: PortfolioSkill[];
+  soft_skills: SoftSkill[];
   work_experiences: WorkExperience[];
   academyc_trainings: AcademicTraining[];
   projects: Project[];
