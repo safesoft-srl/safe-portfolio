@@ -222,4 +222,17 @@ class SoftSkillController extends Controller
             );
         }
     }
+
+    public function publicBySlug($slug)
+    {
+        $portfolio = \App\Models\Portfolio::where('portfolio_slug', $slug)->firstOrFail();
+
+        $softSkills = $portfolio->softSkills()->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $softSkills,
+            'message' => 'Soft skills obtenidas correctamente',
+        ]);
+    }
 }

@@ -43,4 +43,14 @@ class Portfolio extends Model
     {
         return $this->hasMany(WorkExperience::class);
     }
+
+    public function academycTrainings()
+    {
+        return $this->hasMany(Academyc_Training::class);
+    }
+
+    public function softSkills()
+    {
+        return $this->hasMany(SoftSkill::class);
+    }
 }

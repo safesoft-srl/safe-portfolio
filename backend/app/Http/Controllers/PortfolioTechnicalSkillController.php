@@ -199,4 +199,17 @@ class PortfolioTechnicalSkillController extends Controller
             );
         }
     }
+
+    public function publicBySlug($slug)
+    {
+        $portfolio = \App\Models\Portfolio::where('portfolio_slug', $slug)->firstOrFail();
+
+        $skills = $portfolio->portfolioSkills()->with('technicalSkill')->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $skills,
+            'message' => 'Skills obtenidas correctamente',
+        ]);
+    }
 }

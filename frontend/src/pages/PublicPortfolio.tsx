@@ -5,13 +5,14 @@ import { PublicFooter } from "@/components/PublicFooter";
 import defaultProfileImage from "@/assets/image.png";
 import { type ProfileData } from "@/types/public-portfolio";
 import { getPublicPortfolio } from "@/services/url.service";
-// import BusinessGit from "@/components/public-portfolio/BusinessGit";
+import BusinessGit from "@/components/public-portfolio/BusinessGit";
 // import Stats from "@/components/public-portfolio/Stats";
 // import BigSkilss from "@/components/public-portfolio/BigSkilss";
 import WorkExperience from "@/components/public-portfolio/WorkExperience";
-import BusinessGit from "@/components/public-portfolio/BusinessGit";
+import AcademicFormation from "@/components/public-portfolio/AcademicFormation";
 // import EducationProjects from "@/components/public-portfolio/EducationProjects";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
+import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 import RecentWork from "@/components/public-portfolio/RecentWork";
 import { LinkedinLogo } from "@phosphor-icons/react";
 
@@ -66,6 +67,12 @@ export default function PublicPortfolio() {
       : [];
 
   const safeSkills = Array.isArray(portfolioSkills) ? portfolioSkills : [];
+  const softSkills =
+    profile && typeof profile === "object" && "soft_skills" in profile
+      ? (profile as { soft_skills?: unknown }).soft_skills
+      : [];
+
+  const safeSoftSkills = Array.isArray(softSkills) ? softSkills : [];
 
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
@@ -135,8 +142,15 @@ export default function PublicPortfolio() {
           <WorkExperience workExperience={profile?.work_experiences || []} />
           {/* <EducationProjects /> */}
         </div>
+        <div id="formation">
+          <AcademicFormation academics={profile?.academyc_trainings || []} />
+          {/* <AcademicFormation /> */}
+        </div>
         <div id="skills">
           <SkillsGrid skills={safeSkills} />
+        </div>
+        <div id="soft-skills">
+          <SoftSkillsGrid skills={safeSoftSkills} />
         </div>
         {/* <div id="contacto">
           <ContactForm />

@@ -1,5 +1,15 @@
 import type { Project } from "@/features/projects/types/project.types";
 
+export type TechnicalSkill = {
+  id: number;
+  name: string;
+  category: string;
+  urls?: {
+    light?: string;
+    dark?: string;
+  };
+};
+
 export type PortfolioSkill = {
   id: number;
   portfolio_id: number;
@@ -7,6 +17,8 @@ export type PortfolioSkill = {
   level: string;
   created_at: Date;
   updated_at: Date;
+  technical_skill?: TechnicalSkill;
+  technicalSkill?: TechnicalSkill;
 };
 
 export type WorkExperience = {
@@ -19,6 +31,21 @@ export type WorkExperience = {
   is_current: boolean;
   description: string | null;
   achievements: string | null;
+  is_visible: boolean;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type AcademicTraining = {
+  id: number;
+  portfolio_id: number;
+  institution_name: string;
+  title: string;
+  field_of_study: string;
+  start_date: string;
+  end_date: string | null;
+  is_current: boolean;
+  description: string;
   is_visible: boolean;
   created_at: Date;
   updated_at: Date;
@@ -42,6 +69,7 @@ export type ProfileData = {
   updated_at: Date;
   portfolio_skills: PortfolioSkill[];
   work_experiences: WorkExperience[];
+  academyc_trainings: AcademicTraining[];
   projects: Project[];
 };
 export type ApiProfilePayload = {
