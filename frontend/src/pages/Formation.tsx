@@ -34,7 +34,7 @@ const getErrorMessage = (error: unknown, fallback: string) => {
 export default function FormationPage() {
   const portfolioId = usePortfolioId();
   const queryClient = useQueryClient();
-  const { academics} = useAcademic();
+  const { academics } = useAcademic();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAcademic, setEditingAcademic] = useState<AcademicRecord | null>(null);

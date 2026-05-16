@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PortfolioController;
@@ -8,7 +9,6 @@ use App\Http\Controllers\RegisterAccountController;
 use App\Http\Controllers\ResendTokenController;
 use App\Http\Controllers\SkillProjectController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AcademicController;
 
 Route::post('/register', [RegisterAccountController::class, 'register']);
 // Api   http://localhost:8000/api/register   (Para registrar nuevos usuarios)  JSON(name,email,password)

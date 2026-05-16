@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Services;
-use App\Models\Academyc_Training;
 
+use App\Models\Academyc_Training;
 
 class AcademicService
 {
     public function showAll()
     {
-        return  Academyc_Training::all();
+        return Academyc_Training::all();
     }
 
-    public function create(array $data, int  $portfolioId)
+    public function create(array $data, int $portfolioId)
     {
         $data['portfolio_id'] = $portfolioId;
 
@@ -24,13 +24,13 @@ class AcademicService
     {
         $academic = Academyc_Training::find($id);
 
-        if(!$academic) {
+        if (! $academic) {
             return null;
         }
 
         return $academic;
     }
-    
+
     public function update(Academyc_Training $academic, array $data)
     {
         $academic->update($data);
@@ -39,14 +39,14 @@ class AcademicService
     }
 
     public function delete(Academyc_Training $academic)
-    { 
+    {
         $academic->delete();
     }
 
     public function getByPortfolio(int $portfolioId)
     {
         return Academyc_Training::where('portfolio_id', $portfolioId)
-        ->latest()
-        ->get();
+            ->latest()
+            ->get();
     }
 }

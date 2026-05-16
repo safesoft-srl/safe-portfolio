@@ -49,10 +49,7 @@ export const createAcademic = async (portfolioId: number, data: AcademicFormData
   return response.data;
 };
 
-export const updateAcademic = async (
-  academicId: number,
-  data: AcademicFormData
-) => {
+export const updateAcademic = async (academicId: number, data: AcademicFormData) => {
   const formData = mapAcademicFormData(data);
   formData.append("_method", "PUT");
 
@@ -60,7 +57,7 @@ export const updateAcademic = async (
   return response.data;
 };
 
-export const deleteAcademic = async ( academicId: number) => {
+export const deleteAcademic = async (academicId: number) => {
   const response = await http.delete(`api/academics/${academicId}`);
   return response.data;
 };

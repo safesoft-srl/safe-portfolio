@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AcademicStoreRequest extends FormRequest
@@ -54,7 +54,7 @@ class AcademicStoreRequest extends FormRequest
         ];
     }
 
-    public function failedValidation(validator $validator) 
+    public function failedValidation(validator $validator)
     {
         throw new HttpResponseException(
             response()->json([

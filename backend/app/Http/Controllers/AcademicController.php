@@ -11,8 +11,8 @@ class AcademicController extends Controller
 {
     public function __construct(
         private AcademicService $academicService
-    ){}
-    
+    ) {}
+
     public function index()
     {
         $academics = $this->academicService->showAll();
@@ -23,13 +23,13 @@ class AcademicController extends Controller
         );
     }
 
-    public function store(AcademicStoreRequest $request, int  $portfolioId)
+    public function store(AcademicStoreRequest $request, int $portfolioId)
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
 
         $portfolio = $user->portfolios()->find($portfolioId);
-        
+
         if (! $portfolio) {
             return ApiResponse::error(
                 'Portafolio no encontrado',
@@ -52,7 +52,7 @@ class AcademicController extends Controller
     {
         $academic = $this->academicService->getById($id);
 
-        if (!$academic) {
+        if (! $academic) {
             return ApiResponse::error(
                 'Formación académica no encontrada',
                 404
@@ -69,7 +69,7 @@ class AcademicController extends Controller
     {
         $academic = $this->academicService->getById($id);
 
-        if(!$academic) {
+        if (! $academic) {
             return ApiResponse::error(
                 'Formación académica no encontrada',
                 404
@@ -92,7 +92,7 @@ class AcademicController extends Controller
     {
         $academic = $this->academicService->getById($id);
 
-        if(!$academic) {
+        if (! $academic) {
             return ApiResponse::error(
                 'Formación académica no encontrada',
                 404
@@ -113,8 +113,8 @@ class AcademicController extends Controller
         $user = auth()->user();
 
         $portfolio = $user->portfolios()->find($portfolioId);
-        
-        if (!$portfolio) {
+
+        if (! $portfolio) {
             return ApiResponse::error(
                 'Portafolio no encontrado',
                 404
