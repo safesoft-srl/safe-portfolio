@@ -101,10 +101,12 @@ export default function PublicPortfolio() {
             </div>
 
             <div className="w-full max-w-xl text-left lg:pl-4">
-              <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-white">
-                Hola, soy {firstName}!
-              </p>
-              <Button onClick={() => window.open(portfolioPdfUrl, "_blank")}>Descargar PDF</Button>
+              <div className="flex justify-between items-center gap-4 mb-3">
+                <p className=" font-mono text-xs uppercase tracking-[0.3em] text-white">
+                  Hola, soy {firstName}!
+                </p>
+                <Button onClick={() => window.open(portfolioPdfUrl, "_blank")}>Descargar CV</Button>
+              </div>
 
               <h1 className="text-3xl font-semibold leading-snug text-white sm:text-4xl md:text-5xl">
                 <span className="block">
