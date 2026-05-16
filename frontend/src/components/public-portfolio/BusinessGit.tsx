@@ -5,18 +5,19 @@ interface BusinessGitProps {
   githubUsername?: string | null;
 }
 
-interface GithubRepo {
-  id: number;
+interface DisplayRepo {
+  id: string | number;
   name: string;
   description: string;
   html_url: string;
-  stargazers_count: number;
-  forks_count: number;
+  stargazers_count: string | number;
+  forks_count: string | number;
   language: string;
+  languageColor?: string;
 }
 
-// Map of colors for common languages
-const languageColors: Record<string, string> = {
+// Map of colors for common languages (fallback when API doesn't provide them)
+const defaultLanguageColors: Record<string, string> = {
   JavaScript: "#f1e05a",
   TypeScript: "#3178c6",
   Python: "#3572A5",
@@ -31,7 +32,7 @@ const languageColors: Record<string, string> = {
 };
 
 export default function BusinessGit({ githubUsername }: BusinessGitProps) {
-  const [repos, setRepos] = useState<GithubRepo[]>([]);
+  const [repos, setRepos] = useState<DisplayRepo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -41,18 +42,56 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
     const fetchRepos = async () => {
       try {
         setLoading(true);
-        // Fetch repositories sorted by recently updated, limited to 4
-        const response = await fetch(
-          `https://api.github.com/users/${githubUsername}/repos?sort=updated&per_page=4`
-        );
-        
-        if (!response.ok) throw new Error("Error fetching repos");
-        
-        const data = await response.json();
-        setRepos(data);
         setError(false);
+
+        let displayRepos: DisplayRepo[] = [];
+
+        // 1. Intentar obtener los Pinned Repositories (Usando la API comunitaria)
+        try {
+          const pinnedRes = await fetch(`https://gh-pinned-repos.egoist.dev/?username=${githubUsername}`);
+          if (pinnedRes.ok) {
+            const pinnedData = await pinnedRes.json();
+            if (Array.isArray(pinnedData) && pinnedData.length > 0) {
+              displayRepos = pinnedData.map((repo: any, index: number) => ({
+                id: `pinned-${index}`,
+                name: repo.repo,
+                description: repo.description || "",
+                html_url: repo.link,
+                stargazers_count: repo.stars,
+                forks_count: repo.forks,
+                language: repo.language || "",
+                languageColor: repo.languageColor,
+              }));
+            }
+          }
+        } catch (e) {
+          console.warn("Fallo al obtener pinned repos, usando fallback", e);
+        }
+
+        // 2. Fallback: Si no tiene pinned repos o la API falló, traemos los más populares (estrellas)
+        if (displayRepos.length === 0) {
+          const searchRes = await fetch(
+            `https://api.github.com/search/repositories?q=user:${githubUsername}&sort=stars&order=desc&per_page=6`
+          );
+
+          if (!searchRes.ok) throw new Error("Error fetching fallback repos");
+
+          const searchData = await searchRes.json();
+          displayRepos = searchData.items.map((repo: any) => ({
+            id: repo.id,
+            name: repo.name,
+            description: repo.description || "",
+            html_url: repo.html_url,
+            stargazers_count: repo.stargazers_count,
+            forks_count: repo.forks_count,
+            language: repo.language || "",
+            languageColor: defaultLanguageColors[repo.language] || "#8b949e",
+          }));
+        }
+
+        setRepos(displayRepos.slice(0, 6)); // Asegurar máximo 6
       } catch (err) {
-        console.error("Error fetching GitHub repos:", err);
+        console.error("Error al cargar repos:", err);
         setError(true);
       } finally {
         setLoading(false);
@@ -79,7 +118,7 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
                 <GithubLogo size={22} weight="fill" className="text-white" />
               </div>
               <div>
-                <span className="font-mono text-xs text-[#6c72ff]">• Repositorios Recientes</span>
+                <span className="font-mono text-xs text-[#6c72ff]">• Repositorios Destacados</span>
                 <p className="text-lg font-semibold text-white">@{githubUsername}</p>
               </div>
             </div>
@@ -111,7 +150,7 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
                 Este usuario no tiene repositorios públicos aún.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {repos.map((repo) => (
                   <a
                     key={repo.id}
@@ -128,24 +167,24 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
                         {repo.description || "Sin descripción"}
                       </p>
                     </div>
-                    
+
                     <div className="flex items-center gap-4 text-xs font-mono text-slate-500">
                       {repo.language && (
                         <div className="flex items-center gap-1.5">
-                          <Circle 
-                            size={10} 
-                            weight="fill" 
-                            color={languageColors[repo.language] || "#8b949e"} 
+                          <Circle
+                            size={10}
+                            weight="fill"
+                            color={repo.languageColor || defaultLanguageColors[repo.language] || "#8b949e"}
                           />
                           <span>{repo.language}</span>
                         </div>
                       )}
-                      
+
                       <div className="flex items-center gap-1">
                         <Star size={14} />
                         <span>{repo.stargazers_count}</span>
                       </div>
-                      
+
                       <div className="flex items-center gap-1">
                         <GitFork size={14} />
                         <span>{repo.forks_count}</span>
