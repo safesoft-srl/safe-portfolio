@@ -107,7 +107,7 @@ export default function BusinessGit({ githubUsername }: BusinessGitProps) {
             stargazers_count: repo.stargazers_count,
             forks_count: repo.forks_count,
             language: repo.language || "",
-            languageColor: defaultLanguageColors[repo.language] || "#8b949e",
+            languageColor: repo.language ? defaultLanguageColors[repo.language] : "#8b949e",
           }));
         }
 
