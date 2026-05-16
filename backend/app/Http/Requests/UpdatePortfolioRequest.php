@@ -33,6 +33,8 @@ class UpdatePortfolioRequest extends FormRequest
             'bio' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'image_id' => 'nullable|string',
+            'github_username' => ['sometimes', 'nullable', 'string', 'max:39', 'regex:/^[a-zA-Z0-9\-]+$/'],
+            'linkedin_url' => ['sometimes', 'nullable', 'url', 'regex:/linkedin\.com\/in\//'],
         ];
     }
 

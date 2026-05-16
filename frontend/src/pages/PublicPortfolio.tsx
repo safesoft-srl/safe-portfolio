@@ -5,8 +5,8 @@ import { PublicFooter } from "@/components/PublicFooter";
 import defaultProfileImage from "@/assets/image.png";
 import { type ProfileData } from "@/types/public-portfolio";
 import { getPublicPortfolio } from "@/services/url.service";
+import BusinessGit from "@/components/public-portfolio/BusinessGit";
 import { generateLatexPdf } from "@/lib/latex";
-// import BusinessGit from "@/components/public-portfolio/BusinessGit";
 // import Stats from "@/components/public-portfolio/Stats";
 // import BigSkilss from "@/components/public-portfolio/BigSkilss";
 import WorkExperience from "@/components/public-portfolio/WorkExperience";
@@ -15,6 +15,7 @@ import AcademicFormation from "@/components/public-portfolio/AcademicFormation";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
 import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 import RecentWork from "@/components/public-portfolio/RecentWork";
+import { LinkedinLogo } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 // import ContactForm from "@/components/public-portfolio/ContactForm";
 
@@ -118,7 +119,19 @@ export default function PublicPortfolio() {
 
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-300">{bio}</p>
 
-              <div className="mt-8" />
+              <div className="mt-8 flex gap-4">
+                {profile?.linkedin_url && (
+                  <a
+                    href={profile.linkedin_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-[#0a66c2] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#084e96]"
+                  >
+                    <LinkedinLogo size={20} weight="fill" />
+                    Contactame en LinkedIn
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -126,6 +139,9 @@ export default function PublicPortfolio() {
         {/* <Stats /> */}
         <div id="projects">
           <RecentWork projects={profile?.projects || []} />
+        </div>
+        <div id="github">
+          <BusinessGit githubUsername={profile?.github_username} />
         </div>
         {/* <BusinessGit />
         <div id="servicios">
