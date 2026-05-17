@@ -206,9 +206,31 @@ class PortfolioTechnicalSkillController extends Controller
 
         $skills = $portfolio->portfolioSkills()->with('technicalSkill')->get();
 
+        $skillsFormatted = $skills->map(function ($skill) {
+            return [
+                'id' => $skill->id,
+                'portfolio_id' => $skill->portfolio_id,
+                'technical_skill_id' => $skill->technical_skill_id,
+                'level' => $skill->level,
+                'created_at' => $skill->created_at,
+                'updated_at' => $skill->updated_at,
+                'technical_skill' => [
+                    'id' => $skill->technicalSkill->id,
+                    'name' => $skill->technicalSkill->name,
+                    'category' => $skill->technicalSkill->category,
+                    'urls' => [
+                        'light' => $skill->technicalSkill->url_light,
+                        'dark' => $skill->technicalSkill->url_dark,
+                    ],
+                    'created_at' => $skill->technicalSkill->created_at,
+                    'updated_at' => $skill->technicalSkill->updated_at,
+                ],
+            ];
+        });
+
         return response()->json([
             'success' => true,
-            'data' => $skills,
+            'data' => $skillsFormatted,
             'message' => 'Skills obtenidas correctamente',
         ]);
     }

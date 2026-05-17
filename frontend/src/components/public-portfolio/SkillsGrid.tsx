@@ -68,45 +68,54 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
 
           {/* GRID */}
           <div className="mt-14 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
-            {filteredSkills.map((skill) => (
-              <div key={skill.id} className="group [perspective:1000px] isolate">
-                <div className="relative aspect-square w-32 sm:w-36 md:w-40 lg:w-44 xl:w-48 mx-auto will-change-transform">
-                  <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(-180deg)]">
-                    {/* FRONT */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl border border-[#2a2f4a] bg-[#1a1d3a]/40 p-4 [backface-visibility:hidden]">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/5 p-2">
-                        {skill.technical_skill?.urls?.dark ? (
-                          <img
-                            src={skill.technical_skill.urls.dark}
-                            alt={skill.technical_skill.name}
-                            className="h-9 w-9 object-contain"
-                          />
-                        ) : (
-                          <PersonIcon className="h-7 w-7 text-white/30" />
-                        )}
+            {filteredSkills.map((skill) => {
+              const iconPath =
+                skill.technical_skill?.urls?.dark ?? skill.technical_skill?.urls?.light;
+
+              const iconUrl = iconPath ? `${import.meta.env.VITE_API_URL}/${iconPath}` : null;
+
+              return (
+                <div key={skill.id} className="group [perspective:1000px] isolate">
+                  <div className="relative aspect-square w-32 sm:w-36 md:w-40 lg:w-44 xl:w-48 mx-auto will-change-transform">
+                    <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(-180deg)]">
+                      {/* FRONT */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl border border-[#2a2f4a] bg-[#1a1d3a]/40 p-4 [backface-visibility:hidden]">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/5 p-2">
+                          {iconUrl ? (
+                            <img
+                              src={iconUrl}
+                              alt={skill.technical_skill?.name ?? "Skill"}
+                              className="h-9 w-9 object-contain"
+                            />
+                          ) : (
+                            <PersonIcon className="h-7 w-7 text-white/30" />
+                          )}
+                        </div>
+
+                        <span className="text-xs font-semibold text-slate-300">
+                          {skill.technical_skill?.name ?? "Sin nombre"}
+                        </span>
                       </div>
 
-                      <span className="text-xs font-semibold text-slate-300">
-                        {skill.technical_skill?.name ?? "Sin nombre"}
-                      </span>
-                    </div>
+                      {/* BACK */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl border border-[#bcfd49] bg-[#0f1224] p-4 text-center text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                        <p className="text-sm font-bold">
+                          {skill.technical_skill?.name ?? "Skill"}
+                        </p>
 
-                    {/* BACK */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl border border-[#bcfd49] bg-[#0f1224] p-4 text-center text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
-                      <p className="text-sm font-bold">{skill.technical_skill?.name ?? "Skill"}</p>
+                        <p className="text-xs text-slate-300">
+                          Nivel: <span className="text-[#bcfd49]">{skill.level}</span>
+                        </p>
 
-                      <p className="text-xs text-slate-300">
-                        Nivel: <span className="text-[#bcfd49]">{skill.level}</span>
-                      </p>
-
-                      <p className="text-[10px] text-slate-400">
-                        {skill.technical_skill?.category ?? "Sin categoría"}
-                      </p>
+                        <p className="text-[10px] text-slate-400">
+                          {skill.technical_skill?.category ?? "Sin categoría"}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* EMPTY */}
