@@ -3,6 +3,8 @@ import { SkillCard, type UserSkill } from "./SkillCard";
 import { EditLevelModal } from "./EditLevelModal";
 import { AddTechnicalSkill } from "./addTechnicalSkill";
 import { usePortfolioId } from "@/hooks/usePortfolio";
+import { showErrorToast } from "@/components/ui/showErrorToast";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,24 +17,37 @@ export function TechnicalSkillsSection() {
   const [skillToEdit, setSkillToEdit] = useState<UserSkill | null>(null);
 
   const token = localStorage.getItem("token");
+  const toastStyle = {
+    background: "#6c72ff",
+    color: "#ffffff",
+    border: "1px solid #8b90ff",
+  };
 
   const fetchUserSkills = useCallback(async () => {
     try {
       setIsLoading(true);
+
       const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/technical-skills`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       const result = await res.json();
-      const skills = result.data || [];
-      setUserSkills(skills);
+
+      if (!res.ok) {
+        showErrorToast(result.message || "Error al cargar las habilidades.");
+        return;
+      }
+
+      setUserSkills(result.data || []);
     } catch (err) {
+      showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error cargando skills del usuario:", err);
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [PORTFOLIO_ID, token]);
 
   useEffect(() => {
     fetchUserSkills();
@@ -49,13 +64,20 @@ export function TechnicalSkillsSection() {
         body: JSON.stringify({ technical_skill_id, level }),
       });
 
-      if (res.ok) {
-        await fetchUserSkills();
-      } else {
-        const errorData = await res.json();
-        console.error("Error de la API:", errorData.message);
+      const result = await res.json();
+
+      if (!res.ok) {
+        showErrorToast(result.message || "No se pudo agregar la habilidad.");
+        return;
       }
+
+      toast.success(result.message || "Habilidad agregada correctamente.", {
+        style: toastStyle,
+      });
+
+      await fetchUserSkills();
     } catch (err) {
+      showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error de conexión:", err);
     }
   };
@@ -71,13 +93,20 @@ export function TechnicalSkillsSection() {
         body: JSON.stringify({ technical_skill_id }),
       });
 
-      if (res.ok) {
-        await fetchUserSkills();
-      } else {
-        const errorData = await res.json();
-        console.error("Error al eliminar:", errorData.message);
+      const result = await res.json();
+
+      if (!res.ok) {
+        showErrorToast(result.message || "No se pudo eliminar la habilidad.");
+        return;
       }
+
+      toast.success(result.message || "Habilidad eliminada correctamente.", {
+        style: toastStyle,
+      });
+
+      await fetchUserSkills();
     } catch (err) {
+      showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error eliminando skill:", err);
     }
   };
@@ -103,15 +132,23 @@ export function TechnicalSkillsSection() {
         }),
       });
 
-      if (res.ok) {
-        setIsEditModalOpen(false);
-        setSkillToEdit(null);
-        await fetchUserSkills();
-      } else {
-        const errorData = await res.json();
-        console.error("Error al actualizar:", errorData.message);
+      const result = await res.json();
+
+      if (!res.ok) {
+        showErrorToast(result.message || "No se pudo actualizar el nivel.");
+        return;
       }
+
+      toast.success(result.message || "Nivel actualizado correctamente.", {
+        style: toastStyle,
+      });
+
+      setIsEditModalOpen(false);
+      setSkillToEdit(null);
+
+      await fetchUserSkills();
     } catch (err) {
+      showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error actualizando skill:", err);
     }
   };
