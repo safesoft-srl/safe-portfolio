@@ -1,5 +1,7 @@
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { format, parseISO, isValid } from "date-fns";
+import { es } from "date-fns/locale";
 import type { Project } from "../types/project.types";
 import type { Skill } from "@/services/skill.service";
 import defaultProjectImage from "@/assets/image.png";
@@ -17,6 +19,24 @@ type Props = {
 
 export default function ProjectCard({ project, onEdit, onDelete, variant = "grid" }: Props) {
   const isListView = variant === "list";
+
+  const formatProjectYears = (startDate: string, endDate: string | null) => {
+    try {
+      const start = parseISO(startDate);
+      const startLabel = isValid(start) ? format(start, "MMM yyyy", { locale: es }) : "";
+
+      if (!endDate) {
+        return startLabel ? `${startLabel} - Presente` : "";
+      }
+
+      const end = parseISO(endDate);
+      const endLabel = isValid(end) ? format(end, "MMM yyyy", { locale: es }) : "";
+
+      return endLabel ? `${startLabel} - ${endLabel}` : startLabel;
+    } catch {
+      return "";
+    }
+  };
 
   return (
     <div className={isListView ? "w-full" : "w-full flex"}>
@@ -64,6 +84,11 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                     <span className="text-xs text-gray-400">Sin habilidades</span>
                   )}
                 </div>
+                  {project.start_date ? (
+                    <span className="bg-indigo-900 text-indigo-100 px-3 py-1.5 rounded-full font-semibold text-xs sm:text-sm whitespace-nowrap mt-2 inline-block">
+                      {formatProjectYears(project.start_date, project.end_date || null)}
+                    </span>
+                  ) : null}
               </div>
 
               <div className="flex flex-col items-end gap-2 shrink-0">
@@ -172,31 +197,39 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
               )}
             </div>
 
-            <div className="flex gap-3 mb-2">
-              {project.url_github && (
-                <a href={project.url_github} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    variant="default"
-                    className="flex items-center gap-2 px-6 py-3  font-semibold shadow-lg border-2 border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
-                    style={{ minWidth: 100 }}
-                  >
-                    <span className="i-mdi-github" />
-                    GitHub
-                  </Button>
-                </a>
-              )}
-              {project.url_demo && (
-                <a href={project.url_demo} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    variant="default"
-                    className="flex items-center gap-2 px-6 py-3 font-semibold shadow-lg border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
-                    style={{ minWidth: 100 }}
-                  >
-                    <span className="i-mdi-link-variant" />
-                    Ver Demo
-                  </Button>
-                </a>
-              )}
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <div className="flex gap-3">
+                {project.url_github && (
+                  <a href={project.url_github} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      variant="default"
+                      className="flex items-center gap-2 px-6 py-3  font-semibold shadow-lg border-2 border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
+                      style={{ minWidth: 100 }}
+                    >
+                      <span className="i-mdi-github" />
+                      GitHub
+                    </Button>
+                  </a>
+                )}
+                {project.url_demo && (
+                  <a href={project.url_demo} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      variant="default"
+                      className="flex items-center gap-2 px-6 py-3 font-semibold shadow-lg border-[#23234a] bg-[#23234a] hover:bg-[#6c72ff] hover:text-white transition-all duration-300"
+                      style={{ minWidth: 100 }}
+                    >
+                      <span className="i-mdi-link-variant" />
+                      Ver Demo
+                    </Button>
+                  </a>
+                )}
+              </div>
+
+              {project.start_date ? (
+                <span className="bg-indigo-900 text-indigo-100 px-3 py-1.5 rounded-full font-semibold text-xs sm:text-sm whitespace-nowrap">
+                  {formatProjectYears(project.start_date, project.end_date || null)}
+                </span>
+              ) : null}
             </div>
           </>
         )}
