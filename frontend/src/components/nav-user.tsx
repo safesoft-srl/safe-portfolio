@@ -32,7 +32,7 @@ export function NavUser({ user }: { user: User }) {
           >
             <Avatar>
               <AvatarImage src={""} alt={user.name} />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{user?.name?.charAt(0) ?? "U"}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{user.name}</span>
@@ -51,7 +51,7 @@ export function NavUser({ user }: { user: User }) {
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
                     <AvatarImage src={""} alt={user.name} />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>{user?.name?.charAt(0) ?? "U"}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
@@ -64,17 +64,17 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <CheckCircleIcon />
-                Account
+                Cuenta
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <BellIcon />
-                Notifications
+                Notificaciones
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
               <SignOutIcon />
-              Log out
+              Cerrrar Sesion
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
