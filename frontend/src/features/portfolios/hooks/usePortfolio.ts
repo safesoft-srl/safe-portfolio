@@ -1,36 +1,22 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getPortfolios } from "@/services/profile.service";
+import { useAuthStore } from "@/lib/auth-store";
 import type { Portfolio } from "../types/portfolios.type";
 
 export function usePortfolio() {
-  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const loadPortfolios = async () => {
-      try {
-        const response = await getPortfolios({ signal: controller.signal });
-
-        if (response) {
-          setPortfolios(response);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error("Error al cargar usuario:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadPortfolios();
-    return () => controller.abort();
-  }, []);
+  const { data: portfolios = [], isLoading } = useQuery({
+    queryKey: ["portfolios"],
+    queryFn: getPortfolios,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    enabled: isAuthenticated,
+  });
 
   return {
     portfolios,
     isLoading,
-    addPortfolio: (portfolio: Portfolio) => setPortfolios((prev) => [portfolio, ...prev]),
+    addPortfolio: (portfolio: Portfolio) => portfolio,
   };
 }
