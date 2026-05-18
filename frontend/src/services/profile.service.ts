@@ -4,6 +4,7 @@ import type { ProfileData as ProfileDataType } from "@/types/public-portfolio";
 
 export type ProfileData = {
   id?: number;
+  portfolio_name?: string;
   profile_name: string;
   profile_email: string;
   profession: string;
@@ -18,6 +19,7 @@ export type ProfileData = {
 
 const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
   id: payload?.id ?? 1,
+  portfolio_name: payload?.portfolio_name ?? "",
   profile_name: payload?.profile_name ?? payload?.profile_name ?? "",
   profile_email: payload?.profile_email ?? "",
   profession: payload?.profession ?? "",
@@ -94,6 +96,7 @@ export async function updateProfile(
 
   formData.append("profile_name", payload.profile_name);
   formData.append("profile_email", payload.profile_email);
+  formData.append("portfolio_name", payload.portfolio_name ?? "");
   formData.append("profession", payload.profession);
   formData.append("city", payload.city);
   formData.append("phone", payload.phone);
@@ -132,6 +135,10 @@ export async function createProfile(
   const formData = new FormData();
   formData.append("profile_name", payload.profile_name);
   formData.append("profile_email", payload.profile_email);
+  formData.append(
+    "portfolio_name",
+    ((((payload as unknown) as Record<string, unknown>).portfolio_name as string) ?? "")
+  );
   formData.append("profession", payload.profession);
   formData.append("city", payload.city);
   formData.append("phone", payload.phone);
