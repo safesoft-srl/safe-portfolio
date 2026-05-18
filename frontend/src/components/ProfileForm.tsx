@@ -367,6 +367,34 @@ export default function ProfileForm({
               </>
             )}
           </div>
+          <div className="-mt-4 space-y-2.5">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Sobre mi *
+              </Label>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                {formData.bio.length}/300
+              </span>
+            </div>
+            <Textarea
+              id="bio"
+              name="bio"
+              placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
+              value={formData.bio}
+              onChange={handleInputChange}
+              onBlur={handleFieldBlur}
+              maxLength={300}
+              rows={6}
+              required
+              style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
+              className="h-24 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
+            />
+            {errors.bio ? (
+              <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                {errors.bio}
+              </p>
+            ) : null}
+          </div>
         </div>
         <div className="space-y-5">
           <div className="space-y-2.5">
@@ -521,34 +549,6 @@ export default function ProfileForm({
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-8 space-y-2.5">
-        <div className="flex justify-between items-center">
-          <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-            Sobre mi *
-          </Label>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
-            {formData.bio.length}/300
-          </span>
-        </div>
-        <Textarea
-          id="bio"
-          name="bio"
-          placeholder="Cuéntanos sobre ti, tu experiencia y tus intereses."
-          value={formData.bio}
-          onChange={handleInputChange}
-          onBlur={handleFieldBlur}
-          maxLength={300}
-          rows={6}
-          required
-          style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}
-          className="h-24 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
-        />
-        {errors.bio ? (
-          <p className="text-xs" style={{ color: "var(--destructive)" }}>
-            {errors.bio}
-          </p>
-        ) : null}
       </div>
       <div className="border-b border-slate-800 my-6"></div>
       <div className="mt-6">
