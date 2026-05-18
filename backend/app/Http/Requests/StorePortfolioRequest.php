@@ -30,10 +30,10 @@ class StorePortfolioRequest extends FormRequest
             'profile_email' => 'required|email',
             'profession' => 'required|string|max:255',
             'bio' => 'nullable|string',
-            'portfolio_name'=> 'nullable|string|max:255',
+            'portfolio_name' => 'nullable|string|max:255',
             'portfolio_descrition' => 'nullable|string',
             'phone' => 'nullable|string|max:15',
-            'city'=> 'nullable|string|max:50',
+            'city' => 'nullable|string|max:50',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'image_id' => 'nullable|string',
         ];

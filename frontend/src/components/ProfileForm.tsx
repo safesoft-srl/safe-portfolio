@@ -61,7 +61,14 @@ const EMPTY_ERRORS = {
   bio: "",
 };
 
-type ProfileField = "portfolioName" | "fullName" | "email" | "profession" | "city" | "phone" | "bio";
+type ProfileField =
+  | "portfolioName"
+  | "fullName"
+  | "email"
+  | "profession"
+  | "city"
+  | "phone"
+  | "bio";
 
 export default function ProfileForm({
   mode,
@@ -91,9 +98,11 @@ export default function ProfileForm({
   const validateField = (field: ProfileField, value: string) => {
     const trimmedValue = value.trim();
     if (field === "portfolioName") {
-      if (trimmedValue.length > 60) return "El nombre del portafolio debe tener máximo 60 caracteres.";
+      if (trimmedValue.length > 60)
+        return "El nombre del portafolio debe tener máximo 60 caracteres.";
       return "";
-    }    if (field === "fullName") {
+    }
+    if (field === "fullName") {
       if (!trimmedValue) return "El nombre es obligatorio.";
       if (trimmedValue.length < 2 || trimmedValue.length > 50) {
         return "El nombre debe tener entre 2 y 50 caracteres.";

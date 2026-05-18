@@ -334,14 +334,19 @@ export default function ProjectForm({
                     void validateDateFields();
                   }}
                 />
-                <Label htmlFor="is_current_work_cb" className="cursor-pointer text-xs text-slate-300">
+                <Label
+                  htmlFor="is_current_work_cb"
+                  className="cursor-pointer text-xs text-slate-300"
+                >
                   Trabajo actualmente
                 </Label>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-900 dark:text-slate-300">Fecha Inicio *</Label>
+                  <Label className="text-xs font-semibold text-slate-900 dark:text-slate-300">
+                    Fecha Inicio *
+                  </Label>
                   <Input
                     type="date"
                     value={form.start_date}
@@ -355,11 +360,17 @@ export default function ProjectForm({
                     }}
                     className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.start_date ? " border-red-500" : ""}`}
                   />
-                  {errors.start_date && <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>{errors.start_date}</p>}
+                  {errors.start_date && (
+                    <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
+                      {errors.start_date}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-semibold text-slate-900 dark:text-slate-300">Fecha Fin</Label>
+                  <Label className="text-xs font-semibold text-slate-900 dark:text-slate-300">
+                    Fecha Fin
+                  </Label>
                   <Input
                     type="date"
                     value={form.end_date}
@@ -374,7 +385,11 @@ export default function ProjectForm({
                     }}
                     className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.end_date ? " border-red-500" : ""}`}
                   />
-                  {errors.end_date && <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>{errors.end_date}</p>}
+                  {errors.end_date && (
+                    <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
+                      {errors.end_date}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
