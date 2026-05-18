@@ -19,7 +19,7 @@ export default function Portfolios() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const displayName = user?.name ?? "Usuario";
 
-  const { portfolios, isLoading} = usePortfolio();
+  const { portfolios, isLoading } = usePortfolio();
   const [createOpen, setCreateOpen] = useState(false);
   const filteredPortfolios = useMemo(() => {
     if (!portfolios) return [];
@@ -27,11 +27,7 @@ export default function Portfolios() {
     if (!search) return portfolios;
 
     return portfolios.filter((portfolio: ProfileData) => {
-      const haystack = [
-        portfolio.profile_name,
-        portfolio.profession,
-        portfolio.bio,
-      ]
+      const haystack = [portfolio.profile_name, portfolio.profession, portfolio.bio]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();

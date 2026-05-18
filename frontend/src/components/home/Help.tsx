@@ -4,14 +4,12 @@ export default function Help() {
   const faqs = [
     {
       question: "¿Es gratis crear un portafolio?",
-      answer:
-        "Si puedes crear y gestionar tu portafolio de forma completamente gratuita.",
+      answer: "Si puedes crear y gestionar tu portafolio de forma completamente gratuita.",
       open: true,
     },
     {
       question: "¿Puedo personalizar mi portafolio?",
-      answer:
-        "Claro, tienes multiples opciones de personalizacion para que se adapte a tu estilo.",
+      answer: "Claro, tienes multiples opciones de personalizacion para que se adapte a tu estilo.",
     },
     {
       question: "¿Cómo comparto mi portafolio?",
@@ -24,7 +22,7 @@ export default function Help() {
         "Puedes añadir proyectos, habilidades tecnicas, habilidades blandas, experiencia laboral y mas.",
     },
   ];
-  
+
   return (
     <section className="relative overflow-hidden bg-transparent px-4 py-20 text-white">
       <div
@@ -34,14 +32,13 @@ export default function Help() {
 
       <div className="relative mx-auto flex max-w-5xl flex-col gap-12">
         <div className="mx-auto max-w-3xl space-y-4 text-center">
-          <span className="text-sm font-semibold text-[#a78bfa]">
-            AYUDA
-          </span>
+          <span className="text-sm font-semibold text-[#a78bfa]">AYUDA</span>
           <h2 className="text-5xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
             Preguntas frecuentes
           </h2>
           <p className="mx-auto max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">
-            Todo lo que necesitas saber sobre cómo usar nuestro sistema. Si tienes más preguntas, no dudes en contactarnos.
+            Todo lo que necesitas saber sobre cómo usar nuestro sistema. Si tienes más preguntas, no
+            dudes en contactarnos.
           </p>
         </div>
 

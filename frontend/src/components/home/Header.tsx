@@ -109,7 +109,11 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" sideOffset={4} className="min-w-56 rounded-lg bg-slate-900 backdrop-blur-md border border-white/10">
+              <DropdownMenuContent
+                align="end"
+                sideOffset={4}
+                className="min-w-56 rounded-lg bg-slate-900 backdrop-blur-md border border-white/10"
+              >
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="p-0 font-normal">
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">

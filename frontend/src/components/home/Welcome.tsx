@@ -43,7 +43,9 @@ export default function Welcome() {
               </div>
             ))}
           </div>
-          <span className="text-[8px] text-slate-300 sm:text-xs">De confianza por creadores de todo el mundo</span>
+          <span className="text-[8px] text-slate-300 sm:text-xs">
+            De confianza por creadores de todo el mundo
+          </span>
         </div>
 
         <div className="space-y-4">
@@ -55,8 +57,8 @@ export default function Welcome() {
           </h1>
           <p className="max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
             Crea y gestiona un portafolio en línea que unifique tus proyectos, habilidades,
-            experiencia y logros. Una herramienta clave para fortalecer tu marca personal y
-            destacar profesionalmente.
+            experiencia y logros. Una herramienta clave para fortalecer tu marca personal y destacar
+            profesionalmente.
           </p>
         </div>
 
@@ -76,12 +78,10 @@ export default function Welcome() {
             Ver Demo
           </Button>
         </div>
-
       </section>
 
       <section className="mx-auto w-full max-w-[540px] lg:ml-auto lg:mr-0 z-10">
         <div className="relative space-y-4 pt-10">
-
           <div className="mt-12 h-[300px] w-full max-w-[540px] overflow-hidden rounded-[1.2rem] bg-[#120f2a]">
             <img
               src={heroTres}
@@ -93,13 +93,25 @@ export default function Welcome() {
           <div className="mt-4 flex items-center justify-start gap-3 px-1 pb-1">
             <div className="flex gap-2">
               <span className="h-10 w-16 overflow-hidden rounded-lg border border-white/10 bg-white/5">
-                <img src={heroDos} alt="Miniatura 1" className="h-full w-full object-cover opacity-80" />
+                <img
+                  src={heroDos}
+                  alt="Miniatura 1"
+                  className="h-full w-full object-cover opacity-80"
+                />
               </span>
               <span className="h-10 w-16 overflow-hidden rounded-lg border border-white/10 bg-white/5">
-                <img src={heroUno} alt="Miniatura 2" className="h-full w-full object-cover opacity-60" />
+                <img
+                  src={heroUno}
+                  alt="Miniatura 2"
+                  className="h-full w-full object-cover opacity-60"
+                />
               </span>
               <span className="h-10 w-16 overflow-hidden rounded-lg border border-white/10 bg-white/5 grayscale">
-                <img src={heroCuatro} alt="Miniatura 3" className="h-full w-full object-cover opacity-50" />
+                <img
+                  src={heroCuatro}
+                  alt="Miniatura 3"
+                  className="h-full w-full object-cover opacity-50"
+                />
               </span>
             </div>
 

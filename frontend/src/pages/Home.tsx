@@ -25,7 +25,7 @@ export default function Home() {
     setTimeout(() => {
       setActiveSection(scrollTo);
     }, 0);
-    
+
     const element = document.getElementById(scrollTo);
 
     if (element) {

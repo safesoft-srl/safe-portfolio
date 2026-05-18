@@ -369,7 +369,10 @@ export default function ProfileForm({
           </div>
           <div className="-mt-4 space-y-2.5">
             <div className="flex justify-between items-center">
-              <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <Label
+                htmlFor="bio"
+                className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+              >
                 Sobre mi *
               </Label>
               <span className="text-xs text-slate-500 dark:text-slate-400">

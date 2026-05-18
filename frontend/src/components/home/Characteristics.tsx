@@ -1,42 +1,43 @@
-import { FolderOpenIcon, BrainIcon, BriefcaseIcon, BookOpenIcon, LockIcon, GlobeIcon } from "@phosphor-icons/react";
+import {
+  FolderOpenIcon,
+  BrainIcon,
+  BriefcaseIcon,
+  BookOpenIcon,
+  LockIcon,
+  GlobeIcon,
+} from "@phosphor-icons/react";
 import { type CSSProperties } from "react";
 export default function Characteristics() {
   const services = [
     {
       icon: FolderOpenIcon,
       title: "Gestión de Proyectos",
-      description:
-        "Organiza y presenta tus proyectos profesionales con evidencias digitales.",
+      description: "Organiza y presenta tus proyectos profesionales con evidencias digitales.",
     },
     {
       icon: BrainIcon,
       title: "Habilidades",
-      description:
-        "Registra tus habilidades técnicas y blandas con niveles de dominio.",
+      description: "Registra tus habilidades técnicas y blandas con niveles de dominio.",
     },
     {
       icon: BriefcaseIcon,
       title: "Experiencias",
-      description:
-        "Muestra tus expericiencias adquiridas en diferentes areas de trabajo.",
+      description: "Muestra tus expericiencias adquiridas en diferentes areas de trabajo.",
     },
     {
       icon: BookOpenIcon,
       title: "Formacion",
-      description:
-        "Registra tu formacion academica adquirida a lo largo de tu formacion.",
+      description: "Registra tu formacion academica adquirida a lo largo de tu formacion.",
     },
     {
       icon: LockIcon,
       title: "Privacidad",
-      description:
-        "Control total sobre qué información deseas publicar",
+      description: "Control total sobre qué información deseas publicar",
     },
     {
       icon: GlobeIcon,
       title: "Portafolio publico",
-      description:
-        "Comparte tu portafolio profesional con un enlace único.",
+      description: "Comparte tu portafolio profesional con un enlace único.",
     },
   ];
 
@@ -48,15 +49,20 @@ export default function Characteristics() {
       />
 
       <div className="relative mx-auto flex max-w-6xl flex-col gap-12">
-        <div className="mx-auto max-w-3xl space-y-4 text-center stagger-item" style={{ "--delay": "80ms" } as CSSProperties}>
-          <span className="text-xs font-semibold uppercase text-[#a78bfa]">
-            COMO FUNCIONA
-          </span>
+        <div
+          className="mx-auto max-w-3xl space-y-4 text-center stagger-item"
+          style={{ "--delay": "80ms" } as CSSProperties}
+        >
+          <span className="text-xs font-semibold uppercase text-[#a78bfa]">COMO FUNCIONA</span>
           <h2 className="text-3xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
             Todo lo que nesecitas para crecer
           </h2>
-          <p className="mx-auto max-w-2xl text-sm leading-7 text-slate-400 sm:text-base stagger-item" style={{ "--delay": "160ms" } as CSSProperties}>
-            Desde la estrategia hasta la ejecución, ayudamos a las personas a crear portafolios profesionales y experiencias de cliente significativas.
+          <p
+            className="mx-auto max-w-2xl text-sm leading-7 text-slate-400 sm:text-base stagger-item"
+            style={{ "--delay": "160ms" } as CSSProperties}
+          >
+            Desde la estrategia hasta la ejecución, ayudamos a las personas a crear portafolios
+            profesionales y experiencias de cliente significativas.
           </p>
         </div>
 
@@ -75,13 +81,9 @@ export default function Characteristics() {
                   <Icon size={24} weight="regular" />
                 </div>
 
-                <h3 className="text-xl font-semibold tracking-tight text-white">
-                  {service.title}
-                </h3>
+                <h3 className="text-xl font-semibold tracking-tight text-white">{service.title}</h3>
 
-                <p className="mt-4 text-sm leading-7 text-slate-300">
-                  {service.description}
-                </p>
+                <p className="mt-4 text-sm leading-7 text-slate-300">{service.description}</p>
               </article>
             );
           })}

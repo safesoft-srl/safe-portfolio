@@ -25,7 +25,11 @@ export default function useReveal(options: Options = { once: true }) {
           }
         });
       },
-      { threshold: options.threshold ?? 0.12, root: options.root ?? null, rootMargin: options.rootMargin ?? "0px" }
+      {
+        threshold: options.threshold ?? 0.12,
+        root: options.root ?? null,
+        rootMargin: options.rootMargin ?? "0px",
+      }
     );
 
     observer.observe(el);
