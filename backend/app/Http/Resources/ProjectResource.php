@@ -24,7 +24,7 @@ class ProjectResource extends JsonResource
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'current' => $this->current,
-            'category'=> $this->category,
+            'category' => $this->category,
             'url_image' => $this->url_image,
             'visible' => $this->visible,
             'skill_projects' => TechnicalSkillResource::collection($this->skills),
