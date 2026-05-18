@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('url_github')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->boolean('current')->default(false);
             $table->string('category')->nullable();
             $table->string('url_image')->unique()->nullable();
             $table->string('image_id')->unique()->nullable();

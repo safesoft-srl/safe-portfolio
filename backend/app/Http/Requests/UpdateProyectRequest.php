@@ -30,6 +30,7 @@ class UpdateProyectRequest extends FormRequest
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'category' => 'nullable|string|max:50',
+            'current'=> 'boolean',
             'project_image' => 'nullable|image|mimes:jpg,jpeg,png',
             'skill_ids' => 'nullable|array',
             'skill_ids.*' => 'exists:technical_skills,id',

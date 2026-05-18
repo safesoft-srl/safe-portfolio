@@ -30,6 +30,7 @@ class StoreProjectRequest extends FormRequest
             'url_github' => 'nullable|url',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'current'=> 'boolean',
             'category' => 'nullable|string|max:50',
             'project_image' => 'nullable|image|mimes:jpg,jpeg,png',
             'skill_ids' => 'nullable|array',

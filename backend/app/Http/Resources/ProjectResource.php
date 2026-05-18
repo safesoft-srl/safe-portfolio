@@ -23,6 +23,7 @@ class ProjectResource extends JsonResource
             'url_github' => $this->url_github,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'current' => $this->current,
             'category'=> $this->category,
             'url_image' => $this->url_image,
             'visible' => $this->visible,
