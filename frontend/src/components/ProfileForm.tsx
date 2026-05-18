@@ -88,6 +88,7 @@ export default function ProfileForm({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const photoActionsRef = useRef<HTMLDivElement>(null);
   const [prevInitialData, setPrevInitialData] = useState(initialData);
+  const showPortfolioNameField = mode === "create";
 
   if (initialData !== prevInitialData) {
     setFormData(initialData);
@@ -400,29 +401,31 @@ export default function ProfileForm({
           </div>
         </div>
         <div className="space-y-5">
-          <div className="space-y-2.5">
-            <Label
-              htmlFor="portfolioName"
-              className="text-xs font-semibold text-slate-700 dark:text-slate-300"
-            >
-              Nombre de Portafolio
-            </Label>
-            <Input
-              id="portfolioName"
-              name="portfolioName"
-              type="text"
-              placeholder="Ej: Portafolio - Developer"
-              value={formData.portfolio_name ?? ""}
-              onChange={handleInputChange}
-              onBlur={handleFieldBlur}
-              className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm"
-            />
-            {errors.portfolioName ? (
-              <p className="text-xs" style={{ color: "var(--destructive)" }}>
-                {errors.portfolioName}
-              </p>
-            ) : null}
-          </div>
+          {showPortfolioNameField ? (
+            <div className="space-y-2.5">
+              <Label
+                htmlFor="portfolioName"
+                className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+              >
+                Nombre de Portafolio
+              </Label>
+              <Input
+                id="portfolioName"
+                name="portfolioName"
+                type="text"
+                placeholder="Ej: Portafolio - Developer"
+                value={formData.portfolio_name ?? ""}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm"
+              />
+              {errors.portfolioName ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.portfolioName}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
           <div className="space-y-2.5">
             <Label
               htmlFor="fullName"
