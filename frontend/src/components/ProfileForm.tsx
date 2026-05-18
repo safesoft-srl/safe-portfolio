@@ -380,7 +380,7 @@ export default function ProfileForm({
               id="portfolioName"
               name="portfolioName"
               type="text"
-              placeholder="Ej: Portafolio - Juan Perez"
+              placeholder="Ej: Portafolio - Developer"
               value={formData.portfolio_name ?? ""}
               onChange={handleInputChange}
               onBlur={handleFieldBlur}
@@ -404,7 +404,7 @@ export default function ProfileForm({
               name="fullName"
               type="text"
               pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+"
-              placeholder="Ej: Juan Perez"
+              placeholder="Ej: Diego Maldonado"
               value={formData.profile_name}
               onChange={handleInputChange}
               onBlur={handleFieldBlur}

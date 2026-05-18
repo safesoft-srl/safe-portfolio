@@ -18,10 +18,6 @@ return new class extends Migration
             $table->string('profile_email', 50);
             $table->string('profession', 50);
             $table->text('bio');
-            $table->string('portfolio_name', 50)->nullable();
-            $table->text('portfolio_descrition')->nullable();
-            $table->string('phone', 15)->nullable();
-            $table->string('city', 50)->nullable();
             $table->string('profile_image')->nullable();
             $table->string('image_id')->nullable();
             $table->string('url_portfolio')->nullable();

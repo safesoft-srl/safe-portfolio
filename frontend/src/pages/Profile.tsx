@@ -10,6 +10,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [initialFormData, setInitialFormData] = useState<ProfileFormData>({
     profile_name: "",
+    portfolio_name: "",
     profile_email: "",
     profession: "",
     city: "",
@@ -25,6 +26,7 @@ export default function Profile() {
       const profile = await getPortfolio(idPortfolio);
       setInitialFormData({
         profile_name: profile.profile_name ?? "",
+        portfolio_name: profile.portfolio_name ?? "",
         profile_email: profile.profile_email ?? "",
         profession: profile.profession ?? "",
         city: profile.city ?? "",
@@ -36,7 +38,7 @@ export default function Profile() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [idPortfolio]);
 
   useEffect(() => {
     void loadProfile();
@@ -48,6 +50,7 @@ export default function Profile() {
       const payload = {
         id: idPortfolio,
         profile_name: data.profile_name?.trim() || "",
+        portfolio_name: data.portfolio_name?.trim() || "",
         profile_email: data.profile_email?.trim() || "",
         profession: data.profession?.trim() || "",
         city: data.city?.trim() || "",
@@ -60,6 +63,7 @@ export default function Profile() {
       const profile = await updateProfile(payload, file);
       setInitialFormData({
         profile_name: profile.profile_name,
+        portfolio_name: profile.portfolio_name ?? "",
         profile_email: profile.profile_email,
         profession: profile.profession,
         city: profile.city ?? "",

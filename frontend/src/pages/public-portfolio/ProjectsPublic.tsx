@@ -4,6 +4,8 @@ import { PublicNavbar } from "@/components/PublicNavbar";
 import { PublicFooter } from "@/components/PublicFooter";
 import { getPublicPortfolio } from "@/services/url.service";
 import { ArrowUpRight } from "@phosphor-icons/react";
+import { format, parseISO, isValid } from "date-fns";
+import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import type { ProfileData } from "@/types/public-portfolio";
 
@@ -35,6 +37,24 @@ export default function ProjectsPublic() {
   const firstName = profile?.profile_name?.split(" ")[0] ?? "Usuario";
   const projects = profile?.projects ?? [];
   const displayedProjects = showAll ? projects : projects.slice(0, 3);
+
+  const formatProjectYears = (startDate?: string, endDate?: string | null) => {
+    if (!startDate) return "";
+    try {
+      const start = parseISO(startDate);
+      const startLabel = isValid(start) ? format(start, "MMM yyyy", { locale: es }) : "";
+
+      if (!endDate) {
+        return startLabel ? `${startLabel} - Presente` : "";
+      }
+
+      const end = parseISO(endDate);
+      const endLabel = isValid(end) ? format(end, "MMM yyyy", { locale: es }) : "";
+      return endLabel ? `${startLabel} - ${endLabel}` : startLabel;
+    } catch {
+      return "";
+    }
+  };
 
   if (!isLoading && projects.length === 0) {
     return (
@@ -117,6 +137,22 @@ export default function ProjectsPublic() {
                             </h4>
 
                             <div className="mt-4 space-y-4 font-mono text-xs">
+                              {project.start_date ? (
+                                <div className="flex items-center justify-between pb-2 w-full border-b border-white/5">
+                                  <span className="text-slate-200 pt-1 font-mono text-xs whitespace-nowrap">
+                                    Tiempo de finalizacion:
+                                  </span>
+                                  <div className="w-full flex justify-end">
+                                    <span className="text-slate-400 w-full text-right font-mono text-xs whitespace-nowrap">
+                                      {formatProjectYears(
+                                        project.start_date,
+                                        project.end_date || null
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : null}
+
                               <div className="flex items-start justify-between border-b border-white/5 pb-2 w-full">
                                 <span className="text-slate-200 pt-1">Tecnologias:</span>
                                 <div className="flex flex-col items-end w-full">

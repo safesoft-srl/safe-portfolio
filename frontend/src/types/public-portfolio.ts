@@ -59,6 +59,7 @@ export type AcademicTraining = {
 export type ProfileData = {
   id: number;
   user_id: number;
+  portfolio_name?: string | null;
   profile_name?: string;
   profile_email?: string;
   profession?: string | null;
