@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { SoftSkillCard, type SoftSkill } from "./SoftSkillCard";
 import { SoftSkillModal } from "./SoftSkillModal";
 import { usePortfolioId } from "@/hooks/usePortfolio";
+import { showErrorToast } from "@/components/ui/showErrorToast";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -17,6 +19,12 @@ export function SoftSkillsSection() {
 
   const token = localStorage.getItem("token");
 
+  const toastStyle = {
+    background: "#6c72ff",
+    color: "#ffffff",
+    border: "1px solid #8b90ff",
+  };
+
   const fetchSoftSkills = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -28,14 +36,17 @@ export function SoftSkillsSection() {
       });
 
       const result = await res.json();
-
+      if (!res.ok) {
+        showErrorToast(result.message || "Error al cargar las habilidades blandas.");
+        return;
+      }
       setSoftSkills(result.data || []);
     } catch (err) {
       console.error("Error cargando soft skills:", err);
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [PORTFOLIO_ID, token]);
 
   useEffect(() => {
     fetchSoftSkills();
@@ -63,14 +74,21 @@ export function SoftSkillsSection() {
       const result = await res.json();
 
       if (!res.ok) {
-        throw new Error(result.message || "Error al guardar soft skill");
+        showErrorToast(result.message || "No se pudo guardar la habilidad blanda.");
+        return;
       }
+
+      toast.success(result.message || "Habilidad guardada correctamente.", {
+        style: toastStyle,
+      });
+
+      setIsModalOpen(false);
+      setSkillToEdit(null);
 
       await fetchSoftSkills();
     } catch (err) {
+      showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error en save soft skill:", err);
-
-      throw err;
     }
   };
 
@@ -83,10 +101,20 @@ export function SoftSkillsSection() {
         },
       });
 
-      if (res.ok) {
-        await fetchSoftSkills();
+      const result = await res.json();
+
+      if (!res.ok) {
+        showErrorToast(result.message || "No se pudo eliminar la habilidad.");
+        return;
       }
+
+      toast.success(result.message || "Habilidad eliminada correctamente.", {
+        style: toastStyle,
+      });
+
+      await fetchSoftSkills();
     } catch (err) {
+      showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error eliminando skill:", err);
     }
   };

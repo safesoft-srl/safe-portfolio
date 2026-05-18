@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { showErrorToast } from "@/components/ui/showErrorToast";
 import type { SoftSkill } from "./SoftSkillCard";
-import { toast } from "sonner";
 
 interface SoftSkillModalProps {
   isOpen: boolean;
@@ -69,13 +68,6 @@ export function SoftSkillModal({ isOpen, skill, onClose, onSave }: SoftSkillModa
         description: description.trim(),
       });
 
-      toast.success("Habilidad guardada correctamente.", {
-        style: {
-          background: "#6c72ff",
-          color: "#ffffff",
-          border: "1px solid #8b90ff",
-        },
-      });
       onClose();
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Error al guardar la habilidad.";
