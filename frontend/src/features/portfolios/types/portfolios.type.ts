@@ -17,6 +17,7 @@ export type WorkExperience = {
 
 export type Portfolio = {
   id?: number;
+  portfolio_name?: string;
   profile_name: string;
   profession: string;
   bio: string;

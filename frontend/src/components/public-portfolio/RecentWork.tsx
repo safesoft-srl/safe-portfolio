@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { ArrowUpRight, ArrowLeft, ArrowRight } from "@phosphor-icons/react";
+import { format, parseISO, isValid } from "date-fns";
+import { es } from "date-fns/locale";
 import { Button } from "../ui/button";
 import type { Project } from "@/features/projects/types/project.types";
 import defaultProjectImage from "@/assets/image.png";
@@ -165,6 +167,27 @@ export default function RecentWork({ projects }: Props) {
                     Informacion del proyecto
                   </h4>
                   <div className="mt-4 space-y-4 font-mono text-xs">
+                    {project.start_date ? (
+                      <div className="flex items-center justify-between pb-2 w-full border-b border-white/5">
+                        <span className="text-slate-200 pt-1 font-mono text-xs whitespace-nowrap">Tiempo de finalizacion:</span>
+                        <div className="w-full flex justify-end">
+                          <span className="text-slate-400 w-full text-right font-mono text-xs whitespace-nowrap">
+                            {(() => {
+                              try {
+                                const start = parseISO(project.start_date);
+                                const startLabel = isValid(start) ? format(start, "MMM yyyy", { locale: es }) : "";
+                                if (!project.end_date) return startLabel ? `${startLabel} - Presente` : "";
+                                const end = parseISO(project.end_date);
+                                const endLabel = isValid(end) ? format(end, "MMM yyyy", { locale: es }) : "";
+                                return endLabel ? `${startLabel} - ${endLabel}` : startLabel;
+                              } catch {
+                                return "";
+                              }
+                            })()}
+                          </span>
+                        </div>
+                      </div>
+                    ) : null}
                     <div className="flex items-start justify-between border-b border-white/5 pb-2 w-full">
                       <span className="text-slate-200 pt-1">Tecnologias:</span>
                       <div className="flex flex-col items-end w-full">

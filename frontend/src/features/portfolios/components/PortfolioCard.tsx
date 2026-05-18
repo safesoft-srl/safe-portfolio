@@ -1,5 +1,6 @@
 import type { Portfolio } from "@/features/portfolios/types/portfolios.type";
 import { MedalIcon, GraduationCapIcon, CodeIcon } from "@phosphor-icons/react";
+import defaultProfileImage from "@/assets/image.png";
 import { useNavigate } from "react-router-dom";
 
 export default function PortfolioCard({
@@ -25,6 +26,12 @@ export default function PortfolioCard({
       onClick={handleCardClick}
       className={`rounded-2xl border border-sidebar-border bg-[#0f1224] shadow-sm cursor-pointer transition-all hover:border-[#6c72ff] hover:shadow-lg ${isListView ? "p-4 sm:p-5" : "p-6"}`}
     >
+      {!isListView && portfolio.portfolio_name ? (
+        <div className="w-full text-center mb-2">
+          <p className="text-xs text-slate-300 truncate">{portfolio.portfolio_name}</p>
+        </div>
+      ) : null}
+
       <div
         className={
           isListView
@@ -33,12 +40,27 @@ export default function PortfolioCard({
         }
       >
         <div className="flex-shrink-0">
-          <div
-            className={`h-20 w-20 rounded-full bg-gradient-to-br from-[#7c5cff] to-[#a28bff] flex items-center justify-center text-white text-3xl ${
-              isListView ? "mx-auto lg:mx-0" : ""
-            }`}
-          >
-            <span>{portfolio.profile_name ? portfolio.profile_name.charAt(0) : "U"}</span>
+          <div className={`${isListView ? "mx-auto lg:mx-0 text-center" : "text-center"}`}>
+
+            <div
+              className={`h-20 w-20 rounded-full overflow-hidden flex items-center justify-center text-white text-3xl ${
+                isListView ? "mx-auto lg:mx-0" : ""
+              }`}
+            >
+              {portfolio.profile_image ? (
+                <img
+                  src={portfolio.profile_image}
+                  alt={portfolio.profile_name || portfolio.portfolio_name || "Perfil"}
+                  className="h-full w-full object-cover"
+                />
+              ) : portfolio.profile_name ? (
+                <div className={`h-full w-full bg-gradient-to-br from-[#7c5cff] to-[#a28bff] flex items-center justify-center text-white text-3xl`}>
+                  <span>{portfolio.profile_name.charAt(0)}</span>
+                </div>
+              ) : (
+                <img src={defaultProfileImage} alt="Perfil" className="h-full w-full object-cover" />
+              )}
+            </div>
           </div>
         </div>
 
@@ -48,6 +70,11 @@ export default function PortfolioCard({
           }
         >
           <div className={isListView ? "min-w-0 flex-1 text-center lg:text-left" : "w-full"}>
+            {isListView && portfolio.portfolio_name ? (
+              <p className="text-xs text-slate-300 mb-1 w-full truncate lg:text-left">
+                {portfolio.portfolio_name}
+              </p>
+            ) : null}
             <h3 className={`font-semibold text-white ${isListView ? "text-lg" : "text-lg"}`}>
               {portfolio.profile_name || "Nombre"}
             </h3>
