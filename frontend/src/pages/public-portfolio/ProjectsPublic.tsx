@@ -156,18 +156,18 @@ export default function ProjectsPublic() {
                                 <div className="flex flex-col items-end w-full">
                                   <span className="text-slate-400 w-full text-right">
                                     {Array.isArray(project.skill_projects) &&
-                                      project.skill_projects.length > 0
+                                    project.skill_projects.length > 0
                                       ? project.skill_projects
-                                        .slice(0, 5)
-                                        .map((skill, skillIndex) => (
-                                          <span key={skill.name + skillIndex}>
-                                            {skill.name}
-                                            {skillIndex <
+                                          .slice(0, 5)
+                                          .map((skill, skillIndex) => (
+                                            <span key={skill.name + skillIndex}>
+                                              {skill.name}
+                                              {skillIndex <
                                               Math.min(4, project.skill_projects.length - 1)
-                                              ? ", "
-                                              : ""}
-                                          </span>
-                                        ))
+                                                ? ", "
+                                                : ""}
+                                            </span>
+                                          ))
                                       : "-"}
                                   </span>
                                   {Array.isArray(project.skill_projects) &&
