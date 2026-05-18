@@ -5,6 +5,8 @@ export type Project = {
   portfolio_id: number;
   name: string;
   description: string;
+  start_date: string;
+  end_date: string;
   url_demo: string | "";
   url_github: string | "";
   url_image: string | "";
@@ -16,6 +18,8 @@ export type Project = {
 export type BaseProjectDTO = {
   name: string;
   description: string;
+  start_date: string;
+  end_date: string;
   url_demo: string | "";
   url_github: string;
   url_image: string | "";
