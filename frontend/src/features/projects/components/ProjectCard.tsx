@@ -84,11 +84,11 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                     <span className="text-xs text-gray-400">Sin habilidades</span>
                   )}
                 </div>
-                  {project.start_date ? (
-                    <span className="bg-indigo-900 text-indigo-100 px-3 py-1.5 rounded-full font-semibold text-xs sm:text-sm whitespace-nowrap mt-2 inline-block">
-                      {formatProjectYears(project.start_date, project.end_date || null)}
-                    </span>
-                  ) : null}
+                {project.start_date ? (
+                  <span className="bg-indigo-900 text-indigo-100 px-3 py-1.5 rounded-full font-semibold text-xs sm:text-sm whitespace-nowrap mt-2 inline-block">
+                    {formatProjectYears(project.start_date, project.end_date || null)}
+                  </span>
+                ) : null}
               </div>
 
               <div className="flex flex-col items-end gap-2 shrink-0">

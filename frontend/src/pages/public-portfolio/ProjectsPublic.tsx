@@ -139,10 +139,15 @@ export default function ProjectsPublic() {
                             <div className="mt-4 space-y-4 font-mono text-xs">
                               {project.start_date ? (
                                 <div className="flex items-center justify-between pb-2 w-full border-b border-white/5">
-                                  <span className="text-slate-200 pt-1 font-mono text-xs whitespace-nowrap">Tiempo de finalizacion:</span>
+                                  <span className="text-slate-200 pt-1 font-mono text-xs whitespace-nowrap">
+                                    Tiempo de finalizacion:
+                                  </span>
                                   <div className="w-full flex justify-end">
                                     <span className="text-slate-400 w-full text-right font-mono text-xs whitespace-nowrap">
-                                      {formatProjectYears(project.start_date, project.end_date || null)}
+                                      {formatProjectYears(
+                                        project.start_date,
+                                        project.end_date || null
+                                      )}
                                     </span>
                                   </div>
                                 </div>

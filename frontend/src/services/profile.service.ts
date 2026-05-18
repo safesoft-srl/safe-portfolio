@@ -137,7 +137,7 @@ export async function createProfile(
   formData.append("profile_email", payload.profile_email);
   formData.append(
     "portfolio_name",
-    ((((payload as unknown) as Record<string, unknown>).portfolio_name as string) ?? "")
+    ((payload as unknown as Record<string, unknown>).portfolio_name as string) ?? ""
   );
   formData.append("profession", payload.profession);
   formData.append("city", payload.city);

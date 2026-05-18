@@ -41,7 +41,6 @@ export default function PortfolioCard({
       >
         <div className="flex-shrink-0">
           <div className={`${isListView ? "mx-auto lg:mx-0 text-center" : "text-center"}`}>
-
             <div
               className={`h-20 w-20 rounded-full overflow-hidden flex items-center justify-center text-white text-3xl ${
                 isListView ? "mx-auto lg:mx-0" : ""
@@ -54,11 +53,17 @@ export default function PortfolioCard({
                   className="h-full w-full object-cover"
                 />
               ) : portfolio.profile_name ? (
-                <div className={`h-full w-full bg-gradient-to-br from-[#7c5cff] to-[#a28bff] flex items-center justify-center text-white text-3xl`}>
+                <div
+                  className={`h-full w-full bg-gradient-to-br from-[#7c5cff] to-[#a28bff] flex items-center justify-center text-white text-3xl`}
+                >
                   <span>{portfolio.profile_name.charAt(0)}</span>
                 </div>
               ) : (
-                <img src={defaultProfileImage} alt="Perfil" className="h-full w-full object-cover" />
+                <img
+                  src={defaultProfileImage}
+                  alt="Perfil"
+                  className="h-full w-full object-cover"
+                />
               )}
             </div>
           </div>

@@ -50,7 +50,7 @@ export default function Profile() {
       const payload = {
         id: idPortfolio,
         profile_name: data.profile_name?.trim() || "",
-          portfolio_name: data.portfolio_name?.trim() || "",
+        portfolio_name: data.portfolio_name?.trim() || "",
         profile_email: data.profile_email?.trim() || "",
         profession: data.profession?.trim() || "",
         city: data.city?.trim() || "",
