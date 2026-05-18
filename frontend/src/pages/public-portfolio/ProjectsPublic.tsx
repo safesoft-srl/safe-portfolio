@@ -9,6 +9,10 @@ import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import type { ProfileData } from "@/types/public-portfolio";
 
+import defaultProjectImage from "@/assets/image.png";
+
+const DEFAULT_PROJECT_IMAGE = defaultProjectImage;
+
 export default function ProjectsPublic() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const { slug } = useParams();
@@ -109,17 +113,11 @@ export default function ProjectsPublic() {
                       <div className="grid grid-cols-1 items-center gap-0 lg:grid-cols-[1fr_1.3fr] lg:gap-0">
                         <div className="relative aspect-square w-full max-w-sm overflow-hidden rounded-xl border border-[#262b46] bg-[#0a0b1e] group mx-auto mr-1 lg:mr-3">
                           <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
-                          {project.url_image ? (
-                            <img
-                              src={project.url_image}
-                              alt={project.name || "Imagen del proyecto"}
-                              className="object-cover w-full h-full rounded-xl"
-                            />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center p-4 text-slate-500">
-                              Sin imagen
-                            </div>
-                          )}
+                          <img
+                            src={project.url_image || DEFAULT_PROJECT_IMAGE}
+                            alt={project.name || "Imagen del proyecto"}
+                            className="object-cover w-full h-full rounded-xl"
+                          />
                         </div>
 
                         <div className="flex flex-col text-left w-full p-4 sm:p-8 m-0">
