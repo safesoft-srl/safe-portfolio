@@ -103,7 +103,7 @@ class SoftSkillController extends Controller
 
         } catch (Throwable $e) {
 
-            Log::error('Error creando soft skill', [
+            Log::error('Error creando habilidad blanda', [
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -168,7 +168,7 @@ class SoftSkillController extends Controller
 
         } catch (Throwable $e) {
 
-            Log::error('Error actualizando soft skill', [
+            Log::error('Error actualizando habilidad blanda', [
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -197,7 +197,7 @@ class SoftSkillController extends Controller
 
             return ApiResponse::success(
                 null,
-                "La habilidad blanda '{$name}' fue eliminada correctamente 🗑"
+                "La habilidad blanda '{$name}' fue eliminada correctamente."
             );
 
         } catch (ModelNotFoundException $e) {
@@ -210,7 +210,7 @@ class SoftSkillController extends Controller
 
         } catch (Throwable $e) {
 
-            Log::error('Error eliminando soft skill', [
+            Log::error('Error eliminando habilidad blanda', [
                 'error_message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);

@@ -148,7 +148,7 @@ class PortfolioTechnicalSkillController extends Controller
 
             return ApiResponse::success(
                 null,
-                "La habilidad '{$name}' fue eliminada correctamente del portafolio 🗑"
+                "La habilidad '{$name}' fue eliminada correctamente del portafolio."
             );
 
         } catch (ModelNotFoundException $e) {
