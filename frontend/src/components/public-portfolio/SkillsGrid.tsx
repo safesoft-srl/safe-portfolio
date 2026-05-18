@@ -69,14 +69,6 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
           {/* GRID */}
           <div className="mt-14 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {filteredSkills.map((skill) => {
-              const iconPath =
-                skill.technical_skill?.urls?.dark ?? skill.technical_skill?.urls?.light;
-
-              const iconUrl = iconPath
-                ? iconPath.startsWith("http")
-                  ? iconPath
-                  : `${import.meta.env.VITE_API_URL}/${iconPath}`
-                : null;
               return (
                 <div key={skill.id} className="group [perspective:1000px] isolate">
                   <div className="relative aspect-square w-32 sm:w-36 md:w-40 lg:w-44 xl:w-48 mx-auto will-change-transform">
