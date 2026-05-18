@@ -5,13 +5,18 @@ import { PublicFooter } from "@/components/PublicFooter";
 import defaultProfileImage from "@/assets/image.png";
 import { type ProfileData } from "@/types/public-portfolio";
 import { getPublicPortfolio } from "@/services/url.service";
-// import BusinessGit from "@/components/public-portfolio/BusinessGit";
+import BusinessGit from "@/components/public-portfolio/BusinessGit";
+import { generateLatexPdf } from "@/lib/latex";
 // import Stats from "@/components/public-portfolio/Stats";
 // import BigSkilss from "@/components/public-portfolio/BigSkilss";
 import WorkExperience from "@/components/public-portfolio/WorkExperience";
+import AcademicFormation from "@/components/public-portfolio/AcademicFormation";
 // import EducationProjects from "@/components/public-portfolio/EducationProjects";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
+import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 import RecentWork from "@/components/public-portfolio/RecentWork";
+import { LinkedinLogo } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
 // import ContactForm from "@/components/public-portfolio/ContactForm";
 
 // import { PersonIcon } from "@phosphor-icons/react";
@@ -67,7 +72,14 @@ export default function PublicPortfolio() {
       : [];
 
   const safeSkills = Array.isArray(portfolioSkills) ? portfolioSkills : [];
+  const softSkills =
+    profile && typeof profile === "object" && "soft_skills" in profile
+      ? (profile as { soft_skills?: unknown }).soft_skills
+      : [];
 
+  const safeSoftSkills = Array.isArray(softSkills) ? softSkills : [];
+
+  const portfolioPdfUrl = generateLatexPdf(profile);
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100">
       <PublicNavbar firstName={firstName} slug={slug || ""} />
@@ -90,9 +102,12 @@ export default function PublicPortfolio() {
             </div>
 
             <div className="w-full max-w-xl text-left lg:pl-4">
-              <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-white">
-                Hola, soy {firstName}!
-              </p>
+              <div className="flex justify-between items-center gap-4 mb-3">
+                <p className=" font-mono text-xs uppercase tracking-[0.3em] text-white">
+                  Hola, soy {firstName}!
+                </p>
+                <Button onClick={() => window.open(portfolioPdfUrl, "_blank")}>Descargar CV</Button>
+              </div>
 
               <h1 className="text-3xl font-semibold leading-snug text-white sm:text-4xl md:text-5xl">
                 <span className="block">
@@ -104,7 +119,19 @@ export default function PublicPortfolio() {
 
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-300">{bio}</p>
 
-              <div className="mt-8" />
+              <div className="mt-8 flex gap-4">
+                {profile?.linkedin_url && (
+                  <a
+                    href={profile.linkedin_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-[#0a66c2] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#084e96]"
+                  >
+                    <LinkedinLogo size={20} weight="fill" />
+                    Contactame en LinkedIn
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -112,6 +139,9 @@ export default function PublicPortfolio() {
         {/* <Stats /> */}
         <div id="projects">
           <RecentWork projects={profile?.projects || []} />
+        </div>
+        <div id="github">
+          <BusinessGit githubUsername={profile?.github_username} />
         </div>
         {/* <BusinessGit />
         <div id="servicios">
@@ -121,8 +151,15 @@ export default function PublicPortfolio() {
           <WorkExperience workExperience={profile?.work_experiences || []} />
           {/* <EducationProjects /> */}
         </div>
+        <div id="formation">
+          <AcademicFormation academics={profile?.academyc_trainings || []} />
+          {/* <AcademicFormation /> */}
+        </div>
         <div id="skills">
           <SkillsGrid skills={safeSkills} />
+        </div>
+        <div id="soft-skills">
+          <SoftSkillsGrid skills={safeSoftSkills} />
         </div>
         {/* <div id="contacto">
           <ContactForm />

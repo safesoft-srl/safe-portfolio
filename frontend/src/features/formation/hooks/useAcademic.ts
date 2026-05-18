@@ -1,14 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "@/services/profile.service";
 import { getAcademics } from "../services/academic.service";
+import { usePortfolioId } from "@/hooks/usePortfolio";
 
 export function useAcademic() {
-  const profileQuery = useQuery({
-    queryKey: ["profile"],
-    queryFn: getProfile,
-  });
-
-  const portfolioId = profileQuery.data?.id ?? null;
+  const portfolioId = usePortfolioId();
 
   const academicsQuery = useQuery({
     queryKey: ["academics", portfolioId],
@@ -18,10 +13,8 @@ export function useAcademic() {
 
   return {
     academics: academicsQuery.data ?? [],
-    isLoading: profileQuery.isLoading || academicsQuery.isLoading,
     isFetching: academicsQuery.isFetching,
     portfolioId,
-    profile: profileQuery.data,
     refetchAcademics: academicsQuery.refetch,
   };
 }

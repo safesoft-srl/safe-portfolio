@@ -25,3 +25,13 @@ export async function getPublicWorkExperiences(slug: string) {
   const response = await http.get(`/api/portfolios/slug/${slug}/work-experiences`);
   return response.data.data;
 }
+
+export async function getPublicSkills(slug: string) {
+  const response = await http.get(`/api/portfolios/slug/${slug}/skills`);
+  return response.data.data;
+}
+
+export async function getPublicSoftSkills(slug: string) {
+  const response = await http.get(`/api/portfolios/slug/${slug}/soft-skills`);
+  return response.data.data;
+}

@@ -46,6 +46,8 @@ export default function ProjectForm({
   const [form, setForm] = useState<BaseProjectDTO>({
     name: "",
     description: "",
+    start_date: "",
+    end_date: "",
     url_demo: "",
     url_github: "",
     url_image: "",
@@ -57,6 +59,8 @@ export default function ProjectForm({
   const [errors, setErrors] = useState({
     name: "",
     description: "",
+    start_date: "",
+    end_date: "",
     skill_ids: "",
     url_github: "",
   });
@@ -64,19 +68,57 @@ export default function ProjectForm({
   const [imagePreview, setImagePreview] = useState<string>(DEFAULT_PROJECT_IMAGE);
   const [fileImage, setFileImage] = useState<File | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isCurrentWork, setIsCurrentWork] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
   const [deleteImage, setDeleteImage] = useState(false);
 
   useEffect(() => {
     if (initialData) {
-      setForm(initialData);
+      setForm({
+        ...initialData,
+        start_date: initialData.start_date ? initialData.start_date.split("T")[0] : "",
+        end_date: initialData.end_date ? initialData.end_date.split("T")[0] : "",
+      });
+      setIsCurrentWork(!initialData.end_date);
       setIsPublic(initialData.visible);
       if (initialData.url_image) {
         setImagePreview(initialData.url_image);
       }
     }
   }, [initialData]);
+
+  const validateDateFields = () => {
+    const todayStr = new Date().toISOString().split("T")[0];
+    const dateErrors = {
+      start_date: "",
+      end_date: "",
+    };
+
+    if (!form.start_date) {
+      dateErrors.start_date = "La fecha de inicio es requerida";
+    } else if (form.start_date > todayStr) {
+      dateErrors.start_date = "La fecha de inicio no puede ser mayor a la fecha actual";
+    }
+
+    if (!isCurrentWork && !form.end_date) {
+      dateErrors.end_date = "Fecha fin requerida si no trabajas actualmente";
+    } else if (form.end_date && !isCurrentWork) {
+      if (form.end_date > todayStr) {
+        dateErrors.end_date = "La fecha de fin no puede ser mayor a la fecha actual";
+      } else if (form.start_date && form.end_date < form.start_date) {
+        dateErrors.end_date = "La fecha de fin no puede ser anterior a la fecha de inicio";
+      }
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      start_date: dateErrors.start_date,
+      end_date: dateErrors.end_date,
+    }));
+
+    return dateErrors;
+  };
 
   const validate = () => {
     if (!form.name.trim()) return PROJECT_NAME_REQUIRED_ERROR;
@@ -88,6 +130,15 @@ export default function ProjectForm({
       return PROJECT_DESCRIPTION_MAX_ERROR;
     }
 
+    const dateErrors = validateDateFields();
+    if (dateErrors.start_date) {
+      return dateErrors.start_date;
+    }
+
+    if (dateErrors.end_date) {
+      return dateErrors.end_date;
+    }
+
     if (form.url_github.trim()) {
       const githubRegex = /^https:\/\/github\.com\/[\w-]+\/[\w.-]+\/?$/;
       if (!githubRegex.test(form.url_github)) {
@@ -96,10 +147,9 @@ export default function ProjectForm({
     }
 
     if (form.url_demo) {
-      const demoRegex =
-        /^https:\/\/(www\.[\w.-]+\.[a-zA-Z]{2,}(\/.*)?|[\w-]+\.railway\.app\/?|[\w-]+\.vercel\.app\/?)+$/;
+      const demoRegex = /^https?:\/\/[A-Za-z0-9.-]+\.[A-Za-z]{2,}(:\d+)?(\/.*)?$/;
       if (!demoRegex.test(form.url_demo)) {
-        return "La URL de demo debe tener el formato: https://www.sitio.com, railway.app o vercel.app";
+        return "La URL de demo debe ser una URL válida con dominio (http o https)";
       }
     }
 
@@ -266,6 +316,83 @@ export default function ProjectForm({
             }
             `}</style>
             </div>
+            <div className="mt-2">
+              <div className="flex items-center justify-end gap-2">
+                <Checkbox
+                  id="is_current_work_cb"
+                  checked={isCurrentWork}
+                  onCheckedChange={(checked) => {
+                    const nextChecked = Boolean(checked);
+                    setIsCurrentWork(nextChecked);
+
+                    if (nextChecked) {
+                      setForm((f) => ({ ...f, end_date: "" }));
+                      setErrors((prev) => ({ ...prev, end_date: "" }));
+                      return;
+                    }
+
+                    void validateDateFields();
+                  }}
+                />
+                <Label
+                  htmlFor="is_current_work_cb"
+                  className="cursor-pointer text-xs text-slate-300"
+                >
+                  Trabajo actualmente
+                </Label>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-semibold text-slate-900 dark:text-slate-300">
+                    Fecha Inicio *
+                  </Label>
+                  <Input
+                    type="date"
+                    value={form.start_date}
+                    onChange={(e) => {
+                      setForm((f) => ({ ...f, start_date: e.target.value }));
+                      if (errors.start_date) setErrors((prev) => ({ ...prev, start_date: "" }));
+                    }}
+                    onBlur={() => {
+                      const dateErrors = validateDateFields();
+                      setErrors((prev) => ({ ...prev, start_date: dateErrors.start_date }));
+                    }}
+                    className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.start_date ? " border-red-500" : ""}`}
+                  />
+                  {errors.start_date && (
+                    <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
+                      {errors.start_date}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-semibold text-slate-900 dark:text-slate-300">
+                    Fecha Fin
+                  </Label>
+                  <Input
+                    type="date"
+                    value={form.end_date}
+                    disabled={isCurrentWork}
+                    onChange={(e) => {
+                      setForm((f) => ({ ...f, end_date: e.target.value }));
+                      if (errors.end_date) setErrors((prev) => ({ ...prev, end_date: "" }));
+                    }}
+                    onBlur={() => {
+                      const dateErrors = validateDateFields();
+                      setErrors((prev) => ({ ...prev, end_date: dateErrors.end_date }));
+                    }}
+                    className={`h-8 rounded-xl border bg-slate-950 border-slate-800 text-white focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50${errors.end_date ? " border-red-500" : ""}`}
+                  />
+                  {errors.end_date && (
+                    <p className="text-xs mt-1" style={{ color: "var(--destructive)" }}>
+                      {errors.end_date}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="-mt-1">
               <SkillComboBox
                 skills={skills}
@@ -290,7 +417,7 @@ export default function ProjectForm({
           </div>
           {/* Columna Derecha */}
           <div className="flex flex-col gap-4">
-            <div className="space-y-1.5 mt-2">
+            <div className="space-y-1.5">
               <Label
                 htmlFor="urlGithub"
                 className="text-xs font-semibold text-slate-900 dark:text-slate-300"

@@ -1,5 +1,15 @@
 import type { Project } from "@/features/projects/types/project.types";
 
+export type TechnicalSkill = {
+  id: number;
+  name: string;
+  category: string;
+  urls?: {
+    light?: string;
+    dark?: string;
+  };
+};
+
 export type PortfolioSkill = {
   id: number;
   portfolio_id: number;
@@ -7,6 +17,13 @@ export type PortfolioSkill = {
   level: string;
   created_at: Date;
   updated_at: Date;
+  technical_skill?: TechnicalSkill;
+  technicalSkill?: TechnicalSkill;
+};
+export type SoftSkill = {
+  id: number;
+  name: string;
+  description: string;
 };
 
 export type WorkExperience = {
@@ -24,9 +41,25 @@ export type WorkExperience = {
   updated_at: Date;
 };
 
+export type AcademicTraining = {
+  id: number;
+  portfolio_id: number;
+  institution_name: string;
+  title: string;
+  field_of_study: string;
+  start_date: string;
+  end_date: string | null;
+  is_current: boolean;
+  description: string;
+  is_visible: boolean;
+  created_at: Date;
+  updated_at: Date;
+};
+
 export type ProfileData = {
   id: number;
   user_id: number;
+  portfolio_name?: string | null;
   profile_name?: string;
   profile_email?: string;
   profession?: string | null;
@@ -36,10 +69,14 @@ export type ProfileData = {
   url_portfolio?: string | null;
   portfolio_slug: string | null;
   is_public: boolean;
+  github_username?: string | null;
+  linkedin_url?: string | null;
   created_at: Date;
   updated_at: Date;
   portfolio_skills: PortfolioSkill[];
+  soft_skills: SoftSkill[];
   work_experiences: WorkExperience[];
+  academyc_trainings: AcademicTraining[];
   projects: Project[];
 };
 export type ApiProfilePayload = {

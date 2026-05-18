@@ -25,12 +25,20 @@ class PortfolioResource extends JsonResource
             'image_id' => $this->image_id,
             'url_portfolio' => $this->url_portfolio,
             'portfolio_slug' => $this->portfolio_slug,
+            'portfolio_name' => $this->portfolio_name,
+            'portfolio_descrition' => $this->portfolio_descrition,
+            'phone' => $this->phone,
+            'city' => $this->city,
             'is_public' => $this->is_public,
+            'github_username' => $this->github_username,
+            'linkedin_url' => $this->linkedin_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'projects' => ProjectResource::collection($this->projects),
             'portfolio_skills' => TechnicalSkillPortfolioResource::collection($this->portfolioSkills),
+            'soft_skills' => SoftSkillResource::collection($this->softSkills),
             'work_experiences' => ExperienceResource::collection($this->workExperiences),
+            'academyc_trainings' => AcademicResource::collection($this->academycTrainings),
         ];
     }
 }

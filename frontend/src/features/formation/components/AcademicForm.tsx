@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
@@ -20,16 +20,44 @@ const academicSchema = z
     start_date: z.string().min(1, "La fecha de inicio es requerida"),
     end_date: z.string().optional().nullable(),
     is_current: z.boolean(),
-    description: z.string().min(1, "La descripción es requerida"),
+    description: z.string(),
     is_visible: z.boolean(),
   })
   .superRefine((data, ctx) => {
+    const todayStr = new Date().toISOString().split("T")[0];
+
+    if (data.start_date && data.start_date > todayStr) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "La fecha de inicio no puede ser mayor a la fecha actual",
+        path: ["start_date"],
+      });
+    }
+
     if (!data.is_current && !data.end_date) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Fecha fin requerida si no esta cursando actualmente",
         path: ["end_date"],
       });
+    }
+
+    if (data.end_date && !data.is_current) {
+      if (data.end_date > todayStr) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de fin no puede ser mayor a la fecha actual (selecciona 'Actualidad')",
+          path: ["end_date"],
+        });
+      }
+
+      if (data.start_date && data.end_date < data.start_date) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "La fecha de fin no puede ser anterior a la fecha de inicio",
+          path: ["end_date"],
+        });
+      }
     }
   });
 
@@ -54,6 +82,7 @@ const defaultValues: AcademicFormValues = {
 
 export default function AcademicForm({ initialData, onSubmit, onCancel }: Props) {
   const [isSaving, setIsSaving] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const {
     register,
@@ -61,13 +90,40 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     reset,
     watch,
     control,
+    trigger,
     formState: { errors },
   } = useForm<AcademicFormValues>({
     resolver: zodResolver(academicSchema),
     defaultValues,
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
 
   const isCurrent = watch("is_current");
+  const startDate = watch("start_date");
+  const endDate = watch("end_date");
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+
+    const fieldsToValidate: Array<"start_date" | "end_date"> = [];
+
+    if (startDate) {
+      fieldsToValidate.push("start_date");
+    }
+
+    if (endDate) {
+      fieldsToValidate.push("end_date");
+    }
+
+    if (fieldsToValidate.length > 0) {
+      void trigger(fieldsToValidate);
+    }
+  }, [startDate, endDate, isCurrent, trigger]);
 
   useEffect(() => {
     if (initialData) {
@@ -79,7 +135,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
         end_date: initialData.end_date ? initialData.end_date.split("T")[0] : "",
         is_current: initialData.is_current,
         description: initialData.description ?? "",
-        is_visible: initialData.is_visible,
+        is_visible: Boolean(initialData.is_visible),
       });
       return;
     }
@@ -98,7 +154,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
         end_date: data.end_date ?? "",
         is_current: data.is_current,
         description: data.description.trim(),
-        is_visible: data.is_visible,
+        is_visible: Boolean(data.is_visible),
       });
     } catch {
       showErrorToast("Error al guardar la formación");
@@ -107,8 +163,28 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     }
   };
 
+  const handleKeyDownCapture = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key !== "Enter" || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) {
+      return;
+    }
+
+    const target = e.target as HTMLElement | null;
+    if (target?.tagName === "TEXTAREA") {
+      return;
+    }
+
+    e.preventDefault();
+    formRef.current?.requestSubmit();
+  };
+
   return (
-    <form id="academic-form" onSubmit={handleSubmit(submitForm)} className="space-y-6 px-4">
+    <form
+      ref={formRef}
+      id="academic-form"
+      onSubmit={handleSubmit(submitForm)}
+      onKeyDownCapture={handleKeyDownCapture}
+      className="space-y-6 px-4"
+    >
       <div className="mb-6 space-y-2">
         <Label className="text-slate-300">Institución</Label>
         <Input
@@ -126,7 +202,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
           <Label className="text-slate-300">Título</Label>
           <Input
             {...register("title")}
-            placeholder="Ej: Ingeniero de Sistemas"
+            placeholder="Ej: Licenciatura, Master, etc."
             className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
           />
           {errors.title && <span className="text-xs text-red-500">{errors.title.message}</span>}
@@ -136,7 +212,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
           <Label className="text-slate-300">Campo de Estudio</Label>
           <Input
             {...register("field_of_study")}
-            placeholder="Ej: Ciencias de la Computación"
+            placeholder="Ej: Ingeniero en Informatica, etc."
             className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
           />
           {errors.field_of_study && (

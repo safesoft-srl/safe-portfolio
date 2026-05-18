@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProjectResource extends JsonResource
+class AcademicResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,17 +17,16 @@ class ProjectResource extends JsonResource
         return [
             'id' => $this->id,
             'portfolio_id' => $this->portfolio_id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'url_demo' => $this->url_demo,
-            'url_github' => $this->url_github,
+            'institution_name' => $this->institution_name,
+            'title' => $this->title,
+            'field_of_study' => $this->field_of_study,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'current' => $this->current,
-            'category' => $this->category,
-            'url_image' => $this->url_image,
-            'visible' => $this->visible,
-            'skill_projects' => TechnicalSkillResource::collection($this->skills),
+            'is_current' => $this->is_current,
+            'description' => $this->description,
+            'is_visible' => $this->is_visible,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

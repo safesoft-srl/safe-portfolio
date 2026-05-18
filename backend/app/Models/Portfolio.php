@@ -15,11 +15,17 @@ class Portfolio extends Model
         'profile_email',
         'profession',
         'bio',
+        'phone',
+        'city',
+        'portfolio_name',
+        'portfolio_descrition',
         'profile_image',
         'image_id',
         'url_portfolio',
         'portfolio_slug',
         'is_public',
+        'github_username',
+        'linkedin_url',
     ];
 
     public function user()
@@ -40,5 +46,15 @@ class Portfolio extends Model
     public function workExperiences()
     {
         return $this->hasMany(WorkExperience::class);
+    }
+
+    public function academycTrainings()
+    {
+        return $this->hasMany(Academyc_Training::class);
+    }
+
+    public function softSkills()
+    {
+        return $this->hasMany(SoftSkill::class);
     }
 }
