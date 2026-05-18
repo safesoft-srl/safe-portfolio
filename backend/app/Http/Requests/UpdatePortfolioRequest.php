@@ -33,7 +33,7 @@ class UpdatePortfolioRequest extends FormRequest
             'bio' => 'nullable|string',
             'portfolio_name'=> 'nullable|string|max:50',
             'portfolio_descrition' => 'nullable|string',
-            'telephone' => 'nullable|string|max:10',
+            'phone' => 'nullable|string|max:10',
             'city'=> 'nullable|string|max:50',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'image_id' => 'nullable|string',

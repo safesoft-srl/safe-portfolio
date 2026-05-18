@@ -27,7 +27,7 @@ class PortfolioResource extends JsonResource
             'portfolio_slug' => $this->portfolio_slug,
             'portfolio_name' => $this->portfolio_name,
             'portfolio_descrition' => $this->portfolio_descrition,
-            'telephone' => $this->telephone,
+            'phone' => $this->phone,
             'city' => $this->city,
             'is_public' => $this->is_public,
             'github_username' => $this->github_username,

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('bio');
             $table->string('portfolio_name', 50)->nullable();
             $table->text('portfolio_descrition')->nullable();
-            $table->string('telephone', 10)->nullable();
+            $table->string('phone', 10)->nullable();
             $table->string('city', 50)->nullable();
             $table->string('profile_image')->nullable();
             $table->string('image_id')->nullable();
