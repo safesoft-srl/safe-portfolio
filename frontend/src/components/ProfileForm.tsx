@@ -26,12 +26,17 @@ const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 const VALID_TEXT_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:()'"/\-\n\r]+$/;
 const VALID_NAME_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
 const VALID_PROFESSION_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s/-]+$/;
+const VALID_CITY_REGEX = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s.'-]+$/;
+const VALID_PHONE_REGEX = /^[0-9+\s()-]+$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export type ProfileFormData = {
   profile_name: string;
+  portfolio_name?: string;
   profile_email: string;
   profession: string;
+  city: string;
+  phone: string;
   bio: string;
   profile_image: string;
   url_portfolio: string;
@@ -47,13 +52,23 @@ export type ProfileFormProps = {
 };
 
 const EMPTY_ERRORS = {
+  portfolioName: "",
   fullName: "",
   email: "",
   profession: "",
+  city: "",
+  phone: "",
   bio: "",
 };
 
-type ProfileField = "fullName" | "email" | "profession" | "bio";
+type ProfileField =
+  | "portfolioName"
+  | "fullName"
+  | "email"
+  | "profession"
+  | "city"
+  | "phone"
+  | "bio";
 
 export default function ProfileForm({
   mode,
@@ -82,6 +97,11 @@ export default function ProfileForm({
   }
   const validateField = (field: ProfileField, value: string) => {
     const trimmedValue = value.trim();
+    if (field === "portfolioName") {
+      if (trimmedValue.length > 60)
+        return "El nombre del portafolio debe tener máximo 60 caracteres.";
+      return "";
+    }
     if (field === "fullName") {
       if (!trimmedValue) return "El nombre es obligatorio.";
       if (trimmedValue.length < 2 || trimmedValue.length > 50) {
@@ -114,6 +134,20 @@ export default function ProfileForm({
       }
       return "";
     }
+    if (field === "city") {
+      if (!trimmedValue) return "";
+      if (!VALID_CITY_REGEX.test(trimmedValue)) {
+        return "La ciudad contiene caracteres inválidos.";
+      }
+      return "";
+    }
+    if (field === "phone") {
+      if (!trimmedValue) return "";
+      if (!VALID_PHONE_REGEX.test(trimmedValue)) {
+        return "El teléfono contiene caracteres inválidos.";
+      }
+      return "";
+    }
     if (trimmedValue.length < 100) {
       return "La biografía debe tener al menos 100 caracteres.";
     }
@@ -124,22 +158,29 @@ export default function ProfileForm({
   };
 
   const getFieldKey = (name: string): ProfileField => {
+    if (name === "portfolio_name" || name === "portfolioName") return "portfolioName";
     if (name === "profile_name" || name === "fullName") return "fullName";
     if (name === "profile_email" || name === "email") return "email";
-    if (name === "profession") return "profession";
+    if (name === "profession" || name === "professionName") return "profession";
+    if (name === "city") return "city";
+    if (name === "phone") return "phone";
     return "bio";
   };
 
   const getStateKey = (field: ProfileField) => {
     if (field === "fullName") return "profile_name";
     if (field === "email") return "profile_email";
+    if (field === "portfolioName") return "portfolio_name";
     return field;
   };
 
   const hasUnsavedChanges =
+    formData.portfolio_name !== initialData.portfolio_name ||
     formData.profile_name !== initialData.profile_name ||
     formData.profile_email !== initialData.profile_email ||
     formData.profession !== initialData.profession ||
+    formData.city !== initialData.city ||
+    formData.phone !== initialData.phone ||
     formData.bio !== initialData.bio ||
     selectedFile !== null;
 
@@ -209,9 +250,12 @@ export default function ProfileForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const nextErrors: Record<ProfileField, string> = {
+      portfolioName: validateField("portfolioName", formData.portfolio_name ?? ""),
       fullName: validateField("fullName", formData.profile_name),
       email: validateField("email", formData.profile_email),
       profession: validateField("profession", formData.profession),
+      city: validateField("city", formData.city),
+      phone: validateField("phone", formData.phone),
       bio: validateField("bio", formData.bio),
     };
     setErrors(nextErrors);
@@ -236,7 +280,7 @@ export default function ProfileForm({
   return (
     <form onSubmit={handleSubmit} className="w-full bg-slate-900 rounded-2xl p-4 sm:p-5">
       <h2 className="mb-4 text-2xl font-semibold">
-        {mode === "edit" ? "Información Básica" : "Crear Perfil"}
+        {mode === "edit" ? "Información Básica" : "Crear Perfil de Portafolio"}
       </h2>
       <div className="border-b border-slate-800 mb-8"></div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
@@ -327,6 +371,29 @@ export default function ProfileForm({
         <div className="space-y-5">
           <div className="space-y-2.5">
             <Label
+              htmlFor="portfolioName"
+              className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+            >
+              Nombre de Portafolio
+            </Label>
+            <Input
+              id="portfolioName"
+              name="portfolioName"
+              type="text"
+              placeholder="Ej: Portafolio - Juan Perez"
+              value={formData.portfolio_name ?? ""}
+              onChange={handleInputChange}
+              onBlur={handleFieldBlur}
+              className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm"
+            />
+            {errors.portfolioName ? (
+              <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                {errors.portfolioName}
+              </p>
+            ) : null}
+          </div>
+          <div className="space-y-2.5">
+            <Label
               htmlFor="fullName"
               className="text-xs font-semibold text-slate-700 dark:text-slate-300"
             >
@@ -362,8 +429,7 @@ export default function ProfileForm({
               id="email"
               name="email"
               type="email"
-              placeholder="Ej: example1@gmail.com"
-              pattern="[a-z0-9]+@gmail\.com"
+              placeholder="Ej: correo@dominio.com"
               value={formData.profile_email}
               onChange={handleInputChange}
               onBlur={handleFieldBlur}
@@ -403,12 +469,68 @@ export default function ProfileForm({
               </p>
             ) : null}
           </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="space-y-2.5">
+              <Label
+                htmlFor="city"
+                className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+              >
+                Ciudad
+              </Label>
+              <Input
+                id="city"
+                name="city"
+                type="text"
+                placeholder="Ej: Buenos Aires"
+                value={formData.city}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.city ? { borderColor: "var(--destructive)" } : undefined}
+                className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.city ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.city}
+                </p>
+              ) : null}
+            </div>
+            <div className="space-y-2.5">
+              <Label
+                htmlFor="phone"
+                className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+              >
+                Teléfono
+              </Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                inputMode="tel"
+                placeholder="Ej: +591 67563184"
+                value={formData.phone}
+                onChange={handleInputChange}
+                onBlur={handleFieldBlur}
+                style={errors.phone ? { borderColor: "var(--destructive)" } : undefined}
+                className="h-8 border bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 px-4 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {errors.phone ? (
+                <p className="text-xs" style={{ color: "var(--destructive)" }}>
+                  {errors.phone}
+                </p>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
       <div className="mt-8 space-y-2.5">
-        <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-          Sobre mi *
-        </Label>
+        <div className="flex justify-between items-center">
+          <Label htmlFor="bio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Sobre mi *
+          </Label>
+          <span className="text-xs text-slate-500 dark:text-slate-400">
+            {formData.bio.length}/300
+          </span>
+        </div>
         <Textarea
           id="bio"
           name="bio"
@@ -416,6 +538,7 @@ export default function ProfileForm({
           value={formData.bio}
           onChange={handleInputChange}
           onBlur={handleFieldBlur}
+          maxLength={300}
           rows={6}
           required
           style={errors.bio ? { borderColor: "var(--destructive)" } : undefined}

@@ -13,6 +13,8 @@ export type CreateProjectDTO = {
   portfolio_id: number;
   name: string;
   description: string;
+  start_date: string;
+  end_date: string;
   url_demo: string | null;
   url_github: string;
   url_image: string;
@@ -31,6 +33,8 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
   formData.append("portfolio_id", data.portfolio_id.toString());
   formData.append("name", data.name);
   formData.append("description", data.description);
+  formData.append("start_date", data.start_date);
+  formData.append("end_date", data.end_date);
   formData.append("visible", data.visible ? "1" : "0");
   if (data.url_demo) {
     formData.append("url_demo", data.url_demo);
@@ -62,6 +66,8 @@ export const updateProject = async (
   const formData = new FormData();
   formData.append("name", data.name ?? "");
   formData.append("description", data.description ?? "");
+  formData.append("start_date", data.start_date ?? "");
+  formData.append("end_date", data.end_date ?? "");
   formData.append("url_demo", data.url_demo ?? "");
   formData.append("url_github", data.url_github ?? "");
   formData.append("visible", data.visible ? "1" : "0");

@@ -82,6 +82,7 @@ const defaultValues: AcademicFormValues = {
 
 export default function AcademicForm({ initialData, onSubmit, onCancel }: Props) {
   const [isSaving, setIsSaving] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const {
     register,
@@ -162,8 +163,28 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     }
   };
 
+  const handleKeyDownCapture = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key !== "Enter" || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) {
+      return;
+    }
+
+    const target = e.target as HTMLElement | null;
+    if (target?.tagName === "TEXTAREA") {
+      return;
+    }
+
+    e.preventDefault();
+    formRef.current?.requestSubmit();
+  };
+
   return (
-    <form id="academic-form" onSubmit={handleSubmit(submitForm)} className="space-y-6 px-4">
+    <form
+      ref={formRef}
+      id="academic-form"
+      onSubmit={handleSubmit(submitForm)}
+      onKeyDownCapture={handleKeyDownCapture}
+      className="space-y-6 px-4"
+    >
       <div className="mb-6 space-y-2">
         <Label className="text-slate-300">Institución</Label>
         <Input

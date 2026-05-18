@@ -7,6 +7,8 @@ export type ProfileData = {
   profile_name: string;
   profile_email: string;
   profession: string;
+  city: string;
+  phone: string;
   bio: string;
   profile_image: string | null;
   url_portfolio: string;
@@ -19,6 +21,8 @@ const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
   profile_name: payload?.profile_name ?? payload?.profile_name ?? "",
   profile_email: payload?.profile_email ?? "",
   profession: payload?.profession ?? "",
+  city: "",
+  phone: "",
   bio: payload?.bio ?? "",
   profile_image: payload?.profile_image ?? null,
   url_portfolio: payload?.url_portfolio ?? "",
@@ -91,6 +95,8 @@ export async function updateProfile(
   formData.append("profile_name", payload.profile_name);
   formData.append("profile_email", payload.profile_email);
   formData.append("profession", payload.profession);
+  formData.append("city", payload.city);
+  formData.append("phone", payload.phone);
   formData.append("bio", payload.bio);
   formData.append("url_portfolio", payload.url_portfolio);
 
@@ -127,6 +133,8 @@ export async function createProfile(
   formData.append("profile_name", payload.profile_name);
   formData.append("profile_email", payload.profile_email);
   formData.append("profession", payload.profession);
+  formData.append("city", payload.city);
+  formData.append("phone", payload.phone);
   formData.append("bio", payload.bio);
   if (file) {
     formData.append("profile_image", file);
