@@ -12,6 +12,8 @@ export default function Profile() {
     profile_name: "",
     profile_email: "",
     profession: "",
+    city: "",
+    phone: "",
     bio: "",
     profile_image: "",
     url_portfolio: "",
@@ -25,6 +27,8 @@ export default function Profile() {
         profile_name: profile.profile_name ?? "",
         profile_email: profile.profile_email ?? "",
         profession: profile.profession ?? "",
+        city: profile.city ?? "",
+        phone: profile.phone ?? "",
         bio: profile.bio ?? "",
         profile_image: profile.profile_image ?? null,
         url_portfolio: profile.url_portfolio ?? "",
@@ -46,6 +50,8 @@ export default function Profile() {
         profile_name: data.profile_name?.trim() || "",
         profile_email: data.profile_email?.trim() || "",
         profession: data.profession?.trim() || "",
+        city: data.city?.trim() || "",
+        phone: data.phone?.trim() || "",
         bio: data.bio?.trim() || "",
         profile_image: data.profile_image?.trim() || "",
         url_portfolio: data.url_portfolio?.trim() || "",
@@ -56,6 +62,8 @@ export default function Profile() {
         profile_name: profile.profile_name,
         profile_email: profile.profile_email,
         profession: profile.profession,
+        city: profile.city ?? "",
+        phone: profile.phone ?? "",
         bio: profile.bio,
         profile_image: profile.profile_image ?? "",
         url_portfolio: profile.url_portfolio,
@@ -75,7 +83,7 @@ export default function Profile() {
 
   return (
     <div className="mx-auto w-full max-w-4xl font-sans text-slate-900 dark:text-white">
-      {!isLoading && <h1 className="mb-4 text-3xl font-semibold">Editar Perfil</h1>}
+      {!isLoading && <h1 className="mb-4 text-3xl font-semibold">Editar Perfil de Portafolio</h1>}
       <ProfileForm
         mode="edit"
         initialData={initialFormData}

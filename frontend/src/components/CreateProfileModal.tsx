@@ -44,6 +44,8 @@ export default function CreateProfileModal({
     profile_name: user?.name || "",
     profile_email: user?.email || "",
     profession: "",
+    city: "",
+    phone: "",
     bio: "",
     profile_image: defaultProfileImage,
     url_portfolio: "",
