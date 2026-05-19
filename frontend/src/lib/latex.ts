@@ -18,6 +18,15 @@ function stringToArray(text = "") {
 export const generateLatexPdf = (profile: ProfileData | null) => {
   if (!profile) return "";
 
+  const contactInfo = [
+    profile.profession,
+    profile.city,
+    profile.profile_email,
+    profile.phone,
+  ]
+    .filter((item): item is string => typeof item === "string" && item.trim() !== "")
+    .join(" \\textbullet \\ ");
+
   const baseText = String.raw`\documentclass[11pt]{article}
 \setlength{\parindent}{0pt}
 \usepackage{hyperref}
@@ -40,8 +49,7 @@ export const generateLatexPdf = (profile: ProfileData | null) => {
 \end{center}
 
 \begin{center}
-    %Home or Campus Street Address \textbullet \ City, State Zip \textbullet \ ${profile.profile_email} \textbullet \ phone number
-    ${profile.profile_email}
+    ${contactInfo}
 \end{center}
 
 \vspace{0.5pt}
@@ -57,7 +65,7 @@ ${profile.academyc_trainings.map(
 
 ${training.field_of_study}
 ${training.description}`
-)}
+).join("\n")}
 
 \vspace{12pt}
 
@@ -86,7 +94,7 @@ ${
 
 \vspace{12pt}
 `
-)}  
+).join("\n")}  
 
 
 
@@ -113,7 +121,7 @@ ${
     .join(", ")}
 
 \textbf{Blandas:}
-${profile?.soft_skills.map((skill) => `${skill?.name}: ${skill?.description}`)}
+${profile?.soft_skills.map((skill) => `${skill?.name}: ${skill?.description}`).join(", ")}
 
 
 
