@@ -1,40 +1,39 @@
-import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createProject, updateProject, deleteProject } from "../services/project.service";
-import { getSkills, type Skill } from "@/services/skill.service";
+import { getSkills } from "@/services/skill.service";
 import { http } from "@/services/http.service";
 import type { Project } from "../types/project.types";
 import { usePortfolioId } from "@/hooks/usePortfolio";
 
 export function useProjects() {
   const portfolioId = usePortfolioId();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
+
+  const projectsQuery = useQuery({
+    queryKey: ["projects", portfolioId],
+    queryFn: async () => {
+      const res = await http.get(`/api/portfolios/${portfolioId}/projects`);
+      return (res.data.data || res.data) as Project[];
+    },
+    enabled: Boolean(portfolioId),
+    staleTime: Infinity,
+  });
+
+  const skillsQuery = useQuery({
+    queryKey: ["skills"],
+    queryFn: getSkills,
+    staleTime: Infinity,
+  });
 
   const syncProjects = async () => {
-    if (!portfolioId) return;
-
-    const res = await http.get(`/api/portfolios/${portfolioId}/projects`);
-
-    setProjects(res.data.data || res.data);
+    await queryClient.invalidateQueries({ queryKey: ["projects", portfolioId] });
+    await projectsQuery.refetch();
   };
-
-  const init = async () => {
-    try {
-      await Promise.all([syncProjects(), getSkills().then(setSkills)]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    init();
-  }, [portfolioId]);
 
   return {
-    projects,
-    skills,
-    isLoading,
+    projects: projectsQuery.data ?? [],
+    skills: skillsQuery.data ?? [],
+    isLoading: projectsQuery.isLoading || skillsQuery.isLoading,
     syncProjects,
     createProject,
     updateProject,
