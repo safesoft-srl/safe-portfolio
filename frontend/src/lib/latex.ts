@@ -18,6 +18,10 @@ function stringToArray(text = "") {
 export const generateLatexPdf = (profile: ProfileData | null) => {
   if (!profile) return "";
 
+  const contactInfo = [profile.profession, profile.city, profile.profile_email, profile.phone]
+    .filter((item): item is string => typeof item === "string" && item.trim() !== "")
+    .join(" \\textbullet \\ ");
+
   const baseText = String.raw`\documentclass[11pt]{article}
 \setlength{\parindent}{0pt}
 \usepackage{hyperref}
@@ -40,8 +44,7 @@ export const generateLatexPdf = (profile: ProfileData | null) => {
 \end{center}
 
 \begin{center}
-    %Home or Campus Street Address \textbullet \ City, State Zip \textbullet \ ${profile.profile_email} \textbullet \ phone number
-    ${profile.profile_email}
+    ${contactInfo}
 \end{center}
 
 \vspace{0.5pt}
@@ -49,23 +52,26 @@ export const generateLatexPdf = (profile: ProfileData | null) => {
 \begin{center}
     \textbf{Educación}
 \end{center}
-${profile.academyc_trainings.map(
-  (training) => String.raw`
+${profile.academyc_trainings
+  .map(
+    (training) => String.raw`
 
 
 \textbf{${training.institution_name}} \hfill ${format(new Date(training.start_date), "MMM yyyy", { locale: es })} – ${training.end_date !== null ? format(new Date(training.end_date), "MMM yyyy", { locale: es }) : "Presente"}
 
 ${training.field_of_study}
 ${training.description}`
-)}
+  )
+  .join("\n")}
 
 \vspace{12pt}
 
 \begin{center}
     \textbf{Experiencia}
 \end{center}
-${profile.work_experiences.map(
-  (experiencie) => String.raw`
+${profile.work_experiences
+  .map(
+    (experiencie) => String.raw`
 \textbf{${experiencie.company}} %\hfill City, State (or Remote)
 
 \textbf{${experiencie.position}} \hfill ${format(new Date(experiencie.start_date), "MMM yyyy", { locale: es })} – ${experiencie.end_date !== null ? format(new Date(experiencie.end_date), "MMM yyyy", { locale: es }) : "Presente"}
@@ -86,7 +92,8 @@ ${
 
 \vspace{12pt}
 `
-)}  
+  )
+  .join("\n")}  
 
 
 
@@ -113,7 +120,7 @@ ${
     .join(", ")}
 
 \textbf{Blandas:}
-${profile?.soft_skills.map((skill) => `${skill?.name}: ${skill?.description}`)}
+${profile?.soft_skills.map((skill) => `${skill?.name}: ${skill?.description}`).join(", ")}
 
 
 
