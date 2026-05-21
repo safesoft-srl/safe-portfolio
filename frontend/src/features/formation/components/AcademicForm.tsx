@@ -91,6 +91,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     watch,
     control,
     trigger,
+    setValue,
     formState: { errors },
   } = useForm<AcademicFormValues>({
     resolver: zodResolver(academicSchema),
@@ -143,6 +144,13 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     reset(defaultValues);
   }, [initialData, reset]);
 
+
+  useEffect(() => {
+    if (isCurrent) {
+      setValue("end_date", "");
+    }
+  }, [isCurrent, setValue]);
+
   const submitForm = async (data: AcademicFormValues) => {
     try {
       setIsSaving(true);
@@ -190,7 +198,8 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
         <Input
           {...register("institution_name")}
           placeholder="Ej: Universidad Nacional"
-          className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
+          disabled={!!initialData}
+          className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 disabled:opacity-50"
         />
         {errors.institution_name && (
           <span className="text-xs text-red-500">{errors.institution_name.message}</span>
@@ -203,7 +212,8 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
           <Input
             {...register("title")}
             placeholder="Ej: Licenciatura, Master, etc."
-            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
+            disabled={!!initialData}
+            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 disabled:opacity-50"
           />
           {errors.title && <span className="text-xs text-red-500">{errors.title.message}</span>}
         </div>
@@ -213,7 +223,8 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
           <Input
             {...register("field_of_study")}
             placeholder="Ej: Ingeniero en Informatica, etc."
-            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
+            disabled={!!initialData}
+            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 disabled:opacity-50"
           />
           {errors.field_of_study && (
             <span className="text-xs text-red-500">{errors.field_of_study.message}</span>
@@ -222,44 +233,39 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
       </div>
 
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2">
-        <div className="hidden sm:block" />
-        <div className="flex items-center justify-end gap-2">
-          <Controller
-            name="is_current"
-            control={control}
-            render={({ field }) => (
-              <Checkbox id="is_current_cb" checked={field.value} onCheckedChange={field.onChange} />
+        <div className="sm:col-span-2 flex items-center gap-4 w-full">
+          <div className="flex-1 flex items-center gap-2">
+            <Controller
+              name="is_current"
+              control={control}
+              render={({ field }) => (
+                <Checkbox id="is_current_cb" checked={field.value} onCheckedChange={field.onChange} />
+              )}
+            />
+
+            <Label htmlFor="is_current_cb" className="cursor-pointer text-xs text-slate-300">
+              Actualmente cursando
+            </Label>
+          </div>
+
+          <div className="flex-1 justify-end">
+            {!isCurrent && (
+              <div className="flex flex-col gap-2">
+                <Label className="text-slate-300">Fecha de emision titulo</Label>
+                <Input
+                  type="date"
+                  {...register("end_date")}
+                  className="h-8 bg-slate-950 border-slate-800 text-white focus-visible:ring-indigo-500"
+                />
+                {errors.end_date && (
+                  <span className="text-xs text-red-500">{errors.end_date.message}</span>
+                )}
+              </div>
             )}
-          />
-          <Label htmlFor="is_current_cb" className="cursor-pointer text-xs text-slate-300">
-            Actualmente cursando
-          </Label>
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-slate-300">Fecha de Inicio</Label>
-          <Input
-            type="date"
-            {...register("start_date")}
-            className="h-8 bg-slate-950 border-slate-800 text-white focus-visible:ring-indigo-500"
-          />
-          {errors.start_date && (
-            <span className="text-xs text-red-500">{errors.start_date.message}</span>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label className="text-slate-300">Fecha de Fin</Label>
-          <Input
-            type="date"
-            {...register("end_date")}
-            disabled={isCurrent}
-            className="h-8 bg-slate-950 border-slate-800 text-white disabled:opacity-50 focus-visible:ring-indigo-500"
-          />
-          {errors.end_date && (
-            <span className="text-xs text-red-500">{errors.end_date.message}</span>
-          )}
-        </div>
+        {/* start_date eliminado: ya no se registra en frontend */}
       </div>
 
       <div className="space-y-2">
