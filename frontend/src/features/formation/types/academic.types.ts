@@ -4,7 +4,6 @@ export interface AcademicRecord {
   institution_name: string;
   title: string;
   field_of_study: string;
-  start_date: string;
   end_date: string | null;
   is_current: boolean;
   description: string;
@@ -17,8 +16,7 @@ export interface AcademicFormData {
   institution_name: string;
   title: string;
   field_of_study: string;
-  start_date: string;
-  end_date: string;
+  end_date: string | null;
   is_current: boolean;
   description: string;
   is_visible: boolean;

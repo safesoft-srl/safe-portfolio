@@ -17,7 +17,6 @@ const academicSchema = z
     institution_name: z.string().min(1, "La institución es requerida"),
     title: z.string().min(1, "El título es requerido"),
     field_of_study: z.string().min(1, "El campo de estudio es requerido"),
-    start_date: z.string().min(1, "La fecha de inicio es requerida"),
     end_date: z.string().optional().nullable(),
     is_current: z.boolean(),
     description: z.string(),
@@ -25,14 +24,6 @@ const academicSchema = z
   })
   .superRefine((data, ctx) => {
     const todayStr = new Date().toISOString().split("T")[0];
-
-    if (data.start_date && data.start_date > todayStr) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "La fecha de inicio no puede ser mayor a la fecha actual",
-        path: ["start_date"],
-      });
-    }
 
     if (!data.is_current && !data.end_date) {
       ctx.addIssue({
@@ -47,14 +38,6 @@ const academicSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: "La fecha de fin no puede ser mayor a la fecha actual (selecciona 'Actualidad')",
-          path: ["end_date"],
-        });
-      }
-
-      if (data.start_date && data.end_date < data.start_date) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "La fecha de fin no puede ser anterior a la fecha de inicio",
           path: ["end_date"],
         });
       }
@@ -73,7 +56,6 @@ const defaultValues: AcademicFormValues = {
   institution_name: "",
   title: "",
   field_of_study: "",
-  start_date: "",
   end_date: "",
   is_current: false,
   description: "",
@@ -101,7 +83,6 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
   });
 
   const isCurrent = watch("is_current");
-  const startDate = watch("start_date");
   const endDate = watch("end_date");
   const hasMounted = useRef(false);
 
@@ -111,11 +92,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
       return;
     }
 
-    const fieldsToValidate: Array<"start_date" | "end_date"> = [];
-
-    if (startDate) {
-      fieldsToValidate.push("start_date");
-    }
+    const fieldsToValidate: Array<"end_date"> = [];
 
     if (endDate) {
       fieldsToValidate.push("end_date");
@@ -124,7 +101,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     if (fieldsToValidate.length > 0) {
       void trigger(fieldsToValidate);
     }
-  }, [startDate, endDate, isCurrent, trigger]);
+  }, [endDate, isCurrent, trigger]);
 
   useEffect(() => {
     if (initialData) {
@@ -132,7 +109,6 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
         institution_name: initialData.institution_name ?? "",
         title: initialData.title ?? "",
         field_of_study: initialData.field_of_study ?? "",
-        start_date: initialData.start_date ? initialData.start_date.split("T")[0] : "",
         end_date: initialData.end_date ? initialData.end_date.split("T")[0] : "",
         is_current: initialData.is_current,
         description: initialData.description ?? "",
@@ -158,8 +134,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
         institution_name: data.institution_name.trim(),
         title: data.title.trim(),
         field_of_study: data.field_of_study.trim(),
-        start_date: data.start_date,
-        end_date: data.end_date ?? "",
+        end_date: data.is_current ? "" : data.end_date??"",
         is_current: data.is_current,
         description: data.description.trim(),
         is_visible: Boolean(data.is_visible),
@@ -264,8 +239,6 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
             )}
           </div>
         </div>
-
-        {/* start_date eliminado: ya no se registra en frontend */}
       </div>
 
       <div className="space-y-2">
