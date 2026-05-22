@@ -57,4 +57,9 @@ class Portfolio extends Model
     {
         return $this->hasMany(SoftSkill::class);
     }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }
