@@ -12,7 +12,7 @@ class CourseController extends Controller
 {
     public function __construct(
         private CourseService $courseService
-    ){}
+    ) {}
 
     public function index()
     {
@@ -24,14 +24,14 @@ class CourseController extends Controller
         );
     }
 
-    public function store(StoreCourseRequest $request, int $portfolioId) 
+    public function store(StoreCourseRequest $request, int $portfolioId)
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
 
         $portfolio = $user->portfolios()->find($portfolioId);
-        
-        if (!$portfolio) {
+
+        if (! $portfolio) {
             return ApiResponse::error(
                 'No existe el portafolio.',
                 404

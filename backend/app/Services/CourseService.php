@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Services;
 
-use App\Models\Portfolio;
 use App\Models\Course;
+use App\Models\Portfolio;
 
 class CourseService
 {
@@ -24,6 +25,7 @@ class CourseService
     public function update(Course $course, array $data)
     {
         $course->update($data);
+
         return $course;
     }
 

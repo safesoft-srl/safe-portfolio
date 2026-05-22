@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcademicController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectController;
@@ -9,7 +10,6 @@ use App\Http\Controllers\RegisterAccountController;
 use App\Http\Controllers\ResendTokenController;
 use App\Http\Controllers\SkillProjectController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CourseController;
 
 Route::post('/register', [RegisterAccountController::class, 'register']);
 // Api   http://localhost:8000/api/register   (Para registrar nuevos usuarios)  JSON(name,email,password)
@@ -125,7 +125,6 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/academics/{id}', [AcademicController::class, 'destroy']);
     Route::get('/academics/portfolio/{portfolioId}', [AcademicController::class, 'getByPortfolio']);
 });
-
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/portfolios/{portfolioId}/courses', [CourseController::class, 'store']);
