@@ -20,7 +20,6 @@ class AcademicResource extends JsonResource
             'institution_name' => $this->institution_name,
             'title' => $this->title,
             'field_of_study' => $this->field_of_study,
-            'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'is_current' => $this->is_current,
             'description' => $this->description,

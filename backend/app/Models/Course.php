@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Academyc_Training extends Model
+class Course extends Model
 {
     use HasFactory;
 
@@ -13,11 +13,13 @@ class Academyc_Training extends Model
         'portfolio_id',
         'institution_name',
         'title',
-        'field_of_study',
-        'end_date',
+        'area',
+        'workload_hours',
+        'level',
+        'certificate_date',
         'is_current',
-        'description',
         'is_visible',
+        'description',
     ];
 
     public function portfolio()

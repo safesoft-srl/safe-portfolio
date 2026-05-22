@@ -10,7 +10,6 @@ const mapAcademicFormData = (data: AcademicFormData) => {
   formData.append("institution_name", data.institution_name.trim());
   formData.append("title", data.title.trim());
   formData.append("field_of_study", data.field_of_study.trim());
-  formData.append("start_date", data.start_date);
   formData.append("end_date", data.end_date ?? "");
   formData.append("is_current", data.is_current ? "1" : "0");
   formData.append("description", data.description.trim());

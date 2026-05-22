@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcademicController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectController;
@@ -124,3 +125,13 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/academics/{id}', [AcademicController::class, 'destroy']);
     Route::get('/academics/portfolio/{portfolioId}', [AcademicController::class, 'getByPortfolio']);
 });
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/portfolios/{portfolioId}/courses', [CourseController::class, 'store']);
+    Route::get('/courses/{id}', [CourseController::class, 'show']);
+    Route::put('/courses/{id}', [CourseController::class, 'update']);
+    Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
+    Route::get('/courses/portfolio/{portfolioId}', [CourseController::class, 'getByPortfolioId']);
+});
+
+Route::get('/courses', [CourseController::class, 'index']);

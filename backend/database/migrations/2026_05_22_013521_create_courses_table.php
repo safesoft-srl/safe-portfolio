@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('academyc__trainings', function (Blueprint $table) {
+        Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('portfolio_id')->constrained()->onDelete('cascade');
             $table->string('institution_name', 60);
             $table->string('title', 60);
-            $table->string('field_of_study', 50);
-            $table->date('end_date')->nullable();
+            $table->string('area', 50);
+            $table->string('workload_hours', 10)->nullable();
+            $table->string('level', 30)->nullable();
+            $table->date('certificate_date')->nullable();
             $table->boolean('is_current')->default(false);
-            $table->string('description')->nullable();
             $table->boolean('is_visible')->default(true);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('academyc__trainings');
+        Schema::dropIfExists('courses');
     }
 };

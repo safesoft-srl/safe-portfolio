@@ -18,9 +18,6 @@ type Props = {
 };
 
 export default function AcademicCard({ academic, onEdit, onDelete }: Props) {
-  const startLabel = academic.start_date
-    ? format(parseISO(academic.start_date), "MMM yyyy", { locale: es })
-    : "";
   const endLabel = academic.is_current
     ? "Presente"
     : academic.end_date
@@ -41,7 +38,7 @@ export default function AcademicCard({ academic, onEdit, onDelete }: Props) {
 
         <div className="flex items-center sm:justify-end">
           <span className="bg-indigo-900 text-indigo-100 px-3 py-1.5 rounded-full font-semibold text-xs sm:text-sm whitespace-nowrap">
-            {startLabel} - {endLabel}
+            {endLabel}
           </span>
         </div>
       </div>

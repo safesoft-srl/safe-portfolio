@@ -1,10 +1,12 @@
-export interface AcademicRecord {
+export interface CourseRecord {
   id: number;
   portfolio_id: number;
   institution_name: string;
   title: string;
-  field_of_study: string;
-  end_date: string | null;
+  area: string;
+  workload_hours: string;
+  level: string;
+  certificate_date: string | null;
   is_current: boolean;
   description: string;
   is_visible: boolean;
@@ -12,11 +14,13 @@ export interface AcademicRecord {
   updated_at?: string;
 }
 
-export interface AcademicFormData {
+export interface CourseFormData {
   institution_name: string;
   title: string;
-  field_of_study: string;
-  end_date: string | null;
+  area: string;
+  workload_hours: string;
+  level: string;
+  certificate_date: string;
   is_current: boolean;
   description: string;
   is_visible: boolean;

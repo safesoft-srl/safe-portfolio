@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AcademicUpdateRequest extends FormRequest
+class StoreCourseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,12 @@ class AcademicUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'institution_name' => 'sometimes|string|max:60',
-            'title' => 'sometimes|string|max:60',
-            'field_of_study' => 'sometimes|string|max:50',
-            'end_date' => 'nullable|date|after:current_date',
+            'institution_name' => 'required|string|max:60',
+            'title' => 'required|string|max:60',
+            'area' => 'required|string|max:50',
+            'workload_hours' => 'nullable|string|max:10',
+            'level' => 'nullable|string|max:30',
+            'certificate_date' => 'nullable|date|after:current_date',
             'is_current' => 'boolean',
             'is_visible' => 'boolean',
             'description' => 'nullable|string',
@@ -37,11 +39,16 @@ class AcademicUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'institution_name.required' => 'El nombre de la institución es obligatorio.',
             'institution_name.max' => 'El nombre de la institución tiene un maximo de 60 caracteres.',
+            'title.required' => 'El título es obligatorio.',
             'title.max' => 'El título tiene un maximo de 60 caracteres.',
-            'field_of_study.max' => 'El campo de estudio tiene un maximo de 50 caracteres.',
-            'end_date.date' => 'La fecha de emision debe ser una fecha válida.',
-            'end_date.after' => 'La fecha de emision debe ser anterior a la fecha actual.',
+            'area.required' => 'El área es obligatoria.',
+            'area.max' => 'El área tiene un maximo de 50 caracteres.',
+            'workload_hours.max' => 'Las horas de carga tienen un maximo de 10 caracteres.',
+            'level.max' => 'El nivel tiene un maximo de 30 caracteres.',
+            'certificate_date.date' => 'La fecha de emisión debe ser una fecha válida.',
+            'certificate_date.after' => 'La fecha de emisión debe ser anterior a la fecha actual.',
             'is_current.boolean' => 'El campo "actual" debe ser un valor booleano.',
             'is_visible.boolean' => 'El campo "visible" debe ser un valor booleano.',
             'description.string' => 'La descripción debe ser una cadena de texto.',
