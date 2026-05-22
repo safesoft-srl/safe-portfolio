@@ -113,7 +113,9 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
         area: initialData.area ?? "",
         workload_hours: initialData.workload_hours ?? "",
         level: initialData.level ?? "",
-        certificate_date: initialData.certificate_date ? initialData.certificate_date.split("T")[0] : "",
+        certificate_date: initialData.certificate_date
+          ? initialData.certificate_date.split("T")[0]
+          : "",
         is_current: initialData.is_current,
         description: initialData.description ?? "",
         is_visible: Boolean(initialData.is_visible),
@@ -243,7 +245,11 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
               name="is_current"
               control={control}
               render={({ field }) => (
-                <Checkbox id="is_current_course_cb" checked={field.value} onCheckedChange={field.onChange} />
+                <Checkbox
+                  id="is_current_course_cb"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               )}
             />
 
@@ -278,7 +284,9 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
           placeholder="Describe los contenidos, logros o certificación del curso..."
           className="h-10 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 resize-none font-sans"
         />
-        {errors.description && <span className="text-xs text-red-500">{errors.description.message}</span>}
+        {errors.description && (
+          <span className="text-xs text-red-500">{errors.description.message}</span>
+        )}
       </div>
 
       <div className="flex items-center gap-3">
@@ -286,7 +294,11 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
           name="is_visible"
           control={control}
           render={({ field }) => (
-            <Checkbox id="is_visible_course_cb" checked={field.value} onCheckedChange={field.onChange} />
+            <Checkbox
+              id="is_visible_course_cb"
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
           )}
         />
         <Label htmlFor="is_visible_course_cb" className="cursor-pointer font-medium text-slate-300">

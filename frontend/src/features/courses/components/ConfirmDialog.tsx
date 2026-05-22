@@ -38,7 +38,10 @@ export default function ConfirmDialog({
             Cancelar
           </AlertDialogCancel>
 
-          <AlertDialogAction className="bg-[#e53e3e] text-white hover:bg-[#c53030]" onClick={onConfirm}>
+          <AlertDialogAction
+            className="bg-[#e53e3e] text-white hover:bg-[#c53030]"
+            onClick={onConfirm}
+          >
             {confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>

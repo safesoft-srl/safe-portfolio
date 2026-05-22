@@ -66,11 +66,18 @@ export default function CourseCard({ course, onEdit, onDelete }: Props) {
       </div>
 
       <div className="mt-2 flex-1">
-        <p className="mb-4 text-sm leading-relaxed text-slate-300 sm:text-base">{course.description}</p>
+        <p className="mb-4 text-sm leading-relaxed text-slate-300 sm:text-base">
+          {course.description}
+        </p>
       </div>
 
       <div className="absolute right-4 top-4 flex gap-2 transition-all sm:bottom-4 sm:top-auto">
-        <Button className="cursor-pointer" onClick={() => onEdit(course)} variant="ghost" size="icon-lg">
+        <Button
+          className="cursor-pointer"
+          onClick={() => onEdit(course)}
+          variant="ghost"
+          size="icon-lg"
+        >
           <PencilSimpleIcon weight="bold" />
         </Button>
         <Button

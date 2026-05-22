@@ -11,13 +11,21 @@ import AcademicForm from "@/features/formation/components/AcademicForm";
 import AcademicList from "@/features/formation/components/AcademicList";
 import AcademicConfirmDialog from "@/features/formation/components/ConfirmDialog";
 import { useAcademic } from "@/features/formation/hooks/useAcademic";
-import { createAcademic, deleteAcademic, updateAcademic } from "@/features/formation/services/academic.service";
+import {
+  createAcademic,
+  deleteAcademic,
+  updateAcademic,
+} from "@/features/formation/services/academic.service";
 import type { AcademicFormData, AcademicRecord } from "@/features/formation/types/academic.types";
 import CourseForm from "@/features/courses/components/CourseForm";
 import CourseList from "@/features/courses/components/CourseList";
 import CourseConfirmDialog from "@/features/courses/components/ConfirmDialog";
 import { useCourse } from "@/features/courses/hooks/useCourse";
-import { createCourse, deleteCourse, updateCourse } from "@/features/courses/services/course.service";
+import {
+  createCourse,
+  deleteCourse,
+  updateCourse,
+} from "@/features/courses/services/course.service";
 import type { CourseFormData, CourseRecord } from "@/features/courses/types/course.types";
 import { usePortfolioId } from "@/hooks/usePortfolio";
 
@@ -296,7 +304,9 @@ export default function FormationPage() {
                 type="button"
                 size="lg"
                 className="gap-2 font-heading"
-                onClick={() => (activeTab === "academic" ? handleOpenAcademicModal() : handleOpenCourseModal())}
+                onClick={() =>
+                  activeTab === "academic" ? handleOpenAcademicModal() : handleOpenCourseModal()
+                }
                 disabled={!portfolioId}
               >
                 <PlusIcon weight="bold" className="size-4" />
@@ -310,7 +320,9 @@ export default function FormationPage() {
               {academics.length === 0 ? (
                 <div className="w-full rounded-2xl border border-slate-800 bg-slate-900/40 px-8 py-10">
                   <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 py-6 text-center">
-                    <p className="text-sm text-slate-400">Aún no has agregado ningún grado académico.</p>
+                    <p className="text-sm text-slate-400">
+                      Aún no has agregado ningún grado académico.
+                    </p>
                     <Button
                       type="button"
                       variant="default"

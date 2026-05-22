@@ -120,7 +120,6 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     reset(defaultValues);
   }, [initialData, reset]);
 
-
   useEffect(() => {
     if (isCurrent) {
       setValue("end_date", "");
@@ -134,7 +133,7 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
         institution_name: data.institution_name.trim(),
         title: data.title.trim(),
         field_of_study: data.field_of_study.trim(),
-        end_date: data.is_current ? "" : data.end_date??"",
+        end_date: data.is_current ? "" : (data.end_date ?? ""),
         is_current: data.is_current,
         description: data.description.trim(),
         is_visible: Boolean(data.is_visible),
@@ -214,7 +213,11 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
               name="is_current"
               control={control}
               render={({ field }) => (
-                <Checkbox id="is_current_cb" checked={field.value} onCheckedChange={field.onChange} />
+                <Checkbox
+                  id="is_current_cb"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               )}
             />
 

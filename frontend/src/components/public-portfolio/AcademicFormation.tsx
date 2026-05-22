@@ -9,7 +9,7 @@ type Props = {
 };
 
 function formatAcademicYears(endDate: string | null, isCurrent: boolean) {
-  const startLabel =  "";
+  const startLabel = "";
 
   if (isCurrent) {
     return `${startLabel} - Presente`;
@@ -64,8 +64,7 @@ export default function AcademicFormation({ academics }: Props) {
               <div className="absolute -left-[27px] top-2 h-2.5 w-2.5 rounded-full bg-white/30 md:-left-[31px]" />
               <div className="grid min-w-0 gap-x-4 gap-y-1 md:grid-cols-[11rem_minmax(0,1fr)] md:items-start">
                 <p className="font-mono text-sm text-slate-400 md:text-right md:text-base md:whitespace-nowrap md:pr-2">
-                  {formatAcademicYears( academic.end_date, academic.is_current)}
-                  :
+                  {formatAcademicYears(academic.end_date, academic.is_current)}:
                 </p>
                 <span className="font-mono text-sm font-semibold text-[#727bff] md:text-base">
                   {academic.institution_name}
