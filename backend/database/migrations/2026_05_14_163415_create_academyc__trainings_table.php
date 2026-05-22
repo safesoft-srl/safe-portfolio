@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('institution_name', 60);
             $table->string('title', 60);
             $table->string('field_of_study', 50);
-            $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->boolean('is_current')->default(false);
             $table->string('description')->nullable();

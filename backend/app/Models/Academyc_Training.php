@@ -14,7 +14,6 @@ class Academyc_Training extends Model
         'institution_name',
         'title',
         'field_of_study',
-        'start_date',
         'end_date',
         'is_current',
         'description',
