@@ -66,8 +66,20 @@ export default function Configuration() {
 
     setIsSavingGithub(true);
     try {
+      if (githubUsername.trim()) {
+        const res = await fetch(`https://api.github.com/users/${githubUsername.trim()}`);
+        if (!res.ok) {
+          setGithubError("Este usuario de GitHub no existe.");
+          setIsSavingGithub(false);
+          return;
+        }
+      }
+
       const portfolio = await getPortfolio(parseInt(idPortfolio));
-      if (!portfolio) return;
+      if (!portfolio) {
+        setIsSavingGithub(false);
+        return;
+      }
 
       await updateProfile({
         id: portfolio.id,
