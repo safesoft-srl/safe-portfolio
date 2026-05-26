@@ -59,31 +59,7 @@ body:
     attributes:
       label: Data
       placeholder: Chrome, Firefox, Safari...
-
-  - type: dropdown
-    id: severidad
-    attributes:
-      label: Severidad
-      options:
-        - Baja
-        - Moderada
-        - Alta
-        - Crítica
-    validations:
-      required: true
-
-  - type: dropdown
-    id: prioridad
-    attributes:
-      label: Prioridad
-      options:
-        - Baja
-        - Media
-        - Alta
-        - Urgente
-    validations:
-      required: true
-
+      
   - type: textarea
     id: evidencias
     attributes:
