@@ -1,0 +1,69 @@
+name: Bug Report
+description: Reporta un error o comportamiento inesperado
+title: "[BUG]: "
+labels: ["bug"]
+
+body:
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: Explica el problema encontrado
+      placeholder: Describe el error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: precondiciones
+    attributes:
+      label: Precondiciones
+      description: Condiciones necesarias antes de ejecutar la prueba
+      placeholder: |
+        - Usuario autenticado
+        - Tener conexión a internet
+        - Contar con datos registrados
+    validations:
+      required: true
+
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      placeholder: |
+        1. Ir a...
+        2. Hacer click...
+        3. Ocurre el error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: comportamiento_actual
+    attributes:
+      label: Comportamiento actual
+      description: Explica qué sucede actualmente
+      placeholder: El sistema muestra un error o no responde...
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Comportamiento esperado
+      description: Explica qué debería suceder correctamente
+      placeholder: El sistema debería mostrar un mensaje de éxito...
+    validations:
+      required: true
+
+  - type: input
+    id: data
+    attributes:
+      label: Data
+      placeholder: Chrome, Firefox, Safari...
+      
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: Evidencias
+      description: Adjunta imágenes o archivos arrastrándolos al área de texto
+      placeholder: |
+        Puedes pegar imágenes o arrastrar archivos aquí.
