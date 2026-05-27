@@ -20,6 +20,11 @@ import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
 import ProjectsPage from "./pages/ProjectsPage";
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminModerators from "./pages/admin/AdminModerators";
+import AdminSkills from "./pages/admin/AdminSkills";
+import AdminProjects from "./pages/admin/AdminProjects";
+import AdminExperience from "./pages/admin/AdminExperience";
+import AdminFormation from "./pages/admin/AdminFormation";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +78,26 @@ export const router = createBrowserRouter([
           {
             path: "",
             element: <AdminDashboard />,
+          },
+          {
+            path: "moderators",
+            element: <AdminModerators />,
+          },
+          {
+            path: "skills",
+            element: <AdminSkills />,
+          },
+          {
+            path: "projects",
+            element: <AdminProjects />,
+          },
+          {
+            path: "experience",
+            element: <AdminExperience />,
+          },
+          {
+            path: "formation",
+            element: <AdminFormation />,
           },
         ],
       },
