@@ -10,14 +10,16 @@ import ProjectsPublic from "./pages/public-portfolio/ProjectsPublic";
 import ExperiencePublic from "./pages/public-portfolio/ExperiencePublic";
 import SkillsPublic from "./pages/public-portfolio/SkillsPublic";
 import UserLayout from "./layouts/UserLayout";
+import AdminLayout from "./layouts/AdminLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
+import { AdminRoute } from "./components/auth/AdminRoute";
 import ExperiencePage from "./pages/Experience";
 import FormationPage from "./pages/Formation";
 import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
 import ProjectsPage from "./pages/ProjectsPage";
-//import Projects from "./pages/Projects";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +59,22 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Register />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminRoute />,
+    children: [
+      {
+        path: "",
+        element: <AdminLayout />,
+        children: [
+          {
+            path: "",
+            element: <AdminDashboard />,
+          },
+        ],
       },
     ],
   },
