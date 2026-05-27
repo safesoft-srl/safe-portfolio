@@ -6,6 +6,7 @@ import {
   PencilSimpleIcon,
   GraduationCapIcon,
   TrashIcon,
+  Star,
 } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ export default function CourseCard({ course, onEdit, onDelete }: Props) {
   return (
     <div className="group relative flex w-full flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-5 pr-16 backdrop-blur-xl transition-all hover:border-indigo-500/50 hover:bg-slate-900/80 sm:p-6 sm:pr-6">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 pb-2">
           <span className="text-xl font-bold text-white">{course.title}</span>
           {!course.is_visible && (
             <span className="whitespace-nowrap rounded-full bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-100 sm:text-sm">
@@ -46,22 +47,23 @@ export default function CourseCard({ course, onEdit, onDelete }: Props) {
         </div>
       </div>
 
-      <div className="mb-2 flex items-center gap-2 text-sm text-slate-400">
+      <div className="mb-2 flex items-center gap-2 text-sm text-slate-400 border-b border-slate-800 pb-2">
         <BuildingsIcon size={18} className="text-indigo-400" />
         <span className="font-medium text-slate-200">{course.institution_name}</span>
       </div>
 
-      <div className="mb-2 flex items-center gap-2 text-sm text-slate-400">
+      <div className="mb-2 flex items-center gap-2 text-sm text-slate-400 border-b border-slate-800 pb-2">
         <GraduationCapIcon size={18} className="text-indigo-400" />
         <span className="font-medium text-slate-200">{course.area}</span>
       </div>
 
-      <div className="mb-2 flex items-center gap-2 text-sm text-slate-400">
+      <div className="mb-2 flex items-center gap-2 text-sm text-slate-400 border-b border-slate-800 pb-2">
         <ClockIcon size={18} className="text-indigo-400" />
         <span className="font-medium text-slate-200">Carga horaria: {course.workload_hours}</span>
       </div>
 
-      <div className="mb-4 flex items-center gap-2 text-sm text-slate-400">
+      <div className="mb-4 flex items-center gap-2 text-sm text-slate-400 border-b border-slate-800 pb-2">
+        <Star size={18} className="text-indigo-400" />
         <span className="font-medium text-slate-200">Nivel: {course.level}</span>
       </div>
 
