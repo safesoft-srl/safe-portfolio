@@ -9,6 +9,7 @@ import PublicPortfolio from "./pages/PublicPortfolio";
 import ProjectsPublic from "./pages/public-portfolio/ProjectsPublic";
 import ExperiencePublic from "./pages/public-portfolio/ExperiencePublic";
 import SkillsPublic from "./pages/public-portfolio/SkillsPublic";
+import FormationPublic from "./pages/public-portfolio/FormationPublic";
 import UserLayout from "./layouts/UserLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
   {
     path: "/p/:slug/experience",
     element: <ExperiencePublic />,
+  },
+  {
+    path: "/p/:slug/formation",
+    element: <FormationPublic />,
   },
   {
     path: "/p/:slug/projects",
