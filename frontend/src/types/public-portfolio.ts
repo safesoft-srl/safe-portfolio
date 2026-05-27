@@ -47,6 +47,7 @@ export type AcademicTraining = {
   institution_name: string;
   title: string;
   field_of_study: string;
+  start_date: string;
   end_date: string | null;
   is_current: boolean;
   description: string;
