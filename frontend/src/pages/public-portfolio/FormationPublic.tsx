@@ -50,7 +50,9 @@ export default function FormationPublic() {
                 </h2>
               </div>
               <p className="font-mono text-sm leading-relaxed text-gray-400">
-                Mi historial académico e institucional estará disponible muy pronto en este espacio. Puedes revisar los demás apartados del portafolio para conocer mis capacidades actuales. 
+                Mi historial académico e institucional estará disponible muy pronto en este espacio.
+                Puedes revisar los demás apartados del portafolio para conocer mis capacidades
+                actuales.
               </p>
             </div>
           </section>
@@ -107,8 +109,8 @@ export default function FormationPublic() {
                 const yearLabel = academic.is_current
                   ? "Presente"
                   : academic.end_date
-                  ? academic.end_date.slice(0, 4)
-                  : "";
+                    ? academic.end_date.slice(0, 4)
+                    : "";
 
                 return (
                   <article key={academic.id} className="relative">
@@ -124,7 +126,8 @@ export default function FormationPublic() {
                         </span>
 
                         <h3 className="max-w-4xl font-mono text-xl font-bold leading-snug text-white md:text-2xl">
-                          {academic.title} <span className="text-slate-400">en</span> {academic.field_of_study}
+                          {academic.title} <span className="text-slate-400">en</span>{" "}
+                          {academic.field_of_study}
                         </h3>
 
                         {academic.description ? (
@@ -155,10 +158,10 @@ export default function FormationPublic() {
                   const yearLabel = course.is_current
                     ? "Presente"
                     : course.certificate_date
-                    ? isValid(parseISO(course.certificate_date))
-                      ? format(parseISO(course.certificate_date), "yyyy")
-                      : ""
-                    : "";
+                      ? isValid(parseISO(course.certificate_date))
+                        ? format(parseISO(course.certificate_date), "yyyy")
+                        : ""
+                      : "";
 
                   return (
                     <article key={course.id} className="relative">
@@ -176,7 +179,8 @@ export default function FormationPublic() {
 
                         <div className="flex min-w-0 flex-1 flex-col gap-y-1">
                           <span className="font-mono text-sm font-semibold text-[#727bff] md:text-base">
-                            {course.institution_name} <span className="text-slate-400">|</span> {course.area}
+                            {course.institution_name} <span className="text-slate-400">|</span>{" "}
+                            {course.area}
                           </span>
 
                           <h3 className="max-w-4xl font-mono text-xl font-bold leading-snug text-white md:text-2xl">
