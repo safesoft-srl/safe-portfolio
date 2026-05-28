@@ -152,7 +152,10 @@ export default function PublicPortfolio() {
           {/* <EducationProjects /> */}
         </div>
         <div id="formation">
-          <AcademicFormation academics={profile?.academyc_trainings || []} />
+          <AcademicFormation
+            academics={profile?.academyc_trainings || []}
+            courses={profile?.courses || []}
+          />
           {/* <AcademicFormation /> */}
         </div>
         <div id="skills">

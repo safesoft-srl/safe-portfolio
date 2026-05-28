@@ -56,6 +56,22 @@ export type AcademicTraining = {
   updated_at: Date;
 };
 
+export type Course = {
+  id: number;
+  portfolio_id: number;
+  institution_name: string;
+  title: string;
+  area: string;
+  workload_hours: string;
+  level: string;
+  certificate_date: string | null;
+  is_current: boolean;
+  description: string;
+  is_visible: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
 export type ProfileData = {
   id: number;
   user_id: number;
@@ -79,6 +95,7 @@ export type ProfileData = {
   soft_skills: SoftSkill[];
   work_experiences: WorkExperience[];
   academyc_trainings: AcademicTraining[];
+  courses: Course[];
   projects: Project[];
 };
 export type ApiProfilePayload = {
