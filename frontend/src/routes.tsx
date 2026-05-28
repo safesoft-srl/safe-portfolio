@@ -11,14 +11,21 @@ import ExperiencePublic from "./pages/public-portfolio/ExperiencePublic";
 import SkillsPublic from "./pages/public-portfolio/SkillsPublic";
 import FormationPublic from "./pages/public-portfolio/FormationPublic";
 import UserLayout from "./layouts/UserLayout";
+import AdminLayout from "./layouts/AdminLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { GuestRoute } from "./components/auth/GuestRoute";
+import { AdminRoute } from "./components/auth/AdminRoute";
 import ExperiencePage from "./pages/Experience";
 import FormationPage from "./pages/Formation";
 import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
 import ProjectsPage from "./pages/ProjectsPage";
-//import Projects from "./pages/Projects";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminModerators from "./pages/admin/AdminModerators";
+import AdminSkills from "./pages/admin/AdminSkills";
+import AdminProjects from "./pages/admin/AdminProjects";
+import AdminExperience from "./pages/admin/AdminExperience";
+import AdminFormation from "./pages/admin/AdminFormation";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +69,42 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Register />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminRoute />,
+    children: [
+      {
+        path: "",
+        element: <AdminLayout />,
+        children: [
+          {
+            path: "",
+            element: <AdminDashboard />,
+          },
+          {
+            path: "moderators",
+            element: <AdminModerators />,
+          },
+          {
+            path: "skills",
+            element: <AdminSkills />,
+          },
+          {
+            path: "projects",
+            element: <AdminProjects />,
+          },
+          {
+            path: "experience",
+            element: <AdminExperience />,
+          },
+          {
+            path: "formation",
+            element: <AdminFormation />,
+          },
+        ],
       },
     ],
   },
