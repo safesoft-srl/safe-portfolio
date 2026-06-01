@@ -10,7 +10,10 @@ class EnsureUserIsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth('api')->check() || !auth('api')->user()->isAdmin()) {
+        /** @var \App\Models\User|null $user */
+        $user = auth('api')->user();
+
+        if (!$user || !$user->isAdmin()) {
             return response()->json([
                 'success' => false,
                 'message' => 'No tienes permisos de administrador.',
