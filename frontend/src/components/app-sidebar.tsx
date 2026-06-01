@@ -147,15 +147,13 @@ export function AppSidebar({
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user || {}} />
-        {!admin && (
-          <Button
-            onClick={() => navigate("/portfolios")}
-            className="gap-2 bg-[#0A0B1E] hover:bg-[#5c61eb] text-white rounded-ms h-10 mb-2 px-15 py-2 w-fit mx-auto"
-          >
-            <ArrowLeftIcon size={16} weight="bold" />
-            <span>Ir a Portafolios</span>
-          </Button>
-        )}
+        <Button
+          onClick={() => navigate("/portfolios")}
+          className="gap-2 bg-[#0A0B1E] hover:bg-[#5c61eb] text-white rounded-ms h-10 mb-2 px-15 py-2 w-fit mx-auto"
+        >
+          <ArrowLeftIcon size={16} weight="bold" />
+          <span>Ir a Portafolios</span>
+        </Button>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
