@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { RowsIcon, SignOutIcon } from "@phosphor-icons/react";
+import { RowsIcon, SignOutIcon, ShieldCheckIcon } from "@phosphor-icons/react";
 import { useAuthStore } from "@/lib/auth-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -129,7 +129,24 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout} className="flex items-center gap-2">
+                {user?.role === "admin" && (
+                  <>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/admin")}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
+                        <ShieldCheckIcon size={16} />
+                        Panel de Administración
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
                   <SignOutIcon />
                   Cerrrar Sesion
                 </DropdownMenuItem>

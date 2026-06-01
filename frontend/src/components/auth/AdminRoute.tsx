@@ -44,5 +44,9 @@ export const AdminRoute = () => {
     );
   }
 
+  if (user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+
   return <Outlet />;
 };

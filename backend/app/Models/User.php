@@ -23,6 +23,8 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'verified',
+        'role',
+        'permissions',
     ];
 
     /**
@@ -43,6 +45,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'permissions' => 'array',
     ];
 
     /**
@@ -63,6 +66,11 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 
     public function portfolios()

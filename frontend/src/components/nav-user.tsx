@@ -16,13 +16,21 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { CaretUpDownIcon, CheckCircleIcon, BellIcon, SignOutIcon } from "@phosphor-icons/react";
+import {
+  CaretUpDownIcon,
+  CheckCircleIcon,
+  BellIcon,
+  SignOutIcon,
+  ShieldCheckIcon,
+} from "@phosphor-icons/react";
 import type { User } from "@/types/users";
 import { useAuthStore } from "@/lib/auth-store";
+import { useNavigate } from "react-router-dom";
 
 export function NavUser({ user }: { user: User }) {
   const { logout } = useAuthStore();
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -72,6 +80,17 @@ export function NavUser({ user }: { user: User }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            {user?.role === "admin" && (
+              <>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => navigate("/admin")}>
+                    <ShieldCheckIcon />
+                    Panel de Administración
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuItem onClick={logout}>
               <SignOutIcon />
               Cerrrar Sesion
