@@ -38,6 +38,7 @@ export default function DeleteModeratorDialog({ moderator }: Props) {
 
   return (
     <AlertDialog>
+      {/* @ts-expect-error asChild type issue with React 19 / Shadcn */}
       <AlertDialogTrigger asChild>
         <Button variant="outline" size="sm" className="gap-1.5 text-destructive hover:text-destructive">
           <UserMinus size={16} weight="bold" />
