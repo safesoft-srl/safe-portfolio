@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ShieldPlus } from "@phosphor-icons/react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateModerator } from "../hooks/useModerators";
@@ -25,7 +25,7 @@ const schema = z.object({
     .string()
     .min(1, "El correo es obligatorio")
     .email("Debe ser un correo válido"),
-  permissions: z.array(z.string()).default([]),
+  permissions: z.array(z.string()).optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -35,10 +35,10 @@ export default function CreateModeratorDialog() {
   const createModerator = useCreateModerator();
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
-    watch,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
@@ -46,7 +46,7 @@ export default function CreateModeratorDialog() {
     defaultValues: { email: "", permissions: [] },
   });
 
-  const selectedPermissions = watch("permissions") || [];
+  const selectedPermissions = useWatch({ control, name: "permissions" }) || [];
 
   const handlePermissionChange = (perm: string, checked: boolean) => {
     if (checked) {
@@ -58,7 +58,10 @@ export default function CreateModeratorDialog() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await createModerator.mutateAsync(data);
+      await createModerator.mutateAsync({ 
+        ...data, 
+        permissions: data.permissions || [] 
+      });
       toast.success("Usuario ascendido a moderador correctamente");
       reset();
       setOpen(false);
@@ -76,13 +79,14 @@ export default function CreateModeratorDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) reset(); }}>
+      {/* @ts-expect-error asChild type issue with React 19 / Shadcn */}
       <DialogTrigger asChild>
         <Button className="gap-2">
           <ShieldPlus size={18} weight="bold" />
           Ascender a Moderador
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className="sm:max-w-120">
         <DialogHeader>
           <DialogTitle>Ascender a moderador</DialogTitle>
           <DialogDescription>
