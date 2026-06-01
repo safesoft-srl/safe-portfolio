@@ -83,7 +83,7 @@ class ModeratorController extends Controller
 
         $moderator = User::where('role', 'admin')->find($id);
 
-        if (!$moderator) {
+        if (! $moderator) {
             return ApiResponse::error(
                 'Moderador no encontrado.',
                 404

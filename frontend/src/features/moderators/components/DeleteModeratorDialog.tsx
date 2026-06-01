@@ -40,7 +40,11 @@ export default function DeleteModeratorDialog({ moderator }: Props) {
     <AlertDialog>
       {/* @ts-expect-error asChild type issue with React 19 / Shadcn */}
       <AlertDialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-1.5 text-destructive hover:text-destructive">
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 text-destructive hover:text-destructive"
+        >
           <UserMinus size={16} weight="bold" />
           Remover
         </Button>
@@ -50,7 +54,8 @@ export default function DeleteModeratorDialog({ moderator }: Props) {
           <AlertDialogTitle>¿Remover rol de moderador?</AlertDialogTitle>
           <AlertDialogDescription>
             Estás a punto de quitarle los privilegios a <strong>{moderator.name}</strong> (
-            {moderator.email}). Su cuenta volverá a ser un usuario normal y mantendrá sus portafolios intactos.
+            {moderator.email}). Su cuenta volverá a ser un usuario normal y mantendrá sus
+            portafolios intactos.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

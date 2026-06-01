@@ -21,10 +21,7 @@ import { toast } from "sonner";
 import axios from "axios";
 
 const schema = z.object({
-  email: z
-    .string()
-    .min(1, "El correo es obligatorio")
-    .email("Debe ser un correo válido"),
+  email: z.string().min(1, "El correo es obligatorio").email("Debe ser un correo válido"),
   permissions: z.array(z.string()).optional(),
 });
 
@@ -52,15 +49,18 @@ export default function CreateModeratorDialog() {
     if (checked) {
       setValue("permissions", [...selectedPermissions, perm]);
     } else {
-      setValue("permissions", selectedPermissions.filter((p) => p !== perm));
+      setValue(
+        "permissions",
+        selectedPermissions.filter((p) => p !== perm)
+      );
     }
   };
 
   const onSubmit = async (data: FormData) => {
     try {
-      await createModerator.mutateAsync({ 
-        ...data, 
-        permissions: data.permissions || [] 
+      await createModerator.mutateAsync({
+        ...data,
+        permissions: data.permissions || [],
       });
       toast.success("Usuario ascendido a moderador correctamente");
       reset();
@@ -78,7 +78,13 @@ export default function CreateModeratorDialog() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) reset(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        setOpen(v);
+        if (!v) reset();
+      }}
+    >
       {/* @ts-expect-error asChild type issue with React 19 / Shadcn */}
       <DialogTrigger asChild>
         <Button className="gap-2">
@@ -102,46 +108,53 @@ export default function CreateModeratorDialog() {
               placeholder="Ej: usuario@correo.com"
               {...register("email")}
             />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-3 pt-2">
             <Label>Permisos base (opcional)</Label>
-            
+
             <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="perm_mods" 
+              <Checkbox
+                id="perm_mods"
                 checked={selectedPermissions.includes("manage_moderators")}
                 onCheckedChange={(c) => handlePermissionChange("manage_moderators", c === true)}
               />
-              <Label htmlFor="perm_mods" className="font-normal cursor-pointer">Gestionar Moderadores</Label>
+              <Label htmlFor="perm_mods" className="font-normal cursor-pointer">
+                Gestionar Moderadores
+              </Label>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="perm_cats" 
+              <Checkbox
+                id="perm_cats"
                 checked={selectedPermissions.includes("manage_catalogs")}
                 onCheckedChange={(c) => handlePermissionChange("manage_catalogs", c === true)}
               />
-              <Label htmlFor="perm_cats" className="font-normal cursor-pointer">Gestionar Catálogos y Habilidades</Label>
+              <Label htmlFor="perm_cats" className="font-normal cursor-pointer">
+                Gestionar Catálogos y Habilidades
+              </Label>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="perm_reps" 
+              <Checkbox
+                id="perm_reps"
                 checked={selectedPermissions.includes("view_reports")}
                 onCheckedChange={(c) => handlePermissionChange("view_reports", c === true)}
               />
-              <Label htmlFor="perm_reps" className="font-normal cursor-pointer">Generar y ver Reportes</Label>
+              <Label htmlFor="perm_reps" className="font-normal cursor-pointer">
+                Generar y ver Reportes
+              </Label>
             </div>
           </div>
           <DialogFooter>
             <Button
               type="button"
               variant="outline"
-              onClick={() => { setOpen(false); reset(); }}
+              onClick={() => {
+                setOpen(false);
+                reset();
+              }}
             >
               Cancelar
             </Button>

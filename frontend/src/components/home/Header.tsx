@@ -129,10 +129,13 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                {user?.role === 'admin' && (
+                {user?.role === "admin" && (
                   <>
                     <DropdownMenuGroup>
-                      <DropdownMenuItem onClick={() => navigate("/admin")} className="flex items-center gap-2 cursor-pointer">
+                      <DropdownMenuItem
+                        onClick={() => navigate("/admin")}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
                         <ShieldCheckIcon size={16} />
                         Panel de Administración
                       </DropdownMenuItem>
@@ -140,7 +143,10 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
                     <DropdownMenuSeparator />
                   </>
                 )}
-                <DropdownMenuItem onClick={logout} className="flex items-center gap-2 cursor-pointer">
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
                   <SignOutIcon />
                   Cerrrar Sesion
                 </DropdownMenuItem>

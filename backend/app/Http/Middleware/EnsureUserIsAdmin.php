@@ -13,7 +13,7 @@ class EnsureUserIsAdmin
         /** @var \App\Models\User|null $user */
         $user = auth('api')->user();
 
-        if (!$user || !$user->isAdmin()) {
+        if (! $user || ! $user->isAdmin()) {
             return response()->json([
                 'success' => false,
                 'message' => 'No tienes permisos de administrador.',

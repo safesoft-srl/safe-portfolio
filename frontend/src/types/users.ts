@@ -3,7 +3,7 @@ export interface User {
   name?: string;
   username?: string;
   email?: string;
-  role?: 'user' | 'admin';
+  role?: "user" | "admin";
   permissions?: string[];
   verified?: boolean;
   email_verified_at?: string;

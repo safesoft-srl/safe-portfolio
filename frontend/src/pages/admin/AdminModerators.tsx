@@ -54,13 +54,17 @@ export default function AdminModerators() {
             ) : isError ? (
               <div className="flex flex-col items-center justify-center py-10 text-center">
                 <p className="text-muted-foreground">Error al cargar los moderadores.</p>
-                <p className="text-sm text-muted-foreground">Verifica tu conexión e intenta de nuevo.</p>
+                <p className="text-sm text-muted-foreground">
+                  Verifica tu conexión e intenta de nuevo.
+                </p>
               </div>
             ) : !moderators || moderators.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-center">
                 <Users size={48} className="mb-3 text-muted-foreground/50" />
                 <p className="text-muted-foreground">No hay moderadores registrados aún.</p>
-                <p className="text-sm text-muted-foreground">Usa el botón "Registrar Moderador" para agregar uno.</p>
+                <p className="text-sm text-muted-foreground">
+                  Usa el botón "Registrar Moderador" para agregar uno.
+                </p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -76,7 +80,10 @@ export default function AdminModerators() {
                   </thead>
                   <tbody>
                     {moderators.map((mod) => (
-                      <tr key={mod.id} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
+                      <tr
+                        key={mod.id}
+                        className="border-b last:border-0 hover:bg-muted/50 transition-colors"
+                      >
                         <td className="py-3 pr-4 font-medium">{mod.name}</td>
                         <td className="py-3 pr-4 text-muted-foreground">@{mod.username}</td>
                         <td className="py-3 pr-4 text-muted-foreground">{mod.email}</td>
