@@ -12,6 +12,10 @@ export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
     { name: "Experiencia", href: `/p/${slug}/experience` },
     { name: "Formación", href: `/p/${slug}/formation` },
     { name: "Habilidades", href: `/p/${slug}/skills` },
+    // { name: "Habilidades", href: `/p/${slug}/skills` },
+    { name: "Habilidades Técnicas", href: `/p/${slug}/skillstechnical` },
+    { name: "Habilidades Blandas", href: `/p/${slug}/skillssoft` },
+
     // { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog
     // { name: "Contacto", href: "#contacto" },
   ];

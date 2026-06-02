@@ -55,7 +55,7 @@ class Portfolio extends Model
 
     public function softSkills()
     {
-        return $this->hasMany(SoftSkill::class);
+        return $this->hasMany(PortfolioSoftSkill::class);
     }
 
     public function courses()

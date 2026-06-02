@@ -34,16 +34,13 @@ interface SkillCardProps {
 }
 
 export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
-  // Valores por defecto por si alguna relación viene vacía
   const skillName = skill.technical_skill?.name || "Sin nombre";
   const skillCategory = skill.technical_skill?.category || "Sin categoría";
   const skillIcon = skill.technical_skill?.url_dark || "/default-skill.png";
 
   return (
     <Card className="relative bg-[#13152e] border border-[#232555] rounded-2xl overflow-hidden shadow-2xl transition-all hover:border-[#6c72ff]/50 group">
-      {/* CONTENEDOR DE ACCIONES (Lápiz y Basura) */}
       <div className="absolute top-3 right-3 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        {/* BOTÓN EDITAR */}
         <Button
           variant="ghost"
           onClick={(e) => {
@@ -56,7 +53,6 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
           <PencilSimpleIcon size={16} weight="bold" />
         </Button>
 
-        {/* Delete Dialog */}
         <AlertDialog>
           <AlertDialogTrigger
             render={
@@ -96,7 +92,6 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
         </AlertDialog>
       </div>
 
-      {/* CONTENIDO DE LA TARJETA */}
       <CardContent className="p-8 flex flex-col items-center text-center">
         <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-[#1c1f38] border border-[#232555] shadow-inner">
           <img

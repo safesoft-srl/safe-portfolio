@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SoftSkill extends Model
 {
+    use HasFactory;
+
     protected $table = 'soft_skills';
 
     protected $fillable = [
-        'portfolio_id',
         'name',
-        'description',
+        'is_active',
     ];
 
-    public function portfolio()
+    public function portfolioSoftSkills()
     {
-        return $this->belongsTo(Portfolio::class, 'portfolio_id');
+        return $this->hasMany(PortfolioSoftSkill::class, 'soft_skill_id');
     }
 }
