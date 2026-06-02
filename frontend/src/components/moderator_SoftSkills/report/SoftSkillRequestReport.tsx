@@ -197,7 +197,7 @@ export default function SoftSkillRequestReport() {
               </tbody>
             </table>
             <SoftSkillRequestChart data={requests} loading={loading} />
-            {!loading && requests.length === 0 && (
+            {requests.length === 0 && (
               <div className="p-6 text-center text-slate-400">No se encontraron resultados.</div>
             )}
           </div>
