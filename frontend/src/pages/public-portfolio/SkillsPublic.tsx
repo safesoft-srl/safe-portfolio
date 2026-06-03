@@ -9,8 +9,11 @@ import type { PortfolioSkill } from "@/types/public-portfolio";
 
 type SoftSkill = {
   id: number;
-  name: string;
-  description?: string;
+  description?: string | null;
+  soft_skill: {
+    id: number;
+    name: string;
+  };
 };
 
 export default function SkillsPublic() {

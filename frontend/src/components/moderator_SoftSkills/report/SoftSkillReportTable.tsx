@@ -14,12 +14,10 @@ type Props = {
 export default function SoftSkillReportTable({ skills, loading }: Props) {
   return (
     <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] overflow-hidden">
-      {/* HEADER */}
       <div className="px-5 py-4 border-b border-[#2a2f55]">
         <h3 className="font-semibold text-white">Habilidades Blandas</h3>
       </div>
 
-      {/* LOADING */}
       {loading ? (
         <div className="p-5 text-slate-400">Cargando reporte...</div>
       ) : (
@@ -40,10 +38,8 @@ export default function SoftSkillReportTable({ skills, loading }: Props) {
             <tbody>
               {skills.map((skill) => (
                 <tr key={skill.id} className="border-b border-[#232555]">
-                  {/* NOMBRE */}
                   <td className="p-4 text-white">{skill.name}</td>
 
-                  {/* ESTADO */}
                   <td className="p-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs ${
@@ -56,10 +52,8 @@ export default function SoftSkillReportTable({ skills, loading }: Props) {
                     </span>
                   </td>
 
-                  {/* USOS */}
                   <td className="p-4 text-white">{skill.uses}</td>
 
-                  {/* FECHA */}
                   <td className="p-4 text-slate-300">
                     {new Date(skill.created_at).toLocaleDateString()}
                   </td>
@@ -68,7 +62,6 @@ export default function SoftSkillReportTable({ skills, loading }: Props) {
             </tbody>
           </table>
 
-          {/* EMPTY STATE */}
           {!loading && skills.length === 0 && (
             <div className="p-6 text-center text-slate-400">No se encontraron resultados.</div>
           )}
