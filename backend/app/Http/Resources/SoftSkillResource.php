@@ -10,8 +10,11 @@ class SoftSkillResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
             'description' => $this->description,
+            'soft_skill' => [
+                'id' => $this->softSkill->id,
+                'name' => $this->softSkill->name,
+            ],
         ];
     }
 }

@@ -104,11 +104,15 @@ const adminData = {
       icon: <UserGearIcon />,
     },
     {
-      title: "Administrar Habilidades",
-      url: "skills",
+      title: "Administrar H. Tecnicas",
+      url: "skills-technical",
       icon: <MedalIcon />,
     },
-
+    {
+      title: "Administrar H. Blandas",
+      url: "skills-soft",
+      icon: <MedalIcon />,
+    },
     {
       title: "Administrar Proyectos",
       url: "projects",

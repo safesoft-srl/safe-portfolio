@@ -1,24 +1,35 @@
 import { useMemo, useState } from "react";
 import { ChatCircleText } from "@phosphor-icons/react";
 
-type SoftSkill = {
+type SoftSkillRelation = {
   id: number;
-  name: string;
-  description?: string;
+  description?: string | null;
+  soft_skill: {
+    id: number;
+    name: string;
+  };
 };
 
 type Props = {
-  skills: SoftSkill[];
+  skills: SoftSkillRelation[];
 };
 
 export default function SoftSkillsGrid({ skills = [] }: Props) {
-  const data = useMemo(() => skills, [skills]);
-  const [selected, setSelected] = useState<SoftSkill | null>(skills.length > 0 ? skills[0] : null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const selected = useMemo(() => {
+    if (skills.length === 0) return null;
+
+    if (selectedId) {
+      return skills.find((s) => s.id === selectedId) ?? skills[0];
+    }
+
+    return skills[0];
+  }, [skills, selectedId]);
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
       <div className="relative overflow-hidden rounded-3xl border border-[#262b46] bg-[#13152e] p-10 md:p-16 shadow-2xl">
-        {/* Glow decor */}
         <div className="absolute -right-20 -top-20 h-72 w-72 opacity-20 animate-pulse">
           <div className="absolute inset-0 rounded-full border border-white/20" />
           <div className="absolute inset-10 rounded-full border border-[#bcfd49]" />
@@ -27,7 +38,9 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
 
         {/* HEADER */}
         <div className="relative z-10 text-center">
-          <span className="font-mono text-xs text-[#bcfd49] tracking-widest">• SOFT SKILLS</span>
+          <span className="font-mono text-xs text-[#bcfd49] tracking-widest">
+            • Habilidades Blandas
+          </span>
 
           <h2 className="mt-4 text-4xl font-bold text-white md:text-5xl">Habilidades blandas</h2>
 
@@ -37,13 +50,13 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
         </div>
 
         <div className="relative z-10 mt-12 flex flex-wrap justify-center gap-3">
-          {data.map((skill) => {
+          {skills.map((skill) => {
             const isActive = selected?.id === skill.id;
 
             return (
               <button
                 key={skill.id}
-                onClick={() => setSelected(skill)}
+                onClick={() => setSelectedId(skill.id)}
                 className={`
                   group flex items-center gap-2 rounded-full px-4 py-2 text-sm
                   border transition-all duration-300
@@ -57,7 +70,8 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
                 <ChatCircleText
                   className={`h-4 w-4 transition ${isActive ? "text-[#0f1224]" : "text-[#bcfd49]"}`}
                 />
-                {skill.name}
+
+                {skill.soft_skill.name}
               </button>
             );
           })}
@@ -66,18 +80,18 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
         <div className="relative z-10 mt-12">
           <div
             className="
-              rounded-2xl border border-[#2a2f4a]
-              bg-gradient-to-br from-[#0f1224] to-[#13152e]
-              p-8 min-h-[180px]
-              transition-all duration-500
-              shadow-xl
-            "
+            rounded-2xl border border-[#2a2f4a]
+            bg-gradient-to-br from-[#0f1224] to-[#13152e]
+            p-8 min-h-[180px]
+            transition-all duration-500
+            shadow-xl
+          "
           >
             {selected ? (
               <div className="animate-[fadeIn_0.4s_ease-in-out]">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
                   <span className="text-[#bcfd49]">●</span>
-                  {selected.name}
+                  {selected.soft_skill.name}
                 </h3>
 
                 <p className="mt-4 text-sm leading-relaxed text-slate-300">
@@ -93,7 +107,7 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
           </div>
         </div>
 
-        {data.length === 0 && (
+        {skills.length === 0 && (
           <p className="mt-10 text-center text-sm text-slate-400">
             No hay habilidades blandas registradas todavía.
           </p>

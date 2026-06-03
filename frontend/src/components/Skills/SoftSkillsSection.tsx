@@ -1,34 +1,37 @@
 import { useState, useEffect, useCallback } from "react";
 import { PlusIcon } from "@phosphor-icons/react";
+
 import { Button } from "@/components/ui/button";
-import { SoftSkillCard, type SoftSkill } from "./SoftSkillCard";
-import { SoftSkillModal } from "./SoftSkillModal";
-import { usePortfolioId } from "@/hooks/usePortfolio";
 import { showErrorToast } from "@/components/ui/showErrorToast";
+
+import { SoftSkillCard, type SoftSkill } from "./SoftSkillCard";
+import { AddSoftSkillModal } from "./AddSoftSkillModal";
+import { EditSoftSkillModal } from "./EditSoftSkillModal";
+import { SoftSkillRequestSection } from "./SoftSkillRequestSection";
+
+import { usePortfolioId } from "@/hooks/usePortfolio";
+
 import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function SoftSkillsSection() {
   const PORTFOLIO_ID = usePortfolioId();
-  const [softSkills, setSoftSkills] = useState<SoftSkill[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [skillToEdit, setSkillToEdit] = useState<SoftSkill | null>(null);
 
   const token = localStorage.getItem("token");
 
-  const toastStyle = {
-    background: "#6c72ff",
-    color: "#ffffff",
-    border: "1px solid #8b90ff",
-  };
+  const [softSkills, setSoftSkills] = useState<SoftSkill[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const [skillToEdit, setSkillToEdit] = useState<SoftSkill | null>(null);
+  const [requestRefreshKey, setRequestRefreshKey] = useState(0);
 
   const fetchSoftSkills = useCallback(async () => {
     try {
-      setIsLoading(true);
-
       const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,63 +39,30 @@ export function SoftSkillsSection() {
       });
 
       const result = await res.json();
+
       if (!res.ok) {
-        showErrorToast(result.message || "Error al cargar las habilidades blandas.");
+        showErrorToast(result.message);
         return;
       }
+
       setSoftSkills(result.data || []);
     } catch (err) {
-      console.error("Error cargando soft skills:", err);
-    } finally {
-      setIsLoading(false);
+      console.error(err);
+      showErrorToast("Error de conexión");
     }
   }, [PORTFOLIO_ID, token]);
 
   useEffect(() => {
-    fetchSoftSkills();
+    const load = async () => {
+      setIsLoading(true);
+      await fetchSoftSkills();
+      setIsLoading(false);
+    };
+
+    load();
   }, [fetchSoftSkills]);
 
-  const handleSaveSkill = async (data: { name: string; description: string }) => {
-    const isEditing = !!skillToEdit;
-
-    const method = isEditing ? "PUT" : "POST";
-
-    const url = isEditing
-      ? `${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills/${skillToEdit.id}`
-      : `${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills`;
-
-    try {
-      const res = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        showErrorToast(result.message || "No se pudo guardar la habilidad blanda.");
-        return;
-      }
-
-      toast.success(result.message || "Habilidad guardada correctamente.", {
-        style: toastStyle,
-      });
-
-      setIsModalOpen(false);
-      setSkillToEdit(null);
-
-      await fetchSoftSkills();
-    } catch (err) {
-      showErrorToast("No se pudo conectar con el servidor.");
-      console.error("Error en save soft skill:", err);
-    }
-  };
-
-  const handleDeleteSkill = async (id: number) => {
+  const handleDelete = async (id: number) => {
     try {
       const res = await fetch(`${API_URL}/api/portfolios/${PORTFOLIO_ID}/soft-skills/${id}`, {
         method: "DELETE",
@@ -101,75 +71,78 @@ export function SoftSkillsSection() {
         },
       });
 
-      const result = await res.json();
+      const data = await res.json();
 
       if (!res.ok) {
-        showErrorToast(result.message || "No se pudo eliminar la habilidad.");
+        showErrorToast(data.message);
         return;
       }
 
-      toast.success(result.message || "Habilidad eliminada correctamente.", {
-        style: toastStyle,
-      });
+      toast.success("Eliminado correctamente");
 
-      await fetchSoftSkills();
-    } catch (err) {
-      showErrorToast("No se pudo conectar con el servidor.");
-      console.error("Error eliminando skill:", err);
+      fetchSoftSkills();
+    } catch {
+      showErrorToast("Error de conexión");
     }
   };
 
-  const openCreateModal = () => {
-    setSkillToEdit(null);
-    setIsModalOpen(true);
-  };
-
-  const openEditModal = (skill: SoftSkill) => {
-    setSkillToEdit(skill);
-    setIsModalOpen(true);
-  };
-
   return (
-    <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* HEADER */}
-      <div className="flex items-center justify-between mb-10">
+    <div className="w-full animate-in fade-in duration-300">
+      <div className="flex justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-white">Habilidades Blandas</h2>
-          <p className="text-slate-400 text-sm mt-1">
-            Competencias interpersonales y cualidades que te hacen destacar.
-          </p>
+          <h2 className="text-white text-2xl font-bold">Habilidades Blandas</h2>
+
+          <p className="text-slate-400 text-sm">Gestiona tus habilidades</p>
         </div>
 
-        <Button onClick={openCreateModal} className="gap-2 font-heading px-6 h-9">
-          <PlusIcon weight="bold" size={16} />
-          Agregar Habilidad
+        <Button onClick={() => setIsAddModalOpen(true)}>
+          <PlusIcon size={16} />
+          Agregar
         </Button>
       </div>
 
-      {/* GRID */}
+      {/* SKILLS */}
       {isLoading ? (
-        <div className="text-center py-20 text-slate-500">Cargando habilidades...</div>
+        <p className="text-gray-400">Cargando...</p>
       ) : softSkills.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-4 mb-10">
           {softSkills.map((skill) => (
             <SoftSkillCard
               key={skill.id}
               skill={skill}
-              onEdit={openEditModal}
-              onDelete={handleDeleteSkill}
+              onEdit={(s) => {
+                setSkillToEdit(s);
+                setIsEditModalOpen(true);
+              }}
+              onDelete={() => handleDelete(skill.id)}
             />
           ))}
         </div>
       ) : (
-        <div className="text-center py-32 text-slate-500">No tienes habilidades registradas.</div>
+        <p className="text-gray-500">Sin habilidades</p>
       )}
 
-      {/* MODAL */}
-      <SoftSkillModal
-        isOpen={isModalOpen}
+      <SoftSkillRequestSection refreshKey={requestRefreshKey} />
+
+      <AddSoftSkillModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        portfolioId={PORTFOLIO_ID}
+        onSuccess={() => {
+          fetchSoftSkills();
+          setRequestRefreshKey((prev) => prev + 1);
+        }}
+      />
+
+      <EditSoftSkillModal
+        isOpen={isEditModalOpen}
         skill={skillToEdit}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveSkill}
+        portfolioId={PORTFOLIO_ID}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSkillToEdit(null);
+        }}
+        onSuccess={fetchSoftSkills}
       />
     </div>
   );

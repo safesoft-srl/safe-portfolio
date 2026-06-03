@@ -1,3 +1,3 @@
 export default function AdminSkills() {
-  return <div>AdminSkills</div>;
+  return <div>AdminSkills2</div>;
 }

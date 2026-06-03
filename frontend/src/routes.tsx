@@ -10,6 +10,8 @@ import ProjectsPublic from "./pages/public-portfolio/ProjectsPublic";
 import ExperiencePublic from "./pages/public-portfolio/ExperiencePublic";
 import SkillsPublic from "./pages/public-portfolio/SkillsPublic";
 import FormationPublic from "./pages/public-portfolio/FormationPublic";
+import SkillsSoftPublic from "./pages/public-portfolio/SkillsSoftPublic";
+import SkillsThechnicalPublic from "./pages/public-portfolio/SkillsThechnicalPublic";
 import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
@@ -19,6 +21,7 @@ import ExperiencePage from "./pages/Experience";
 import FormationPage from "./pages/Formation";
 import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
+import SoftSkillModerationSection from "./pages/SoftSkillModerationSection";
 import ProjectsPage from "./pages/ProjectsPage";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminModerators from "./pages/admin/AdminModerators";
@@ -52,6 +55,15 @@ export const router = createBrowserRouter([
     path: "/p/:slug/skills",
     element: <SkillsPublic />,
   },
+  {
+    path: "/p/:slug/skillssoft",
+    element: <SkillsSoftPublic />,
+  },
+  {
+    path: "/p/:slug/skillstechnical",
+    element: <SkillsThechnicalPublic />,
+  },
+
   {
     path: "/login",
     element: <GuestRoute />,
@@ -89,9 +101,14 @@ export const router = createBrowserRouter([
             element: <AdminModerators />,
           },
           {
-            path: "skills",
+            path: "skills-technical",
             element: <AdminSkills />,
           },
+          {
+            path: "skills-soft",
+            element: <SoftSkillModerationSection />,
+          },
+
           {
             path: "projects",
             element: <AdminProjects />,
@@ -156,6 +173,7 @@ export const router = createBrowserRouter([
             path: "configuration",
             element: <Configuration />,
           },
+
           {
             path: "reports",
             element: <div>Reports Page</div>,
