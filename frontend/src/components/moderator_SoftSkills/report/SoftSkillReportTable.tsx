@@ -62,7 +62,8 @@ export default function SoftSkillReportTable({ skills, loading }: Props) {
             </tbody>
           </table>
 
-          {!loading && skills.length === 0 && (
+          {/* EMPTY STATE */}
+          {skills.length === 0 && (
             <div className="p-6 text-center text-slate-400">No se encontraron resultados.</div>
           )}
         </div>
