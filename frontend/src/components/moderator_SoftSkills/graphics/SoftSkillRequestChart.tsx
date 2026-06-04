@@ -5,9 +5,11 @@ import {
   BarElement,
   Tooltip,
   Legend,
+  Chart,
 } from "chart.js";
 
 import { Bar } from "react-chartjs-2";
+import { useEffect, useRef } from "react";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -21,16 +23,11 @@ type SoftSkillRequest = {
 type Props = {
   data: SoftSkillRequest[];
   loading?: boolean;
+  onExport?: (img: string) => void;
 };
 
-export default function SoftSkillRequestChart({ data, loading }: Props) {
-  if (loading) {
-    return (
-      <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5 text-slate-400">
-        Cargando gráfico...
-      </div>
-    );
-  }
+export default function SoftSkillRequestChart({ data, loading, onExport }: Props) {
+  const chartRef = useRef<Chart<"bar"> | null>(null);
 
   const labels = data.map((item) => item.name);
 
@@ -94,7 +91,7 @@ export default function SoftSkillRequestChart({ data, loading }: Props) {
 
       y: {
         ticks: {
-          color: "#ffffff",
+          color: "#52688b",
         },
 
         grid: {
@@ -105,6 +102,36 @@ export default function SoftSkillRequestChart({ data, loading }: Props) {
   };
 
   const chartHeight = Math.max(data.length * 45, 350);
+
+  useEffect(() => {
+    if (loading || !onExport) return;
+
+    const timeout = setTimeout(() => {
+      const chart = chartRef.current;
+
+      if (!chart) return;
+
+      try {
+        const img = chart.toBase64Image();
+
+        if (img) {
+          onExport(img);
+        }
+      } catch (err) {
+        console.error("Error exportando gráfico:", err);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [data, loading, onExport]);
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5 text-slate-400">
+        Cargando gráfico...
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
@@ -137,7 +164,7 @@ export default function SoftSkillRequestChart({ data, loading }: Props) {
 
       <div className="overflow-y-auto" style={{ maxHeight: "700px" }}>
         <div style={{ height: chartHeight }}>
-          <Bar data={chartData} options={options} />
+          <Bar ref={chartRef} data={chartData} options={options} />
         </div>
       </div>
     </div>

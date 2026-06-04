@@ -8,6 +8,8 @@ import SoftSkillStatusChart from "@/components/moderator_SoftSkills/graphics/Sof
 import SoftSkillRequestFilters from "@/components/moderator_SoftSkills/report/SoftSkillRequestFilters";
 import SoftSkillRequestTable from "@/components/moderator_SoftSkills/report/SoftSkillRequestTable";
 import SoftSkillRequestChart from "@/components/moderator_SoftSkills/graphics/SoftSkillRequestChart";
+import PdfConfigModal from "@/components/moderator_SoftSkills/report/PdfConfigModal";
+import { generateSoftSkillPdf } from "@/pdf/generateSoftSkillPdf";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -28,7 +30,6 @@ type SoftSkillRequest = {
 
 export default function SoftSkillReportSection() {
   const token = localStorage.getItem("token");
-
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
   const [useOrder, setUseOrder] = useState("desc");
@@ -43,7 +44,6 @@ export default function SoftSkillReportSection() {
     total_uses: 0,
   });
   const [skills, setSkills] = useState<SoftSkillReport[]>([]);
-  const [charts, setCharts] = useState({ usage: true, status: false });
 
   const [requestLoading, setRequestLoading] = useState(true);
   const [requestStatus, setRequestStatus] = useState("");
@@ -53,7 +53,45 @@ export default function SoftSkillReportSection() {
   const [requestDateFrom, setRequestDateFrom] = useState("");
   const [requestDateTo, setRequestDateTo] = useState("");
   const [requests, setRequests] = useState<SoftSkillRequest[]>([]);
-  const [requestView] = useState({ table: true, chart: true });
+
+  const [usageChartImg, setUsageChartImg] = useState("");
+  const [statusChartImg, setStatusChartImg] = useState("");
+  const [requestChartImg, setRequestChartImg] = useState("");
+
+  const [catalogView, setCatalogView] = useState({
+    summary: true,
+    table: true,
+    usageChart: true,
+    statusChart: true,
+  });
+  const [requestView, setRequestView] = useState({ table: true, chart: true });
+
+  const waitForImages = async () => {
+    for (let i = 0; i < 10; i++) {
+      if (usageChartImg && statusChartImg && requestChartImg) return;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+  };
+
+  const [pdfOpen, setPdfOpen] = useState(false);
+  const [pdfConfig, setPdfConfig] = useState({
+    catalog: { ...catalogView },
+    requests: { ...requestView },
+    filters: {
+      status,
+      useOrder,
+      limit,
+      createdPeriod,
+      dateFrom,
+      dateTo,
+      requestStatus,
+      requestOrder,
+      requestLimit,
+      requestCreatedPeriod,
+      requestDateFrom,
+      requestDateTo,
+    },
+  });
 
   const loadReport = async (
     currentStatus = status,
@@ -131,9 +169,36 @@ export default function SoftSkillReportSection() {
       <div className="flex justify-between items-start">
         <div>
           <h2 className="text-2xl font-bold text-white">Reporte de habilidades blandas</h2>
-          <p className="text-slate-400 mt-1">Consulta estadísticas del catálogo y solicitudes.</p>
+          <p className="text-slate-400 mt-1">
+            Análisis completo del catálogo de habilidades y solicitudes de uso dentro del sistema.
+          </p>
         </div>
-        <Button className="bg-[#6c72ff] hover:bg-[#5a60e6]">Generar PDF</Button>
+        <Button
+          className="bg-[#6c72ff] hover:bg-[#5a60e6]"
+          onClick={() => {
+            setPdfConfig({
+              catalog: { ...catalogView },
+              requests: { ...requestView },
+              filters: {
+                status,
+                useOrder,
+                limit,
+                createdPeriod,
+                dateFrom,
+                dateTo,
+                requestStatus,
+                requestOrder,
+                requestLimit,
+                requestCreatedPeriod,
+                requestDateFrom,
+                requestDateTo,
+              },
+            });
+            setPdfOpen(true);
+          }}
+        >
+          Generar PDF
+        </Button>
       </div>
 
       <SoftSkillReportFilters
@@ -170,38 +235,88 @@ export default function SoftSkillReportSection() {
         }
       />
 
-      <SoftSkillReportSummary summary={summary} />
-      <SoftSkillReportTable loading={loading} skills={skills} />
-
       <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between mb-2">
           <div>
-            <h3 className="text-white font-semibold">Uso de habilidades</h3>
+            <h3 className="text-white font-semibold">Resumen general del catálogo</h3>
+            <p className="text-slate-400 text-sm">
+              Total de habilidades registradas, activas, inactivas y uso acumulado en el sistema.
+            </p>
           </div>
           <input
             type="checkbox"
-            checked={charts.usage}
-            onChange={() => setCharts((p) => ({ ...p, usage: !p.usage }))}
+            checked={catalogView.summary}
+            onChange={() => setCatalogView((p) => ({ ...p, summary: !p.summary }))}
           />
         </div>
-        {charts.usage && <SoftSkillUsageChart data={skills} loading={loading} />}
+        {catalogView.summary && <SoftSkillReportSummary summary={summary} />}
       </div>
 
       <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
-        <div className="flex justify-between mb-3">
+        <div className="flex justify-between mb-2">
           <div>
-            <h3 className="text-white font-semibold">Estado</h3>
+            <h3 className="text-white font-semibold">Listado de habilidades registradas</h3>
+            <p className="text-slate-400 text-sm">
+              Detalle de cada habilidad blanda, su estado y número de usos en el sistema.
+            </p>
           </div>
           <input
             type="checkbox"
-            checked={charts.status}
-            onChange={() => setCharts((p) => ({ ...p, status: !p.status }))}
+            checked={catalogView.table}
+            onChange={() => setCatalogView((p) => ({ ...p, table: !p.table }))}
           />
         </div>
-        {charts.status && <SoftSkillStatusChart data={skills} loading={loading} />}
+        {catalogView.table && <SoftSkillReportTable loading={loading} skills={skills} />}
       </div>
 
       <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
+        <div className="flex justify-between mb-2">
+          <div>
+            <h3 className="text-white font-semibold">Frecuencia de uso de habilidades</h3>
+            <p className="text-slate-400 text-sm">
+              Muestra qué habilidades blandas son más utilizadas por los usuarios.
+            </p>
+          </div>
+          <input
+            type="checkbox"
+            checked={catalogView.usageChart}
+            onChange={() => setCatalogView((p) => ({ ...p, usageChart: !p.usageChart }))}
+          />
+        </div>
+        {catalogView.usageChart && (
+          <SoftSkillUsageChart data={skills} loading={loading} onExport={setUsageChartImg} />
+        )}
+      </div>
+
+      <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
+        <div className="flex justify-between mb-2">
+          <div>
+            <h3 className="text-white font-semibold">
+              Estado de habilidades (activas vs inactivas)
+            </h3>
+            <p className="text-slate-400 text-sm">
+              Distribución del catálogo según el estado de cada habilidad.
+            </p>
+          </div>
+          <input
+            type="checkbox"
+            checked={catalogView.statusChart}
+            onChange={() => setCatalogView((p) => ({ ...p, statusChart: !p.statusChart }))}
+          />
+        </div>
+        {catalogView.statusChart && (
+          <SoftSkillStatusChart data={skills} loading={loading} onExport={setStatusChartImg} />
+        )}
+      </div>
+
+      <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
+        <div className="mb-4">
+          <h3 className="text-white font-semibold text-lg">Solicitudes de habilidades blandas</h3>
+          <p className="text-slate-400 text-sm mt-1">
+            Análisis de solicitudes de creación y uso de habilidades dentro del sistema.
+          </p>
+        </div>
+
         <SoftSkillRequestFilters
           status={requestStatus}
           requestOrder={requestOrder}
@@ -216,8 +331,8 @@ export default function SoftSkillReportSection() {
               requestOrder,
               requestLimit,
               requestCreatedPeriod,
-              requestDateFrom,
-              requestDateTo
+              dateFrom,
+              dateTo
             );
           }}
           onRequestOrderChange={(v) => {
@@ -227,8 +342,8 @@ export default function SoftSkillReportSection() {
               v,
               requestLimit,
               requestCreatedPeriod,
-              requestDateFrom,
-              requestDateTo
+              dateFrom,
+              dateTo
             );
           }}
           onLimitChange={(v) => {
@@ -238,8 +353,8 @@ export default function SoftSkillReportSection() {
               requestOrder,
               v,
               requestCreatedPeriod,
-              requestDateFrom,
-              requestDateTo
+              dateFrom,
+              dateTo
             );
           }}
           onCreatedPeriodChange={(v) => {
@@ -264,11 +379,77 @@ export default function SoftSkillReportSection() {
           }
         />
 
-        {requestView.table && (
-          <SoftSkillRequestTable loading={requestLoading} requests={requests} />
-        )}
-        {requestView.chart && <SoftSkillRequestChart data={requests} loading={requestLoading} />}
+        <div className="rounded-xl border border-[#2a2f55] bg-[#0f1224] p-4 mt-4">
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <h4 className="text-white font-medium">Tabla de solicitudes</h4>
+              <p className="text-slate-400 text-sm">
+                Detalle de solicitudes por habilidad y estado.
+              </p>
+            </div>
+            <input
+              type="checkbox"
+              checked={requestView.table}
+              onChange={() => setRequestView((p) => ({ ...p, table: !p.table }))}
+            />
+          </div>
+          {requestView.table && (
+            <SoftSkillRequestTable loading={requestLoading} requests={requests} />
+          )}
+        </div>
+
+        <div className="rounded-xl border border-[#2a2f55] bg-[#0f1224] p-4 mt-4">
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <h4 className="text-white font-medium">Gráfico de solicitudes</h4>
+              <p className="text-slate-400 text-sm">
+                Visualización del volumen y comportamiento de solicitudes.
+              </p>
+            </div>
+            <input
+              type="checkbox"
+              checked={requestView.chart}
+              onChange={() => setRequestView((p) => ({ ...p, chart: !p.chart }))}
+            />
+          </div>
+          {requestView.chart && (
+            <SoftSkillRequestChart
+              data={requests}
+              loading={requestLoading}
+              onExport={setRequestChartImg}
+            />
+          )}
+        </div>
       </div>
+
+      <PdfConfigModal
+        open={pdfOpen}
+        onClose={() => setPdfOpen(false)}
+        config={pdfConfig}
+        setConfig={setPdfConfig}
+        onGenerate={async (finalConfig) => {
+          await waitForImages();
+
+          const data = {
+            summary,
+            skills,
+            requests,
+            images: {
+              usage: usageChartImg,
+              status: statusChartImg,
+              requests: requestChartImg,
+            },
+          };
+          console.log({
+            usageChartImg: !!usageChartImg,
+            statusChartImg: !!statusChartImg,
+            requestChartImg: !!requestChartImg,
+          });
+          await generateSoftSkillPdf(finalConfig, data);
+
+          setPdfOpen(false);
+        }}
+      />
     </div>
   );
 }
