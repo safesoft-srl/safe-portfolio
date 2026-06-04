@@ -6,9 +6,11 @@ import {
   LineElement,
   Tooltip,
   Legend,
+  Chart,
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
+import { useEffect, useRef } from "react";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -23,26 +25,18 @@ type SoftSkill = {
 type Props = {
   data: SoftSkill[];
   loading?: boolean;
+  onExport?: (img: string) => void;
 };
 
-export default function SoftSkillTrendsChart({ data, loading }: Props) {
-  if (loading) {
-    return (
-      <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5 text-slate-400">
-        Cargando gráfico...
-      </div>
-    );
-  }
+export default function SoftSkillTrendsChart({ data, loading, onExport }: Props) {
+  const chartRef = useRef<Chart<"line"> | null>(null);
 
-  /* Agrupar por fecha (día) */
   const grouped: Record<string, number> = {};
 
   data.forEach((skill) => {
     const date = new Date(skill.created_at).toLocaleDateString();
 
-    if (!grouped[date]) {
-      grouped[date] = 0;
-    }
+    if (!grouped[date]) grouped[date] = 0;
 
     grouped[date] += 1;
   });
@@ -82,30 +76,47 @@ export default function SoftSkillTrendsChart({ data, loading }: Props) {
     },
     scales: {
       x: {
-        ticks: {
-          color: "#9ca3af",
-        },
-        grid: {
-          color: "#1f2240",
-        },
+        ticks: { color: "#9ca3af" },
+        grid: { color: "#1f2240" },
       },
       y: {
-        ticks: {
-          color: "#9ca3af",
-        },
-        grid: {
-          color: "#1f2240",
-        },
+        ticks: { color: "#9ca3af" },
+        grid: { color: "#1f2240" },
       },
     },
   };
+
+  useEffect(() => {
+    if (loading || !onExport) return;
+    const timeout = setTimeout(() => {
+      const chart = chartRef.current;
+      if (!chart) return;
+      try {
+        const img = chart.toBase64Image();
+        if (img) {
+          onExport(img);
+        }
+      } catch (err) {
+        console.error("Error exportando gráfico:", err);
+      }
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [data, loading, onExport]);
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5 text-slate-400">
+        Cargando gráfico...
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
       <h3 className="text-white font-semibold mb-4">Tendencia de creación de habilidades</h3>
 
       <div className="h-[320px]">
-        <Line data={chartData} options={options} />
+        <Line ref={chartRef} data={chartData} options={options} />
       </div>
     </div>
   );
