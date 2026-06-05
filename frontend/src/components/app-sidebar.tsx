@@ -129,6 +129,11 @@ const adminData = {
       url: "formation",
       icon: <GraduationCapIcon />,
     },
+    {
+      title: "Administrar Cursos",
+      url: "courses",
+      icon: <GraduationCapIcon />,
+    },
   ],
 };
 
