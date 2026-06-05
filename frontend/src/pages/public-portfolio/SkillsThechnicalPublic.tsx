@@ -3,24 +3,13 @@ import { useParams } from "react-router-dom";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import { PublicFooter } from "@/components/PublicFooter";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
-import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 
 import type { PortfolioSkill } from "@/types/public-portfolio";
-
-type SoftSkill = {
-  id: number;
-  description?: string | null;
-  soft_skill: {
-    id: number;
-    name: string;
-  };
-};
 
 export default function SkillsPublic() {
   const { slug } = useParams();
 
   const [skills, setSkills] = useState<PortfolioSkill[]>([]);
-  const [softSkills, setSoftSkills] = useState<SoftSkill[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -30,20 +19,17 @@ export default function SkillsPublic() {
 
     const loadData = async () => {
       try {
-        const [techRes, softRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL}/api/portfolios/slug/${slug}/skills`),
-          fetch(`${import.meta.env.VITE_API_URL}/api/portfolios/slug/${slug}/soft-skills`),
-        ]);
+        const techRes = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/portfolios/slug/${slug}/skills`
+        );
 
         const techJson = await techRes.json();
-        const softJson = await softRes.json();
 
         if (!isMounted) return;
+
         const techData = Array.isArray(techJson) ? techJson : (techJson?.data ?? []);
-        const softData = Array.isArray(softJson) ? softJson : (softJson?.data ?? []);
 
         setSkills(techData);
-        setSoftSkills(softData);
       } catch (error) {
         console.error("Error loading skills:", error);
       } finally {
@@ -76,14 +62,8 @@ export default function SkillsPublic() {
       <PublicNavbar firstName={firstName} slug={slug || ""} />
 
       <main className="pb-20 pt-20">
-        {/* TECH SKILLS */}
         <div className="mt-10">
           <SkillsGrid skills={skills} />
-        </div>
-
-        {/* SOFT SKILLS */}
-        <div className="mt-10">
-          <SoftSkillsGrid skills={softSkills} />
         </div>
       </main>
 

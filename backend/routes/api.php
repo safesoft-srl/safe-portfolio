@@ -9,6 +9,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RegisterAccountController;
 use App\Http\Controllers\ResendTokenController;
 use App\Http\Controllers\SkillProjectController;
+use App\Http\Controllers\SoftSkillController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [RegisterAccountController::class, 'register']);
@@ -98,22 +99,6 @@ Route::delete('/projects/{id}/image', [ProjectController::class, 'deleteImagePro
 // routes for skills
 Route::apiResource('/skills', SkillProjectController::class);
 
-// Apis for soft skills
-use App\Http\Controllers\SoftSkillController;
-
-Route::middleware('auth:api')->group(function () {
-
-    Route::get('/portfolios/{portfolioId}/soft-skills', [SoftSkillController::class, 'index']);
-    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills  (Para obtener las soft skills registradas en un portafolio)
-    Route::post('/portfolios/{portfolioId}/soft-skills', [SoftSkillController::class, 'store']);
-    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills  (Para agregar una soft skill a un portafolio) JSON(name)
-    Route::put('/portfolios/{portfolioId}/soft-skills/{id}', [SoftSkillController::class, 'update']);
-    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para actualizar el nombre de una soft skill en un portafolio) JSON(name)
-    Route::delete('/portfolios/{portfolioId}/soft-skills/{id}', [SoftSkillController::class, 'destroy']);
-    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para eliminar una soft skill de un portafolio)
-
-});
-
 Route::get('/portfolios/slug/{slug}/skills', [PortfolioTechnicalSkillController::class, 'publicBySlug']);
 Route::get('/portfolios/slug/{slug}/soft-skills', [SoftSkillController::class, 'publicBySlug']);
 
@@ -142,4 +127,64 @@ Route::middleware(['auth:api', 'admin'])->prefix('admin')->group(function () {
     Route::get('/moderators', [ModeratorController::class, 'index']);
     Route::post('/moderators', [ModeratorController::class, 'store']);
     Route::delete('/moderators/{id}', [ModeratorController::class, 'destroy']);
+});
+
+// Apis for soft skills
+use App\Http\Controllers\PortfolioSoftSkillController;
+
+Route::get('/portfolios/slug/{slug}/soft-skills', [PortfolioSoftSkillController::class, 'publicBySlug']);
+
+Route::get('/soft-skills', [SoftSkillController::class, 'index']);
+Route::middleware('auth:api')->group(function () {
+
+    Route::get('/portfolios/{portfolioId}/soft-skills', [PortfolioSoftSkillController::class, 'index']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills  (Para obtener las soft skills registradas en un portafolio)
+    Route::post('/portfolios/{portfolioId}/soft-skills', [PortfolioSoftSkillController::class, 'store']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills  (Para agregar una soft skill a un portafolio) JSON(soft_skill_id, description)
+    Route::put('/portfolios/{portfolioId}/soft-skills/{id}', [PortfolioSoftSkillController::class, 'update']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para actualizar el nombre de una soft skill en un portafolio) JSON(name)
+    Route::delete('/portfolios/{portfolioId}/soft-skills/{id}', [PortfolioSoftSkillController::class, 'destroy']);
+    // Api: http://localhost:8000/api/portfolios/{portfolioId}/soft-skills/{id}  (Para eliminar una soft skill de un portafolio)
+});
+
+use App\Http\Controllers\SoftSkillRequestController;
+
+Route::middleware('auth:api')->group(function () {
+    // USER APIS
+    Route::get('/soft-skill-requests', [SoftSkillRequestController::class, 'index']);
+
+    Route::post('/soft-skill-requests', [SoftSkillRequestController::class, 'store']);
+
+    // MODERATOR APIS
+    Route::get('/moderator/soft-skill-requests', [SoftSkillRequestController::class, 'moderatorIndex']);
+
+    Route::post('/moderator/soft-skill-requests/approve', [SoftSkillRequestController::class, 'approveGroup']);
+
+    Route::post('/moderator/soft-skill-requests/reject', [SoftSkillRequestController::class, 'rejectGroup']);
+
+});
+
+use App\Http\Controllers\SoftSkillCatalogController;
+
+Route::middleware('auth:api')->group(function () {
+
+    // MODERATOR SOFT SKILL CATALOG APIS
+
+    Route::get('/moderator/soft-skills', [SoftSkillCatalogController::class, 'index']);
+    // Api: http://localhost:8000/api/moderator/soft-skills  (Para obtener el catálogo de soft skills, con opción de filtrar por estado activo/inactivo) Query Param: is_active=true/false
+    Route::post('/moderator/soft-skills', [SoftSkillCatalogController::class, 'store']);
+    // Api: http://localhost:8000/api/moderator/soft-skills  (Para crear una nueva soft skill en el catálogo)
+    Route::put('/moderator/soft-skills/{id}', [SoftSkillCatalogController::class, 'update']);
+    // Api: http://localhost:8000/api/moderator/soft-skills/{id}  (Para actualizar el nombre o estado de una soft skill en el catálogo)
+    Route::patch('/moderator/soft-skills/{id}/toggle-status', [SoftSkillCatalogController::class, 'toggleStatus']);
+    // Api: http://localhost:8000/api/moderator/soft-skills/{id}/toggle-status  (Para activar o desactivar una soft skill en el catálogo)
+});
+
+use App\Http\Controllers\SoftSkillReportController;
+
+Route::middleware('auth:api')->group(function () {
+
+    // MODERATOR SOFT SKILL REPORT APIS
+    Route::get('/moderator/reports/soft-skills', [SoftSkillReportController::class, 'index']);
+    Route::get('/moderator/reports/soft-skill-requests', [SoftSkillReportController::class, 'requestReport']);
 });

@@ -11,16 +11,10 @@ return new class extends Migration
         Schema::create('soft_skills', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('portfolio_id')
-                ->constrained('portfolios')
-                ->onDelete('cascade');
-
-            $table->string('name', 45);
-            $table->string('description', 255)->nullable();
-
+            $table->string('name', 45)->unique();
+            $table->boolean('is_active')
+                ->default(true);
             $table->timestamps();
-
-            $table->unique(['portfolio_id', 'name']);
         });
     }
 

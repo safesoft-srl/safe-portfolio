@@ -37,7 +37,6 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 md:px-10">
       <div className="relative overflow-hidden rounded-3xl border border-[#262b46] bg-[#13152e] p-10 md:p-16 shadow-2xl">
-        {/* decor */}
         <div className="absolute -right-20 -top-20 h-64 w-64 opacity-20">
           <div className="absolute inset-0 rounded-full border border-white/20" />
           <div className="absolute inset-8 rounded-full border border-[#bcfd49]" />
@@ -45,11 +44,10 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center">
-          <span className="font-mono text-xs text-[#bcfd49]">• Skills</span>
+          <span className="font-mono text-xs text-[#bcfd49]">• Habilidades Técnicas</span>
 
           <h2 className="mt-4 text-4xl font-bold text-white md:text-5xl">Mis habilidades</h2>
 
-          {/* Tabs */}
           <div className="mt-10 flex flex-wrap justify-center rounded-full border border-[#262b46] bg-[#1a1d3a]/50 p-1">
             {tabs.map((tab) => (
               <button
@@ -66,7 +64,6 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
             ))}
           </div>
 
-          {/* GRID */}
           <div className="mt-14 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {filteredSkills.map((skill) => {
               return (
@@ -92,7 +89,6 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
                         </span>
                       </div>
 
-                      {/* BACK */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl border border-[#bcfd49] bg-[#0f1224] p-4 text-center text-white [transform:rotateY(180deg)] [backface-visibility:hidden]">
                         <p className="text-sm font-bold">
                           {skill.technical_skill?.name ?? "Skill"}
@@ -113,7 +109,6 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
             })}
           </div>
 
-          {/* EMPTY */}
           {filteredSkills.length === 0 && (
             <p className="mt-10 text-sm text-slate-400">No hay habilidades registradas todavía.</p>
           )}

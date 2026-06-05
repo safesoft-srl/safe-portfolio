@@ -23,7 +23,9 @@ export type PortfolioSkill = {
 export type SoftSkill = {
   id: number;
   name: string;
-  description: string;
+  soft_skill_id?: number;
+  description?: string;
+  status?: string;
 };
 
 export type WorkExperience = {

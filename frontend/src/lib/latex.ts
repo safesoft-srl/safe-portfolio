@@ -1,6 +1,7 @@
 import { type ProfileData } from "@/types/public-portfolio";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { es } from "date-fns/locale";
+
 function stringToArray(text = "") {
   console.log(
     "what",
@@ -9,10 +10,24 @@ function stringToArray(text = "") {
       .map((line) => line.trim())
       .filter((line) => line !== "")
   );
+
   return text
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line !== "");
+}
+
+function formatDate(date: string | null | undefined) {
+  if (!date) return "Presente";
+
+  const parsedDate = new Date(date);
+
+  if (!isValid(parsedDate)) {
+    console.error("Fecha inválida:", date);
+    return "Presente";
+  }
+
+  return format(parsedDate, "MMM yyyy", { locale: es });
 }
 
 export const generateLatexPdf = (profile: ProfileData | null) => {
@@ -32,12 +47,10 @@ export const generateLatexPdf = (profile: ProfileData | null) => {
 \usepackage{lipsum}
 \usepackage[left=1.06cm,top=1.7cm,right=1.06cm,bottom=0.49cm]{geometry}
 
-
-
-
 %by: Aline R. Antunes
 
 \begin{document}
+
 \begin{center}
     \textbf{${profile.profile_name}}\\ 
     \hrulefill
@@ -52,15 +65,17 @@ export const generateLatexPdf = (profile: ProfileData | null) => {
 \begin{center}
     \textbf{Educación}
 \end{center}
+
 ${profile.academyc_trainings
   .map(
     (training) => String.raw`
 
+\textbf{${training.institution_name}} 
+\hfill ${formatDate(training.start_date)} – ${formatDate(training.end_date)}
 
-\textbf{${training.institution_name}} \hfill ${format(new Date(training.start_date), "MMM yyyy", { locale: es })} – ${training.end_date !== null ? format(new Date(training.end_date), "MMM yyyy", { locale: es }) : "Presente"}
-
-${training.field_of_study}
-${training.description}`
+${training.field_of_study || ""}
+${training.description || ""}
+`
   )
   .join("\n")}
 
@@ -69,12 +84,16 @@ ${training.description}`
 \begin{center}
     \textbf{Experiencia}
 \end{center}
+
 ${profile.work_experiences
   .map(
     (experiencie) => String.raw`
-\textbf{${experiencie.company}} %\hfill City, State (or Remote)
 
-\textbf{${experiencie.position}} \hfill ${format(new Date(experiencie.start_date), "MMM yyyy", { locale: es })} – ${experiencie.end_date !== null ? format(new Date(experiencie.end_date), "MMM yyyy", { locale: es }) : "Presente"}
+\textbf{${experiencie.company}} 
+
+\textbf{${experiencie.position}} 
+\hfill ${formatDate(experiencie.start_date)} – ${formatDate(experiencie.end_date)}
+
 ${
   experiencie.achievements !== null
     ? String.raw`
@@ -93,22 +112,7 @@ ${
 \vspace{12pt}
 `
   )
-  .join("\n")}  
-
-
-
-
-%\begin{center}
-%    \textbf{Leadership \& Activities}
-%\end{center}
-
-%\textbf{Organization}	\hfill City, State
-
-%\textbf{Role} \hfill Month Year – Month Year
-%\begin{itemize}[noitemsep, topsep=0pt, partopsep=0pt, parsep=0pt]
-%    \item This section can be formatted similarly to the Experience section, or you can omit descriptions for activities.
-%    \item If this section is more relevant to the opportunity you are applying for, consider moving this above your Experience section.
-%\end{itemize}
+  .join("\n")}
 
 \begin{center}
     \textbf{Habilidades Técnicas y Blandas}
@@ -122,9 +126,9 @@ ${
 \textbf{Blandas:}
 ${profile?.soft_skills.map((skill) => `${skill?.name}: ${skill?.description}`).join(", ")}
 
-
-
 \end{document}`;
+
   console.log("base", baseText);
+
   return "https://latexonline.cc/compile?text=" + encodeURIComponent(baseText);
 };
