@@ -138,7 +138,9 @@ export default function AdminExperience() {
     <div className="p-8 w-full">
       <div className="mb-8 flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold text-white font-heading">Reporte de Experiencias Laborales</h1>
+          <h1 className="text-3xl font-bold text-white font-heading">
+            Reporte de Experiencias Laborales
+          </h1>
           <p className="text-slate-400 mt-1">
             Análisis detallado de los trabajos registrados por los usuarios en la plataforma.
           </p>
@@ -259,7 +261,9 @@ export default function AdminExperience() {
         </div>
 
         {data && (
-          <div className={`space-y-6 transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+          <div
+            className={`space-y-6 transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+          >
             {/* Quick Stats */}
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
@@ -294,16 +298,17 @@ export default function AdminExperience() {
             {/* Charts Section */}
             <div className="grid gap-4 md:grid-cols-3">
               {/* Pie Chart */}
-              {data.summary && (data.summary.currently_working > 0 || data.summary.past_jobs > 0) && (
-                <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5 col-span-1">
-                  <div className="mb-4">
-                    <h3 className="text-white font-semibold">Distribución de Trabajos</h3>
+              {data.summary &&
+                (data.summary.currently_working > 0 || data.summary.past_jobs > 0) && (
+                  <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5 col-span-1">
+                    <div className="mb-4">
+                      <h3 className="text-white font-semibold">Distribución de Trabajos</h3>
+                    </div>
+                    <div className="h-[250px] pb-4">
+                      <Pie data={pieChartData} options={pieChartOptions} />
+                    </div>
                   </div>
-                  <div className="h-[250px] pb-4">
-                    <Pie data={pieChartData} options={pieChartOptions} />
-                  </div>
-                </div>
-              )}
+                )}
 
               {/* Bar Chart */}
               {data.monthly_trend && data.monthly_trend.length > 0 && (
@@ -316,7 +321,9 @@ export default function AdminExperience() {
                   }`}
                 >
                   <div className="mb-4">
-                    <h3 className="text-white font-semibold">Tendencia Histórica (Nuevos Trabajos)</h3>
+                    <h3 className="text-white font-semibold">
+                      Tendencia Histórica (Nuevos Trabajos)
+                    </h3>
                   </div>
                   <div className="h-[250px] pb-4">
                     <Bar data={barChartData} options={barChartOptions} />
@@ -336,7 +343,10 @@ export default function AdminExperience() {
                 {data.top_positions && data.top_positions.length > 0 ? (
                   <div className="space-y-3">
                     {data.top_positions.map((item, i) => (
-                      <div key={i} className="flex justify-between items-center bg-[#0f1224] p-3 rounded-lg border border-[#2a2f55]/50">
+                      <div
+                        key={i}
+                        className="flex justify-between items-center bg-[#0f1224] p-3 rounded-lg border border-[#2a2f55]/50"
+                      >
                         <span className="text-sm font-medium text-white">{item.position}</span>
                         <span className="text-xs bg-[#2a2f55] text-white px-2 py-1 rounded-full">
                           {item.count}
@@ -358,10 +368,11 @@ export default function AdminExperience() {
                 {data.top_companies && data.top_companies.length > 0 ? (
                   <div className="space-y-3">
                     {data.top_companies.map((item, i) => (
-                      <div key={i} className="flex justify-between items-center bg-[#0f1224] p-3 rounded-lg border border-[#2a2f55]/50">
-                        <span className="text-sm font-medium text-white">
-                          {item.company}
-                        </span>
+                      <div
+                        key={i}
+                        className="flex justify-between items-center bg-[#0f1224] p-3 rounded-lg border border-[#2a2f55]/50"
+                      >
+                        <span className="text-sm font-medium text-white">{item.company}</span>
                         <span className="text-xs bg-[#2a2f55] text-white px-2 py-1 rounded-full">
                           {item.count}
                         </span>
@@ -393,13 +404,12 @@ export default function AdminExperience() {
                   <tbody>
                     {data.detailed_list && data.detailed_list.length > 0 ? (
                       data.detailed_list.map((exp, idx) => (
-                        <tr key={idx} className="border-b border-[#2a2f55]/50 last:border-0 hover:bg-[#0f1224] transition-colors">
-                          <td className="py-4 pr-4 text-white">
-                            {exp.user_name || "Desconocido"}
-                          </td>
-                          <td className="py-4 pr-4 text-slate-300 font-medium">
-                            {exp.company}
-                          </td>
+                        <tr
+                          key={idx}
+                          className="border-b border-[#2a2f55]/50 last:border-0 hover:bg-[#0f1224] transition-colors"
+                        >
+                          <td className="py-4 pr-4 text-white">{exp.user_name || "Desconocido"}</td>
+                          <td className="py-4 pr-4 text-slate-300 font-medium">{exp.company}</td>
                           <td className="py-4 pr-4 text-slate-300">{exp.position}</td>
                           <td className="py-4 pr-4">
                             {exp.is_current ? (
@@ -413,10 +423,12 @@ export default function AdminExperience() {
                             )}
                           </td>
                           <td className="py-4 text-slate-400">
-                            {new Date(exp.start_date).toLocaleDateString("es-ES", {
-                              month: "short",
-                              year: "numeric",
-                            })}{" "}
+                            {exp.start_date
+                              ? new Date(exp.start_date).toLocaleDateString("es-ES", {
+                                  month: "short",
+                                  year: "numeric",
+                                })
+                              : "N/A"}{" "}
                             -{" "}
                             {exp.is_current
                               ? "Presente"

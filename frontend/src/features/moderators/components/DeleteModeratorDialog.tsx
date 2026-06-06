@@ -53,9 +53,9 @@ export default function DeleteModeratorDialog({ moderator }: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle className="text-white">¿Remover rol de moderador?</AlertDialogTitle>
           <AlertDialogDescription className="text-slate-400">
-            Estás a punto de quitarle los privilegios a <strong className="text-white">{moderator.name}</strong> (
-            {moderator.email}). Su cuenta volverá a ser un usuario normal y mantendrá sus
-            portafolios intactos.
+            Estás a punto de quitarle los privilegios a{" "}
+            <strong className="text-white">{moderator.name}</strong> ({moderator.email}). Su cuenta
+            volverá a ser un usuario normal y mantendrá sus portafolios intactos.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
