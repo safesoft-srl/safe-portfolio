@@ -78,7 +78,7 @@ export default function AdminExperience() {
 
   const barChartData = {
     labels:
-      data.monthly_trend?.map((d: any) => {
+      data.monthly_trend?.map((d) => {
         const [year, month] = d.month.split("-");
         const monthNames = [
           "Ene",
@@ -99,7 +99,7 @@ export default function AdminExperience() {
     datasets: [
       {
         label: "Nuevos Trabajos",
-        data: data.monthly_trend?.map((d: any) => Number(d.count)) || [],
+        data: data.monthly_trend?.map((d) => Number(d.count)) || [],
         backgroundColor: "#6c72ff",
         borderRadius: 4,
         barThickness: 24,
@@ -335,7 +335,7 @@ export default function AdminExperience() {
                 </div>
                 {data.top_positions && data.top_positions.length > 0 ? (
                   <div className="space-y-3">
-                    {data.top_positions.map((item: any, i: number) => (
+                    {data.top_positions.map((item, i) => (
                       <div key={i} className="flex justify-between items-center bg-[#0f1224] p-3 rounded-lg border border-[#2a2f55]/50">
                         <span className="text-sm font-medium text-white">{item.position}</span>
                         <span className="text-xs bg-[#2a2f55] text-white px-2 py-1 rounded-full">
@@ -357,7 +357,7 @@ export default function AdminExperience() {
                 </div>
                 {data.top_companies && data.top_companies.length > 0 ? (
                   <div className="space-y-3">
-                    {data.top_companies.map((item: any, i: number) => (
+                    {data.top_companies.map((item, i) => (
                       <div key={i} className="flex justify-between items-center bg-[#0f1224] p-3 rounded-lg border border-[#2a2f55]/50">
                         <span className="text-sm font-medium text-white">
                           {item.company}
@@ -392,7 +392,7 @@ export default function AdminExperience() {
                   </thead>
                   <tbody>
                     {data.detailed_list && data.detailed_list.length > 0 ? (
-                      data.detailed_list.map((exp: any, idx: number) => (
+                      data.detailed_list.map((exp, idx) => (
                         <tr key={idx} className="border-b border-[#2a2f55]/50 last:border-0 hover:bg-[#0f1224] transition-colors">
                           <td className="py-4 pr-4 text-white">
                             {exp.user_name || "Desconocido"}
