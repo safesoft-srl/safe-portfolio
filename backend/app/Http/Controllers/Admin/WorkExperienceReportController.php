@@ -71,7 +71,7 @@ class WorkExperienceReportController extends Controller
             // Usamos formato compatible con la mayoría de motores SQL
             $trendQuery = clone $baseQuery;
             $monthlyTrend = $trendQuery
-                ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"), DB::raw('COUNT(*) as count'))
+                ->select(DB::raw("TO_CHAR(created_at, 'YYYY-MM') as month"), DB::raw('COUNT(*) as count'))
                 ->groupBy('month')
                 ->orderBy('month', 'asc')
                 ->get();
