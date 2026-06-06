@@ -126,7 +126,7 @@ export default function DashboardHome() {
               className="bg-[#6c72ff] hover:bg-[#5c61eb]"
               onClick={() => setIsModalOpen(true)}
             >
-              Generar
+              Publicar Portafolio
             </Button>
           </div>
         </div>
@@ -139,8 +139,8 @@ export default function DashboardHome() {
           </p>
 
           <div className="relative group sm:ml-2 mt-2 sm:mt-0">
-            <button
-              type="button"
+            <Button
+              variant="default" 
               onClick={() => {
                 if (!portfolioUrl) return;
 
@@ -153,7 +153,7 @@ export default function DashboardHome() {
               aria-label="Copiar URL de portafolio"
             >
               <CopySimple size={16} weight="regular" />
-            </button>
+            </Button>
 
             <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-black px-2 py-1 text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
               {copied ? "Copiado!" : "Copiar"}
@@ -166,7 +166,7 @@ export default function DashboardHome() {
         open={isModalOpen}
         onOpenChange={(open) => setIsModalOpen(open)}
       >
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md bg-slate-900 border-slate-800">
           <DialogHeader>
             <DialogTitle>Generar URL pública</DialogTitle>
           </DialogHeader>
@@ -220,7 +220,7 @@ export default function DashboardHome() {
                   }
                 }}
               >
-                {loading ? "Generando..." : "Aceptar"}
+                {loading ? "Generando..." : "Publicar"}
               </Button>
             </div>
           </div>
