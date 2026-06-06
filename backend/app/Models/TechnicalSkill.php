@@ -11,6 +11,7 @@ class TechnicalSkill extends Model
     protected $fillable = [
         'name',
         'category',
+        'is_active',
         'url_light',
         'url_dark',
     ];
@@ -24,6 +25,14 @@ class TechnicalSkill extends Model
             'project_skill',
             'technical_skill_id',
             'project_id'
+        );
+    }
+
+    public function portfolioSkills()
+    {
+        return $this->hasMany(
+            PortfolioSkill::class,
+            'technical_skill_id'
         );
     }
 }
