@@ -87,40 +87,44 @@ export default function CreateModeratorDialog() {
     >
       {/* @ts-expect-error asChild type issue with React 19 / Shadcn */}
       <DialogTrigger asChild>
-        <Button className="gap-2">
+        <Button className="gap-2 bg-[#6c72ff] hover:bg-[#5a60e6] text-white">
           <ShieldPlus size={18} weight="bold" />
           Ascender a Moderador
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-120">
+      <DialogContent className="sm:max-w-md bg-[#14172b] border-[#2a2f55] text-white">
         <DialogHeader>
-          <DialogTitle>Ascender a moderador</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-white">Ascender a moderador</DialogTitle>
+          <DialogDescription className="text-slate-400">
             Busca un usuario existente por su correo y otórgale permisos de administrador.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-2">
           <div className="space-y-2">
-            <Label htmlFor="email">Correo electrónico del usuario</Label>
+            <Label htmlFor="email" className="text-slate-300">
+              Correo electrónico del usuario
+            </Label>
             <Input
               id="email"
               type="email"
               placeholder="Ej: usuario@correo.com"
+              className="bg-[#0f1224] border-[#2a2f55] text-white placeholder-slate-500 focus-visible:ring-[#6c72ff]"
               {...register("email")}
             />
             {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-3 pt-2">
-            <Label>Permisos base (opcional)</Label>
+            <Label className="text-slate-300">Permisos base (opcional)</Label>
 
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="perm_mods"
+                className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
                 checked={selectedPermissions.includes("manage_moderators")}
                 onCheckedChange={(c) => handlePermissionChange("manage_moderators", c === true)}
               />
-              <Label htmlFor="perm_mods" className="font-normal cursor-pointer">
+              <Label htmlFor="perm_mods" className="font-normal cursor-pointer text-slate-300">
                 Gestionar Moderadores
               </Label>
             </div>
@@ -128,10 +132,11 @@ export default function CreateModeratorDialog() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="perm_cats"
+                className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
                 checked={selectedPermissions.includes("manage_catalogs")}
                 onCheckedChange={(c) => handlePermissionChange("manage_catalogs", c === true)}
               />
-              <Label htmlFor="perm_cats" className="font-normal cursor-pointer">
+              <Label htmlFor="perm_cats" className="font-normal cursor-pointer text-slate-300">
                 Gestionar Catálogos y Habilidades
               </Label>
             </div>
@@ -139,10 +144,11 @@ export default function CreateModeratorDialog() {
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="perm_reps"
+                className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
                 checked={selectedPermissions.includes("view_reports")}
                 onCheckedChange={(c) => handlePermissionChange("view_reports", c === true)}
               />
-              <Label htmlFor="perm_reps" className="font-normal cursor-pointer">
+              <Label htmlFor="perm_reps" className="font-normal cursor-pointer text-slate-300">
                 Generar y ver Reportes
               </Label>
             </div>
@@ -151,6 +157,7 @@ export default function CreateModeratorDialog() {
             <Button
               type="button"
               variant="outline"
+              className="border-[#2a2f55] bg-transparent text-slate-300 hover:bg-[#2a2f55] hover:text-white"
               onClick={() => {
                 setOpen(false);
                 reset();
@@ -158,7 +165,11 @@ export default function CreateModeratorDialog() {
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={isSubmitting || createModerator.isPending}>
+            <Button
+              type="submit"
+              className="bg-[#6c72ff] hover:bg-[#5a60e6] text-white"
+              disabled={isSubmitting || createModerator.isPending}
+            >
               {createModerator.isPending ? "Guardando..." : "Ascender"}
             </Button>
           </DialogFooter>

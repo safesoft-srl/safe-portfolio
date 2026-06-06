@@ -188,3 +188,18 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/moderator/reports/soft-skills', [SoftSkillReportController::class, 'index']);
     Route::get('/moderator/reports/soft-skill-requests', [SoftSkillReportController::class, 'requestReport']);
 });
+
+use App\Http\Controllers\Admin\WorkExperienceReportController;
+
+Route::middleware(['auth:api', 'admin'])->group(function () {
+    // MODERATOR WORK EXPERIENCE REPORT APIS
+    Route::get('/moderator/reports/work-experiences', [WorkExperienceReportController::class, 'index']);
+});
+
+use App\Http\Controllers\TechnicalSkillReportController;
+
+Route::middleware('auth:api')->group(function () {
+
+    // MODERATOR TECHNICAL SKILL REPORT APIS
+    Route::get('/moderator/reports/technical-skills', [TechnicalSkillReportController::class, 'index']);
+});

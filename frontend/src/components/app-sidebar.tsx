@@ -138,12 +138,9 @@ const adminData = {
 };
 
 export function AppSidebar({
+  admin = false,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { admin?: boolean }) {
-  let admin = false;
-  if (props.admin) {
-    admin = true;
-  }
   const { user } = useAuthStore();
   const navigate = useNavigate();
   return (
