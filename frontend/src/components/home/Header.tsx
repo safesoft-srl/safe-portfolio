@@ -98,16 +98,14 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
         <div className="flex items-center gap-3">
           {isAuthenticated ? (
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                <button
-                  className="h-9 w-9 rounded-full flex items-center justify-center bg-sidebar-primary text-sidebar-primary-foreground"
-                  aria-label="Abrir usuario"
-                >
-                  <Avatar>
-                    <AvatarImage src={""} alt={user?.name} />
-                    <AvatarFallback>{user?.name?.charAt(0) ?? "U"}</AvatarFallback>
-                  </Avatar>
-                </button>
+              <DropdownMenuTrigger
+                className="h-9 w-9 rounded-full flex items-center justify-center bg-sidebar-primary text-sidebar-primary-foreground outline-none"
+                aria-label="Abrir usuario"
+              >
+                <Avatar>
+                  <AvatarImage src={""} alt={user?.name} />
+                  <AvatarFallback>{user?.name?.charAt(0) ?? "U"}</AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
