@@ -43,26 +43,28 @@ export default function DeleteModeratorDialog({ moderator }: Props) {
         <Button
           variant="outline"
           size="sm"
-          className="gap-1.5 text-destructive hover:text-destructive"
+          className="gap-1.5 border-[#2a2f55] bg-transparent text-red-500 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30"
         >
           <UserMinus size={16} weight="bold" />
           Remover
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="bg-[#14172b] border-[#2a2f55] text-white">
         <AlertDialogHeader>
-          <AlertDialogTitle>¿Remover rol de moderador?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Estás a punto de quitarle los privilegios a <strong>{moderator.name}</strong> (
+          <AlertDialogTitle className="text-white">¿Remover rol de moderador?</AlertDialogTitle>
+          <AlertDialogDescription className="text-slate-400">
+            Estás a punto de quitarle los privilegios a <strong className="text-white">{moderator.name}</strong> (
             {moderator.email}). Su cuenta volverá a ser un usuario normal y mantendrá sus
             portafolios intactos.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel className="border-[#2a2f55] bg-transparent text-slate-300 hover:bg-[#2a2f55] hover:text-white">
+            Cancelar
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
-            className="bg-destructive text-white hover:bg-destructive/90"
+            className="bg-red-600 text-white hover:bg-red-700 border-none"
           >
             {deleteModerator.isPending ? "Removiendo..." : "Sí, remover rol"}
           </AlertDialogAction>
