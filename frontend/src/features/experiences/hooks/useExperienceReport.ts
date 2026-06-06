@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { api } from "@/lib/axios";
 
 export interface WorkExperienceReportParams {
@@ -39,6 +39,8 @@ export function useExperienceReport(params?: WorkExperienceReportParams) {
       });
       return data.data;
     },
+    // Mantener datos anteriores mientras se hace fetch para evitar flickering
+    placeholderData: keepPreviousData,
     // The backend caches for 15 minutes, we can cache on frontend for a bit too
     staleTime: 1000 * 60 * 5,
   });
