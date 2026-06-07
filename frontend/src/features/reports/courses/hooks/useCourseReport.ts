@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { showErrorToast } from "@/components/ui/showErrorToast";
 
 import { getCourseReport } from "../services/course-report.service";
@@ -6,15 +6,39 @@ import type { CourseReportRecord } from "../types/course-report.types";
 
 export function useCourseReport() {
   const [loading, setLoading] = useState(false);
-  const [institution, setInstitution] = useState("");
-  const [level, setLevel] = useState("");
-  const [allCourses, setAllCourses] = useState<CourseReportRecord[]>([]);
+  const [area, setArea] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [courses, setCourses] = useState<CourseReportRecord[]>([]);
 
-  const loadCourseReport = async () => {
+  const loadCourseReport = async (currentArea = area, currentDateFrom = dateFrom, currentDateTo = dateTo) => {
     try {
       setLoading(true);
       const report = await getCourseReport();
-      setAllCourses(report);
+      let result = report;
+
+      const normalizedArea = (currentArea || "").trim().toLowerCase();
+
+      if (normalizedArea) {
+        result = result.filter((course) => (course.area || "").toLowerCase().includes(normalizedArea));
+      }
+
+      if (currentDateFrom || currentDateTo) {
+        const fromTime = currentDateFrom ? new Date(currentDateFrom).getTime() : null;
+        const toTime = currentDateTo ? new Date(currentDateTo).getTime() : null;
+
+        result = result.filter((course) => {
+          const dateStr = course.certificate_date ?? course.created_at ?? null;
+          if (!dateStr) return false;
+          const dateTime = new Date(dateStr).getTime();
+          if (Number.isNaN(dateTime)) return false;
+          if (fromTime !== null && dateTime < fromTime) return false;
+          if (toTime !== null && dateTime > toTime + 24 * 60 * 60 * 1000 - 1) return false;
+          return true;
+        });
+      }
+
+      setCourses(result);
     } catch (error) {
       console.error(error);
       showErrorToast("Error al cargar el reporte de cursos");
@@ -23,34 +47,19 @@ export function useCourseReport() {
     }
   };
 
-  const courses = useMemo(() => {
-    const institutionQuery = institution.trim().toLowerCase();
-    const levelQuery = level.trim().toLowerCase();
-
-    return allCourses.filter((course) => {
-      const matchesInstitution = institutionQuery
-        ? (course.institution_name || "").toLowerCase().includes(institutionQuery)
-        : true;
-
-      const matchesLevel = levelQuery
-        ? (course.level || "").toLowerCase().includes(levelQuery)
-        : true;
-
-      return matchesInstitution && matchesLevel;
-    });
-  }, [allCourses, institution, level]);
-
   useEffect(() => {
     loadCourseReport();
   }, []);
 
   return {
     loading,
-    institution,
-    level,
+    area,
+    dateFrom,
+    dateTo,
     courses,
-    setInstitution,
-    setLevel,
+    setArea,
+    setDateFrom,
+    setDateTo,
     loadCourseReport,
   };
 }

@@ -32,15 +32,6 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     marginBottom: 6,
   },
-  filterText: {
-    marginBottom: 2,
-    lineHeight: 1.1,
-    color: "#4b5563", 
-  },
-  filterBold: {
-    fontWeight: 700,
-    color: "#111827",
-  },
   table: {
     borderWidth: 1,
     borderColor: "#d1d5db",
@@ -60,18 +51,24 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 6,
   },
+  // Distribución calculada para las 6 columnas (Total: 100%)
+  dateColumn: {
+    width: "13%",
+  },
+  userColumn: {
+    width: "17%",
+  },
   titleColumn: {
-    width: "35%",
+    width: "22%",
   },
   areaColumn: {
-    width: "25%",
+    width: "15%",
   },
   institutionColumn: {
-    width: "25%",
+    width: "20%",
   },
   levelColumn: {
-    width: "15%",
-    textAlign: "center",
+    width: "13%",
   },
   headerCell: {
     color: "#111827",
@@ -97,42 +94,41 @@ const styles = StyleSheet.create({
   },
 });
 
-const formatCourseFilters = (f: CourseReportPdfData["filters"]) => {
-  const out: Array<{ label: string; value: string }> = [];
-  if (f.institution) out.push({ label: "Institución: ", value: f.institution });
-  if (f.level) out.push({ label: "Nivel: ", value: f.level });
-  return out;
+const formatDate = (value: string | null | undefined) => {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "—";
+  return new Intl.DateTimeFormat("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(d);
 };
 
 export default function CourseReportPdf({ data }: Props) {
-  const filters = formatCourseFilters(data.filters);
+  // Verifica si el filtro de área contiene texto
+  const hasAreaFilter = data.filters?.area && data.filters.area.trim().length > 0;
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.title}>Cursos realizados</Text>
+        <Text style={styles.title}>Reporte de Cursos realizados</Text>
         <Text style={styles.meta}>Reporte generado el {new Date(data.generatedAt).toLocaleString("es-ES")}</Text>
+        <Text style={styles.meta}>De: {data.filters.dateFrom || "-"} a: {data.filters.dateTo || "-"}</Text>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Filtros aplicados</Text>
-          {filters.length === 0 ? (
-            <Text style={styles.filterText}>
-              Sin filtros aplicados. Se muestran todos los cursos registrados.
+          {/* El subtítulo solo se renderiza si se filtró por un área específica */}
+          {hasAreaFilter && (
+            <Text style={styles.subtitle}>
+              {data.filters.area}
             </Text>
-          ) : (
-            filters.map((filter, index) => (
-              <Text key={index} style={styles.filterText}>
-                <Text style={styles.filterBold}>{filter.label}</Text>
-                {filter.value}
-              </Text>
-            ))
           )}
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Listado de cursos</Text>
+          
           <View style={styles.table}>
+            {/* Encabezado ordenado según los requerimientos */}
             <View style={[styles.row, styles.headerRow]}>
+              <Text style={[styles.cellBase, styles.dateColumn, styles.headerCell]}>Fecha</Text>
+              <Text style={[styles.cellBase, styles.userColumn, styles.headerCell]}>Nombre</Text>
               <Text style={[styles.cellBase, styles.titleColumn, styles.headerCell]}>Título</Text>
               <Text style={[styles.cellBase, styles.areaColumn, styles.headerCell]}>Área</Text>
               <Text style={[styles.cellBase, styles.institutionColumn, styles.headerCell]}>Institución</Text>
@@ -144,6 +140,8 @@ export default function CourseReportPdf({ data }: Props) {
             ) : (
               data.courses.map((c) => (
                 <View key={c.id} style={styles.row}>
+                  <Text style={[styles.cellBase, styles.dateColumn]}>{formatDate(c.certificate_date ?? c.created_at)}</Text>
+                  <Text style={[styles.cellBase, styles.userColumn]}>{c.user_name || "—"}</Text>
                   <Text style={[styles.cellBase, styles.titleColumn]}>{c.title}</Text>
                   <Text style={[styles.cellBase, styles.areaColumn]}>{c.area || "—"}</Text>
                   <Text style={[styles.cellBase, styles.institutionColumn]}>{c.institution_name || "—"}</Text>

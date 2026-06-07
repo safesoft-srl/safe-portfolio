@@ -8,18 +8,20 @@ import CourseReportTable from "./CourseReportTable";
 export default function CoursesReport() {
   const {
     loading,
-    institution,
-    level,
+    area,
+    dateFrom,
+    dateTo,
     courses,
-    setInstitution,
-    setLevel,
+    setArea,
+    setDateFrom,
+    setDateTo,
     loadCourseReport,
   } = useCourseReport();
 
   const handleExport = async () => {
     await generateCourseReportPdf({
       generatedAt: new Date().toISOString(),
-      filters: { institution, level },
+      filters: { area, dateFrom, dateTo },
       courses,
     });
   };
@@ -32,18 +34,20 @@ export default function CoursesReport() {
             Reporte de Cursos Realizados
           </h1>
           <p className="max-w-2xl text-xs text-slate-400 sm:text-base">
-            Consulta los cursos realizados y filtra por institución o nivel.
+            Consulta los cursos realizados y filtra por área.
           </p>
         </div>
-        <Button size="lg" onClick={handleExport}>Exportar a PDF</Button>
+        <Button size="lg" onClick={handleExport} disabled={!dateFrom || !dateTo}>Exportar a PDF</Button>
       </div>
 
       <CourseReportFilters
-        institution={institution}
-        level={level}
-        onInstitutionChange={setInstitution}
-        onLevelChange={setLevel}
-        onApplyFilters={() => loadCourseReport()}
+        area={area}
+        dateFrom={dateFrom}
+        dateTo={dateTo}
+        onAreaChange={setArea}
+        onDateFromChange={setDateFrom}
+        onDateToChange={setDateTo}
+        onApplyFilters={() => loadCourseReport(area, dateFrom, dateTo)}
       />
 
       <CourseReportTable loading={loading} courses={courses} />
