@@ -70,9 +70,9 @@ class User extends Authenticatable implements JWTSubject
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === 'admin' || $this->role === 'Super Admin';
     }
-
+    
     public function portfolios()
     {
         return $this->hasMany(Portfolio::class);

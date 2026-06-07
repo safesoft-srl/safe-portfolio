@@ -127,7 +127,7 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                {user?.role === "admin" && (
+                {user?.role === "admin" || user?.role === "Super Admin" && (
                   <>
                     <DropdownMenuGroup>
                       <DropdownMenuItem
