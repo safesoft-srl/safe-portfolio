@@ -32,15 +32,6 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     marginBottom: 6,
   },
-  filterText: {
-    marginBottom: 2,
-    lineHeight: 1.1,
-    color: "#4b5563", 
-  },
-  filterBold: {
-    fontWeight: 700,
-    color: "#111827",
-  },
   table: {
     borderWidth: 1,
     borderColor: "#d1d5db",
@@ -60,18 +51,20 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 6,
   },
-  titleColumn: {
-    width: "20%",
-  },
-  fieldColumn: {
-    width: "25%",
-  },
-  institutionColumn: {
-    width: "40%",
-  },
   dateColumn: {
     width: "15%",
-    textAlign: "center", 
+  },
+  userColumn: {
+    width: "25%",
+  },
+  titleColumn: {
+    width: "15%",
+  },
+  fieldColumn: {
+    width: "20%",
+  },
+  institutionColumn: {
+    width: "30%",
   },
   headerCell: {
     color: "#111827",
@@ -105,38 +98,30 @@ const formatDate = (value: string | null) => {
 };
 
 export default function AcademicReportPdf({ data }: Props) {
-  const filter = data.filters.institution 
-    ? { label: "Institución: ", value: data.filters.institution } 
-    : null;
+  const hasTitleFilter = data.filters?.title && data.filters.title.trim().length > 0;
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.title}>Grados académicos registrados</Text>
+        <Text style={styles.title}>Reporte de Grados académicos</Text>
         <Text style={styles.meta}>Reporte generado el {new Date(data.generatedAt).toLocaleString("es-ES")}</Text>
+        <Text style={styles.meta}>De: {data.filters.dateFrom || "-"} a: {data.filters.dateTo || "-"}</Text>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Filtros aplicados</Text>
-          {!filter ? (
-            <Text style={styles.filterText}>
-              Sin filtros aplicados. Se muestran todos los grados registrados.
-            </Text>
-          ) : (
-            <Text style={styles.filterText}>
-              <Text style={styles.filterBold}>{filter.label}</Text>
-              {filter.value}
+          {/* El subtítulo solo se renderiza si se filtró por un título específico */}
+          {hasTitleFilter && (
+            <Text style={styles.subtitle}>
+              {data.filters.title}
             </Text>
           )}
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Listado de grados</Text>
+          
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
+              <Text style={[styles.cellBase, styles.dateColumn, styles.headerCell]}>Fecha</Text>
+              <Text style={[styles.cellBase, styles.userColumn, styles.headerCell]}>Nombre del usuario</Text>
               <Text style={[styles.cellBase, styles.titleColumn, styles.headerCell]}>Título</Text>
               <Text style={[styles.cellBase, styles.fieldColumn, styles.headerCell]}>Campo de estudio</Text>
               <Text style={[styles.cellBase, styles.institutionColumn, styles.headerCell]}>Institución</Text>
-              <Text style={[styles.cellBase, styles.dateColumn, styles.headerCell]}>Fecha</Text>
             </View>
 
             {data.academics.length === 0 ? (
@@ -144,10 +129,11 @@ export default function AcademicReportPdf({ data }: Props) {
             ) : (
               data.academics.map((a) => (
                 <View key={a.id} style={styles.row}>
+                  <Text style={[styles.cellBase, styles.dateColumn]}>{formatDate(a.created_at)}</Text>
+                  <Text style={[styles.cellBase, styles.userColumn]}>{a.user_name || "—"}</Text>
                   <Text style={[styles.cellBase, styles.titleColumn]}>{a.title}</Text>
                   <Text style={[styles.cellBase, styles.fieldColumn]}>{a.field_of_study || "—"}</Text>
                   <Text style={[styles.cellBase, styles.institutionColumn]}>{a.institution_name || "—"}</Text>
-                  <Text style={[styles.cellBase, styles.dateColumn]}>{formatDate(a.created_at)}</Text>
                 </View>
               ))
             )}

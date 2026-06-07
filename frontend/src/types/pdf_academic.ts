@@ -1,7 +1,9 @@
 import type { AcademicReportRecord } from "@/features/reports/academic/types/academic-report.types";
 
 export type AcademicReportPdfFilters = {
-  institution: string;
+  title: string;
+  dateFrom: string;
+  dateTo: string;
 };
 
 export type AcademicReportPdfData = {

@@ -6,17 +6,29 @@ type Props = {
 };
 
 export default function AcademicReportTable({ loading, academics }: Props) {
+    const formatDate = (value: string | null | undefined) => {
+    if (!value) return "—";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "—";
+    return new Intl.DateTimeFormat("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(d);
+  };
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-bold text-slate-200">
-        Lista de grados académicos registrados
+        
       </h2>
       <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-[#2a2f55] bg-white/5">
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-1/3">Título</th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase text-center">Fecha</th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-1/4">Nombre del usuario</th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-1/4">Título</th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase">Campo de estudio</th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase">Institución</th>
               </tr>
@@ -40,7 +52,9 @@ export default function AcademicReportTable({ loading, academics }: Props) {
                     key={academic.id}
                     className="border-b border-[#2a2f55] hover:bg-white/5 transition-colors"
                   >
-                    <td className="p-4 font-medium text-white">{academic.title}</td>
+                    <td className="p-4 text-slate-300 text-center">{formatDate(academic.created_at)}</td>
+                    <td className="p-4 text-slate-300">{academic.user_name ?? "—"}</td>
+                    <td className="p-4 font-medium text-white">{academic.title}</td>  
                     <td className="p-4 text-slate-300">{academic.field_of_study || "—"}</td>
                     <td className="p-4 text-slate-300">{academic.institution_name || "—"}</td>
                   </tr>

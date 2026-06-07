@@ -6,12 +6,12 @@ import AcademicReportFilters from "./AcademicReportFilters";
 import AcademicReportTable from "./AcademicReportTable";
 
 export default function AcademicReport() {
-  const { loading, institution, academics, setInstitution, loadAcademicReport } = useAcademicReport();
+  const { loading, title, dateFrom, dateTo, academics, setTitle, setDateFrom, setDateTo, loadAcademicReport } = useAcademicReport();
 
   const handleExport = async () => {
     await generateAcademicReportPdf({
       generatedAt: new Date().toISOString(),
-      filters: { institution },
+      filters: { title, dateFrom, dateTo },
       academics,
     });
   };
@@ -27,15 +27,19 @@ export default function AcademicReport() {
             Consulta los grados académicos registrados y filtra por institución.
           </p>
         </div>
-        <Button size="lg" onClick={handleExport}>
+        <Button size="lg" onClick={handleExport} disabled={!dateFrom || !dateTo}>
           Exportar a PDF
         </Button>
       </div>
 
       <AcademicReportFilters
-        institution={institution}
-        onInstitutionChange={setInstitution}
-        onApplyFilters={() => loadAcademicReport(institution)}
+        title={title}
+        dateFrom={dateFrom}
+        dateTo={dateTo}
+        onTitleChange={setTitle}
+        onDateFromChange={setDateFrom}
+        onDateToChange={setDateTo}
+        onApplyFilters={() => loadAcademicReport(title, dateFrom, dateTo)}
       />
 
       <AcademicReportTable loading={loading} academics={academics} />
