@@ -35,15 +35,6 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     marginBottom: 6,
   },
-  filterText: {
-    marginBottom: 2,
-    lineHeight: 1.1,
-    color: "#4b5563", 
-  },
-  filterBold: {
-    fontWeight: 700,
-    color: "#111827",
-  },
   table: {
     borderWidth: 1,
     borderColor: "#d1d5db",
@@ -64,15 +55,17 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 6,
   },
-  nameColumn: {
-    width: "55%",
-  },
-  skillsColumn: {
-    width: "30%",
-  },
   dateColumn: {
     width: "15%",
-    textAlign: "center", 
+  },
+  userColumn: {
+    width: "25%",
+  },
+  emailColumn: {
+    width: "30%",
+  },
+  nameColumn: {
+    width: "30%",
   },
   headerCell: {
     color: "#111827",
@@ -112,70 +105,41 @@ const formatDate = (value: string | null) => {
   }).format(date);
 };
 
-const formatProjectFilters = (filters: ProjectReportPdfData["filters"]) => {
-  const activeFilters: Array<{ label: string; value: string }> = [];
-
-  if (filters.createdPeriod && filters.createdPeriod !== "custom") {
-    activeFilters.push({ label: "Período de creación: ", value: filters.createdPeriod });
-  }
-
-  if (filters.dateFrom || filters.dateTo) {
-    activeFilters.push({ 
-      label: "Rango de fechas: ", 
-      value: `de ${filters.dateFrom || "-"} a ${filters.dateTo || "-"}` 
-    });
-  }
-
-  if (filters.selectedSkills.length > 0) {
-    activeFilters.push({ label: "Tecnologías: ", value: filters.selectedSkills.join(", ") });
-  }
-
-  return activeFilters;
+const getUserName = (project: ProjectReportPdfData["projects"][number]) => {
+  return project.user_name || "—";
 };
 
-const getTechnologiesLabel = (project: ProjectReportPdfData["projects"][number]) => {
-  if (!Array.isArray(project.skill_projects) || project.skill_projects.length === 0) {
-    return "—";
-  }
-
-  return project.skill_projects.map((skill) => skill.name).join(", ");
+const getUserEmail = (project: ProjectReportPdfData["projects"][number]) => {
+  return project.user_email || "—";
 };
 
 export default function ProjectReportPdf({ data }: Props) {
-  const filters = formatProjectFilters(data.filters);
+  const hasSkills = data.filters?.selectedSkills && data.filters.selectedSkills.length > 0;
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.title}>Proyectos registrados</Text>
+        <Text style={styles.title}>Reporte de Proyectos</Text>
         <Text style={styles.meta}>
           Reporte generado el {new Date(data.generatedAt).toLocaleString("es-ES")}
         </Text>
+        <Text style={styles.meta}>
+          De: {data.filters.dateFrom || "/"} a: {data.filters.dateTo || "/"}
+        </Text>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Filtros aplicados</Text>
-          
-          {filters.length === 0 ? (
-            <Text style={styles.filterText}>
-              Sin filtros aplicados. Se listan todos los proyectos registrados.
+          {hasSkills && (
+            <Text style={styles.subtitle}>
+              {data.filters.selectedSkills.join(", ")}
             </Text>
-          ) : (
-            filters.map((filter, index) => (
-              <Text key={index} style={styles.filterText}>
-                <Text style={styles.filterBold}>{filter.label}</Text>
-                {filter.value}
-              </Text>
-            ))
           )}
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Lista de proyectos registrados</Text>
+          
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              <Text style={[styles.cellBase, styles.nameColumn, styles.headerCell]}>Nombre del proyecto</Text>
-              <Text style={[styles.cellBase, styles.skillsColumn, styles.headerCell]}>Tecnologías usadas</Text>
               <Text style={[styles.cellBase, styles.dateColumn, styles.headerCell]}>Fecha</Text>
+              <Text style={[styles.cellBase, styles.userColumn, styles.headerCell]}>Nombre del usuario</Text>
+              <Text style={[styles.cellBase, styles.emailColumn, styles.headerCell]}>Correo del usuario</Text>
+              <Text style={[styles.cellBase, styles.nameColumn, styles.headerCell]}>Nombre del proyecto</Text>
             </View>
 
             {data.projects.length === 0 ? (
@@ -183,9 +147,12 @@ export default function ProjectReportPdf({ data }: Props) {
             ) : (
               data.projects.map((project) => (
                 <View key={project.id} style={styles.row}>
+                  <Text style={[styles.cellBase, styles.dateColumn]}>
+                    {formatDate(project.start_date ?? project.created_at)}
+                  </Text>
+                  <Text style={[styles.cellBase, styles.userColumn]}>{getUserName(project)}</Text>
+                  <Text style={[styles.cellBase, styles.emailColumn]}>{getUserEmail(project)}</Text>
                   <Text style={[styles.cellBase, styles.nameColumn]}>{project.name}</Text>
-                  <Text style={[styles.cellBase, styles.skillsColumn]}>{getTechnologiesLabel(project)}</Text>
-                  <Text style={[styles.cellBase, styles.dateColumn]}>{formatDate(project.start_date ?? project.created_at)}</Text>
                 </View>
               ))
             )}

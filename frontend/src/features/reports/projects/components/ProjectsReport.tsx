@@ -8,14 +8,12 @@ import ProjectReportTable from "./ProjectReportTable";
 export default function ProjectsReport() {
   const {
     loading,
-    createdPeriod,
     dateFrom,
     dateTo,
     projects,
     skills,
     selectedSkills,
     setSelectedSkills,
-    setCreatedPeriod,
     setDateFrom,
     setDateTo,
     loadProjectReport,
@@ -25,7 +23,7 @@ export default function ProjectsReport() {
     await generateProjectReportPdf({
       generatedAt: new Date().toISOString(),
       filters: {
-        createdPeriod,
+        createdPeriod: "custom",
         dateFrom,
         dateTo,
         selectedSkills: selectedSkills.map((skill) => skill.name),
@@ -45,27 +43,17 @@ export default function ProjectsReport() {
             Consulta los proyectos realizados y genera reportes detallados en tablas
           </p>
         </div>
-        <Button size="lg" onClick={handleExportPdf}>
+        <Button size="lg" onClick={handleExportPdf} disabled={!dateFrom || !dateTo}>
           Exportar a PDF
         </Button>
       </div>
 
       <ProjectReportFilters
-        createdPeriod={createdPeriod}
         dateFrom={dateFrom}
         dateTo={dateTo}
         skills={skills}
         selectedSkills={selectedSkills}
         onSelectedSkillsChange={setSelectedSkills}
-        onCreatedPeriodChange={(value) => {
-          setCreatedPeriod(value);
-
-          if (value !== "custom") {
-            setDateFrom("");
-            setDateTo("");
-            loadProjectReport("", "");
-          }
-        }}
         onDateFromChange={setDateFrom}
         onDateToChange={setDateTo}
         onApplyFilters={() => loadProjectReport(dateFrom, dateTo)}

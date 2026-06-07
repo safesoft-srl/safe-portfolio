@@ -8,7 +8,6 @@ import type { ProjectReportRecord } from "../types/project-report.types";
 
 export function useProjectReport() {
   const [loading, setLoading] = useState(false);
-  const [createdPeriod, setCreatedPeriod] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [projects, setProjects] = useState<ProjectReportRecord[]>([]);
@@ -30,8 +29,8 @@ export function useProjectReport() {
         );
       }
 
-      {/*Si se seleccionó personalizado y hay fechas, filtrar por start_date*/}
-      if (createdPeriod === "custom" && (currentDateFrom || currentDateTo)) {
+      {/*Si hay fechas seleccionadas, filtrar por start_date*/}
+      if (currentDateFrom || currentDateTo) {
         const fromTime = currentDateFrom ? new Date(currentDateFrom).getTime() : null;
         const toTime = currentDateTo ? new Date(currentDateTo).getTime() : null;
 
@@ -72,14 +71,12 @@ export function useProjectReport() {
 
   return {
     loading,
-    createdPeriod,
     dateFrom,
     dateTo,
     projects,
     skills,
     selectedSkills,
     setSelectedSkills,
-    setCreatedPeriod,
     setDateFrom,
     setDateTo,
     loadProjectReport,
