@@ -27,6 +27,18 @@ class TechnicalSkillController extends Controller
         );
     }
 
+    public function activeSkills()
+    {
+        $skills = TechnicalSkill::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return ApiResponse::success(
+            TechnicalSkillResource::collection($skills),
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
     /**
      * Store a newly created resource in storage.
      */

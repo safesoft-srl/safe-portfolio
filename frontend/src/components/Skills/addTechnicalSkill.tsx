@@ -12,6 +12,7 @@ interface Skill {
   };
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
 
@@ -29,12 +30,14 @@ export function AddTechnicalSkill({
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  
+
   useEffect(() => {
     const fetchCatalog = async () => {
       if (!isOpen) return;
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/technical-skills`);
+        const response = await fetch(`${API_URL}/api/technical-skills/actives`);
         const result = await response.json();
 
         let skillsArray: Skill[] = [];

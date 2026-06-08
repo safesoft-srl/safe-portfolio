@@ -77,7 +77,9 @@ Route::get('/portfolios', [PortfolioController::class, 'showAll']);
 use App\Http\Controllers\PortfolioTechnicalSkillController;
 use App\Http\Controllers\TechnicalSkillController;
 
+Route::get('/technical-skills/actives', [TechnicalSkillController::class, 'activeSkills'] );
 Route::apiResource('/technical-skills', TechnicalSkillController::class);
+
 
 Route::middleware('auth:api')->group(function () {
 
