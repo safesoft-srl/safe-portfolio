@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-//import TechnicalSkillCatalogSection from "@/components/moderator_TechnicalSkills/TechnicalSkillCatalogSection";
 import TechnicalSkillReportPage from "@/components/moderator_TechnicalSkills/TechinicalSkillReportPage";
+import { TSModCatalogo } from "@/components/Skills/TSModCatalogo";
 
 type Tab = "catalog" | "reports";
 
@@ -34,8 +34,8 @@ export default function TechnicalSkillModerationSection() {
           Reportes
         </Button>
       </div>
-      {/* {tab === "catalog" && <TechnicalSkillCatalogSection />} */}
       {tab === "reports" && <TechnicalSkillReportPage />}
+      {tab === "catalog" && <TSModCatalogo />}
     </div>
   );
 }

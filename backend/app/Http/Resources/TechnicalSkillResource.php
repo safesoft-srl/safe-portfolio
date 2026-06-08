@@ -7,11 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TechnicalSkillResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
@@ -22,6 +17,8 @@ class TechnicalSkillResource extends JsonResource
                 'light' => $this->url_light,
                 'dark' => $this->url_dark,
             ],
+            // ¡Esta es la línea clave que faltaba!
+            'is_active' => (bool) $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

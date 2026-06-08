@@ -10,36 +10,49 @@ import { CircleNotchIcon, UploadSimple, Trash } from "@phosphor-icons/react";
 const skillSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   category: z.string().min(1, "La categoría es requerida"),
-  logo_light: z.any().optional(),
-  logo_dark: z.any().optional(),
+  logo_light: z.custom<FileList>().optional(),
+  logo_dark: z.custom<FileList>().optional(),
 });
 
 type SkillFormData = z.infer<typeof skillSchema>;
 
 interface SkillFormProps {
-  onSubmit: (data: SkillFormData) => void;
+  onSubmit: (data: { name: string; category: string; logo_light?: File; logo_dark?: File }) => void;
   isLoading?: boolean;
   onCancel?: () => void;
+  initialData?: {
+    id?: number;
+    name: string;
+    category: string;
+    url_light?: string;
+    url_dark?: string;
+  } | null;
 }
 
 const categories = ["Frontend", "Backend", "DevOps", "Otros"];
 
-export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
+export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillFormProps) {
+  // 1. Inicializamos React Hook Form DIRECTAMENTE con initialData
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SkillFormData>({
     resolver: zodResolver(skillSchema),
-    defaultValues: { name: "", category: "", logo_light: undefined, logo_dark: undefined },
+    defaultValues: {
+      name: initialData?.name || "",
+      category: initialData?.category || "",
+      logo_light: undefined,
+      logo_dark: undefined,
+    },
   });
 
-  const [previewLight, setPreviewLight] = useState<string | null>(null);
-  const [previewDark, setPreviewDark] = useState<string | null>(null);
+  // 2. Inicializamos los estados de las imágenes DIRECTAMENTE con initialData
+  const [previewLight, setPreviewLight] = useState<string | null>(initialData?.url_light || null);
+  const [previewDark, setPreviewDark] = useState<string | null>(initialData?.url_dark || null);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>, type: "light" | "dark") => {
     const file = e.target.files?.[0];
-
     if (!file) return;
 
     const preview = URL.createObjectURL(file);
@@ -52,7 +65,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
   };
 
   const clearLogo = (type: "light" | "dark") => {
-    const input = document.getElementById(`logo-${type}-input`) as HTMLInputElement;
+    const input = document.getElementById(`${type}-logo-input`) as HTMLInputElement;
     if (input) {
       input.value = "";
     }
@@ -74,7 +87,6 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
 
   const renderUploader = (type: "light" | "dark", preview: string | null) => {
     const fieldName = type === "light" ? "logo_light" : "logo_dark";
-
     const logoField = register(fieldName);
 
     return (
@@ -83,7 +95,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
 
         <label
           htmlFor={`${type}-logo-input`}
-          className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all h-32 bg-slate-950 border-slate-800 hover:border-indigo-500 relative"
+          className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all h-32 bg-slate-950 border-slate-800 hover:border-[#6c72ff] relative"
         >
           {preview ? (
             <div className="flex flex-col items-center gap-2">
@@ -92,11 +104,11 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
                 alt="Preview"
                 className="h-16 rounded shadow border border-slate-800 object-contain"
               />
-
               <button
                 type="button"
-                className="absolute top-2 right-2 bg-slate-800 hover:bg-red-600 text-white rounded-full p-1"
+                className="absolute top-2 right-2 bg-slate-800 hover:bg-red-600 text-white rounded-full p-1 transition-colors"
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   clearLogo(type);
                 }}
@@ -134,7 +146,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
         <Input
           {...register("name")}
           placeholder="Ej: React, Node.js"
-          className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500"
+          className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-[#6c72ff]"
         />
         {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
       </div>
@@ -144,7 +156,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
         <select
           {...register("category")}
           defaultValue=""
-          className="flex h-10 w-full rounded-md border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="flex h-10 w-full rounded-md border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#6c72ff]"
         >
           <option value="" disabled>
             Selecciona una categoría
@@ -159,14 +171,24 @@ export function SkillForm({ onSubmit, isLoading, onCancel }: SkillFormProps) {
 
         {errors.category && <span className="text-xs text-red-500">{errors.category.message}</span>}
       </div>
+
       {renderUploader("light", previewLight)}
       {renderUploader("dark", previewDark)}
 
-      <div className="flex justify-end gap-3">
-        <Button type="button" variant="outline" className="w-24" onClick={onCancel}>
+      <div className="flex justify-end gap-3 pt-2">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-24 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+          onClick={onCancel}
+        >
           Cancelar
         </Button>
-        <Button type="submit" className="w-24" disabled={isLoading}>
+        <Button
+          type="submit"
+          className="w-24 bg-[#6c72ff] hover:bg-[#5a60d6] text-white"
+          disabled={isLoading}
+        >
           {isLoading ? <CircleNotchIcon className="animate-spin" /> : "Guardar"}
         </Button>
       </div>

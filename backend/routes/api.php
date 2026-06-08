@@ -195,6 +195,15 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     // MODERATOR WORK EXPERIENCE REPORT APIS
     Route::get('/moderator/reports/work-experiences', [WorkExperienceReportController::class, 'index']);
 });
+use App\Http\Controllers\TechnicalSkillCatalogController;
+
+Route::middleware('auth:api')->group(function () {
+
+    // MODERATOR TECHNICAL SKILL CATALOG APIS
+    // Api: http://localhost:8000/api/moderator/technical-skills/{id}/toggle-status
+    Route::patch('/moderator/technical-skills/{id}/toggle-status', [TechnicalSkillCatalogController::class, 'toggleStatus']);
+
+});
 
 use App\Http\Controllers\TechnicalSkillReportController;
 
