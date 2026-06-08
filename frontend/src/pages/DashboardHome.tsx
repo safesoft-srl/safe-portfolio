@@ -42,6 +42,17 @@ export default function DashboardHome() {
     return Math.round((score / totalCriteria) * 100);
   };
 
+  const getMissingSections = (data: ProfileData) => {
+    const missing = [];
+    if (!data.bio || data.bio.trim().length === 0) missing.push("Biografía");
+    if (!data.profession || data.profession.trim().length === 0) missing.push("Profesión");
+    if (!data.projects_count || data.projects_count === 0) missing.push("Proyectos");
+    if (!data.work_experiences_count || data.work_experiences_count === 0) missing.push("Experiencia");
+    if (!data.portfolio_skills_count || data.portfolio_skills_count === 0) missing.push("Habilidades");
+    if (!data.academyc_trainings_count || data.academyc_trainings_count === 0) missing.push("Formación Académica");
+    return missing;
+  };
+
   const validatePortfolioUrl = (value: string) => {
     const trimmed = value.trim();
     if (!trimmed) return "";
@@ -122,6 +133,7 @@ export default function DashboardHome() {
   }, [idPortfolio]);
 
   const completeness = portfolioData ? calculateCompleteness(portfolioData) : 0;
+  const missingSections = portfolioData ? getMissingSections(portfolioData) : [];
 
   if (loadingData) {
     return (
@@ -156,11 +168,17 @@ export default function DashboardHome() {
                 <ChartPieSlice size={24} weight="fill" />
                 <h2 className="text-lg font-bold text-white">Progreso del Portafolio</h2>
               </div>
-              <p className="text-sm text-slate-400 max-w-[80%]">
-                {completeness === 100
-                  ? "¡Felicidades! Tu portafolio está completamente optimizado y listo para brillar."
+              <p className="text-sm text-slate-400 max-w-[80%] mb-2">
+                {completeness === 100 
+                  ? "¡Felicidades! Tu portafolio está completamente optimizado y listo para brillar." 
                   : "Completa todas las secciones principales para aumentar tus posibilidades de destacar."}
               </p>
+              {missingSections.length > 0 && (
+                <div className="mt-2 text-xs text-slate-400">
+                  <span className="font-semibold text-slate-300">Te falta añadir: </span>
+                  {missingSections.join(", ")}
+                </div>
+              )}
             </div>
 
             <div className="mt-8">
