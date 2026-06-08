@@ -85,7 +85,7 @@ export default function PortfolioCard({
             </h3>
             <p className="text-xs text-slate-300">{portfolio.profession || "Profesión ejemplo"}</p>
             <p
-              className={`mt-2 text-xs text-sidebar-foreground ${
+              className={`mt-2 text-xs text-sidebar-foreground break-words line-clamp-3 ${
                 isListView ? "max-w-2xl lg:pr-8" : "max-w-[36rem]"
               }`}
             >

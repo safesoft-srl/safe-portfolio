@@ -15,6 +15,12 @@ export type ProfileData = {
   url_portfolio: string;
   github_username?: string | null;
   linkedin_url?: string | null;
+  projects_count?: number;
+  portfolio_skills_count?: number;
+  soft_skills_count?: number;
+  work_experiences_count?: number;
+  academyc_trainings_count?: number;
+  courses_count?: number;
 };
 
 const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
@@ -30,6 +36,12 @@ const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
   url_portfolio: payload?.url_portfolio ?? "",
   github_username: payload?.github_username ?? null,
   linkedin_url: payload?.linkedin_url ?? null,
+  projects_count: payload?.projects_count ?? 0,
+  portfolio_skills_count: payload?.portfolio_skills_count ?? 0,
+  soft_skills_count: payload?.soft_skills_count ?? 0,
+  work_experiences_count: payload?.work_experiences_count ?? 0,
+  academyc_trainings_count: payload?.academyc_trainings_count ?? 0,
+  courses_count: payload?.courses_count ?? 0,
 });
 
 const unwrapData = (responseData: unknown): ProfileDataType | undefined => {
