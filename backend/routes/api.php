@@ -12,6 +12,7 @@ use App\Http\Controllers\SkillProjectController;
 use App\Http\Controllers\SoftSkillController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::post('/register', [RegisterAccountController::class, 'register']);
 // Api   http://localhost:8000/api/register   (Para registrar nuevos usuarios)  JSON(name,email,password)
 Route::post('/verify-email', [EmailVerificationController::class, 'verifyEmail']);
@@ -201,5 +202,22 @@ use App\Http\Controllers\TechnicalSkillReportController;
 Route::middleware('auth:api')->group(function () {
 
     // MODERATOR TECHNICAL SKILL REPORT APIS
+    Route::get('/moderator/reports/technical-skills', [TechnicalSkillReportController::class, 'index']);
+});
+
+use App\Http\Controllers\TechnicalSkillCatalogController;
+
+Route::middleware('auth:api')->group(function () {
+    
+    // MODERATOR TECHNICAL SKILL CATALOG APIS
+    // Api: http://localhost:8000/api/moderator/technical-skills/{id}/toggle-status
+    Route::patch('/moderator/technical-skills/{id}/toggle-status', [TechnicalSkillCatalogController::class, 'toggleStatus']);
+    
+});
+
+use App\Http\Controllers\TechnicalSkillReportController;
+
+Route::middleware('auth:api')->group(function () {
+    // ... otras rutas
     Route::get('/moderator/reports/technical-skills', [TechnicalSkillReportController::class, 'index']);
 });
