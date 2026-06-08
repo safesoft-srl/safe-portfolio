@@ -19,17 +19,23 @@ export function useProjectReport() {
       setLoading(true);
       const report = await getProjectReport(currentDateFrom, currentDateTo);
 
-      {/*Si hay selección de skills, filtrar por proyectos que tengan al menos una de las skills seleccionadas*/}
+      {
+        /*Si hay selección de skills, filtrar por proyectos que tengan al menos una de las skills seleccionadas*/
+      }
       let result = report;
 
       if (selectedSkills && selectedSkills.length > 0) {
         const selectedIds = selectedSkills.map((s) => s.id);
-        result = result.filter((project) =>
-          Array.isArray(project.skill_projects) && project.skill_projects.some((sk) => selectedIds.includes(sk.id))
+        result = result.filter(
+          (project) =>
+            Array.isArray(project.skill_projects) &&
+            project.skill_projects.some((sk) => selectedIds.includes(sk.id))
         );
       }
 
-      {/*Si hay fechas seleccionadas, filtrar por start_date*/}
+      {
+        /*Si hay fechas seleccionadas, filtrar por start_date*/
+      }
       if (currentDateFrom || currentDateTo) {
         const fromTime = currentDateFrom ? new Date(currentDateFrom).getTime() : null;
         const toTime = currentDateTo ? new Date(currentDateTo).getTime() : null;

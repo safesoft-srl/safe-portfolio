@@ -19,20 +19,28 @@ export default function CourseReportTable({ loading, courses }: Props) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold text-slate-200">
-        
-      </h2>
+      <h2 className="text-lg font-bold text-slate-200"></h2>
       <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-[#2a2f55] bg-white/5">
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase text-center">Fecha</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[18%]">Nombre del usuario</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[26%]">Título</th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase text-center">
+                  Fecha
+                </th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[18%]">
+                  Nombre del usuario
+                </th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[26%]">
+                  Título
+                </th>
                 <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[18%]">Área</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[22%]">Institución</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[18%]">Nivel</th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[22%]">
+                  Institución
+                </th>
+                <th className="p-4 text-xs font-semibold text-slate-400 uppercase w-[18%]">
+                  Nivel
+                </th>
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -54,7 +62,9 @@ export default function CourseReportTable({ loading, courses }: Props) {
                     key={course.id}
                     className="border-b border-[#2a2f55] hover:bg-white/5 transition-colors"
                   >
-                    <td className="p-4 text-slate-300 text-center">{formatDate(course.certificate_date ?? course.created_at)}</td>
+                    <td className="p-4 text-slate-300 text-center">
+                      {formatDate(course.certificate_date ?? course.created_at)}
+                    </td>
                     <td className="p-4 text-slate-300">{course.user_name ?? "—"}</td>
                     <td className="p-4 font-medium text-white">{course.title}</td>
                     <td className="p-4 text-slate-300">{course.area || "—"}</td>

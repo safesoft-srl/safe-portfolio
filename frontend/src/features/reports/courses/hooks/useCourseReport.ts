@@ -11,7 +11,11 @@ export function useCourseReport() {
   const [dateTo, setDateTo] = useState("");
   const [courses, setCourses] = useState<CourseReportRecord[]>([]);
 
-  const loadCourseReport = async (currentArea = area, currentDateFrom = dateFrom, currentDateTo = dateTo) => {
+  const loadCourseReport = async (
+    currentArea = area,
+    currentDateFrom = dateFrom,
+    currentDateTo = dateTo
+  ) => {
     try {
       setLoading(true);
       const report = await getCourseReport();
@@ -20,7 +24,9 @@ export function useCourseReport() {
       const normalizedArea = (currentArea || "").trim().toLowerCase();
 
       if (normalizedArea) {
-        result = result.filter((course) => (course.area || "").toLowerCase().includes(normalizedArea));
+        result = result.filter((course) =>
+          (course.area || "").toLowerCase().includes(normalizedArea)
+        );
       }
 
       if (currentDateFrom || currentDateTo) {

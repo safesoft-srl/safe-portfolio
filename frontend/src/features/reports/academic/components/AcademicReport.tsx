@@ -6,7 +6,17 @@ import AcademicReportFilters from "./AcademicReportFilters";
 import AcademicReportTable from "./AcademicReportTable";
 
 export default function AcademicReport() {
-  const { loading, title, dateFrom, dateTo, academics, setTitle, setDateFrom, setDateTo, loadAcademicReport } = useAcademicReport();
+  const {
+    loading,
+    title,
+    dateFrom,
+    dateTo,
+    academics,
+    setTitle,
+    setDateFrom,
+    setDateTo,
+    loadAcademicReport,
+  } = useAcademicReport();
 
   const handleExport = async () => {
     await generateAcademicReportPdf({

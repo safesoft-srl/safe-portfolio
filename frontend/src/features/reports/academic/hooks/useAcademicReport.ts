@@ -11,7 +11,11 @@ export function useAcademicReport() {
   const [dateTo, setDateTo] = useState("");
   const [academics, setAcademics] = useState<AcademicReportRecord[]>([]);
 
-  const loadAcademicReport = async (currentTitle = title, currentDateFrom = dateFrom, currentDateTo = dateTo) => {
+  const loadAcademicReport = async (
+    currentTitle = title,
+    currentDateFrom = dateFrom,
+    currentDateTo = dateTo
+  ) => {
     try {
       setLoading(true);
       const report = await getAcademicReport();

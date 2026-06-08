@@ -37,7 +37,9 @@ export default function CoursesReport() {
             Consulta los cursos realizados y filtra por área.
           </p>
         </div>
-        <Button size="lg" onClick={handleExport} disabled={!dateFrom || !dateTo}>Exportar a PDF</Button>
+        <Button size="lg" onClick={handleExport} disabled={!dateFrom || !dateTo}>
+          Exportar a PDF
+        </Button>
       </div>
 
       <CourseReportFilters

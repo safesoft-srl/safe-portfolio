@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     minHeight: 26,
   },
   headerRow: {
-    backgroundColor: "#ffffff", 
+    backgroundColor: "#ffffff",
   },
   cellBase: {
     paddingVertical: 6,
@@ -113,17 +113,17 @@ export default function CourseReportPdf({ data }: Props) {
     <Document>
       <Page size="A4" style={styles.page}>
         <Text style={styles.title}>Reporte de Cursos realizados</Text>
-        <Text style={styles.meta}>Reporte generado el {new Date(data.generatedAt).toLocaleString("es-ES")}</Text>
-        <Text style={styles.meta}>De: {data.filters.dateFrom || "-"} a: {data.filters.dateTo || "-"}</Text>
+        <Text style={styles.meta}>
+          Reporte generado el {new Date(data.generatedAt).toLocaleString("es-ES")}
+        </Text>
+        <Text style={styles.meta}>
+          De: {data.filters.dateFrom || "-"} a: {data.filters.dateTo || "-"}
+        </Text>
 
         <View style={styles.section}>
           {/* El subtítulo solo se renderiza si se filtró por un área específica */}
-          {hasAreaFilter && (
-            <Text style={styles.subtitle}>
-              {data.filters.area}
-            </Text>
-          )}
-          
+          {hasAreaFilter && <Text style={styles.subtitle}>{data.filters.area}</Text>}
+
           <View style={styles.table}>
             {/* Encabezado ordenado según los requerimientos */}
             <View style={[styles.row, styles.headerRow]}>
@@ -131,7 +131,9 @@ export default function CourseReportPdf({ data }: Props) {
               <Text style={[styles.cellBase, styles.userColumn, styles.headerCell]}>Nombre</Text>
               <Text style={[styles.cellBase, styles.titleColumn, styles.headerCell]}>Título</Text>
               <Text style={[styles.cellBase, styles.areaColumn, styles.headerCell]}>Área</Text>
-              <Text style={[styles.cellBase, styles.institutionColumn, styles.headerCell]}>Institución</Text>
+              <Text style={[styles.cellBase, styles.institutionColumn, styles.headerCell]}>
+                Institución
+              </Text>
               <Text style={[styles.cellBase, styles.levelColumn, styles.headerCell]}>Nivel</Text>
             </View>
 
@@ -140,11 +142,15 @@ export default function CourseReportPdf({ data }: Props) {
             ) : (
               data.courses.map((c) => (
                 <View key={c.id} style={styles.row}>
-                  <Text style={[styles.cellBase, styles.dateColumn]}>{formatDate(c.certificate_date ?? c.created_at)}</Text>
+                  <Text style={[styles.cellBase, styles.dateColumn]}>
+                    {formatDate(c.certificate_date ?? c.created_at)}
+                  </Text>
                   <Text style={[styles.cellBase, styles.userColumn]}>{c.user_name || "—"}</Text>
                   <Text style={[styles.cellBase, styles.titleColumn]}>{c.title}</Text>
                   <Text style={[styles.cellBase, styles.areaColumn]}>{c.area || "—"}</Text>
-                  <Text style={[styles.cellBase, styles.institutionColumn]}>{c.institution_name || "—"}</Text>
+                  <Text style={[styles.cellBase, styles.institutionColumn]}>
+                    {c.institution_name || "—"}
+                  </Text>
                   <Text style={[styles.cellBase, styles.levelColumn]}>{c.level || "—"}</Text>
                 </View>
               ))

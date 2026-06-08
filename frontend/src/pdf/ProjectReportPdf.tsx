@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     minHeight: 26,
   },
   headerRow: {
-    backgroundColor: "#ffffff", 
+    backgroundColor: "#ffffff",
   },
   cellBase: {
     paddingVertical: 6,
@@ -129,21 +129,27 @@ export default function ProjectReportPdf({ data }: Props) {
 
         <View style={styles.section}>
           {hasSkills && (
-            <Text style={styles.subtitle}>
-              {data.filters.selectedSkills.join(", ")}
-            </Text>
+            <Text style={styles.subtitle}>{data.filters.selectedSkills.join(", ")}</Text>
           )}
-          
+
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
               <Text style={[styles.cellBase, styles.dateColumn, styles.headerCell]}>Fecha</Text>
-              <Text style={[styles.cellBase, styles.userColumn, styles.headerCell]}>Nombre del usuario</Text>
-              <Text style={[styles.cellBase, styles.emailColumn, styles.headerCell]}>Correo del usuario</Text>
-              <Text style={[styles.cellBase, styles.nameColumn, styles.headerCell]}>Nombre del proyecto</Text>
+              <Text style={[styles.cellBase, styles.userColumn, styles.headerCell]}>
+                Nombre del usuario
+              </Text>
+              <Text style={[styles.cellBase, styles.emailColumn, styles.headerCell]}>
+                Correo del usuario
+              </Text>
+              <Text style={[styles.cellBase, styles.nameColumn, styles.headerCell]}>
+                Nombre del proyecto
+              </Text>
             </View>
 
             {data.projects.length === 0 ? (
-              <Text style={styles.empty}>No se encontraron proyectos con los filtros aplicados.</Text>
+              <Text style={styles.empty}>
+                No se encontraron proyectos con los filtros aplicados.
+              </Text>
             ) : (
               data.projects.map((project) => (
                 <View key={project.id} style={styles.row}>
