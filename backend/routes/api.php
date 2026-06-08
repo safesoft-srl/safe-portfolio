@@ -126,6 +126,7 @@ use App\Http\Controllers\Admin\ModeratorController;
 Route::middleware(['auth:api', 'admin'])->prefix('admin')->group(function () {
     Route::get('/moderators', [ModeratorController::class, 'index']);
     Route::post('/moderators', [ModeratorController::class, 'store']);
+    Route::put('/moderators/{id}', [ModeratorController::class, 'update']);
     Route::delete('/moderators/{id}', [ModeratorController::class, 'destroy']);
 });
 
