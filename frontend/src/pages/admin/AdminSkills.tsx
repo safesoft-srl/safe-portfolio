@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { TSModCatalogo } from "@/components/Skills/TSModCatalogo";
 import TechnicalSkillReportPage from "@/components/moderator_TechnicalSkills/TechinicalSkillReportPage";
@@ -6,7 +5,6 @@ import TechnicalSkillReportPage from "@/components/moderator_TechnicalSkills/Tec
 type TabType = "catalogo" | "solicitudes" | "reportes";
 
 export default function AdminSkills() {
- 
   const [activeTab, setActiveTab] = useState<TabType>("catalogo");
 
   return (
@@ -32,7 +30,7 @@ export default function AdminSkills() {
           >
             Catálogo
           </button>
-          
+
           <button
             onClick={() => setActiveTab("reportes")}
             className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
@@ -44,7 +42,7 @@ export default function AdminSkills() {
             Reportes
           </button>
         </div>
-           
+
         <div className="pt-4 animate-in fade-in duration-300">
           {activeTab === "catalogo" && <TSModCatalogo />}
           {activeTab === "reportes" && <TechnicalSkillReportPage />}

@@ -14,11 +14,11 @@ class TechnicalSkill extends Model
         'is_active',
         'url_light',
         'url_dark',
-        'is_active', 
+        'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean', 
+        'is_active' => 'boolean',
     ];
 
     protected $hidden = ['pivot'];

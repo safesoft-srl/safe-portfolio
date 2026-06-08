@@ -12,7 +12,7 @@ const CATEGORIES = ["Frontend", "Backend", "DevOps"];
 export function TechnicalSkillSuggestModal({ isOpen, onClose }: TechnicalSkillSuggestModalProps) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -30,7 +30,6 @@ export function TechnicalSkillSuggestModal({ isOpen, onClose }: TechnicalSkillSu
     setSuccess(null);
 
     try {
-
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/technical-skills/suggestions`, {
         method: "POST",
         headers: {
@@ -42,7 +41,7 @@ export function TechnicalSkillSuggestModal({ isOpen, onClose }: TechnicalSkillSu
 
       if (res.ok) {
         setSuccess("¡Gracias! Tu sugerencia ha sido enviada a revisión.");
-        
+
         setTimeout(() => {
           handleClose();
         }, 2000);
@@ -72,7 +71,6 @@ export function TechnicalSkillSuggestModal({ isOpen, onClose }: TechnicalSkillSu
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-md bg-[#13152e] border border-[#232555] rounded-3xl p-8 shadow-2xl flex flex-col">
-        
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#6c72ff]/10 flex items-center justify-center border border-[#6c72ff]/30">
@@ -90,7 +88,8 @@ export function TechnicalSkillSuggestModal({ isOpen, onClose }: TechnicalSkillSu
         </div>
 
         <p className="text-slate-400 text-sm mb-6">
-          ¿No encuentras la tecnología que buscas? Sugiérela y nuestros moderadores la revisarán para agregarla al catálogo global.
+          ¿No encuentras la tecnología que buscas? Sugiérela y nuestros moderadores la revisarán
+          para agregarla al catálogo global.
         </p>
 
         {success ? (
@@ -125,7 +124,9 @@ export function TechnicalSkillSuggestModal({ isOpen, onClose }: TechnicalSkillSu
                 className="w-full h-12 bg-[#1c1f38] text-white border border-[#232555] rounded-xl px-4 focus:ring-2 focus:ring-[#6c72ff] outline-none appearance-none cursor-pointer font-sans"
               >
                 {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
                 ))}
               </select>
             </div>

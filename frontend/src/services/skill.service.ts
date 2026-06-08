@@ -44,12 +44,15 @@ export async function createSkill(data: {
   return response.data;
 }
 
-export const updateSkill = async (id: number, data: {
-  name: string;
-  category: string;
-  logo_light?: File;
-  logo_dark?: File;
-}) => {
+export const updateSkill = async (
+  id: number,
+  data: {
+    name: string;
+    category: string;
+    logo_light?: File;
+    logo_dark?: File;
+  }
+) => {
   const formData = new FormData();
   formData.append("_method", "PUT");
   formData.append("name", data.name);

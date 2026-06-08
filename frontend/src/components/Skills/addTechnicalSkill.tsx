@@ -30,8 +30,6 @@ export function AddTechnicalSkill({
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  
-
   useEffect(() => {
     const fetchCatalog = async () => {
       if (!isOpen) return;

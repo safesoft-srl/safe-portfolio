@@ -39,13 +39,13 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
       category: "",
       logo_light: undefined,
       logo_dark: undefined,
-    }
+    },
   });
 
   const isEditMode = !!initialData?.id;
   const [previewLight, setPreviewLight] = useState<string | null>(initialData?.urls?.light || null);
   const [previewDark, setPreviewDark] = useState<string | null>(initialData?.urls?.dark || null);
-  
+
   useEffect(() => {
     if (!initialData) return;
     reset({
@@ -54,7 +54,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
       logo_light: undefined,
       logo_dark: undefined,
     });
-  }, [initialData,reset]);
+  }, [initialData, reset]);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>, type: "light" | "dark") => {
     const file = e.target.files?.[0];
@@ -146,10 +146,13 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
   };
 
   return (
-    <form onSubmit={(e) => {
-    console.log("submit");
-    handleSubmit(onSubmitForm)(e);
-  }} className="space-y-6">
+    <form
+      onSubmit={(e) => {
+        console.log("submit");
+        handleSubmit(onSubmitForm)(e);
+      }}
+      className="space-y-6"
+    >
       <div className="space-y-2">
         <Label className="text-slate-300">Nombre de la Skill</Label>
         <Input
@@ -168,9 +171,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
           disabled={isEditMode}
           className="flex h-10 w-full rounded-md border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#6c72ff]"
         >
-          <option value="">
-            Selecciona una categoría
-          </option>
+          <option value="">Selecciona una categoría</option>
 
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -186,10 +187,19 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
       {renderUploader("dark", previewDark)}
 
       <div className="flex justify-end gap-3 pt-2">
-        <Button type="button" variant="outline" className="w-24 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white" onClick={onCancel}>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-24 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+          onClick={onCancel}
+        >
           Cancelar
         </Button>
-        <Button type="submit" className="w-24 bg-[#6c72ff] hover:bg-[#5a60d6] text-white" disabled={isLoading}>
+        <Button
+          type="submit"
+          className="w-24 bg-[#6c72ff] hover:bg-[#5a60d6] text-white"
+          disabled={isLoading}
+        >
           {isLoading ? <CircleNotchIcon className="animate-spin" /> : "Guardar"}
         </Button>
       </div>

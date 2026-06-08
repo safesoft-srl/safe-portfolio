@@ -6,10 +6,9 @@ import { SkillCardCatalog } from "./SkillCardCatalog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { SkillForm } from "@/components/SkillForm";
 import { createSkill, updateSkill } from "@/services/skill.service";
-import type {Skill as TechnicalSkill } from "@/services/skill.service";
+import type { Skill as TechnicalSkill } from "@/services/skill.service";
 
 import { toast } from "sonner";
-
 
 export interface SkillSubmitData {
   name: string;
@@ -26,7 +25,6 @@ export function TSModCatalogo() {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreatingSkill, setIsCreatingSkill] = useState(false);
-
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [skillToEdit, setSkillToEdit] = useState<TechnicalSkill | null>(null);
@@ -53,14 +51,19 @@ export function TSModCatalogo() {
 
   const handleToggleStatus = async (id: number, currentStatus: boolean) => {
     const action = currentStatus ? "deshabilitar" : "habilitar";
-    const confirm = window.confirm(`¿Estás seguro de que deseas ${action} esta habilidad del catálogo?`);
+    const confirm = window.confirm(
+      `¿Estás seguro de que deseas ${action} esta habilidad del catálogo?`
+    );
     if (!confirm) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/moderator/technical-skills/${id}/toggle-status`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/moderator/technical-skills/${id}/toggle-status`,
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (res.ok) {
         await loadSkills();
@@ -93,7 +96,6 @@ export function TSModCatalogo() {
   const filteredSkills = skills.filter((skill) => {
     const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
 
-
     if (activeTab === "Deshabilitadas") {
       return matchesSearch && !skill.is_active;
     }
@@ -118,10 +120,11 @@ export function TSModCatalogo() {
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${activeTab === cat
-                ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
-                : "bg-[#13152e] border border-[#232555] text-slate-400 hover:text-slate-200"
-                }`}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                activeTab === cat
+                  ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
+                  : "bg-[#13152e] border border-[#232555] text-slate-400 hover:text-slate-200"
+              }`}
             >
               {cat}
             </button>
@@ -191,7 +194,6 @@ export function TSModCatalogo() {
                         border: "1px solid #8b90ff",
                       },
                     });
-
                   } else {
                     await createSkill(data);
                     toast.success("La tecnologia se ha agregado correctamente.", {
@@ -206,7 +208,11 @@ export function TSModCatalogo() {
                   await loadSkills();
                 } catch (error) {
                   console.error("Error creating skill:", error);
-                  toast.error(skillToEdit ? "Error al actualizar la tecnología." : "Error al agregar la tecnología.");
+                  toast.error(
+                    skillToEdit
+                      ? "Error al actualizar la tecnología."
+                      : "Error al agregar la tecnología."
+                  );
                 } finally {
                   setIsCreatingSkill(false);
                 }

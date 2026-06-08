@@ -1,9 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  PencilSimpleIcon, 
-  EyeSlash, 
-  Eye 
-} from "@phosphor-icons/react";
+import { PencilSimpleIcon, EyeSlash, Eye } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -32,19 +28,13 @@ interface SkillCardProps {
   onToggleStatus?: (id: number, currentStatus: boolean) => void;
 }
 
-export function SkillCardCatalog({
-  skill,
-  onEdit,
-  onToggleStatus,
-}: SkillCardProps) {
+export function SkillCardCatalog({ skill, onEdit, onToggleStatus }: SkillCardProps) {
   const { id, name, category, url_dark, is_active } = skill;
 
   return (
     <Card
       className={`relative flex flex-col bg-[#13152e] border ${
-        is_active
-          ? "border-[#232555] hover:border-[#6c72ff]/50"
-          : "border-red-900/50 opacity-80"
+        is_active ? "border-[#232555] hover:border-[#6c72ff]/50" : "border-red-900/50 opacity-80"
       } rounded-2xl overflow-hidden shadow-2xl transition-all group h-full`}
     >
       <CardContent className="p-6 flex flex-col items-center text-center grow">
@@ -57,32 +47,22 @@ export function SkillCardCatalog({
             <img
               src={url_dark}
               alt={name}
-              className={`w-10 h-10 object-contain ${
-                !is_active ? "grayscale opacity-50" : ""
-              }`}             
+              className={`w-10 h-10 object-contain ${!is_active ? "grayscale opacity-50" : ""}`}
             />
           ) : (
             <span
-              className={`font-bold text-2xl ${
-                is_active ? "text-[#6c72ff]" : "text-slate-600"
-              }`}
+              className={`font-bold text-2xl ${is_active ? "text-[#6c72ff]" : "text-slate-600"}`}
             >
               {name.charAt(0)}
             </span>
           )}
         </div>
 
-        <h3
-          className={`font-bold text-xl mb-1 ${
-            is_active ? "text-white" : "text-slate-500"
-          }`}
-        >
+        <h3 className={`font-bold text-xl mb-1 ${is_active ? "text-white" : "text-slate-500"}`}>
           {name}
         </h3>
 
-        <p className="text-slate-500 text-xs uppercase tracking-widest">
-          {category}
-        </p>
+        <p className="text-slate-500 text-xs uppercase tracking-widest">{category}</p>
 
         <div className="w-full mt-6 pt-4 border-t border-[#232555] flex gap-2">
           <Button
@@ -93,11 +73,7 @@ export function SkillCardCatalog({
             }}
             className="flex-1 bg-[#1c1f38] border-[#232555] text-slate-300 hover:bg-[#6c72ff] hover:text-white transition-colors h-9 px-0"
           >
-            <PencilSimpleIcon
-              size={16}
-              weight="bold"
-              className="mr-2"
-            />
+            <PencilSimpleIcon size={16} weight="bold" className="mr-2" />
             Editar
           </Button>
 
@@ -126,9 +102,7 @@ export function SkillCardCatalog({
             <AlertDialogContent className="bg-[#13152e] border border-[#232555]">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-white">
-                  {is_active
-                    ? "¿Desactivar tecnología?"
-                    : "¿Activar tecnología?"}
+                  {is_active ? "¿Desactivar tecnología?" : "¿Activar tecnología?"}
                 </AlertDialogTitle>
 
                 <AlertDialogDescription className="text-slate-400">
@@ -144,9 +118,7 @@ export function SkillCardCatalog({
                 </AlertDialogCancel>
 
                 <AlertDialogAction
-                  onClick={() =>
-                    onToggleStatus?.(id, is_active)
-                  }
+                  onClick={() => onToggleStatus?.(id, is_active)}
                   className={`${
                     is_active
                       ? "bg-amber-600 hover:bg-amber-700"

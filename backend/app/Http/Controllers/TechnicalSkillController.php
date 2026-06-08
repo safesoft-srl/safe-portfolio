@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TechnicalSkill;
-use App\Http\Resources\TechnicalSkillResource;
-use Illuminate\Http\Request;
-use App\Services\ImageUploadService;
 use App\Constants\ApiResponse;
 use App\Constants\ResponseMessages;
+use App\Http\Resources\TechnicalSkillResource;
+use App\Models\TechnicalSkill;
+use App\Services\ImageUploadService;
+use Illuminate\Http\Request;
 
 class TechnicalSkillController extends Controller
 {
     public function __construct(
         private ImageUploadService $imageUploadService
     ) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -76,7 +77,7 @@ class TechnicalSkillController extends Controller
     {
         $skill = TechnicalSkill::find($id);
 
-        if (!$skill) {
+        if (! $skill) {
             return response()->json(['message' => 'Habilidad técnica no encontrada.'], 404);
         }
 
@@ -90,7 +91,7 @@ class TechnicalSkillController extends Controller
     {
         $skill = TechnicalSkill::find($id);
 
-        if (!$skill) {
+        if (! $skill) {
             return response()->json(['message' => 'Habilidad técnica no encontrada.'], 404);
         }
 
@@ -119,7 +120,6 @@ class TechnicalSkillController extends Controller
         );
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
@@ -127,7 +127,7 @@ class TechnicalSkillController extends Controller
     {
         $skill = TechnicalSkill::find($id);
 
-        if (!$skill) {
+        if (! $skill) {
             return response()->json(['message' => 'Habilidad técnica no encontrada.'], 404);
         }
 
