@@ -46,7 +46,14 @@ class PortfolioService
 
     public function getPortfolio(int $id)
     {
-        return Portfolio::findOrFail($id);
+        return Portfolio::withCount([
+            'projects',
+            'portfolioSkills',
+            'softSkills',
+            'workExperiences',
+            'academycTrainings',
+            'courses',
+        ])->findOrFail($id);
     }
 
     public function getByUserId(int $userId)

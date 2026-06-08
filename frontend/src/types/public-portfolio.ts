@@ -99,6 +99,12 @@ export type ProfileData = {
   academyc_trainings: AcademicTraining[];
   courses: Course[];
   projects: Project[];
+  projects_count?: number;
+  portfolio_skills_count?: number;
+  soft_skills_count?: number;
+  work_experiences_count?: number;
+  academyc_trainings_count?: number;
+  courses_count?: number;
 };
 export type ApiProfilePayload = {
   success: boolean;
