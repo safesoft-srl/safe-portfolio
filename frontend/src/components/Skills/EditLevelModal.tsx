@@ -38,7 +38,6 @@ export function EditLevelModal({ isOpen, skill, onClose, onSave }: EditLevelModa
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-md bg-[#13152e] border border-[#232555] rounded-3xl p-8 shadow-2xl">
-        {/* CABECERA */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-white">
             Editar nivel de {skill.technical_skill?.name || "Habilidad"}
@@ -54,7 +53,6 @@ export function EditLevelModal({ isOpen, skill, onClose, onSave }: EditLevelModa
 
         <p className="text-slate-400 text-sm mb-6">Selecciona tu nivel de dominio:</p>
 
-        {/* LISTA DE NIVELES */}
         <div className="flex flex-col gap-3">
           {LEVELS.map((level) => {
             const isSelected = selectedLevel === level;
@@ -76,7 +74,6 @@ export function EditLevelModal({ isOpen, skill, onClose, onSave }: EditLevelModa
           })}
         </div>
 
-        {/* BOTÓN DE GUARDAR */}
         <Button
           variant="default"
           disabled={!selectedLevel || isSaving || selectedLevel === skill.level}
