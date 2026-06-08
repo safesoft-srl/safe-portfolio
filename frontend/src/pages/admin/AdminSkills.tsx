@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { TSModCatalogo } from "@/components/Skills/TSModCatalogo";
-import { TSModReportes } from "@/components/Skills/TSModReportes";
+import TechnicalSkillReportPage from "@/components/moderator_TechnicalSkills/TechinicalSkillReportPage";
 
 type TabType = "catalogo" | "solicitudes" | "reportes";
 
@@ -12,8 +12,6 @@ export default function AdminSkills() {
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-slate-100 p-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
-        
-        {/* Cabecera principal */}
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight font-heading">
             Moderación de habilidades técnicas
@@ -23,7 +21,6 @@ export default function AdminSkills() {
           </p>
         </div>
 
-        {/* Navegación de tabs */}
         <div className="flex flex-wrap gap-3 border-b border-[#232555] pb-4">
           <button
             onClick={() => setActiveTab("catalogo")}
@@ -47,13 +44,11 @@ export default function AdminSkills() {
             Reportes
           </button>
         </div>
-
-        
+           
         <div className="pt-4 animate-in fade-in duration-300">
           {activeTab === "catalogo" && <TSModCatalogo />}
-          {activeTab === "reportes" && <TSModReportes />}
+          {activeTab === "reportes" && <TechnicalSkillReportPage />}
         </div>
-
       </div>
     </div>
   );

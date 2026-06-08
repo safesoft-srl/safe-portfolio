@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@phosphor-icons/react";
-import { SkillForm } from "@/components/SkillForm";
-import { SkillCard } from "./SkillCard";
+import { SkillCardCatalog } from "./SkillCardCatalog";
 
-// Tipado actualizado respetando el objeto "urls" que envía tu backend
-export interface TechnicalSkill {
-  id: number;
-  name: string;
-  category: string;
-  urls: { light: string; dark: string } | null;
-  is_active: boolean; // Agregamos la columna que creamos en la DB
-}
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { SkillForm } from "@/components/SkillForm";
+import { createSkill, updateSkill } from "@/services/skill.service";
+import type {Skill as TechnicalSkill } from "@/services/skill.service";
+
+import { toast } from "sonner";
+
 
 export interface SkillSubmitData {
   name: string;
@@ -27,10 +25,10 @@ export function TSModCatalogo() {
   const [activeTab, setActiveTab] = useState("Todas");
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreatingSkill, setIsCreatingSkill] = useState(false);
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  // Guardamos la habilidad completa cuando queremos editar
   const [skillToEdit, setSkillToEdit] = useState<TechnicalSkill | null>(null);
 
   const token = localStorage.getItem("token");
@@ -40,7 +38,7 @@ export function TSModCatalogo() {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/technical-skills`);
       const data = await res.json();
-      
+
       setSkills(Array.isArray(data) ? data : data.data || []);
     } catch (error: unknown) {
       console.error("Error cargando el catálogo:", error);
@@ -53,45 +51,6 @@ export function TSModCatalogo() {
     loadSkills();
   }, []);
 
-  const handleSaveSkill = async (formData: SkillSubmitData) => {
-    setIsSubmitting(true);
-    try {
-      const data = new FormData();
-      data.append("name", formData.name);
-      data.append("category", formData.category);
-      if (formData.logo_light) data.append("logo_light", formData.logo_light);
-      if (formData.logo_dark) data.append("logo_dark", formData.logo_dark);
-
-      let url = `${import.meta.env.VITE_API_URL}/api/technical-skills`;
-      const method = "POST";
-
-    
-      if (skillToEdit) {
-        url = `${import.meta.env.VITE_API_URL}/api/technical-skills/${skillToEdit.id}`;
-        data.append("_method", "PUT");
-      }
-
-      const res = await fetch(url, {
-        method: method,
-        headers: { Authorization: `Bearer ${token}` },
-        body: data,
-      });
-
-      if (!res.ok) throw new Error("Error al guardar la habilidad");
-
-      closeModal();
-      await loadSkills();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
-      alert("Hubo un error al guardar la habilidad en el catálogo global.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Esta función reemplaza al handleDeleteSkill usando la ruta PATCH
   const handleToggleStatus = async (id: number, currentStatus: boolean) => {
     const action = currentStatus ? "deshabilitar" : "habilitar";
     const confirm = window.confirm(`¿Estás seguro de que deseas ${action} esta habilidad del catálogo?`);
@@ -121,8 +80,8 @@ export function TSModCatalogo() {
     setIsModalOpen(true);
   };
 
-  const openModalForEdit = (skill: unknown) => {
-    setSkillToEdit(skill as TechnicalSkill);
+  const openModalForEdit = (skill: TechnicalSkill) => {
+    setSkillToEdit(skill);
     setIsModalOpen(true);
   };
 
@@ -133,14 +92,14 @@ export function TSModCatalogo() {
 
   const filteredSkills = skills.filter((skill) => {
     const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
-    
-    
+
+
     if (activeTab === "Deshabilitadas") {
-      return matchesSearch && !skill.is_active; 
+      return matchesSearch && !skill.is_active;
     }
-    
+
     const matchesTab = activeTab === "Todas" || skill.category === activeTab;
-    return matchesSearch && matchesTab && skill.is_active; 
+    return matchesSearch && matchesTab && skill.is_active;
   });
 
   if (isLoading) {
@@ -159,11 +118,10 @@ export function TSModCatalogo() {
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                activeTab === cat
-                  ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
-                  : "bg-[#13152e] border border-[#232555] text-slate-400 hover:text-slate-200"
-              }`}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${activeTab === cat
+                ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
+                : "bg-[#13152e] border border-[#232555] text-slate-400 hover:text-slate-200"
+                }`}
             >
               {cat}
             </button>
@@ -178,8 +136,8 @@ export function TSModCatalogo() {
             onChange={(e) => setSearch(e.target.value)}
             className="w-full lg:w-64 h-10 bg-[#13152e] text-white border border-[#232555] rounded-xl px-4 focus:ring-2 focus:ring-[#6c72ff] outline-none placeholder:text-slate-500 font-sans"
           />
-          <Button 
-            onClick={openModalForCreate} 
+          <Button
+            onClick={openModalForCreate}
             className="bg-[#6c72ff] hover:bg-[#5a60d6] text-white font-bold h-10 px-5 rounded-xl shadow-lg shadow-indigo-500/20 shrink-0"
           >
             <PlusIcon weight="bold" className="mr-2" size={16} />
@@ -191,9 +149,8 @@ export function TSModCatalogo() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredSkills.length > 0 ? (
           filteredSkills.map((skill) => (
-            <SkillCard
+            <SkillCardCatalog
               key={skill.id}
-              // Adaptamos el objeto al vuelo para que SkillCard lo lea sin errores
               skill={{
                 id: skill.id,
                 name: skill.name,
@@ -202,7 +159,6 @@ export function TSModCatalogo() {
                 url_dark: skill.urls?.dark,
                 is_active: skill.is_active,
               }}
-              role="moderator"
               onEdit={() => openModalForEdit(skill)}
               onToggleStatus={handleToggleStatus}
             />
@@ -214,29 +170,54 @@ export function TSModCatalogo() {
         )}
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl bg-[#13152e] border border-[#232555] rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-2xl font-bold text-white mb-6 font-heading">
-              {skillToEdit ? `Editar Habilidad: ${skillToEdit.name}` : "Registrar Nueva Habilidad"}
-            </h2>
-            
-            <SkillForm 
-              isLoading={isSubmitting}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-lg bg-slate-900 border-slate-800">
+          <DialogHeader className="border-b border-slate-800 pb-4">
+            <DialogTitle className="text-xl font-bold text-white">
+              {skillToEdit ? "Editar Skill" : "Nueva Skill"}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <SkillForm
+              onSubmit={async (data) => {
+                setIsCreatingSkill(true);
+                try {
+                  if (skillToEdit) {
+                    await updateSkill(skillToEdit.id, data);
+                    toast.success("La tecnologia se ha actualizado correctamente.", {
+                      style: {
+                        background: "#6c72ff",
+                        color: "#ffffff",
+                        border: "1px solid #8b90ff",
+                      },
+                    });
+
+                  } else {
+                    await createSkill(data);
+                    toast.success("La tecnologia se ha agregado correctamente.", {
+                      style: {
+                        background: "#6c72ff",
+                        color: "#ffffff",
+                        border: "1px solid #8b90ff",
+                      },
+                    });
+                  }
+                  closeModal();
+                  await loadSkills();
+                } catch (error) {
+                  console.error("Error creating skill:", error);
+                  toast.error(skillToEdit ? "Error al actualizar la tecnología." : "Error al agregar la tecnología.");
+                } finally {
+                  setIsCreatingSkill(false);
+                }
+              }}
               onCancel={closeModal}
-              onSubmit={handleSaveSkill}
-              // Mapeamos el objeto urls hacia lo que el formulario espera
-              initialData={skillToEdit ? {
-                id: skillToEdit.id,
-                name: skillToEdit.name,
-                category: skillToEdit.category,
-                url_light: skillToEdit.urls?.light,
-                url_dark: skillToEdit.urls?.dark,
-              } : null}
+              isLoading={isCreatingSkill}
+              initialData={skillToEdit}
             />
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
