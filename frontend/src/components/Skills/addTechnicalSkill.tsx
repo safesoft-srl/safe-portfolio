@@ -61,7 +61,7 @@ export function AddTechnicalSkill({
   // Modificamos el filtro para excluir las que tengan is_active === false
   const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter((skill) => {
     if (!skill.name) return false;
-    
+
     // Si explícitamente viene deshabilitada del backend, la ignoramos para el usuario común
     if (skill.is_active === false) return false;
 

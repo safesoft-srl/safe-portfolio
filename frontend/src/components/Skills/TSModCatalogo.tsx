@@ -10,7 +10,7 @@ export interface TechnicalSkill {
   name: string;
   category: string;
   urls: { light: string; dark: string } | null;
-  is_active: boolean; 
+  is_active: boolean;
 }
 
 export interface SkillSubmitData {
