@@ -16,6 +16,7 @@ export type Skill = {
     light: string;
     dark: string;
   };
+  is_active: boolean;
 };
 
 export async function createSkill(data: {
@@ -42,6 +43,29 @@ export async function createSkill(data: {
 
   return response.data;
 }
+
+export const updateSkill = async (id: number, data: {
+  name: string;
+  category: string;
+  logo_light?: File;
+  logo_dark?: File;
+}) => {
+  const formData = new FormData();
+  formData.append("_method", "PUT");
+  formData.append("name", data.name);
+  formData.append("category", data.category);
+
+  if (data.logo_light) {
+    formData.append("logo_light", data.logo_light);
+  }
+
+  if (data.logo_dark) {
+    formData.append("logo_dark", data.logo_dark);
+  }
+
+  const response = await api.post(`/api/technical-skills/${id}`, formData);
+  return response.data;
+};
 
 export const getSkills = async (): Promise<Skill[]> => {
   const response = await api.get("api/technical-skills");

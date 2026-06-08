@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CircleNotchIcon, UploadSimple, Trash } from "@phosphor-icons/react";
+import type { Skill } from "@/services/skill.service";
 
 const skillSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -20,31 +21,32 @@ interface SkillFormProps {
   onSubmit: (data: { name: string; category: string; logo_light?: File; logo_dark?: File }) => void;
   isLoading?: boolean;
   onCancel?: () => void;
-  initialData?: { id?: number; name: string; category: string; url_light?: string; url_dark?: string } | null;
+  initialData?: Skill | null;
 }
 
 const categories = ["Frontend", "Backend", "DevOps", "Otros"];
 
 export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillFormProps) {
-  
-  // 1. Inicializamos React Hook Form DIRECTAMENTE con initialData
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SkillFormData>({
     resolver: zodResolver(skillSchema),
-    defaultValues: { 
-      name: initialData?.name || "", 
-      category: initialData?.category || "", 
-      logo_light: undefined, 
-      logo_dark: undefined 
-    },
   });
 
-  // 2. Inicializamos los estados de las imágenes DIRECTAMENTE con initialData
-  const [previewLight, setPreviewLight] = useState<string | null>(initialData?.url_light || null);
-  const [previewDark, setPreviewDark] = useState<string | null>(initialData?.url_dark || null);
+  const isEditMode = !!initialData?.id;
+  const [previewLight, setPreviewLight] = useState<string | null>(initialData?.urls?.light || null);
+  const [previewDark, setPreviewDark] = useState<string | null>(initialData?.urls?.dark || null);
+  useEffect(() => {
+    reset({
+      name: initialData?.name || "",
+      category: initialData?.category || "",
+      logo_light: undefined,
+      logo_dark: undefined,
+    });
+  }, [initialData, reset]);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>, type: "light" | "dark") => {
     const file = e.target.files?.[0];
@@ -141,6 +143,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
         <Input
           {...register("name")}
           placeholder="Ej: React, Node.js"
+          disabled={isEditMode}
           className="bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-[#6c72ff]"
         />
         {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
@@ -150,6 +153,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
 
         <select
           {...register("category")}
+          disabled={isEditMode}
           defaultValue=""
           className="flex h-10 w-full rounded-md border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#6c72ff]"
         >
@@ -166,7 +170,7 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
 
         {errors.category && <span className="text-xs text-red-500">{errors.category.message}</span>}
       </div>
-      
+
       {renderUploader("light", previewLight)}
       {renderUploader("dark", previewDark)}
 
