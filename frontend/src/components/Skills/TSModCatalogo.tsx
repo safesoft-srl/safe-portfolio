@@ -10,7 +10,7 @@ export interface TechnicalSkill {
   name: string;
   category: string;
   urls: { light: string; dark: string } | null;
-  is_active: boolean; // Agregamos la columna que creamos en la DB
+  is_active: boolean; 
 }
 
 export interface SkillSubmitData {
@@ -20,7 +20,7 @@ export interface SkillSubmitData {
   logo_dark?: File;
 }
 
-const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros", "Deshabilitadas"];
+const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros", "Desactivadas"];
 
 export function TSModCatalogo() {
   const [skills, setSkills] = useState<TechnicalSkill[]>([]);

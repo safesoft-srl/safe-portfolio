@@ -160,7 +160,7 @@ export function SkillCard({
                 onClick={(e) => e.stopPropagation()}
                 className={`flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium border h-9 px-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                   isActive
-                    ? "bg-[#1c1f38] text-amber-500 border-[#232555] hover:bg-amber-500/20 hover:border-amber-500/50 hover:text-amber-400"
+                    ? "bg-[#1c1f38] text-red-500 border-[#232555] hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400"
                     : "bg-emerald-500/10 border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/20 hover:text-emerald-400"
                 }`}
               >
@@ -193,7 +193,7 @@ export function SkillCard({
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => onToggleStatus && onToggleStatus(skillId, isActive)}
-                    className={`${isActive ? "bg-amber-600 hover:bg-amber-700" : "bg-emerald-600 hover:bg-emerald-700"} text-white border-none`}
+                    className={`${isActive ? "bg-red-600 hover:bg-red-700" : "bg-emerald-600 hover:bg-emerald-700"} text-white border-none`}
                   >
                     {isActive ? "Desactivar" : "Activar"}
                   </AlertDialogAction>

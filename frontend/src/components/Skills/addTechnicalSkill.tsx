@@ -6,6 +6,7 @@ interface Skill {
   id: number;
   name: string;
   category: string;
+  is_active?: boolean; // Añadimos la propiedad como opcional por seguridad
   urls: {
     light: string;
     dark: string;
@@ -57,8 +58,13 @@ export function AddTechnicalSkill({
     fetchCatalog();
   }, [isOpen]);
 
+  // Modificamos el filtro para excluir las que tengan is_active === false
   const filteredCatalog = (Array.isArray(catalogo) ? catalogo : []).filter((skill) => {
     if (!skill.name) return false;
+    
+    // Si explícitamente viene deshabilitada del backend, la ignoramos para el usuario común
+    if (skill.is_active === false) return false;
+
     const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
     const matchesTab = activeTab === "Todas" || skill.category === activeTab;
     return matchesSearch && matchesTab;

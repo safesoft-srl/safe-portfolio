@@ -40,7 +40,7 @@ export default function PdfConfigModal({ open, onClose, config, setConfig, onGen
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-[#14172b] p-6 rounded-xl w-[520px] border border-[#2a2f55]">
+      <div className="bg-[#14172b] p-6 rounded-xl w-130 border border-[#2a2f55]">
         <h2 className="text-white text-lg font-bold mb-4">Configurar PDF</h2>
 
         {/* CATÁLOGO */}
