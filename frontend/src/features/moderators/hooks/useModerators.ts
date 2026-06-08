@@ -31,6 +31,20 @@ export function useCreateModerator() {
   });
 }
 
+export function useUpdateModeratorPermissions() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { id: number | string; permissions: string[]; email: string }) => {
+      const response = await api.put(`/api/admin/moderators/${data.id}`, { permissions: data.permissions, email: data.email });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["moderators"] });
+    },
+  });
+}
+
 export function useDeleteModerator() {
   const queryClient = useQueryClient();
 
