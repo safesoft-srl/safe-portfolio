@@ -73,7 +73,7 @@ const data = {
       icon: <GraduationCapIcon />,
     },
     {
-      title: "Configuración",
+      title: "Redes Profesionales",
       url: "configuration",
       icon: <GearIcon />,
     },
@@ -93,6 +93,11 @@ const adminData = {
     },
   ],
   navMain: [
+     {
+      title: "Panel Administrador",
+      url: "",
+      icon: <LayoutIcon />,
+    },
     {
       title: "Moderadores",
       url: "moderators",
