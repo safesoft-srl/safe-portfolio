@@ -93,7 +93,7 @@ const adminData = {
     },
   ],
   navMain: [
-     {
+    {
       title: "Panel Administrador",
       url: "",
       icon: <LayoutIcon />,
