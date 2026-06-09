@@ -11,7 +11,6 @@ export default function Skills() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-12">
           <h1 className="text-3xl font-bold text-white tracking-tight">Habilidades</h1>
 
-          {/* TABS */}
           <div className="bg-[#1c1f38] border border-[#232555] rounded-full p-1 flex gap-2 shadow-lg w-fit">
             <button
               onClick={() => setActiveTab("technical")}

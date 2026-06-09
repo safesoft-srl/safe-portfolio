@@ -139,7 +139,7 @@ export function TechnicalSkillsSection() {
         return;
       }
 
-      toast.success(result.message || "Nivel actualizado correctamente.", {
+      toast.success("Nivel actualizado correctamente.", {
         style: toastStyle,
       });
 
@@ -159,7 +159,6 @@ export function TechnicalSkillsSection() {
 
   return (
     <div className="w-full animate-in fade-in duration-300">
-      {/* HEADER TÉCNICO */}
       <div className="flex items-center justify-between mb-12">
         <h2 className="text-2xl font-bold text-white tracking-tight">Habilidades Técnicas</h2>
         <div className="w-56">
@@ -167,7 +166,6 @@ export function TechnicalSkillsSection() {
         </div>
       </div>
 
-      {/* FILTROS (PILLS) */}
       <div className="flex flex-wrap gap-3 mb-10 justify-center">
         {["Todas", "Frontend", "Backend", "DevOps", "Otros"].map((cat) => (
           <button
@@ -184,7 +182,6 @@ export function TechnicalSkillsSection() {
         ))}
       </div>
 
-      {/* RENDERIZADO DEL GRID */}
       {isLoading ? (
         <div className="text-center py-20 text-slate-500 flex flex-col items-center">
           <div className="w-8 h-8 border-4 border-[#6c72ff] border-t-transparent rounded-full animate-spin mb-4"></div>
@@ -196,7 +193,7 @@ export function TechnicalSkillsSection() {
             <SkillCard
               key={skill.id}
               skill={skill}
-              onEdit={handleOpenEdit}
+              onEdit={(skill) => handleOpenEdit(skill as UserSkill)}
               onDelete={handleDeleteSkill}
             />
           ))}
@@ -210,7 +207,6 @@ export function TechnicalSkillsSection() {
         </div>
       )}
 
-      {/* MODAL DE EDICIÓN */}
       <EditLevelModal
         isOpen={isEditModalOpen}
         skill={skillToEdit}

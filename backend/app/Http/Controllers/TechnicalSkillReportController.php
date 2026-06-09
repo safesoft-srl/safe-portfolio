@@ -17,7 +17,6 @@ class TechnicalSkillReportController extends Controller
                 ->withCount('portfolioSkills')
                 ->with('portfolioSkills');
 
-            // Estado
             if ($request->filled('status')) {
                 if ($request->status === 'active') {
                     $query->where('is_active', true);
@@ -28,12 +27,10 @@ class TechnicalSkillReportController extends Controller
                 }
             }
 
-            // Categoría
             if ($request->filled('category')) {
                 $query->where('category', $request->category);
             }
 
-            // Uso
             if ($request->filled('usage')) {
                 if ($request->usage === 'used') {
                     $query->has('portfolioSkills');
@@ -44,7 +41,6 @@ class TechnicalSkillReportController extends Controller
                 }
             }
 
-            // Búsqueda
             if ($request->filled('search')) {
                 $search = mb_strtolower(
                     trim($request->search),
@@ -57,7 +53,6 @@ class TechnicalSkillReportController extends Controller
                 );
             }
 
-            // Orden por uso
             $useOrder = $request->get('use_order', 'desc');
 
             if ($useOrder === 'asc') {
@@ -66,10 +61,8 @@ class TechnicalSkillReportController extends Controller
                 $query->orderByDesc('portfolio_skills_count');
             }
 
-            // Orden secundario
             $query->orderBy('name');
 
-            // Límite
             $limit = $request->get('limit');
 
             if (

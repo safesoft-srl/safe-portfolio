@@ -20,11 +20,9 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
   const selected = useMemo(() => {
     if (skills.length === 0) return null;
 
-    if (selectedId) {
-      return skills.find((s) => s.id === selectedId) ?? skills[0];
-    }
+    if (!selectedId) return null;
 
-    return skills[0];
+    return skills.find((s) => s.id === selectedId) ?? null;
   }, [skills, selectedId]);
 
   return (
@@ -94,15 +92,22 @@ export default function SoftSkillsGrid({ skills = [] }: Props) {
                   {selected.soft_skill.name}
                 </h3>
 
-                <p className="mt-4 text-sm leading-relaxed text-slate-300">
-                  {selected.description ||
-                    "Esta habilidad refleja tu forma de trabajar y relacionarte en entornos profesionales."}
-                </p>
+                {selected.description?.trim() ? (
+                  <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                    {selected.description}
+                  </p>
+                ) : (
+                  <p className="mt-4 text-sm text-slate-500 italic">
+                    Sin descripción proporcionada
+                  </p>
+                )}
 
                 <div className="mt-6 h-1 w-24 rounded-full bg-[#bcfd49]/70" />
               </div>
             ) : (
-              <p className="text-sm text-slate-400">Selecciona una habilidad para ver detalles</p>
+              <p className="text-sm text-slate-400">
+                Selecciona una habilidad blanda para ver su descripción
+              </p>
             )}
           </div>
         </div>
