@@ -91,15 +91,25 @@ const styles = StyleSheet.create({
 });
 
 const formatDate = (value: string | null) => {
-  if (!value) return "—";
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return "—";
-  return new Intl.DateTimeFormat("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(d);
-};
+    if (!value) return "—";
+
+    const parts = value.split("-");
+    if (parts.length !== 3) return "—";
+
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+
+    const date = new Date(year, month, day);
+
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return new Intl.DateTimeFormat("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(date);
+  };
 
 export default function AcademicReportPdf({ data }: Props) {
   const hasTitleFilter = data.filters?.title && data.filters.title.trim().length > 0;
@@ -140,9 +150,9 @@ export default function AcademicReportPdf({ data }: Props) {
               data.academics.map((a) => (
                 <View key={a.id} style={styles.row}>
                   <Text style={[styles.cellBase, styles.dateColumn]}>
-                    {formatDate(a.created_at)}
+                    {formatDate(a.end_date)}
                   </Text>
-                  <Text style={[styles.cellBase, styles.userColumn]}>{a.user_name || "—"}</Text>
+                  <Text style={[styles.cellBase, styles.userColumn]}>{a.portfolio.profile_name || "—"}</Text>
                   <Text style={[styles.cellBase, styles.titleColumn]}>{a.title}</Text>
                   <Text style={[styles.cellBase, styles.fieldColumn]}>
                     {a.field_of_study || "—"}
