@@ -94,7 +94,14 @@ const styles = StyleSheet.create({
 const formatDate = (value: string | null) => {
   if (!value) return "—";
 
-  const date = new Date(value);
+  const parts = value.split("-");
+  if (parts.length !== 3) return "—";
+
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+
+  const date = new Date(year, month, day);
 
   if (Number.isNaN(date.getTime())) return "—";
 
@@ -106,11 +113,11 @@ const formatDate = (value: string | null) => {
 };
 
 const getUserName = (project: ProjectReportPdfData["projects"][number]) => {
-  return project.user_name || "—";
+  return project.portfolio.profile_name || "—";
 };
 
 const getUserEmail = (project: ProjectReportPdfData["projects"][number]) => {
-  return project.user_email || "—";
+  return project.portfolio.profile_email || "—";
 };
 
 export default function ProjectReportPdf({ data }: Props) {

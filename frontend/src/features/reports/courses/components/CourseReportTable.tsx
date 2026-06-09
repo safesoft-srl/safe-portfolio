@@ -6,15 +6,25 @@ type Props = {
 };
 
 export default function CourseReportTable({ loading, courses }: Props) {
-  const formatDate = (value: string | null | undefined) => {
+  const formatDate = (value: string | null) => {
     if (!value) return "—";
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return "—";
+
+    const parts = value.split("-");
+    if (parts.length !== 3) return "—";
+
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+
+    const date = new Date(year, month, day);
+
+    if (Number.isNaN(date.getTime())) return "—";
+
     return new Intl.DateTimeFormat("es-ES", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
-    }).format(d);
+    }).format(date);
   };
 
   return (
@@ -63,9 +73,9 @@ export default function CourseReportTable({ loading, courses }: Props) {
                     className="border-b border-[#2a2f55] hover:bg-white/5 transition-colors"
                   >
                     <td className="p-4 text-slate-300 text-center">
-                      {formatDate(course.certificate_date ?? course.created_at)}
+                      {formatDate(course.certificate_date)}
                     </td>
-                    <td className="p-4 text-slate-300">{course.user_name ?? "—"}</td>
+                    <td className="p-4 text-slate-300">{course.portfolio.profile_name ?? "—"}</td>
                     <td className="p-4 font-medium text-white">{course.title}</td>
                     <td className="p-4 text-slate-300">{course.area || "—"}</td>
                     <td className="p-4 text-slate-300">{course.institution_name || "—"}</td>

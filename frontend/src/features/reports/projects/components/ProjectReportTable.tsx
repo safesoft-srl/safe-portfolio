@@ -9,7 +9,14 @@ export default function ProjectReportTable({ loading, projects }: Props) {
   const formatDate = (value: string | null) => {
     if (!value) return "—";
 
-    const date = new Date(value);
+    const parts = value.split("-");
+    if (parts.length !== 3) return "—";
+
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+
+    const date = new Date(year, month, day);
 
     if (Number.isNaN(date.getTime())) return "—";
 
@@ -62,11 +69,13 @@ export default function ProjectReportTable({ loading, projects }: Props) {
                     className="border-b border-[#2a2f55] hover:bg-white/5 transition-colors"
                   >
                     <td className="p-4 text-slate-300 text-center align-top">
-                      {formatDate(project.start_date ?? project.created_at)}
+                      {formatDate(project.end_date)}
                     </td>
-                    <td className="p-4 text-slate-300 align-top">{project.user_name ?? "—"}</td>
+                    <td className="p-4 text-slate-300 align-top">
+                      {project.portfolio.profile_name ?? "—"}
+                    </td>
                     <td className="p-4 text-slate-300 align-top break-words">
-                      {project.user_email ?? "—"}
+                      {project.portfolio.profile_email ?? "—"}
                     </td>
                     <td className="p-4 font-medium text-white align-top">{project.name}</td>
                   </tr>

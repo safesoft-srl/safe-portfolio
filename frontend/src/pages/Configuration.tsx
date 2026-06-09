@@ -1,4 +1,4 @@
-import { GithubLogo, LinkedinLogo, PlusIcon } from "@phosphor-icons/react";
+import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -149,10 +149,6 @@ export default function Configuration() {
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex-1">
           Configuración
         </h1>
-        <Button size="lg" onClick={() => setIsModalOpen(true)}>
-          <PlusIcon weight="bold" />
-          Agregar Skill
-        </Button>
       </div>
 
       {/* GitHub Section */}

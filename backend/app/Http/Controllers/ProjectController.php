@@ -7,7 +7,9 @@ use App\Constants\ResponseMessages;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProyectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Models\Project;
 use App\Services\ProjectService;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -25,6 +27,36 @@ class ProjectController extends Controller
         return ApiResponse::success(
             $proyects,
             ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
+    public function getReportProjects(Request $request)
+    {
+        $validated = $request->validate([
+            'date_from' => 'nullable|date|date_format:Y-m-d',
+            'date_to' => 'nullable|date|date_format:Y-m-d|after_or_equal:date_from',
+        ]);
+
+        $query = Project::with('portfolio')
+            ->where('visible', true)
+            ->where('current', false);
+
+        if (! empty($validated['date_from'])) {
+            $query->whereDate('end_date', '>=', $validated['date_from']);
+        }
+
+        if (! empty($validated['date_to'])) {
+            $query->whereDate('end_date', '<=', $validated['date_to']);
+        }
+
+        $projects = $query
+            ->orderBy('end_date', 'asc')
+            ->get();
+
+        return ApiResponse::success(
+            $projects,
+            ResponseMessages::FETCHED_SUCCESSFULLY,
+            201
         );
     }
 
@@ -66,7 +98,6 @@ class ProjectController extends Controller
             $proyect,
             ResponseMessages::UPDATED_SUCCESSFULLY
         );
-
     }
 
     /**
@@ -80,7 +111,6 @@ class ProjectController extends Controller
             null,
             ResponseMessages::DELETED_SUCCESSFULLY
         );
-
     }
 
     public function getByPortfolio(int $portfolioId)

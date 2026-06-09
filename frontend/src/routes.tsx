@@ -23,7 +23,6 @@ import Skills from "./pages/Skills";
 import Configuration from "./pages/Configuration";
 import SoftSkillModerationSection from "./pages/SoftSkillModerationSection";
 import ProjectsPage from "./pages/ProjectsPage";
-import AdminDashboard from "./pages/admin/Dashboard";
 import AdminModerators from "./pages/admin/AdminModerators";
 import AdminSkills from "./pages/admin/AdminSkills";
 import AdminProjects from "./pages/admin/AdminProjects";
@@ -93,10 +92,6 @@ export const router = createBrowserRouter([
         path: "",
         element: <AdminLayout />,
         children: [
-          {
-            path: "",
-            element: <AdminDashboard />,
-          },
           {
             path: "moderators",
             element: <AdminModerators />,
