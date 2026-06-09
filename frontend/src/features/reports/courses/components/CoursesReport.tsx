@@ -27,7 +27,7 @@ export default function CoursesReport() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-8 p-4 animate-in fade-in zoom-in duration-500 sm:p-6 lg:p-8">
+    <div className="mx-auto w-full max-w-6xl space-y-8 p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex-1 space-y-2">
           <h1 className="text-sm font-bold tracking-tight text-white sm:text-2xl">

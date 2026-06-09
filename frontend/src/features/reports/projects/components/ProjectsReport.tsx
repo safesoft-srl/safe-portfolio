@@ -33,7 +33,7 @@ export default function ProjectsReport() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 animate-in fade-in zoom-in duration-500">
+    <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex-1 space-y-2">
           <h1 className="text-sm sm:text-2xl font-bold tracking-tight text-white">
