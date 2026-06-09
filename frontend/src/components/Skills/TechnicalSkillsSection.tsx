@@ -193,7 +193,7 @@ export function TechnicalSkillsSection() {
             <SkillCard
               key={skill.id}
               skill={skill}
-              onEdit={handleOpenEdit}
+              onEdit={(skill) => handleOpenEdit(skill as UserSkill)}
               onDelete={handleDeleteSkill}
             />
           ))}

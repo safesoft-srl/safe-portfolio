@@ -68,7 +68,7 @@ export function AddSoftSkillModal({ isOpen, onClose, portfolioId, onSuccess }: P
     ? []
     : query.trim()
       ? allSkills.filter((s) => normalizeText(s.name).includes(normalizeText(query)))
-      : allSkills.slice(0, 6);
+      : allSkills;
 
   const exactMatch = allSkills.find((s) => normalizeText(s.name) === normalizeText(query));
 

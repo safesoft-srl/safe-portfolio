@@ -60,7 +60,7 @@ export function CreateSoftSkillModal({ isOpen, onClose, onSuccess }: Props) {
 
   const filtered = query.trim()
     ? skills.filter((s) => s.name.toLowerCase().includes(query.toLowerCase()))
-    : skills.slice(0, 6);
+    : skills;
 
   const exists = skills.find((s) => s.name.toLowerCase() === query.toLowerCase());
 

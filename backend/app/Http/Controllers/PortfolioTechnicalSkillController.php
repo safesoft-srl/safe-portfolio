@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\ApiResponse;
 use App\Models\PortfolioSkill;
+use App\Models\TechnicalSkill;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -43,6 +44,17 @@ class PortfolioTechnicalSkillController extends Controller
                 'technical_skill_id' => 'required|exists:technical_skills,id',
                 'level' => 'required|string|max:50',
             ]);
+
+            $technicalSkill = TechnicalSkill::findOrFail(
+                $validated['technical_skill_id']
+            );
+
+            if (! $technicalSkill->is_active) {
+                return ApiResponse::error(
+                    'Esta habilidad ha sido deshabilitada y ya no puede agregarse al portafolio.',
+                    403
+                );
+            }
 
             $exists = PortfolioSkill::where('portfolio_id', $portfolio->id)
                 ->where('technical_skill_id', $validated['technical_skill_id'])
