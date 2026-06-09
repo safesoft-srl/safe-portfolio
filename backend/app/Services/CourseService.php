@@ -9,7 +9,10 @@ class CourseService
 {
     public function getAll()
     {
-        return Course::with('portfolio')->get();
+        return Course::with('portfolio')
+            ->where('is_visible', true)
+            ->where('is_current', false)
+            ->get();
     }
 
     public function create(array $data, Portfolio $portfolio)

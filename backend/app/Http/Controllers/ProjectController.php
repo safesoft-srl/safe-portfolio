@@ -37,7 +37,9 @@ class ProjectController extends Controller
             'date_to'   => 'nullable|date|date_format:Y-m-d|after_or_equal:date_from',
         ]);
 
-        $query = Project::with('portfolio');
+        $query = Project::with('portfolio')
+            ->where('visible', true)
+            ->where('current', false);
 
         if (!empty($validated['date_from'])) {
             $query->whereDate('end_date', '>=', $validated['date_from']);
