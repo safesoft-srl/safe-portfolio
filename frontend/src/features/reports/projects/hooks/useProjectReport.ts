@@ -19,7 +19,6 @@ export function useProjectReport() {
       setLoading(true);
       const report = await getProjectReport(currentDateFrom, currentDateTo);
 
-    
       let result = report;
 
       if (selectedSkills && selectedSkills.length > 0) {

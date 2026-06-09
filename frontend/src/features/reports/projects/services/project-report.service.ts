@@ -2,7 +2,6 @@ import { http } from "@/services/http.service";
 
 import type { ProjectReportRecord } from "../types/project-report.types";
 
-
 const extractProjects = (value: unknown): ProjectReportRecord[] => {
   if (Array.isArray(value)) {
     return value as ProjectReportRecord[];
@@ -52,7 +51,7 @@ export const getProjectReport = async (dateFrom: string, dateTo: string) => {
 
   const response = await http.get(endpoint);
 
-  console.log('respuesta', response.data);
+  console.log("respuesta", response.data);
 
   return unwrapProjectReport(response.data);
 };

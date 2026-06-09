@@ -7,9 +7,9 @@ use App\Constants\ResponseMessages;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProyectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Models\Project;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
-use App\Models\Project;
 
 class ProjectController extends Controller
 {
@@ -30,22 +30,22 @@ class ProjectController extends Controller
         );
     }
 
-    function getReportProjects(Request $request)
+    public function getReportProjects(Request $request)
     {
         $validated = $request->validate([
             'date_from' => 'nullable|date|date_format:Y-m-d',
-            'date_to'   => 'nullable|date|date_format:Y-m-d|after_or_equal:date_from',
+            'date_to' => 'nullable|date|date_format:Y-m-d|after_or_equal:date_from',
         ]);
 
         $query = Project::with('portfolio')
             ->where('visible', true)
             ->where('current', false);
 
-        if (!empty($validated['date_from'])) {
+        if (! empty($validated['date_from'])) {
             $query->whereDate('end_date', '>=', $validated['date_from']);
         }
 
-        if (!empty($validated['date_to'])) {
+        if (! empty($validated['date_to'])) {
             $query->whereDate('end_date', '<=', $validated['date_to']);
         }
 
@@ -122,8 +122,6 @@ class ProjectController extends Controller
             ResponseMessages::FETCHED_SUCCESSFULLY
         );
     }
-
-
 
     public function deleteImageProject(int $id)
     {

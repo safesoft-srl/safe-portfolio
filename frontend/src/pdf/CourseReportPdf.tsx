@@ -95,25 +95,25 @@ const styles = StyleSheet.create({
 });
 
 const formatDate = (value: string | null) => {
-    if (!value) return "—";
+  if (!value) return "—";
 
-    const parts = value.split("-");
-    if (parts.length !== 3) return "—";
+  const parts = value.split("-");
+  if (parts.length !== 3) return "—";
 
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const day = parseInt(parts[2], 10);
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
 
-    const date = new Date(year, month, day);
+  const date = new Date(year, month, day);
 
-    if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return "—";
 
-    return new Intl.DateTimeFormat("es-ES", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    }).format(date);
-  };
+  return new Intl.DateTimeFormat("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+};
 
 export default function CourseReportPdf({ data }: Props) {
   // Verifica si el filtro de área contiene texto
@@ -155,7 +155,9 @@ export default function CourseReportPdf({ data }: Props) {
                   <Text style={[styles.cellBase, styles.dateColumn]}>
                     {formatDate(c.certificate_date ?? c.created_at)}
                   </Text>
-                  <Text style={[styles.cellBase, styles.userColumn]}>{c.portfolio.profile_name || "—"}</Text>
+                  <Text style={[styles.cellBase, styles.userColumn]}>
+                    {c.portfolio.profile_name || "—"}
+                  </Text>
                   <Text style={[styles.cellBase, styles.titleColumn]}>{c.title}</Text>
                   <Text style={[styles.cellBase, styles.areaColumn]}>{c.area || "—"}</Text>
                   <Text style={[styles.cellBase, styles.institutionColumn]}>

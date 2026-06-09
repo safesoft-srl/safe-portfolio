@@ -13,7 +13,7 @@ export default function ProjectReportTable({ loading, projects }: Props) {
     if (parts.length !== 3) return "—";
 
     const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; 
+    const month = parseInt(parts[1], 10) - 1;
     const day = parseInt(parts[2], 10);
 
     const date = new Date(year, month, day);
@@ -26,7 +26,6 @@ export default function ProjectReportTable({ loading, projects }: Props) {
       year: "numeric",
     }).format(date);
   };
-
 
   return (
     <div className="space-y-4">
@@ -72,7 +71,9 @@ export default function ProjectReportTable({ loading, projects }: Props) {
                     <td className="p-4 text-slate-300 text-center align-top">
                       {formatDate(project.end_date)}
                     </td>
-                    <td className="p-4 text-slate-300 align-top">{project.portfolio.profile_name ?? "—"}</td>
+                    <td className="p-4 text-slate-300 align-top">
+                      {project.portfolio.profile_name ?? "—"}
+                    </td>
                     <td className="p-4 text-slate-300 align-top break-words">
                       {project.portfolio.profile_email ?? "—"}
                     </td>
