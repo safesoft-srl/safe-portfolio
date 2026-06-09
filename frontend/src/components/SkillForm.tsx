@@ -6,18 +6,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CircleNotchIcon, UploadSimple, Trash } from "@phosphor-icons/react";
+import { toast } from "sonner"; // Importamos sonner para las notificaciones
+
+// 1. Definimos los formatos aceptados para mayor seguridad
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/svg+xml",
+  "image/gif",
+];
+
+// 2. Creamos un validador personalizado reutilizable en Zod
+const imageValidator = z
+  .custom<FileList>()
+  .optional()
+  .refine(
+    (files) => !files || files.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files[0].type),
+    "Solo se permiten formatos de imagen válidos (.jpg, .png, .webp, .svg)"
+  );
 
 const skillSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   category: z.string().min(1, "La categoría es requerida"),
-  logo_light: z.custom<FileList>().optional(),
-  logo_dark: z.custom<FileList>().optional(),
+  logo_light: imageValidator,
+  logo_dark: imageValidator,
 });
 
 type SkillFormData = z.infer<typeof skillSchema>;
 
 interface SkillFormProps {
-  onSubmit: (data: { name: string; category: string; logo_light?: File; logo_dark?: File }) => void;
+  // Actualizamos el tipo para que acepte promesas, así podemos atrapar errores
+  onSubmit: (data: {
+    name: string;
+    category: string;
+    logo_light?: File;
+    logo_dark?: File;
+  }) => void | Promise<void>;
   isLoading?: boolean;
   onCancel?: () => void;
   initialData?: {
@@ -32,7 +58,6 @@ interface SkillFormProps {
 const categories = ["Frontend", "Backend", "DevOps", "Otros"];
 
 export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillFormProps) {
-  // 1. Inicializamos React Hook Form DIRECTAMENTE con initialData
   const {
     register,
     handleSubmit,
@@ -47,13 +72,21 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
     },
   });
 
-  // 2. Inicializamos los estados de las imágenes DIRECTAMENTE con initialData
   const [previewLight, setPreviewLight] = useState<string | null>(initialData?.url_light || null);
   const [previewDark, setPreviewDark] = useState<string | null>(initialData?.url_dark || null);
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>, type: "light" | "dark") => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Validación extra a nivel de componente antes de generar el preview
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      toast.error("Formato no soportado. Por favor sube una imagen.", {
+        position: "bottom-right",
+      });
+      clearLogo(type);
+      return;
+    }
 
     const preview = URL.createObjectURL(file);
 
@@ -76,18 +109,33 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
     }
   };
 
-  const onSubmitForm = (data: SkillFormData) => {
-    onSubmit({
-      name: data.name,
-      category: data.category,
-      logo_light: data.logo_light?.[0],
-      logo_dark: data.logo_dark?.[0],
-    });
+  const onSubmitForm = async (data: SkillFormData) => {
+    try {
+      await onSubmit({
+        name: data.name,
+        category: data.category,
+        logo_light: data.logo_light?.[0],
+        logo_dark: data.logo_dark?.[0],
+      });
+
+      // Notificación de éxito en la esquina inferior derecha
+      toast.success(
+        initialData ? "Habilidad actualizada correctamente" : "Habilidad creada con éxito",
+        { position: "bottom-right" }
+      );
+    } catch (error: unknown) {
+      // Notificación de fallo
+      toast.error("Hubo un error al procesar la habilidad", {
+        position: "bottom-right",
+      });
+      console.error(error);
+    }
   };
 
   const renderUploader = (type: "light" | "dark", preview: string | null) => {
     const fieldName = type === "light" ? "logo_light" : "logo_dark";
     const logoField = register(fieldName);
+    const hasError = errors[fieldName];
 
     return (
       <div className="space-y-2">
@@ -95,7 +143,8 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
 
         <label
           htmlFor={`${type}-logo-input`}
-          className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all h-32 bg-slate-950 border-slate-800 hover:border-[#6c72ff] relative"
+          className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-all h-32 relative
+            ${hasError ? "border-red-500 bg-red-500/10" : "bg-slate-950 border-slate-800 hover:border-[#6c72ff]"}`}
         >
           {preview ? (
             <div className="flex flex-col items-center gap-2">
@@ -117,16 +166,23 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2 text-slate-400">
+            <div
+              className={`flex flex-col items-center gap-2 ${hasError ? "text-red-400" : "text-slate-400"}`}
+            >
               <UploadSimple size={32} />
-              <span className="text-xs">Arrastra o selecciona imagen</span>
+              <span className="text-xs text-center px-4">
+                {hasError
+                  ? errors[fieldName]?.message?.toString()
+                  : "Arrastra o selecciona imagen (.png, .svg, .webp)"}
+              </span>
             </div>
           )}
 
           <Input
             id={`${type}-logo-input`}
             type="file"
-            accept="image/*"
+            // Restricción nativa del navegador para que solo permita elegir imágenes en la ventana
+            accept={ACCEPTED_IMAGE_TYPES.join(",")}
             {...logoField}
             onChange={(e) => {
               handleLogoChange(e, type);
@@ -172,8 +228,10 @@ export function SkillForm({ onSubmit, isLoading, onCancel, initialData }: SkillF
         {errors.category && <span className="text-xs text-red-500">{errors.category.message}</span>}
       </div>
 
-      {renderUploader("light", previewLight)}
-      {renderUploader("dark", previewDark)}
+      <div className="grid grid-cols-2 gap-4">
+        {renderUploader("light", previewLight)}
+        {renderUploader("dark", previewDark)}
+      </div>
 
       <div className="flex justify-end gap-3 pt-2">
         <Button

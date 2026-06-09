@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@phosphor-icons/react";
 import { SkillForm } from "@/components/SkillForm";
 import { SkillCard } from "./SkillCard";
+import { toast } from "sonner"; // Importamos Sonner para las notificaciones
 
 export interface TechnicalSkill {
   id: number;
@@ -19,7 +20,6 @@ export interface SkillSubmitData {
   logo_dark?: File;
 }
 
-// Usamos "Desactivadas" aquí
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros", "Desactivadas"];
 
 export function TSModCatalogo() {
@@ -83,15 +83,16 @@ export function TSModCatalogo() {
       if (error instanceof Error) {
         console.error(error.message);
       }
-      alert("Hubo un error al guardar la habilidad en el catálogo global.");
+      // Cambiamos el alert por throw para que el formulario lo atrape si es necesario
+      throw new Error("Fallo al guardar");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleToggleStatus = async (id: number, currentStatus: boolean) => {
-    const action = currentStatus ? "deshabilitar" : "habilitar";
-    if (!confirm(`¿Estás seguro de que deseas ${action} esta habilidad del catálogo?`)) return;
+    // ELIMINAMOS la línea de window.confirm() porque SkillCard ya maneja la confirmación visual
+    const actionText = currentStatus ? "desactivada" : "activada";
 
     try {
       const res = await fetch(
@@ -104,14 +105,21 @@ export function TSModCatalogo() {
 
       if (res.ok) {
         await loadSkills();
+        // Agregamos la notificación de éxito
+        toast.success(`Habilidad ${actionText} correctamente`, {
+          position: "bottom-right",
+        });
       } else {
-        throw new Error(`No se pudo ${action} la habilidad`);
+        throw new Error(`No se pudo modificar el estado`);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message);
       }
-      alert(`Error al intentar modificar el estado de la habilidad.`);
+      // Agregamos la notificación de error
+      toast.error(`Error al intentar modificar el estado de la habilidad.`, {
+        position: "bottom-right",
+      });
     }
   };
 
