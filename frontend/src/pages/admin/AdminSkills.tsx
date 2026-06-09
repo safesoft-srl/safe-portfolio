@@ -2,9 +2,14 @@ import { useState } from "react";
 import { TSModCatalogo } from "@/components/Skills/TSModCatalogo";
 import TechnicalSkillReportPage from "@/components/moderator_TechnicalSkills/TechinicalSkillReportPage";
 
+import { useAuthStore } from "@/lib/auth-store";
+import { hasPermission } from "@/services/user.service";
+
+
 type TabType = "catalogo" | "solicitudes" | "reportes";
 
 export default function AdminSkills() {
+  const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState<TabType>("catalogo");
 
   return (
@@ -22,25 +27,25 @@ export default function AdminSkills() {
         <div className="flex flex-wrap gap-3 border-b border-[#232555] pb-4">
           <button
             onClick={() => setActiveTab("catalogo")}
-            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-              activeTab === "catalogo"
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeTab === "catalogo"
                 ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
                 : "bg-[#1c1f38] text-slate-400 border border-[#232555] hover:text-slate-200 hover:bg-[#23274d]"
-            }`}
+              }`}
           >
             Catálogo
           </button>
 
-          <button
+          {hasPermission(user, "view_reports")&&(
+            <button
             onClick={() => setActiveTab("reportes")}
-            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-              activeTab === "reportes"
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeTab === "reportes"
                 ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
                 : "bg-[#1c1f38] text-slate-400 border border-[#232555] hover:text-slate-200 hover:bg-[#23274d]"
-            }`}
+              }`}
           >
             Reportes
           </button>
+          )}
         </div>
 
         <div className="pt-4 animate-in fade-in duration-300">
