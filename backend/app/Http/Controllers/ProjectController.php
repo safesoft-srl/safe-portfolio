@@ -8,7 +8,8 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProyectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Services\ProjectService;
-
+use Illuminate\Http\Request;
+use App\Models\Project;
 class ProjectController extends Controller
 {
     public function __construct(
@@ -25,6 +26,32 @@ class ProjectController extends Controller
         return ApiResponse::success(
             $proyects,
             ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
+    function getReportProjects(Request $request)
+    {
+        $validated = $request->validate([
+            'date_from' => 'nullable|date|date_format:Y-m-d',
+            'date_to'   => 'nullable|date|date_format:Y-m-d|after_or_equal:date_from',
+        ]);
+
+        $query = Project::with('portfolio');
+
+        if (!empty($validated['date_from'])) {
+            $query->whereDate('end_date', '>=', $validated['date_from']);
+        }
+
+        if (!empty($validated['date_to'])) {
+            $query->whereDate('end_date', '<=', $validated['date_to']);
+        }
+
+        $projects = $query->get();
+
+        return ApiResponse::success(
+            $projects,
+            ResponseMessages::FETCHED_SUCCESSFULLY,
+            201
         );
     }
 
@@ -92,6 +119,8 @@ class ProjectController extends Controller
             ResponseMessages::FETCHED_SUCCESSFULLY
         );
     }
+
+
 
     public function deleteImageProject(int $id)
     {

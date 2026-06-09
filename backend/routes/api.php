@@ -93,6 +93,7 @@ Route::middleware('auth:api')->group(function () {
 
 // routes for projects
 Route::get('portfolios/{portfolioId}/projects', [ProjectController::class, 'getByPortfolio']);
+Route::get('portfolios/projects/reports', [ProjectController::class, 'getReportProjects']);
 Route::apiResource('/projects', ProjectController::class);
 Route::delete('/projects/{id}/image', [ProjectController::class, 'deleteImageProject']);
 
@@ -167,8 +168,7 @@ Route::middleware('auth:api')->group(function () {
 use App\Http\Controllers\SoftSkillCatalogController;
 
 Route::middleware('auth:api')->group(function () {
-
-    // MODERATOR SOFT SKILL CATALOG APIS
+        // MODERATOR SOFT SKILL CATALOG APIS
 
     Route::get('/moderator/soft-skills', [SoftSkillCatalogController::class, 'index']);
     // Api: http://localhost:8000/api/moderator/soft-skills  (Para obtener el catálogo de soft skills, con opción de filtrar por estado activo/inactivo) Query Param: is_active=true/false
@@ -199,7 +199,6 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
 use App\Http\Controllers\TechnicalSkillReportController;
 
 Route::middleware('auth:api')->group(function () {
-
     // MODERATOR TECHNICAL SKILL REPORT APIS
     Route::get('/moderator/reports/technical-skills', [TechnicalSkillReportController::class, 'index']);
 });
