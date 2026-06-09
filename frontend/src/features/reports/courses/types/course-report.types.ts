@@ -4,7 +4,9 @@ export interface CourseReportRecord {
   area: string;
   institution_name: string;
   level: string;
-  user_name?: string | null;
-  certificate_date?: string | null;
+  portfolio: {
+    profile_name: string | null;
+  };
+  certificate_date: string;
   created_at?: string | null;
 }

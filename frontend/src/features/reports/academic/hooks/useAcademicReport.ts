@@ -32,7 +32,7 @@ export function useAcademicReport() {
         const toTime = currentDateTo ? new Date(currentDateTo).getTime() : null;
 
         result = result.filter((a) => {
-          const dateStr = a.created_at ?? null;
+          const dateStr = a.end_date ?? null;
           if (!dateStr) return false;
           const createdTime = new Date(dateStr).getTime();
           if (Number.isNaN(createdTime)) return false;

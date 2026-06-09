@@ -8,7 +8,11 @@ class AcademicService
 {
     public function showAll()
     {
-        return Academyc_Training::all();
+        return Academyc_Training::with('portfolio')
+            ->where('is_visible', true)
+            ->where('is_current', false)
+            ->orderBy('end_date', 'asc')
+            ->get();
     }
 
     public function create(array $data, int $portfolioId)
