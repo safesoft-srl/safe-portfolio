@@ -175,9 +175,7 @@ export default function SoftSkillCatalogSection() {
               )}
 
               <div className="flex gap-3 mt-5">
-                <Button variant="secondary" className="flex-1" disabled>
-                  Editar
-                </Button>
+                {/*  <Button variant="secondary" className="flex-1" disabled>  Editar  </Button>*/}
 
                 <AlertDialog>
                   <AlertDialogTrigger

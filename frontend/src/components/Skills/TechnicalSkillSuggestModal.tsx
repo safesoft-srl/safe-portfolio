@@ -19,7 +19,6 @@ export function TechnicalSkillSuggestModal({ isOpen, onClose }: TechnicalSkillSu
 
   const token = localStorage.getItem("token");
 
-  // Si no está abierto, no renderizamos nada en el DOM
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
