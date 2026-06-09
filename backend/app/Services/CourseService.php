@@ -9,7 +9,7 @@ class CourseService
 {
     public function getAll()
     {
-        return Course::all();
+        return Course::with('portfolio')->get();
     }
 
     public function create(array $data, Portfolio $portfolio)

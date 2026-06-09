@@ -10,6 +10,7 @@ use App\Http\Resources\ProjectResource;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
 use App\Models\Project;
+
 class ProjectController extends Controller
 {
     public function __construct(
@@ -46,7 +47,9 @@ class ProjectController extends Controller
             $query->whereDate('end_date', '<=', $validated['date_to']);
         }
 
-        $projects = $query->get();
+        $projects = $query
+            ->orderBy('end_date', 'asc')
+            ->get();
 
         return ApiResponse::success(
             $projects,
@@ -93,7 +96,6 @@ class ProjectController extends Controller
             $proyect,
             ResponseMessages::UPDATED_SUCCESSFULLY
         );
-
     }
 
     /**
@@ -107,7 +109,6 @@ class ProjectController extends Controller
             null,
             ResponseMessages::DELETED_SUCCESSFULLY
         );
-
     }
 
     public function getByPortfolio(int $portfolioId)

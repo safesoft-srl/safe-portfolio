@@ -145,7 +145,7 @@ export default function CourseReportPdf({ data }: Props) {
                   <Text style={[styles.cellBase, styles.dateColumn]}>
                     {formatDate(c.certificate_date ?? c.created_at)}
                   </Text>
-                  <Text style={[styles.cellBase, styles.userColumn]}>{c.user_name || "—"}</Text>
+                  <Text style={[styles.cellBase, styles.userColumn]}>{c.portfolio.profile_name || "—"}</Text>
                   <Text style={[styles.cellBase, styles.titleColumn]}>{c.title}</Text>
                   <Text style={[styles.cellBase, styles.areaColumn]}>{c.area || "—"}</Text>
                   <Text style={[styles.cellBase, styles.institutionColumn]}>
