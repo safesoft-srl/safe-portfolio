@@ -37,7 +37,7 @@ class ProjectController extends Controller
             'date_to' => 'nullable|date|date_format:Y-m-d|after_or_equal:date_from',
         ]);
 
-        $query = Project::with('portfolio')
+        $query = Project::with('portfolio', 'skills')
             ->where('visible', true)
             ->where('current', false);
 
@@ -54,7 +54,7 @@ class ProjectController extends Controller
             ->get();
 
         return ApiResponse::success(
-            $projects,
+            ProjectResource::collection($projects),
             ResponseMessages::FETCHED_SUCCESSFULLY,
             201
         );

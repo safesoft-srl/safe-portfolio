@@ -28,6 +28,11 @@ class ProjectResource extends JsonResource
             'url_image' => $this->url_image,
             'visible' => $this->visible,
             'skill_projects' => TechnicalSkillResource::collection($this->skills),
+            'portfolio' => [
+                'profile_name' => $this->portfolio->profile_name ?? null,
+                'profile_email' => $this->portfolio->profile_email ?? null,
+            ],
+
         ];
     }
 }
