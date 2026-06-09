@@ -67,6 +67,33 @@ class ModeratorController extends Controller
         }
     }
 
+    public function update(StoreModeratorRequest $request, int $id)
+    {
+        try {
+            $moderator = User::where('role', 'admin')->findOrFail($id);
+
+            $moderator->update([
+                'permissions' => $request->permissions ?? [],
+            ]);
+
+            return ApiResponse::success(
+                $moderator,
+                'Permisos del moderador actualizados correctamente.',
+                200
+            );
+        } catch (Throwable $e) {
+            Log::error('Error al actualizar permisos del moderador', [
+                'error_message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return ApiResponse::error(
+                'No se pudo actualizar los permisos. Intenta nuevamente.',
+                500
+            );
+        }
+    }
+
     /**
      * Degrada un moderador a usuario normal. No permite auto-degradación.
      */

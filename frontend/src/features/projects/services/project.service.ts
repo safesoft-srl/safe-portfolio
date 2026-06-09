@@ -20,6 +20,7 @@ export type CreateProjectDTO = {
   url_image: string;
   project_image: string | null;
   visible: boolean;
+  current: boolean;
   skill_ids: number[];
 };
 
@@ -36,6 +37,7 @@ export const createProject = async (data: CreateProjectDTO, file?: File | null) 
   formData.append("start_date", data.start_date);
   formData.append("end_date", data.end_date);
   formData.append("visible", data.visible ? "1" : "0");
+  formData.append("current", data.current ? "1" : "0");
   if (data.url_demo) {
     formData.append("url_demo", data.url_demo);
   }
@@ -70,6 +72,7 @@ export const updateProject = async (
   formData.append("end_date", data.end_date ?? "");
   formData.append("url_demo", data.url_demo ?? "");
   formData.append("url_github", data.url_github ?? "");
+  formData.append("current", data.current ? "1" : "0");
   formData.append("visible", data.visible ? "1" : "0");
   if (data.skill_ids) {
     data.skill_ids.forEach((id) => {

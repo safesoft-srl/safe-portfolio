@@ -3,7 +3,9 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CheckPermission;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
@@ -85,6 +87,7 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
-        'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        'admin' => EnsureUserIsAdmin::class,
+        'permission' => CheckPermission::class,
     ];
 }

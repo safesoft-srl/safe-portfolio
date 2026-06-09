@@ -13,6 +13,7 @@ export type Project = {
   skill_ids: number[];
   skill_projects: Skill[];
   visible: boolean;
+  current: boolean;
 };
 
 export type BaseProjectDTO = {
@@ -26,4 +27,5 @@ export type BaseProjectDTO = {
   skill_ids: number[];
   skill_projects: Skill[];
   visible: boolean;
+  current: boolean;
 };

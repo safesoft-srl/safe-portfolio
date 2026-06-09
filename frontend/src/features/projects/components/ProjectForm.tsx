@@ -54,6 +54,7 @@ export default function ProjectForm({
     skill_ids: [],
     skill_projects: [],
     visible: true,
+    current: false,
   });
 
   const [errors, setErrors] = useState({
@@ -80,7 +81,7 @@ export default function ProjectForm({
         start_date: initialData.start_date ? initialData.start_date.split("T")[0] : "",
         end_date: initialData.end_date ? initialData.end_date.split("T")[0] : "",
       });
-      setIsCurrentWork(!initialData.end_date);
+      setIsCurrentWork(initialData.current);
       setIsPublic(initialData.visible);
       if (initialData.url_image) {
         setImagePreview(initialData.url_image);
@@ -325,8 +326,13 @@ export default function ProjectForm({
                     const nextChecked = Boolean(checked);
                     setIsCurrentWork(nextChecked);
 
+                    setForm((f) => ({
+                      ...f,
+                      end_date: nextChecked ? "" : f.end_date,
+                      current: nextChecked,
+                    }));
+
                     if (nextChecked) {
-                      setForm((f) => ({ ...f, end_date: "" }));
                       setErrors((prev) => ({ ...prev, end_date: "" }));
                       return;
                     }

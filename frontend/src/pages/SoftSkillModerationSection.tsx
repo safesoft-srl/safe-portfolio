@@ -5,10 +5,14 @@ import SoftSkillRequestsSection from "@/components/moderator_SoftSkills/SoftSkil
 import SoftSkillCatalogSection from "@/components/moderator_SoftSkills/SoftSkillCatalogSection";
 import SoftSkillReportsSection from "@/components/moderator_SoftSkills/SoftSkillReportPage";
 
+import { useAuthStore } from "@/lib/auth-store";
+import { hasPermission } from "@/services/user.service";
+
 type Tab = "catalog" | "requests" | "reports";
 
 export default function SoftSkillModerationSection() {
   const [tab, setTab] = useState<Tab>("catalog");
+  const { user } = useAuthStore();
 
   return (
     <div className="p-8 w-full">
@@ -35,12 +39,14 @@ export default function SoftSkillModerationSection() {
           Solicitudes
         </Button>
 
-        <Button
-          variant={tab === "reports" ? "default" : "secondary"}
-          onClick={() => setTab("reports")}
-        >
-          Reportes
-        </Button>
+        {hasPermission(user, "view_reports") && (
+          <Button
+            variant={tab === "reports" ? "default" : "secondary"}
+            onClick={() => setTab("reports")}
+          >
+            Reportes
+          </Button>
+        )}
       </div>
       {tab === "catalog" && <SoftSkillCatalogSection />}
 

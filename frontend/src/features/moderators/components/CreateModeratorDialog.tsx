@@ -133,11 +133,27 @@ export default function CreateModeratorDialog() {
               <Checkbox
                 id="perm_cats"
                 className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
-                checked={selectedPermissions.includes("manage_catalogs")}
-                onCheckedChange={(c) => handlePermissionChange("manage_catalogs", c === true)}
+                checked={selectedPermissions.includes("manage_catalogs_technicals")}
+                onCheckedChange={(c) =>
+                  handlePermissionChange("manage_catalogs_technicals", c === true)
+                }
               />
               <Label htmlFor="perm_cats" className="font-normal cursor-pointer text-slate-300">
-                Gestionar Catálogos y Habilidades
+                Gestionar Catálogos de Habilidades Tecnicas
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="perm_cats"
+                className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
+                checked={selectedPermissions.includes("manage_catalogs_softskills")}
+                onCheckedChange={(c) =>
+                  handlePermissionChange("manage_catalogs_softskills", c === true)
+                }
+              />
+              <Label htmlFor="perm_cats" className="font-normal cursor-pointer text-slate-300">
+                Gestionar Catálogos de Habilidades Blandas
               </Label>
             </div>
 
@@ -150,6 +166,18 @@ export default function CreateModeratorDialog() {
               />
               <Label htmlFor="perm_reps" className="font-normal cursor-pointer text-slate-300">
                 Generar y ver Reportes
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="perm_reps"
+                className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
+                checked={selectedPermissions.includes("manage_portfolios")}
+                onCheckedChange={(c) => handlePermissionChange("manage_portfolios", c === true)}
+              />
+              <Label htmlFor="perm_reps" className="font-normal cursor-pointer text-slate-300">
+                Gestionar Portafolios
               </Label>
             </div>
           </div>

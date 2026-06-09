@@ -2,6 +2,7 @@ import { useModerators } from "@/features/moderators/hooks/useModerators";
 import CreateModeratorDialog from "@/features/moderators/components/CreateModeratorDialog";
 import DeleteModeratorDialog from "@/features/moderators/components/DeleteModeratorDialog";
 import { Users, UserGear } from "@phosphor-icons/react";
+import UpdatePermissions from "@/features/moderators/components/UpdatePermissions";
 
 export default function AdminModerators() {
   const { data: moderators, isLoading, isError } = useModerators();
@@ -65,13 +66,13 @@ export default function AdminModerators() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
+            <table className="w-full text-sm text-center">
               <thead>
                 <tr className="border-b border-[#2a2f55]">
                   <th className="pb-3 pr-4 font-medium text-slate-400">Nombre</th>
-                  <th className="pb-3 pr-4 font-medium text-slate-400">Username</th>
                   <th className="pb-3 pr-4 font-medium text-slate-400">Email</th>
                   <th className="pb-3 pr-4 font-medium text-slate-400">Registrado</th>
+                  <th className="pb-3 pr-4 font-medium text-slate-400">Permisos</th>
                   <th className="pb-3 font-medium text-slate-400">Acciones</th>
                 </tr>
               </thead>
@@ -82,7 +83,6 @@ export default function AdminModerators() {
                     className="border-b border-[#2a2f55]/50 last:border-0 hover:bg-[#0f1224] transition-colors"
                   >
                     <td className="py-4 pr-4 font-medium text-white">{mod.name}</td>
-                    <td className="py-4 pr-4 text-slate-400">@{mod.username}</td>
                     <td className="py-4 pr-4 text-slate-400">{mod.email}</td>
                     <td className="py-4 pr-4 text-slate-400">
                       {mod.created_at
@@ -92,6 +92,9 @@ export default function AdminModerators() {
                             year: "numeric",
                           })
                         : "—"}
+                    </td>
+                    <td className="py-4">
+                      <UpdatePermissions user={mod} />
                     </td>
                     <td className="py-4">
                       <DeleteModeratorDialog moderator={mod} />
