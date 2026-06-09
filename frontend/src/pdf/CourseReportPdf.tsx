@@ -94,16 +94,26 @@ const styles = StyleSheet.create({
   },
 });
 
-const formatDate = (value: string | null | undefined) => {
-  if (!value) return "—";
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return "—";
-  return new Intl.DateTimeFormat("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(d);
-};
+const formatDate = (value: string | null) => {
+    if (!value) return "—";
+
+    const parts = value.split("-");
+    if (parts.length !== 3) return "—";
+
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+
+    const date = new Date(year, month, day);
+
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return new Intl.DateTimeFormat("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(date);
+  };
 
 export default function CourseReportPdf({ data }: Props) {
   // Verifica si el filtro de área contiene texto

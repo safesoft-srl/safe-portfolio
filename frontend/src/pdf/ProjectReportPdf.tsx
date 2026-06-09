@@ -92,18 +92,25 @@ const styles = StyleSheet.create({
 });
 
 const formatDate = (value: string | null) => {
-  if (!value) return "—";
+    if (!value) return "—";
 
-  const date = new Date(value);
+    const parts = value.split("-");
+    if (parts.length !== 3) return "—";
 
-  if (Number.isNaN(date.getTime())) return "—";
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
 
-  return new Intl.DateTimeFormat("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
-};
+    const date = new Date(year, month, day);
+
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return new Intl.DateTimeFormat("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(date);
+  };
 
 const getUserName = (project: ProjectReportPdfData["projects"][number]) => {
   return project.portfolio.profile_name || "—";

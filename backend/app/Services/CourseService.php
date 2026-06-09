@@ -12,6 +12,7 @@ class CourseService
         return Course::with('portfolio')
             ->where('is_visible', true)
             ->where('is_current', false)
+            ->orderBy('certificate_date', 'asc')
             ->get();
     }
 
