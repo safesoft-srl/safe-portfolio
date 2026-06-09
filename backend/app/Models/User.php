@@ -72,7 +72,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->role === 'admin' || $this->role === 'Super Admin';
     }
-    
+
     public function portfolios()
     {
         return $this->hasMany(Portfolio::class);

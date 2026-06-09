@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CheckPermission
 {
@@ -28,7 +27,7 @@ class CheckPermission
         }
 
         return response()->json([
-            'message' => 'No autorizado.'
+            'message' => 'No autorizado.',
         ], 403);
     }
 }
