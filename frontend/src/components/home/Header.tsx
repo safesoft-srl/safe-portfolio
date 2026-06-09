@@ -146,7 +146,7 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <SignOutIcon />
-                  Cerrrar Sesion 
+                  Cerrrar Sesion
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

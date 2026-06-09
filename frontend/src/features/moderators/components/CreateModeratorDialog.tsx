@@ -134,7 +134,9 @@ export default function CreateModeratorDialog() {
                 id="perm_cats"
                 className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
                 checked={selectedPermissions.includes("manage_catalogs_technicals")}
-                onCheckedChange={(c) => handlePermissionChange("manage_catalogs_technicals", c === true)}
+                onCheckedChange={(c) =>
+                  handlePermissionChange("manage_catalogs_technicals", c === true)
+                }
               />
               <Label htmlFor="perm_cats" className="font-normal cursor-pointer text-slate-300">
                 Gestionar Catálogos de Habilidades Tecnicas
@@ -146,7 +148,9 @@ export default function CreateModeratorDialog() {
                 id="perm_cats"
                 className="border-[#2a2f55] data-[state=checked]:bg-[#6c72ff] data-[state=checked]:border-[#6c72ff]"
                 checked={selectedPermissions.includes("manage_catalogs_softskills")}
-                onCheckedChange={(c) => handlePermissionChange("manage_catalogs_softskills", c === true)}
+                onCheckedChange={(c) =>
+                  handlePermissionChange("manage_catalogs_softskills", c === true)
+                }
               />
               <Label htmlFor="perm_cats" className="font-normal cursor-pointer text-slate-300">
                 Gestionar Catálogos de Habilidades Blandas

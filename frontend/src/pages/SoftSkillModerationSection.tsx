@@ -39,14 +39,14 @@ export default function SoftSkillModerationSection() {
           Solicitudes
         </Button>
 
-        {hasPermission(user, "view_reports")&&(
+        {hasPermission(user, "view_reports") && (
           <Button
-          variant={tab === "reports" ? "default" : "secondary"}
-          onClick={() => setTab("reports")}
-        >
-          Reportes
-        </Button>
-      )}
+            variant={tab === "reports" ? "default" : "secondary"}
+            onClick={() => setTab("reports")}
+          >
+            Reportes
+          </Button>
+        )}
       </div>
       {tab === "catalog" && <SoftSkillCatalogSection />}
 

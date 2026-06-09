@@ -5,7 +5,6 @@ import TechnicalSkillReportPage from "@/components/moderator_TechnicalSkills/Tec
 import { useAuthStore } from "@/lib/auth-store";
 import { hasPermission } from "@/services/user.service";
 
-
 type TabType = "catalogo" | "solicitudes" | "reportes";
 
 export default function AdminSkills() {
@@ -27,24 +26,26 @@ export default function AdminSkills() {
         <div className="flex flex-wrap gap-3 border-b border-[#232555] pb-4">
           <button
             onClick={() => setActiveTab("catalogo")}
-            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeTab === "catalogo"
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === "catalogo"
                 ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
                 : "bg-[#1c1f38] text-slate-400 border border-[#232555] hover:text-slate-200 hover:bg-[#23274d]"
-              }`}
+            }`}
           >
             Catálogo
           </button>
 
-          {hasPermission(user, "view_reports")&&(
+          {hasPermission(user, "view_reports") && (
             <button
-            onClick={() => setActiveTab("reportes")}
-            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeTab === "reportes"
-                ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
-                : "bg-[#1c1f38] text-slate-400 border border-[#232555] hover:text-slate-200 hover:bg-[#23274d]"
+              onClick={() => setActiveTab("reportes")}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                activeTab === "reportes"
+                  ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
+                  : "bg-[#1c1f38] text-slate-400 border border-[#232555] hover:text-slate-200 hover:bg-[#23274d]"
               }`}
-          >
-            Reportes
-          </button>
+            >
+              Reportes
+            </button>
           )}
         </div>
 

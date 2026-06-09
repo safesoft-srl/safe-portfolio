@@ -46,7 +46,7 @@ export const AdminRoute = () => {
 
   if (user.role !== "admin" && user.role !== "Super Admin") {
     return <Navigate to="/" replace />;
-  } 
+  }
 
   return <Outlet />;
 };
