@@ -4,7 +4,6 @@ import { PlusIcon } from "@phosphor-icons/react";
 import { SkillForm } from "@/components/SkillForm";
 import { SkillCard } from "./SkillCard";
 
-// Tipado actualizado respetando el objeto "urls" que envía tu backend
 export interface TechnicalSkill {
   id: number;
   name: string;
@@ -20,6 +19,7 @@ export interface SkillSubmitData {
   logo_dark?: File;
 }
 
+// Usamos "Desactivadas" aquí
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros", "Desactivadas"];
 
 export function TSModCatalogo() {
@@ -30,7 +30,6 @@ export function TSModCatalogo() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // Guardamos la habilidad completa cuando queremos editar
   const [skillToEdit, setSkillToEdit] = useState<TechnicalSkill | null>(null);
 
   const token = localStorage.getItem("token");
@@ -92,8 +91,7 @@ export function TSModCatalogo() {
 
   const handleToggleStatus = async (id: number, currentStatus: boolean) => {
     const action = currentStatus ? "deshabilitar" : "habilitar";
-    // const confirm = window.confirm(`¿Estás seguro de que deseas ${action} esta habilidad del catálogo?`);
-    if (!confirm) return;
+    if (!confirm(`¿Estás seguro de que deseas ${action} esta habilidad del catálogo?`)) return;
 
     try {
       const res = await fetch(
@@ -135,7 +133,7 @@ export function TSModCatalogo() {
   const filteredSkills = skills.filter((skill) => {
     const matchesSearch = skill.name.toLowerCase().includes(search.toLowerCase());
 
-    if (activeTab === "Deshabilitadas") {
+    if (activeTab === "Desactivadas") {
       return matchesSearch && !skill.is_active;
     }
 
@@ -224,7 +222,6 @@ export function TSModCatalogo() {
               isLoading={isSubmitting}
               onCancel={closeModal}
               onSubmit={handleSaveSkill}
-              // Mapeamos el objeto urls hacia lo que el formulario espera
               initialData={
                 skillToEdit
                   ? {
