@@ -7,6 +7,7 @@ use App\Constants\ResponseMessages;
 use App\Http\Resources\TechnicalSkillResource;
 use App\Models\TechnicalSkill;
 use App\Services\ImageUploadService;
+use Illuminate\Http\Request;
 
 class TechnicalSkillController extends Controller
 {
@@ -14,6 +15,9 @@ class TechnicalSkillController extends Controller
         private ImageUploadService $imageUploadService
     ) {}
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $skills = TechnicalSkill::orderBy('name')->get();
@@ -24,6 +28,21 @@ class TechnicalSkillController extends Controller
         );
     }
 
+    public function activeSkills()
+    {
+        $skills = TechnicalSkill::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return ApiResponse::success(
+            TechnicalSkillResource::collection($skills),
+            ResponseMessages::FETCHED_SUCCESSFULLY
+        );
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store()
     {
         $data = request()->validate([
@@ -48,6 +67,75 @@ class TechnicalSkillController extends Controller
         return ApiResponse::success(
             $skill,
             ResponseMessages::CREATED_SUCCESSFULLY
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(int $id)
+    {
+        $skill = TechnicalSkill::find($id);
+
+        if (! $skill) {
+            return response()->json(['message' => 'Habilidad técnica no encontrada.'], 404);
+        }
+
+        return new TechnicalSkillResource($skill);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, int $id)
+    {
+        $skill = TechnicalSkill::find($id);
+
+        if (! $skill) {
+            return response()->json(['message' => 'Habilidad técnica no encontrada.'], 404);
+        }
+
+        $data = $request->validate([
+            'name' => 'sometimes|string|max:30',
+            'category' => 'sometimes|string|max:30',
+            'logo_light' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:2048',
+            'logo_dark' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:2048',
+        ]);
+
+        if (request()->hasFile('logo_light')) {
+            $logoData = $this->imageUploadService->uploadLogo(request()->file('logo_light'));
+            $data['url_light'] = $logoData['url'];
+        }
+
+        if (request()->hasFile('logo_dark')) {
+            $logoData = $this->imageUploadService->uploadLogo(request()->file('logo_dark'));
+            $data['url_dark'] = $logoData['url'];
+        }
+
+        $skill->update($data);
+
+        return ApiResponse::success(
+            new TechnicalSkillResource($skill),
+            ResponseMessages::UPDATED_SUCCESSFULLY
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(int $id)
+    {
+        $skill = TechnicalSkill::find($id);
+
+        if (! $skill) {
+            return response()->json(['message' => 'Habilidad técnica no encontrada.'], 404);
+        }
+
+        $skill->delete();
+
+        return ApiResponse::success(
+            null,
+            ResponseMessages::DELETED_SUCCESSFULLY
         );
     }
 }

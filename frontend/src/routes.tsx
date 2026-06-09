@@ -29,6 +29,7 @@ import AdminSkills from "./pages/admin/AdminSkills";
 import AdminProjects from "./pages/admin/AdminProjects";
 import AdminExperience from "./pages/admin/AdminExperience";
 import AdminFormation from "./pages/admin/AdminFormation";
+import AdminCourses from "./pages/admin/AdminCourses";
 
 export const router = createBrowserRouter([
   {
@@ -120,6 +121,10 @@ export const router = createBrowserRouter([
           {
             path: "formation",
             element: <AdminFormation />,
+          },
+          {
+            path: "courses",
+            element: <AdminCourses />,
           },
         ],
       },
