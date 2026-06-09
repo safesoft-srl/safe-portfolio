@@ -106,11 +106,11 @@ const formatDate = (value: string | null) => {
 };
 
 const getUserName = (project: ProjectReportPdfData["projects"][number]) => {
-  return project.user_name || "—";
+  return project.portfolio.profile_name || "—";
 };
 
 const getUserEmail = (project: ProjectReportPdfData["projects"][number]) => {
-  return project.user_email || "—";
+  return project.portfolio.profile_email || "—";
 };
 
 export default function ProjectReportPdf({ data }: Props) {

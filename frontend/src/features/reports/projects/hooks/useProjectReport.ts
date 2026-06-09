@@ -19,9 +19,7 @@ export function useProjectReport() {
       setLoading(true);
       const report = await getProjectReport(currentDateFrom, currentDateTo);
 
-      {
-        /*Si hay selección de skills, filtrar por proyectos que tengan al menos una de las skills seleccionadas*/
-      }
+    
       let result = report;
 
       if (selectedSkills && selectedSkills.length > 0) {
