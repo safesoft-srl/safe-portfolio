@@ -14,8 +14,15 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
+    # 1. If it's a real file or directory (like assets, images, etc.), serve it directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 2. Rewrite any API requests to Laravel's index.php
+    RewriteCond %{REQUEST_URI} ^/api/ [NC]
     RewriteRule ^ index.php [L]
+
+    # 3. Rewrite all other routes to Vite's frontend index.html
+    RewriteRule ^ index.html [L]
 </IfModule>
