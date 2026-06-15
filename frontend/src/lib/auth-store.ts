@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: (token: string, expiresIn: number) => {
     Cookies.set("access_token", token, {
       expires: expiresIn / 86400,
-      secure: true,
+      secure: window.location.protocol === "https:",
       sameSite: "lax",
     });
     set({ isAuthenticated: true });
