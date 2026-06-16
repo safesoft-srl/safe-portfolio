@@ -31,6 +31,12 @@ class AuthController extends Controller
             if (! $token = JWTAuth::attempt($credentials)) {
                 return $this->errorResponse('Credenciales incorrectas.', 401);
             }
+            
+            $user = auth('api')->user();
+            if (!$user->verified) {
+                auth('api')->logout();
+                return $this->errorResponse('Por favor, verifica tu correo electrónico para poder iniciar sesión.', 403);
+            }
         } catch (JWTException $e) {
             return $this->errorResponse('No se pudo crear el token de autenticación.', 500);
         }
