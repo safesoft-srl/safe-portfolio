@@ -74,7 +74,7 @@ export function TSModCatalogo() {
       if (error instanceof Error) {
         console.error(error.message);
       }
-      alert(`Error al intentar modificar el estado de la habilidad.`);
+      toast.error(`Error al intentar modificar el estado de la habilidad.`);
     }
   };
 
