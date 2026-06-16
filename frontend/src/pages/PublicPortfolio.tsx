@@ -36,12 +36,12 @@ export default function PublicPortfolio() {
       try {
         const data = await getPublicPortfolio(slug!);
         if (!isMounted) return;
-        
+
         if (!data) {
           navigate("/404", { replace: true });
           return;
         }
-        
+
         setProfile(data);
       } catch (error) {
         console.error("Error loading public profile:", error);
