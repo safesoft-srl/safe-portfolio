@@ -30,6 +30,7 @@ import AdminProjects from "./pages/admin/AdminProjects";
 import AdminExperience from "./pages/admin/AdminExperience";
 import AdminFormation from "./pages/admin/AdminFormation";
 import AdminCourses from "./pages/admin/AdminCourses";
+import NotFound from "./pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -186,5 +187,13 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/404",
+    element: <NotFound />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import { PublicFooter } from "@/components/PublicFooter";
 import defaultProfileImage from "@/assets/image.png";
@@ -26,6 +26,7 @@ const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 export default function PublicPortfolio() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -35,9 +36,18 @@ export default function PublicPortfolio() {
       try {
         const data = await getPublicPortfolio(slug!);
         if (!isMounted) return;
+        
+        if (!data) {
+          navigate("/404", { replace: true });
+          return;
+        }
+        
         setProfile(data);
       } catch (error) {
         console.error("Error loading public profile:", error);
+        if (isMounted) {
+          navigate("/404", { replace: true });
+        }
       } finally {
         if (isMounted) setIsLoading(false);
       }
