@@ -8,7 +8,7 @@ interface AuthState {
   user: User | null;
   setAuthenticated: (status: boolean) => void;
   setUser: (user: User | null) => void;
-  login: (token: string, expiresIn: number) => void;
+  login: (token: string, expiresIn: number, user?: User) => void;
   logout: () => void;
 }
 
@@ -17,13 +17,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   setAuthenticated: (status) => set({ isAuthenticated: status }),
   setUser: (user) => set({ user }),
-  login: (token: string, expiresIn: number) => {
+  login: (token: string, expiresIn: number, user?: User) => {
     Cookies.set("access_token", token, {
       expires: expiresIn / 86400,
       secure: window.location.protocol === "https:",
       sameSite: "lax",
     });
-    set({ isAuthenticated: true });
+    set({ isAuthenticated: true, user: user || null });
   },
   logout: () => {
     Cookies.remove("access_token");

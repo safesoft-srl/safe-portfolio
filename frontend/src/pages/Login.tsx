@@ -36,8 +36,13 @@ export default function Login() {
     },
     onSuccess: (data) => {
       if (data.success && data.data) {
-        loginFn(data.data.access_token, data.data.expires_in);
-        navigate("/portfolios");
+        loginFn(data.data.access_token, data.data.expires_in, data.data.user);
+        
+        if (data.data.user?.role === "admin" || data.data.user?.role === "Super Admin") {
+          navigate("/admin");
+        } else {
+          navigate("/portfolios");
+        }
       } else {
         setErrorMsg(data.message || "Login failed");
       }
