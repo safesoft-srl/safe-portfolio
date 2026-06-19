@@ -91,7 +91,7 @@ export default function ProjectsPage() {
                 }}
               >
                 <PlusIcon weight="bold" className="size-4" />
-                <span>Nuevo Proyecto</span>
+                <span>Agregar Proyecto</span>
               </Button>
             </AlertDialogTrigger>
           </header>

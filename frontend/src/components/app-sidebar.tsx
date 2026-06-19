@@ -65,12 +65,12 @@ const data = {
     },
 
     {
-      title: "Experiencia",
+      title: "Experiencia Laboral",
       url: "experience",
       icon: <GraduationCapIcon />,
     },
     {
-      title: "Formación",
+      title: "Formación Academica",
       url: "formation",
       icon: <GraduationCapIcon />,
     },
