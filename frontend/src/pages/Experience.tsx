@@ -451,6 +451,7 @@ export default function ExperiencePage() {
                 <div className="space-y-2">
                   <Label className="text-slate-300">Empresa</Label>
                   <Input
+                    disabled={true}
                     {...register("company")}
                     maxLength={50}
                     placeholder="Ej: Microsoft"
@@ -463,7 +464,9 @@ export default function ExperiencePage() {
 
                 <div className="space-y-2">
                   <Label className="text-slate-300">Cargo / Posición</Label>
+
                   <Input
+                    disabled={true}
                     {...register("position")}
                     maxLength={70}
                     placeholder="Ej: Senior Developer"
