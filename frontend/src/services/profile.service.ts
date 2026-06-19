@@ -21,6 +21,7 @@ export type ProfileData = {
   work_experiences_count?: number;
   academyc_trainings_count?: number;
   courses_count?: number;
+  is_public: boolean;
 };
 
 const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
@@ -42,6 +43,7 @@ const toProfileData = (payload: ProfileDataType | undefined): ProfileData => ({
   work_experiences_count: payload?.work_experiences_count ?? 0,
   academyc_trainings_count: payload?.academyc_trainings_count ?? 0,
   courses_count: payload?.courses_count ?? 0,
+  is_public: payload?.is_public ?? true,
 });
 
 const unwrapData = (responseData: unknown): ProfileDataType | undefined => {
@@ -71,6 +73,21 @@ export const getProfile = async () => {
     }
   }
 };
+
+export const setPublicPortfolio = async(is_public: boolean, idPortfolio: number) => {
+  try {
+    const payload = {
+      is_public: is_public
+    };
+
+    const response = await http.put(`/api/me/portfolio/setPublic/${idPortfolio}`, payload);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error Failed to update is_public: ", error);
+  }
+
+}
 
 export const getPortfolio = async (idPortfolio: number) => {
   try {

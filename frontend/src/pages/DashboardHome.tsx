@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import {
   CopySimple,
   UserCircle,
@@ -14,7 +17,7 @@ import {
   GraduationCap,
 } from "@phosphor-icons/react";
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
-import { getPortfolio } from "@/services/profile.service";
+import { getPortfolio, setPublicPortfolio } from "@/services/profile.service";
 import type { ProfileData } from "@/services/profile.service";
 
 export default function DashboardHome() {
@@ -26,6 +29,7 @@ export default function DashboardHome() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
+  const [isPublic, setIsPublic] = useState(true);
 
   // Completitud logic
   const calculateCompleteness = (data: ProfileData) => {
@@ -113,10 +117,13 @@ export default function DashboardHome() {
       try {
         const portfolio = await getPortfolio(parseInt(idPortfolio!));
 
+        console.log('portfolio recuperado: ', portfolio);
+
         if (!isMounted) return;
 
         if (portfolio) {
           setPortfolioData(portfolio);
+          setIsPublic(portfolio.is_public);
           if (portfolio.url_portfolio) {
             setPortfolioUrl(portfolio.url_portfolio);
           }
@@ -134,6 +141,23 @@ export default function DashboardHome() {
       isMounted = false;
     };
   }, [idPortfolio]);
+
+  const handleCheckedChange = async (checked:boolean) => {
+    setIsPublic(checked);
+
+    try {
+      await setPublicPortfolio(checked, Number(idPortfolio));
+      
+      if(checked) {
+        toast.success("Su portafolio se publicó exitosamente.");
+      } else {
+        toast.success("Su portafolio dejó de ser publicó");
+      }
+    } catch (error) {
+      console.error('Error al actualizar el estado', error);
+      setIsPublic(!checked);
+    }   
+  }
 
   const completeness = portfolioData ? calculateCompleteness(portfolioData) : 0;
   const missingSections = portfolioData ? getMissingSections(portfolioData) : [];
@@ -329,11 +353,10 @@ export default function DashboardHome() {
                       value={slug}
                       onChange={handleChangePortfolioUrl}
                       onBlur={handleBlurPortfolioUrl}
-                      className={`h-10 rounded-l-none rounded-r-md border-l-0 ${
-                        portfolioUrlError
-                          ? "border-red-500 focus-visible:ring-red-500 bg-red-500/10"
-                          : "border-[#2a2f55] bg-[#14172b] text-white focus-visible:ring-[#6c72ff]"
-                      }`}
+                      className={`h-10 rounded-l-none rounded-r-md border-l-0 ${portfolioUrlError
+                        ? "border-red-500 focus-visible:ring-red-500 bg-red-500/10"
+                        : "border-[#2a2f55] bg-[#14172b] text-white focus-visible:ring-[#6c72ff]"
+                        }`}
                     />
                   </div>
                   {portfolioUrlError && (
@@ -346,11 +369,10 @@ export default function DashboardHome() {
                 <Button
                   disabled={!isValidSlug || loading}
                   className={`w-full h-10 rounded-lg font-medium tracking-wide text-white transition-all
-                      ${
-                        !isValidSlug || loading
-                          ? "bg-[#2a2f55] text-slate-400 cursor-not-allowed"
-                          : "bg-[#6c72ff] hover:bg-[#5c61eb] shadow-[0_0_15px_rgba(108,114,255,0.3)] hover:shadow-[0_0_20px_rgba(108,114,255,0.5)]"
-                      }`}
+                      ${!isValidSlug || loading
+                      ? "bg-[#2a2f55] text-slate-400 cursor-not-allowed"
+                      : "bg-[#6c72ff] hover:bg-[#5c61eb] shadow-[0_0_15px_rgba(108,114,255,0.3)] hover:shadow-[0_0_20px_rgba(108,114,255,0.5)]"
+                    }`}
                   onClick={handlePublish}
                 >
                   {loading ? "Generando..." : "Generar / Actualizar URL"}
@@ -360,9 +382,23 @@ export default function DashboardHome() {
 
             {portfolioUrl && (
               <div className="mt-6 border-t border-[#2a2f55] pt-4">
-                <span className="text-xs font-sans text-slate-400 block mb-2">
+                <div className="p-4 flex justify-between">
+                  <span className="text-xs font-sans text-slate-400 block mb-2">
                   Tu enlace público activo:
                 </span>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={isPublic}
+                    onCheckedChange={handleCheckedChange}
+                  />
+                  <Label
+                    className="cursor-pointer font-medium text-sidebar-foreground text-xs"
+                  >
+                    Visible para todo publico
+                  </Label>
+                </div>
+
+                </div>
                 <div className="flex items-center justify-between rounded-lg bg-[#0f1224] p-3 border border-[#2a2f55]">
                   <a
                     href={portfolioUrl}
