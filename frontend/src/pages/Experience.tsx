@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -208,6 +208,23 @@ export default function ExperiencePage() {
 
   const isCurrent = watch("is_current");
   const startDate = watch("start_date");
+  const companyValue = watch("company");
+
+  const hasSimilarCompany = useMemo(() => {
+    if (!companyValue || companyValue.length < 4) return false;
+    const newName = companyValue.toLowerCase().trim();
+
+    return experiences?.some((exp) => {
+      if (editingExperience && exp.id === editingExperience.id) return false;
+      const existingName = exp.company.toLowerCase().trim();
+      return (
+        existingName === newName ||
+        (existingName.length > 3 &&
+          newName.length > 3 &&
+          (existingName.includes(newName) || newName.includes(existingName)))
+      );
+    });
+  }, [companyValue, experiences, editingExperience]);
 
   const handleOpenModal = (exp?: WorkExperience) => {
     if (exp) {
@@ -451,7 +468,7 @@ export default function ExperiencePage() {
                 <div className="space-y-2">
                   <Label className="text-slate-300">Empresa</Label>
                   <Input
-                    disabled={true}
+                    disabled={editingExperience ? true : false}
                     {...register("company")}
                     maxLength={50}
                     placeholder="Ej: Microsoft"
@@ -460,13 +477,18 @@ export default function ExperiencePage() {
                   {errors.company && (
                     <span className="text-xs text-red-500">{errors.company.message}</span>
                   )}
+                  {hasSimilarCompany && !errors.company && (
+                    <span className="text-xs text-amber-500">
+                      Ya existe una experiencia con nombre similar.
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-slate-300">Cargo / Posición</Label>
 
                   <Input
-                    disabled={true}
+                    disabled={editingExperience ? true : false}
                     {...register("position")}
                     maxLength={70}
                     placeholder="Ej: Senior Developer"
