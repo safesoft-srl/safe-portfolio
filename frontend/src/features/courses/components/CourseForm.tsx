@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox } from "@/components/ui/combobox";
 
 import type { CourseFormData, CourseRecord } from "../types/course.types";
+import { BasicPlatform } from "chart.js";
 
 const todayStr = new Date().toISOString().split("T")[0];
 
@@ -63,6 +65,21 @@ const defaultValues: CourseFormValues = {
   description: "",
   is_visible: true,
 };
+
+const levels = [
+  {
+    value: 'Basico',
+    label: 'Basico',
+  },
+  {
+    value: 'Intermedio',
+    label: 'Intermedio',
+  },
+  {
+    value: 'Avanzado',
+    label: 'Avanzado',
+  },
+]
 
 export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
   const [isSaving, setIsSaving] = useState(false);
@@ -228,12 +245,20 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
 
         <div className="space-y-2">
           <Label className="text-slate-300">Nivel</Label>
-          <Input
-            {...register("level")}
-            placeholder="Ej: Básico, Intermedio, Avanzado"
-            disabled={!!initialData}
-            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 disabled:opacity-50"
+          <Controller
+            name='level'
+            control={control}
+            render={({ field }) => (
+              <Combobox
+                options={levels}
+                value={field.value}
+                onChange={field.onChange}
+                placeholder='Selecciona un título'
+                disabled={!!initialData}
+              />
+            )}
           />
+
           {errors.level && <span className="text-xs text-red-500">{errors.level.message}</span>}
         </div>
       </div>
