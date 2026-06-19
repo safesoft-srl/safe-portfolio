@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox } from "@/components/ui/combobox";
 
 import type { AcademicFormData, AcademicRecord } from "../types/academic.types";
 
@@ -61,6 +62,41 @@ const defaultValues: AcademicFormValues = {
   description: "",
   is_visible: true,
 };
+
+const academicTitles = [
+  {
+    value: 'Licenciatura',
+    label:'Licenciatura'
+  },
+  {
+    value: 'Ingeneria',
+    label: 'Ingeneria',
+  },
+  {
+    value: 'Maestria',
+    label: 'Maestria',
+  },
+  {
+    value: 'Doctorado',
+    label:'Doctorado',
+  },
+  {
+    value: 'Diplomado',
+    label:'Diplomado',
+  },
+  {
+    value: 'Tecnico Superior',
+    label:'Tecnico Superior',
+  },
+  {
+    value:'Especialidad',
+    label:'Especialidad'
+  },
+  {
+    value:'MBA',
+    label:'MBA',
+  }
+  ];
 
 export default function AcademicForm({ initialData, onSubmit, onCancel }: Props) {
   const [isSaving, setIsSaving] = useState(false);
@@ -183,11 +219,18 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="space-y-2">
           <Label className="text-slate-300">Título</Label>
-          <Input
-            {...register("title")}
-            placeholder="Ej: Licenciatura, Master, etc."
-            disabled={!!initialData}
-            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 disabled:opacity-50"
+          <Controller
+            name='title'
+            control={control}
+            render={({field}) =>(
+              <Combobox
+                options={academicTitles}
+                value={field.value}
+                onChange={field.onChange}
+                placeholder='Selecciona un título'
+                disabled={!!initialData}
+              />
+            )}
           />
           {errors.title && <span className="text-xs text-red-500">{errors.title.message}</span>}
         </div>
