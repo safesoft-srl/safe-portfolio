@@ -96,7 +96,7 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
             );
           })}
 
-          {/* NUEVO: Enlace público al Feed de Portafolios */}
+          {/*Enlace público al Feed de Portafolios */}
           <Link
             to="/feed"
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full border ${
