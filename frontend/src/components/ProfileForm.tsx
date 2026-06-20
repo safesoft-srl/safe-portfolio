@@ -50,6 +50,7 @@ export type ProfileFormProps = {
   isLoading?: boolean;
   isSaving?: boolean;
   idPortfolio: number;
+  existingPortfolios?: Array<{ portfolio_name?: string }>;
 };
 
 const EMPTY_ERRORS = {
@@ -78,6 +79,7 @@ export default function ProfileForm({
   isLoading = false,
   isSaving = false,
   idPortfolio,
+  existingPortfolios = [],
 }: ProfileFormProps) {
   const [formData, setFormData] = useState<ProfileFormData>(initialData);
   const [errors, setErrors] = useState<Record<ProfileField, string>>(EMPTY_ERRORS);
@@ -102,6 +104,13 @@ export default function ProfileForm({
     if (field === "portfolioName") {
       if (trimmedValue.length > 60)
         return "El nombre del portafolio debe tener máximo 60 caracteres.";
+      if (
+        existingPortfolios.some(
+          (p) => p.portfolio_name?.toLowerCase() === trimmedValue.toLowerCase()
+        )
+      ) {
+        return "El nombre de este portafolio ya está en uso";
+      }
       return "";
     }
     if (field === "fullName") {

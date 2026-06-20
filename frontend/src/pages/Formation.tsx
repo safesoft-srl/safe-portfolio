@@ -399,6 +399,7 @@ export default function FormationPage() {
                   initialData={editingAcademic}
                   onSubmit={handleAcademicSubmit}
                   onCancel={handleCloseModal}
+                  existingAcademics={academics}
                 />
               </div>
             </DialogContent>
@@ -418,6 +419,7 @@ export default function FormationPage() {
                   initialData={editingCourse}
                   onSubmit={handleCourseSubmit}
                   onCancel={handleCloseModal}
+                  existingCourses={courses}
                 />
               </div>
             </DialogContent>
