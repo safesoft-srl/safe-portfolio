@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +14,8 @@ import {
   TrashIcon,
   BuildingsIcon,
   CircleNotchIcon,
-  X,
+  XIcon,
+  WarningIcon,
 } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle, AlertAction } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -117,6 +119,7 @@ export default function ExperiencePage() {
   const [editingExperience, setEditingExperience] = useState<WorkExperience | null>(null);
   const [duplicateWarning, setDuplicateWarning] = useState(false);
   const [pendingSubmitData, setPendingSubmitData] = useState<ExperienceFormData | null>(null);
+  const [isWarningDismissed, setIsWarningDismissed] = useState(false);
 
   const { data: experiences, isLoading } = useQuery({
     queryKey: ["work-experiences"],
@@ -127,6 +130,14 @@ export default function ExperiencePage() {
       return response.data.data;
     },
   });
+
+  const currentJobsCount = experiences?.filter((exp) => exp.is_current).length || 0;
+
+  useEffect(() => {
+    if (currentJobsCount < 3) {
+      setIsWarningDismissed(false);
+    }
+  }, [currentJobsCount]);
 
   const createMutation = useMutation({
     mutationFn: (newExp: ExperienceFormData) =>
@@ -197,6 +208,23 @@ export default function ExperiencePage() {
 
   const isCurrent = watch("is_current");
   const startDate = watch("start_date");
+  const companyValue = watch("company");
+
+  const hasSimilarCompany = useMemo(() => {
+    if (!companyValue || companyValue.length < 4) return false;
+    const newName = companyValue.toLowerCase().trim();
+
+    return experiences?.some((exp) => {
+      if (editingExperience && exp.id === editingExperience.id) return false;
+      const existingName = exp.company.toLowerCase().trim();
+      return (
+        existingName === newName ||
+        (existingName.length > 3 &&
+          newName.length > 3 &&
+          (existingName.includes(newName) || newName.includes(existingName)))
+      );
+    });
+  }, [companyValue, experiences, editingExperience]);
 
   const handleOpenModal = (exp?: WorkExperience) => {
     if (exp) {
@@ -290,6 +318,25 @@ export default function ExperiencePage() {
           Agregar Experiencia
         </Button>
       </div>
+
+      {currentJobsCount >= 3 && !isWarningDismissed && (
+        <Alert className="bg-amber-500/10 text-amber-500 border-amber-500/50">
+          <WarningIcon size={20} className="text-amber-500" />
+          <AlertTitle className="text-amber-500 font-bold">Advertencia</AlertTitle>
+          <AlertDescription className="text-amber-500/90">
+            Tienes varios empleos activos simultáneamente. Esto podría generar dudas entre los
+            reclutadores sobre tu disponibilidad o la información de tu perfil.
+          </AlertDescription>
+          <AlertAction>
+            <button
+              onClick={() => setIsWarningDismissed(true)}
+              className="text-amber-500/80 hover:text-amber-500 transition-colors cursor-pointer"
+            >
+              <XIcon size={16} weight="bold" />
+            </button>
+          </AlertAction>
+        </Alert>
+      )}
 
       {/* List */}
       <div className="space-y-6">
@@ -421,6 +468,7 @@ export default function ExperiencePage() {
                 <div className="space-y-2">
                   <Label className="text-slate-300">Empresa</Label>
                   <Input
+                    disabled={editingExperience ? true : false}
                     {...register("company")}
                     maxLength={50}
                     placeholder="Ej: Microsoft"
@@ -429,11 +477,18 @@ export default function ExperiencePage() {
                   {errors.company && (
                     <span className="text-xs text-red-500">{errors.company.message}</span>
                   )}
+                  {hasSimilarCompany && !errors.company && (
+                    <span className="text-xs text-amber-500">
+                      Ya existe una experiencia con nombre similar.
+                    </span>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-slate-300">Cargo / Posición</Label>
+
                   <Input
+                    disabled={editingExperience ? true : false}
                     {...register("position")}
                     maxLength={70}
                     placeholder="Ej: Senior Developer"
@@ -483,6 +538,7 @@ export default function ExperiencePage() {
                     {...register("end_date")}
                     disabled={isCurrent}
                     min={startDate || undefined}
+                    max={new Date().toISOString().split("T")[0]}
                     className="bg-slate-950 border-slate-800 text-white disabled:opacity-50 focus-visible:ring-indigo-500"
                   />
                   {errors.end_date && (
@@ -582,7 +638,7 @@ export default function ExperiencePage() {
                                 }}
                                 className="text-slate-500 hover:text-red-400 transition-colors ml-3 shrink-0 mt-0.5"
                               >
-                                <X weight="bold" size={16} />
+                                <XIcon weight="bold" size={16} />
                               </button>
                             </div>
                           ))}
