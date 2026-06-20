@@ -215,3 +215,18 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/moderator/technical-skills/{id}/toggle-status', [TechnicalSkillCatalogController::class, 'toggleStatus']);
 
 });
+
+use App\Http\Controllers\TechnicalSkillRequestController;
+
+Route::middleware('auth:api')->group(function () {
+
+    // USER APIS
+    Route::get('/technical-skill-requests', [TechnicalSkillRequestController::class, 'index']);
+    Route::post('/technical-skill-requests', [TechnicalSkillRequestController::class, 'store']);
+
+    // MODERATOR APIS
+    Route::get('/moderator/technical-skill-requests', [TechnicalSkillRequestController::class, 'moderatorIndex']);
+    Route::post('/moderator/technical-skill-requests/approve', [TechnicalSkillRequestController::class, 'approveGroup']);
+    Route::post('/moderator/technical-skill-requests/reject', [TechnicalSkillRequestController::class, 'rejectGroup']);
+
+});

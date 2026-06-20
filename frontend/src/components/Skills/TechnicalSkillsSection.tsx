@@ -5,6 +5,7 @@ import { AddTechnicalSkill } from "./addTechnicalSkill";
 import { usePortfolioId } from "@/hooks/usePortfolio";
 import { showErrorToast } from "@/components/ui/showErrorToast";
 import { toast } from "sonner";
+import { TechnicalSkillRequestSection } from "./TechnicalSkillRequestSection";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -22,6 +23,7 @@ export function TechnicalSkillsSection() {
     color: "#ffffff",
     border: "1px solid #8b90ff",
   };
+  const [requestRefreshKey, setRequestRefreshKey] = useState(0);
 
   const fetchUserSkills = useCallback(async () => {
     try {
@@ -76,6 +78,7 @@ export function TechnicalSkillsSection() {
       });
 
       await fetchUserSkills();
+      setRequestRefreshKey((prev) => prev + 1);
     } catch (err) {
       showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error de conexión:", err);
@@ -105,6 +108,7 @@ export function TechnicalSkillsSection() {
       });
 
       await fetchUserSkills();
+      setRequestRefreshKey((prev) => prev + 1);
     } catch (err) {
       showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error eliminando skill:", err);
@@ -147,6 +151,7 @@ export function TechnicalSkillsSection() {
       setSkillToEdit(null);
 
       await fetchUserSkills();
+      setRequestRefreshKey((prev) => prev + 1);
     } catch (err) {
       showErrorToast("No se pudo conectar con el servidor.");
       console.error("Error actualizando skill:", err);
@@ -216,6 +221,8 @@ export function TechnicalSkillsSection() {
         }}
         onSave={handleSaveLevel}
       />
+
+      <TechnicalSkillRequestSection refreshKey={requestRefreshKey} />
     </div>
   );
 }

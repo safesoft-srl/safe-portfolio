@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
+import { showErrorToast } from "@/components/ui/showErrorToast";
 
 interface Skill {
   id: number;
@@ -15,6 +17,13 @@ interface Skill {
 const API_URL = import.meta.env.VITE_API_URL;
 const CATEGORIES = ["Todas", "Frontend", "Backend", "DevOps", "Otros"];
 const LEVELS = ["Principiante", "Intermedio", "Avanzado"];
+
+const normalizeText = (text: string) => {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+};
 
 export function AddTechnicalSkill({
   onAdd,
@@ -64,6 +73,9 @@ export function AddTechnicalSkill({
     const matchesTab = activeTab === "Todas" || skill.category === activeTab;
     return matchesSearch && matchesTab;
   });
+  const exactMatch = catalogo.find((s) => normalizeText(s.name) === normalizeText(search.trim()));
+  const skillExists = Boolean(exactMatch);
+  const isNewSkill = search.trim().length > 0 && !skillExists && !selectedSkill;
 
   const handleSaveSkill = async () => {
     if (!selectedSkill || !selectedLevel) return;
@@ -82,6 +94,36 @@ export function AddTechnicalSkill({
       console.error("Error guardando skill:", err);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleRequestSkill = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${API_URL}/api/technical-skill-requests`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: search.trim(),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showErrorToast(data.message || "Error al enviar solicitud");
+        return;
+      }
+
+      toast.success("Solicitud enviada a revisión");
+
+      setSearch("");
+    } catch {
+      showErrorToast("Error de conexión");
     }
   };
 
@@ -181,8 +223,17 @@ export function AddTechnicalSkill({
                       </div>
                     ))
                   ) : (
-                    <div className="col-span-full py-10 text-center text-slate-500 italic">
-                      No se encontraron habilidades disponibles.
+                    <div className="col-span-full py-10 text-center text-slate-500 italic space-y-4">
+                      <p>No se encontraron habilidades disponibles.</p>
+
+                      {isNewSkill && (
+                        <Button
+                          className="bg-orange-600 hover:bg-orange-700 text-white mt-4"
+                          onClick={() => handleRequestSkill()}
+                        >
+                          Proponer habilidad
+                        </Button>
+                      )}
                     </div>
                   )}
                 </div>

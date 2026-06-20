@@ -109,18 +109,6 @@ export default function TechnicalSkillReportPdf({ config, data }: Props) {
           Generado el {new Date().toLocaleDateString()}
         </Text>
 
-        {/* FILTERS */}
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Filtros aplicados</Text>
-
-          <Text>Estado: {config.filters.status || "Todos"}</Text>
-          <Text>Categoría: {config.filters.category || "Todas"}</Text>
-          <Text>Uso: {config.filters.usage || "Todos"}</Text>
-          <Text>Orden: {config.filters.useOrder || "desc"}</Text>
-          <Text>Límite: {config.filters.limit || "Sin límite"}</Text>
-          <Text>Búsqueda: {config.filters.search || "Ninguna"}</Text>
-        </View>
-
         {/* SUMMARY */}
         {config.catalog.summary && (
           <View style={styles.section}>
