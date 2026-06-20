@@ -9,6 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox } from "@/components/ui/combobox";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import type { AcademicFormData, AcademicRecord } from "../types/academic.types";
 
@@ -50,6 +59,7 @@ type Props = {
   initialData: AcademicRecord | null;
   onSubmit: (data: AcademicFormData) => Promise<void>;
   onCancel?: () => void;
+  existingAcademics?: AcademicRecord[];
 };
 
 const defaultValues: AcademicFormValues = {
@@ -62,8 +72,49 @@ const defaultValues: AcademicFormValues = {
   is_visible: true,
 };
 
-export default function AcademicForm({ initialData, onSubmit, onCancel }: Props) {
+const academicTitles = [
+  {
+    value: "Licenciatura",
+    label: "Licenciatura",
+  },
+  {
+    value: "Ingeneria",
+    label: "Ingeneria",
+  },
+  {
+    value: "Maestria",
+    label: "Maestria",
+  },
+  {
+    value: "Doctorado",
+    label: "Doctorado",
+  },
+  {
+    value: "Diplomado",
+    label: "Diplomado",
+  },
+  {
+    value: "Tecnico Superior",
+    label: "Tecnico Superior",
+  },
+  {
+    value: "Especialidad",
+    label: "Especialidad",
+  },
+  {
+    value: "MBA",
+    label: "MBA",
+  },
+];
+
+export default function AcademicForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  existingAcademics = [],
+}: Props) {
   const [isSaving, setIsSaving] = useState(false);
+  const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const {
@@ -126,7 +177,30 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
     }
   }, [isCurrent, setValue]);
 
+  const checkDuplicateAcademic = (formData: AcademicFormValues): boolean => {
+    const institutionLower = formData.institution_name.trim().toLowerCase();
+    const titleLower = formData.title.trim().toLowerCase();
+    const fieldOfStudyLower = formData.field_of_study.trim().toLowerCase();
+
+    return existingAcademics.some((academic) => {
+      if (initialData && academic.id === initialData.id) {
+        return false;
+      }
+
+      return (
+        academic.institution_name.toLowerCase() === institutionLower &&
+        academic.title.toLowerCase() === titleLower &&
+        academic.field_of_study.toLowerCase() === fieldOfStudyLower
+      );
+    });
+  };
+
   const submitForm = async (data: AcademicFormValues) => {
+    if (checkDuplicateAcademic(data)) {
+      setShowDuplicateWarning(true);
+      return;
+    }
+
     try {
       setIsSaving(true);
       await onSubmit({
@@ -183,11 +257,18 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="space-y-2">
           <Label className="text-slate-300">Título</Label>
-          <Input
-            {...register("title")}
-            placeholder="Ej: Licenciatura, Master, etc."
-            disabled={!!initialData}
-            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 disabled:opacity-50"
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Combobox
+                options={academicTitles}
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="Selecciona un título"
+                disabled={!!initialData}
+              />
+            )}
           />
           {errors.title && <span className="text-xs text-red-500">{errors.title.message}</span>}
         </div>
@@ -284,6 +365,24 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
           )}
         </Button>
       </div>
+
+      <AlertDialog open={showDuplicateWarning} onOpenChange={setShowDuplicateWarning}>
+        <AlertDialogContent className="border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Grado académico duplicado</AlertDialogTitle>
+            <p className="text-slate-600 dark:text-slate-300 text-xs mt-2">
+              Ya existe un grado académico registrado con la misma institución, título y campo de
+              estudio.
+            </p>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-sidebar-border dark:border-[#2a2d46] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-slate-200">
+              Volver al formulario
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </form>
   );
 }

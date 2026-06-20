@@ -62,6 +62,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
     Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
     Route::post('/me/portfolio/publish/{idPortfolio}', [PortfolioController::class, 'getSlug']);
+    Route::put('/me/portfolio/setPublic/{idPortfolio}', [PortfolioController::class, 'setPublic']);
     Route::post('/me/portfolio/save-url/{id}', [PortfolioController::class, 'saveUrlPortfolio']);
 });
 
@@ -212,5 +213,20 @@ Route::middleware('auth:api')->group(function () {
     // MODERATOR TECHNICAL SKILL CATALOG APIS
     // Api: http://localhost:8000/api/moderator/technical-skills/{id}/toggle-status
     Route::patch('/moderator/technical-skills/{id}/toggle-status', [TechnicalSkillCatalogController::class, 'toggleStatus']);
+
+});
+
+use App\Http\Controllers\TechnicalSkillRequestController;
+
+Route::middleware('auth:api')->group(function () {
+
+    // USER APIS
+    Route::get('/technical-skill-requests', [TechnicalSkillRequestController::class, 'index']);
+    Route::post('/technical-skill-requests', [TechnicalSkillRequestController::class, 'store']);
+
+    // MODERATOR APIS
+    Route::get('/moderator/technical-skill-requests', [TechnicalSkillRequestController::class, 'moderatorIndex']);
+    Route::post('/moderator/technical-skill-requests/approve', [TechnicalSkillRequestController::class, 'approveGroup']);
+    Route::post('/moderator/technical-skill-requests/reject', [TechnicalSkillRequestController::class, 'rejectGroup']);
 
 });

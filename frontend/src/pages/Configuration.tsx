@@ -93,6 +93,7 @@ export default function Configuration() {
         profile_image: portfolio.profile_image ?? null,
         github_username: githubUsername.trim() || null,
         linkedin_url: portfolio.linkedin_url ?? null,
+        is_public: portfolio.is_public,
       });
 
       toast.success("Username de GitHub guardado correctamente.", {
@@ -130,6 +131,7 @@ export default function Configuration() {
         profile_image: portfolio.profile_image ?? null,
         github_username: portfolio.github_username ?? null,
         linkedin_url: linkedinUrl.trim() || null,
+        is_public: portfolio.is_public,
       });
 
       toast.success("URL de LinkedIn guardada correctamente.", {
@@ -189,9 +191,11 @@ export default function Configuration() {
               />
             </div>
             <Button
+              type="button"
+              variant="default"
               onClick={() => void handleSaveGithub()}
               disabled={isSavingGithub || !!githubError}
-              className="bg-[#6c72ff] hover:bg-[#5c61eb] text-white min-w-[120px]"
+              className="text-white min-w-[120px]"
             >
               {isSavingGithub ? "Guardando..." : "Guardar"}
             </Button>
@@ -246,9 +250,11 @@ export default function Configuration() {
               />
             </div>
             <Button
+              type="button"
+              variant="default"
               onClick={() => void handleSaveLinkedin()}
               disabled={isSavingLinkedin || !!linkedinError}
-              className="bg-[#6c72ff] hover:bg-[#5c61eb] text-white min-w-[120px]"
+              className="text-white min-w-[120px]"
             >
               {isSavingLinkedin ? "Guardando..." : "Guardar"}
             </Button>

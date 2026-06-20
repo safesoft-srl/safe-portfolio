@@ -93,6 +93,7 @@ export default function Portfolios() {
             open={createOpen}
             onOpenChange={setCreateOpen}
             hideTrigger
+            existingPortfolios={portfolios || []}
             onCreated={(p?: ProfileData) => {
               if (!p) return;
               queryClient.invalidateQueries({ queryKey: ["portfolios"] });

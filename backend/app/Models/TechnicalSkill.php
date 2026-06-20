@@ -14,7 +14,6 @@ class TechnicalSkill extends Model
         'is_active',
         'url_light',
         'url_dark',
-        'is_active',
     ];
 
     protected $casts = [

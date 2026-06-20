@@ -20,11 +20,13 @@ export default function CreateProfileModal({
   open: controlledOpen,
   onOpenChange,
   hideTrigger,
+  existingPortfolios = [],
 }: {
   onCreated?: (profile?: ProfileData) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   hideTrigger?: boolean;
+  existingPortfolios?: ProfileData[];
 }) {
   const user = useAuthStore((state) => state.user);
   console.log("user:", user);
@@ -49,6 +51,7 @@ export default function CreateProfileModal({
     bio: "",
     profile_image: defaultProfileImage,
     url_portfolio: "",
+    is_public: true,
   };
 
   const handleSubmit = async (data: ProfileFormData, file: File | null) => {
@@ -104,6 +107,7 @@ export default function CreateProfileModal({
           onSubmit={handleSubmit}
           isSaving={isSaving}
           idPortfolio={0}
+          existingPortfolios={existingPortfolios}
         />
       </AlertDialogContent>
     </AlertDialog>

@@ -267,7 +267,7 @@ export default function FormationPage() {
           <header className="mt-8 flex flex-col gap-4">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">Formación</h1>
+                <h1 className="text-3xl font-bold tracking-tight">Formación Académica</h1>
                 <p className="mt-1 text-sm text-slate-400"></p>
               </div>
             </div>
@@ -283,7 +283,7 @@ export default function FormationPage() {
                 }`}
               >
                 <GraduationCapIcon weight="bold" className="size-5" />
-                <span>Formación Académica ({academics.length})</span>
+                <span>Grado Académico ({academics.length})</span>
               </button>
               <button
                 type="button"
@@ -310,7 +310,9 @@ export default function FormationPage() {
                 disabled={!portfolioId}
               >
                 <PlusIcon weight="bold" className="size-4" />
-                <span>{activeTab === "academic" ? "Nuevo Grado Académico" : "Nuevo Curso"}</span>
+                <span>
+                  {activeTab === "academic" ? "Agregar Grado Académico" : "Agregar Curso"}
+                </span>
               </Button>
             </div>
           </header>
@@ -397,6 +399,7 @@ export default function FormationPage() {
                   initialData={editingAcademic}
                   onSubmit={handleAcademicSubmit}
                   onCancel={handleCloseModal}
+                  existingAcademics={academics}
                 />
               </div>
             </DialogContent>
@@ -416,6 +419,7 @@ export default function FormationPage() {
                   initialData={editingCourse}
                   onSubmit={handleCourseSubmit}
                   onCancel={handleCloseModal}
+                  existingCourses={courses}
                 />
               </div>
             </DialogContent>

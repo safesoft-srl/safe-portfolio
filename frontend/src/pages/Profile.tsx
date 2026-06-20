@@ -15,6 +15,7 @@ const EMPTY_PROFILE: ProfileFormData = {
   bio: "",
   profile_image: "",
   url_portfolio: "",
+  is_public: true,
 };
 
 const toFormData = (profile: Awaited<ReturnType<typeof getPortfolio>>): ProfileFormData => ({
@@ -27,6 +28,7 @@ const toFormData = (profile: Awaited<ReturnType<typeof getPortfolio>>): ProfileF
   bio: profile?.bio ?? "",
   profile_image: profile?.profile_image ?? "",
   url_portfolio: profile?.url_portfolio ?? "",
+  is_public: profile?.is_public ?? true,
 });
 
 export default function Profile() {
@@ -55,6 +57,7 @@ export default function Profile() {
         bio: data.bio?.trim() || "",
         profile_image: data.profile_image?.trim() || "",
         url_portfolio: data.url_portfolio?.trim() || "",
+        is_public: data.is_public,
       };
 
       const profile = await updateProfile(payload, file);

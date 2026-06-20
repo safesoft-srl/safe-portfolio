@@ -9,6 +9,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox } from "@/components/ui/combobox";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import type { CourseFormData, CourseRecord } from "../types/course.types";
 
@@ -50,6 +60,7 @@ type Props = {
   initialData: CourseRecord | null;
   onSubmit: (data: CourseFormData) => Promise<void>;
   onCancel?: () => void;
+  existingCourses?: CourseRecord[];
 };
 
 const defaultValues: CourseFormValues = {
@@ -64,8 +75,30 @@ const defaultValues: CourseFormValues = {
   is_visible: true,
 };
 
-export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
+const levels = [
+  {
+    value: "Basico",
+    label: "Basico",
+  },
+  {
+    value: "Intermedio",
+    label: "Intermedio",
+  },
+  {
+    value: "Avanzado",
+    label: "Avanzado",
+  },
+];
+
+export default function CourseForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  existingCourses = [],
+}: Props) {
   const [isSaving, setIsSaving] = useState(false);
+  const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
+  const [pendingFormData, setPendingFormData] = useState<CourseFormValues | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const {
@@ -132,7 +165,31 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
     }
   }, [isCurrent, setValue]);
 
+  const checkDuplicateCourse = (formData: CourseFormValues): boolean => {
+    const institutionLower = formData.institution_name.trim().toLowerCase();
+    const titleLower = formData.title.trim().toLowerCase();
+    const areaLower = formData.area.trim().toLowerCase();
+
+    return existingCourses.some((course) => {
+      if (initialData && course.id === initialData.id) {
+        return false;
+      }
+
+      return (
+        course.institution_name.toLowerCase() === institutionLower &&
+        course.title.toLowerCase() === titleLower &&
+        course.area.toLowerCase() === areaLower
+      );
+    });
+  };
+
   const submitForm = async (data: CourseFormValues) => {
+    if (checkDuplicateCourse(data)) {
+      setPendingFormData(data);
+      setShowDuplicateWarning(true);
+      return;
+    }
+
     try {
       setIsSaving(true);
       await onSubmit({
@@ -145,6 +202,29 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
         is_current: data.is_current,
         description: data.description.trim(),
         is_visible: Boolean(data.is_visible),
+      });
+    } catch {
+      showErrorToast("Error al guardar el curso");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const proceedWithSubmit = async () => {
+    if (!pendingFormData) return;
+
+    try {
+      setIsSaving(true);
+      await onSubmit({
+        institution_name: pendingFormData.institution_name.trim(),
+        title: pendingFormData.title.trim(),
+        area: pendingFormData.area.trim(),
+        workload_hours: pendingFormData.workload_hours.trim(),
+        level: pendingFormData.level.trim(),
+        certificate_date: pendingFormData.certificate_date ?? "",
+        is_current: pendingFormData.is_current,
+        description: pendingFormData.description.trim(),
+        is_visible: Boolean(pendingFormData.is_visible),
       });
     } catch {
       showErrorToast("Error al guardar el curso");
@@ -228,12 +308,20 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
 
         <div className="space-y-2">
           <Label className="text-slate-300">Nivel</Label>
-          <Input
-            {...register("level")}
-            placeholder="Ej: Básico, Intermedio, Avanzado"
-            disabled={!!initialData}
-            className="h-8 bg-slate-950 border-slate-800 text-white placeholder-slate-500 focus-visible:ring-indigo-500 disabled:opacity-50"
+          <Controller
+            name="level"
+            control={control}
+            render={({ field }) => (
+              <Combobox
+                options={levels}
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="Selecciona un título"
+                disabled={!!initialData}
+              />
+            )}
           />
+
           {errors.level && <span className="text-xs text-red-500">{errors.level.message}</span>}
         </div>
       </div>
@@ -320,6 +408,34 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
           )}
         </Button>
       </div>
+
+      <AlertDialog open={showDuplicateWarning} onOpenChange={setShowDuplicateWarning}>
+        <AlertDialogContent className="border-sidebar-border dark:border-[#2a2d46] bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Curso duplicado</AlertDialogTitle>
+            <p className="text-slate-600 dark:text-slate-300 text-sm mt-2">
+              Ya existe un curso registrado con la misma institución, título y área. ¿Deseas
+              continuar de todas formas?
+            </p>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-sidebar-border dark:border-[#2a2d46] text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1c1f38] hover:text-slate-900 dark:hover:text-slate-200">
+              Cancelar
+            </AlertDialogCancel>
+
+            <AlertDialogAction
+              className="bg-[#6c72ff] text-white hover:bg-[#5c61eb]"
+              onClick={async () => {
+                setShowDuplicateWarning(false);
+                await proceedWithSubmit();
+              }}
+            >
+              Continuar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </form>
   );
 }
