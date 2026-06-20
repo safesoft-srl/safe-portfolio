@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TSModCatalogo } from "@/components/Skills/TSModCatalogo";
 import TechnicalSkillReportPage from "@/components/moderator_TechnicalSkills/TechinicalSkillReportPage";
+import TechnicalSkillRequestsSection from "@/components/moderator_TechnicalSkills/TechnicalSkillRequestsSection";
 
 import { useAuthStore } from "@/lib/auth-store";
 import { hasPermission } from "@/services/user.service";
@@ -35,6 +36,17 @@ export default function AdminSkills() {
             Catálogo
           </button>
 
+          <button
+            onClick={() => setActiveTab("solicitudes")}
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === "solicitudes"
+                ? "bg-[#6c72ff] text-white shadow-md shadow-indigo-500/20"
+                : "bg-[#1c1f38] text-slate-400 border border-[#232555] hover:text-slate-200 hover:bg-[#23274d]"
+            }`}
+          >
+            Solicitudes
+          </button>
+
           {hasPermission(user, "view_reports") && (
             <button
               onClick={() => setActiveTab("reportes")}
@@ -51,6 +63,7 @@ export default function AdminSkills() {
 
         <div className="pt-4 animate-in fade-in duration-300">
           {activeTab === "catalogo" && <TSModCatalogo />}
+          {activeTab === "solicitudes" && <TechnicalSkillRequestsSection />}
           {activeTab === "reportes" && <TechnicalSkillReportPage />}
         </div>
       </div>
