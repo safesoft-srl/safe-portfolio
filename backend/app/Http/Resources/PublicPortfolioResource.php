@@ -29,7 +29,7 @@ class PublicPortfolioResource extends JsonResource
             'github_username' => $this->github_username,
             'linkedin_url' => $this->linkedin_url,
             'skills' => $this->portfolioSkills
-                ->map(fn($skill) => [
+                ->map(fn ($skill) => [
                     'name' => $skill->technicalSkill->name,
                     'url_dark' => $skill->technicalSkill->url_dark,
                     'url_light' => $skill->technicalSkill->url_light,

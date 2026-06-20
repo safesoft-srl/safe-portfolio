@@ -15,27 +15,27 @@ type FilterState = {
 };
 
 type Skill = {
-  name:string,
-  url_ligth:string,
-  url_dark:string,
-}
+  name: string;
+  url_ligth: string;
+  url_dark: string;
+};
 
 export type PublicPortfolioData = {
-  id:number,
-  profile_name: string,
-  profile_email:string,
-  profession:string,
-  bio:string,
-  profile_image:string,
-  url_portfolio:string,
-  portfolio_name:string,
-  portfolio_descripcion:string,
-  phone:string,
-  city:string,
-  github_username: string,
-  linkedin_url:string,
-  skills: Skill[],
-}
+  id: number;
+  profile_name: string;
+  profile_email: string;
+  profession: string;
+  bio: string;
+  profile_image: string;
+  url_portfolio: string;
+  portfolio_name: string;
+  portfolio_descripcion: string;
+  phone: string;
+  city: string;
+  github_username: string;
+  linkedin_url: string;
+  skills: Skill[];
+};
 
 export default function PortfolioFeedPage() {
   const [filters, setFilters] = useState<FilterState>({
@@ -46,21 +46,20 @@ export default function PortfolioFeedPage() {
   const { data, isLoading, error } = useQuery<PublicPortfolioData[]>({
     queryKey: ["portfolios"],
     queryFn: async (): Promise<PublicPortfolioData[]> => {
-      const response = await http.get<{data : PublicPortfolioData[]}>("/api/portfolios");
+      const response = await http.get<{ data: PublicPortfolioData[] }>("/api/portfolios");
       return response.data.data;
-    }
+    },
   });
 
-  if(isLoading) {
-      return <Loading/>;
+  if (isLoading) {
+    return <Loading />;
   }
 
-  console.log('data', data);
+  console.log("data", data);
 
-  if(error) {
-    console.error('ocurrio un error al cargar los portafolios:', error);
+  if (error) {
+    console.error("ocurrio un error al cargar los portafolios:", error);
   }
-
 
   return (
     <div className="min-h-screen bg-[#0f1123] text-white font-sans flex flex-col">
@@ -123,9 +122,7 @@ export default function PortfolioFeedPage() {
             </Button>
           </div>
 
-          <p className="text-slate-400 text-sm">
-            {data?.length} portafolios encontrados
-          </p>
+          <p className="text-slate-400 text-sm">{data?.length} portafolios encontrados</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data?.map((portfolio) => (

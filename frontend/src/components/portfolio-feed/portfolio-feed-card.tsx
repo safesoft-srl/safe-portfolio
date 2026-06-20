@@ -77,7 +77,12 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
       <div className="grow"></div>
 
       {/* Botón de visitar el portfolio de la tarjeta (Abre en nueva pestaña) */}
-      <a href={data.url_portfolio} target="_blank" rel="noopener noreferrer" className="w-full mt-2">
+      <a
+        href={data.url_portfolio}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full mt-2"
+      >
         <Button className="w-full bg-[#1c1f38] hover:bg-[#6c72ff] text-white border border-[#232555] hover:border-[#6c72ff] transition-all flex items-center justify-center gap-2 rounded-xl h-11">
           Visitar portfolio
           <ArrowSquareOut size={16} />
