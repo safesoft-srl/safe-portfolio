@@ -99,38 +99,6 @@ export default function SoftSkillReportPdf({ config, data }: Props) {
           Generado el {new Date().toLocaleDateString()}
         </Text>
 
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Filtros aplicados</Text>
-
-          <Text>Estado habilidades: {config.filters.status || "Todos"}</Text>
-          <Text>Orden por uso: {config.filters.useOrder || "Sin orden"}</Text>
-          <Text>Límite catálogo: {config.filters.limit || "Sin límite"}</Text>
-          <Text>Período catálogo: {config.filters.createdPeriod || "Todos"}</Text>
-
-          {(config.filters.dateFrom || config.filters.dateTo) && (
-            <Text>
-              Rango catálogo: {config.filters.dateFrom || "-"} a {config.filters.dateTo || "-"}
-            </Text>
-          )}
-
-          <Text style={{ marginTop: 5 }}>
-            Estado solicitudes: {config.filters.requestStatus || "Todos"}
-          </Text>
-
-          <Text>Orden solicitudes: {config.filters.requestOrder || "Sin orden"}</Text>
-
-          <Text>Límite solicitudes: {config.filters.requestLimit || "Sin límite"}</Text>
-
-          <Text>Período solicitudes: {config.filters.requestCreatedPeriod || "Todos"}</Text>
-
-          {(config.filters.requestDateFrom || config.filters.requestDateTo) && (
-            <Text>
-              Rango solicitudes: {config.filters.requestDateFrom || "-"} a{" "}
-              {config.filters.requestDateTo || "-"}
-            </Text>
-          )}
-        </View>
-
         {/* SUMMARY */}
         {config.catalog.summary && (
           <View style={styles.section}>
