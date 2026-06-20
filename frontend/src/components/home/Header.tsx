@@ -30,8 +30,10 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
     { id: "como-funciona", label: "Cómo funciona" },
     { id: "ayuda", label: "Ayuda" },
     { id: "footer", label: "Contactos" },
-    { id: "portfolios", label: "Portafolios", href: "/portfolios" },
+    { id: "public_portfolios", label: "Portafolios", href: "/feed" },
+    { id: "portfolios", label: "Mis Portafolios", href: "/portfolios" },
   ];
+
   const visibleMenuItems = isAuthenticated
     ? menuItems
     : menuItems.filter((it) => it.id !== "portfolios");
@@ -39,6 +41,11 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
   const handleMenuClick = (sectionId: string) => {
     if (sectionId === "portfolios") {
       navigate("/portfolios");
+      return;
+    }
+
+    if (sectionId === "public_portfolios") {
+      navigate("/feed");
       return;
     }
 
@@ -62,12 +69,9 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
 
         <nav className="hidden md:flex items-center gap-6">
           {visibleMenuItems.map((item) => {
-            const isPortfoliosLink = item.id === "portfolios";
-            const isActive = isPortfoliosLink
-              ? pathname === "/portfolios"
-              : activeSection === item.id;
+            const isActive = item.href && pathname === item.href ? true : activeSection === item.id;
 
-            if (isPortfoliosLink) {
+            if (isActive) {
               return (
                 <Link
                   key={item.id}
@@ -146,7 +150,7 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <SignOutIcon />
-                  Cerrrar Sesion
+                  Cerrar Sesión
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
