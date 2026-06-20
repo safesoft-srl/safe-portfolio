@@ -21,7 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import Loading from "@/features/projects/components/Loading";
+import Loading from "@/components/Loading";
 import { toast } from "sonner";
 import { usePortfolioId } from "@/hooks/usePortfolio";
 
