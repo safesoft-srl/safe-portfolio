@@ -51,6 +51,8 @@ Route::apiResource('portfolios', PortfolioController::class);
 
 use App\Http\Controllers\WorkExperienceController;
 
+Route::get('/portfolios', [PortfolioController::class, 'showAll']);
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/me/portfolios', [PortfolioController::class, 'index']);
     Route::get('/me/portfolio/{id}', [PortfolioController::class, 'getPortfolio']);
