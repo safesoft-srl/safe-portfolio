@@ -62,6 +62,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/me/portfolio/{id}/photo', [PortfolioController::class, 'deletePhoto']);
     Route::get('/me/portfolio/check-slug/{slug}', [PortfolioController::class, 'checkSlug']);
     Route::post('/me/portfolio/publish/{idPortfolio}', [PortfolioController::class, 'getSlug']);
+    Route::put('/me/portfolio/setPublic/{idPortfolio}', [PortfolioController::class, 'setPublic']);
     Route::post('/me/portfolio/save-url/{id}', [PortfolioController::class, 'saveUrlPortfolio']);
 });
 
