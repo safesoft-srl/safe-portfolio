@@ -74,10 +74,10 @@ export const getProfile = async () => {
   }
 };
 
-export const setPublicPortfolio = async(is_public: boolean, idPortfolio: number) => {
+export const setPublicPortfolio = async (is_public: boolean, idPortfolio: number) => {
   try {
     const payload = {
-      is_public: is_public
+      is_public: is_public,
     };
 
     const response = await http.put(`/api/me/portfolio/setPublic/${idPortfolio}`, payload);
@@ -86,8 +86,7 @@ export const setPublicPortfolio = async(is_public: boolean, idPortfolio: number)
   } catch (error) {
     console.error("Error Failed to update is_public: ", error);
   }
-
-}
+};
 
 export const getPortfolio = async (idPortfolio: number) => {
   try {

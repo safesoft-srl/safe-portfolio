@@ -49,6 +49,7 @@ export default function CreateProfileModal({
     bio: "",
     profile_image: defaultProfileImage,
     url_portfolio: "",
+    is_public: true,
   };
 
   const handleSubmit = async (data: ProfileFormData, file: File | null) => {

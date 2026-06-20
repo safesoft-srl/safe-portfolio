@@ -12,7 +12,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Combobox } from "@/components/ui/combobox";
 
 import type { CourseFormData, CourseRecord } from "../types/course.types";
-import { BasicPlatform } from "chart.js";
 
 const todayStr = new Date().toISOString().split("T")[0];
 
@@ -68,18 +67,18 @@ const defaultValues: CourseFormValues = {
 
 const levels = [
   {
-    value: 'Basico',
-    label: 'Basico',
+    value: "Basico",
+    label: "Basico",
   },
   {
-    value: 'Intermedio',
-    label: 'Intermedio',
+    value: "Intermedio",
+    label: "Intermedio",
   },
   {
-    value: 'Avanzado',
-    label: 'Avanzado',
+    value: "Avanzado",
+    label: "Avanzado",
   },
-]
+];
 
 export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
   const [isSaving, setIsSaving] = useState(false);
@@ -246,14 +245,14 @@ export default function CourseForm({ initialData, onSubmit, onCancel }: Props) {
         <div className="space-y-2">
           <Label className="text-slate-300">Nivel</Label>
           <Controller
-            name='level'
+            name="level"
             control={control}
             render={({ field }) => (
               <Combobox
                 options={levels}
                 value={field.value}
                 onChange={field.onChange}
-                placeholder='Selecciona un título'
+                placeholder="Selecciona un título"
                 disabled={!!initialData}
               />
             )}

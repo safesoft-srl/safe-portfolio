@@ -236,7 +236,7 @@ class PortfolioController extends Controller
     public function setPublic(Request $request, int $id)
     {
         $validateData = $request->validate([
-            'is_public' => 'required|boolean'
+            'is_public' => 'required|boolean',
         ]);
 
         /** @var \App\Models\User $user */
@@ -244,10 +244,10 @@ class PortfolioController extends Controller
         $portfolio = $user->portfolios()->findOrFail($id);
 
         $portfolio->update([
-            'is_public'=> $validateData['is_public']
+            'is_public' => $validateData['is_public'],
         ]);
 
-        if($portfolio->is_public) {
+        if ($portfolio->is_public) {
             return ApiResponse::success(
                 $portfolio,
                 'Su portfolio se publico exitosamente.'

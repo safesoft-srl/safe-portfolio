@@ -40,6 +40,7 @@ export type ProfileFormData = {
   bio: string;
   profile_image: string;
   url_portfolio: string;
+  is_public: true;
 };
 
 export type ProfileFormProps = {

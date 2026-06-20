@@ -310,7 +310,9 @@ export default function FormationPage() {
                 disabled={!portfolioId}
               >
                 <PlusIcon weight="bold" className="size-4" />
-                <span>{activeTab === "academic" ? "Agregar Grado Académico" : "Agregar Curso"}</span>
+                <span>
+                  {activeTab === "academic" ? "Agregar Grado Académico" : "Agregar Curso"}
+                </span>
               </Button>
             </div>
           </header>

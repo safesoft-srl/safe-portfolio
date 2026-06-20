@@ -65,38 +65,38 @@ const defaultValues: AcademicFormValues = {
 
 const academicTitles = [
   {
-    value: 'Licenciatura',
-    label:'Licenciatura'
+    value: "Licenciatura",
+    label: "Licenciatura",
   },
   {
-    value: 'Ingeneria',
-    label: 'Ingeneria',
+    value: "Ingeneria",
+    label: "Ingeneria",
   },
   {
-    value: 'Maestria',
-    label: 'Maestria',
+    value: "Maestria",
+    label: "Maestria",
   },
   {
-    value: 'Doctorado',
-    label:'Doctorado',
+    value: "Doctorado",
+    label: "Doctorado",
   },
   {
-    value: 'Diplomado',
-    label:'Diplomado',
+    value: "Diplomado",
+    label: "Diplomado",
   },
   {
-    value: 'Tecnico Superior',
-    label:'Tecnico Superior',
+    value: "Tecnico Superior",
+    label: "Tecnico Superior",
   },
   {
-    value:'Especialidad',
-    label:'Especialidad'
+    value: "Especialidad",
+    label: "Especialidad",
   },
   {
-    value:'MBA',
-    label:'MBA',
-  }
-  ];
+    value: "MBA",
+    label: "MBA",
+  },
+];
 
 export default function AcademicForm({ initialData, onSubmit, onCancel }: Props) {
   const [isSaving, setIsSaving] = useState(false);
@@ -220,14 +220,14 @@ export default function AcademicForm({ initialData, onSubmit, onCancel }: Props)
         <div className="space-y-2">
           <Label className="text-slate-300">Título</Label>
           <Controller
-            name='title'
+            name="title"
             control={control}
-            render={({field}) =>(
+            render={({ field }) => (
               <Combobox
                 options={academicTitles}
                 value={field.value}
                 onChange={field.onChange}
-                placeholder='Selecciona un título'
+                placeholder="Selecciona un título"
                 disabled={!!initialData}
               />
             )}
