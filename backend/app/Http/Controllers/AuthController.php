@@ -25,6 +25,7 @@ class AuthController extends Controller
         $credentials = [
             $fieldType => $loginValue,
             'password' => $password,
+            'verified' => true,
         ];
 
         try {
