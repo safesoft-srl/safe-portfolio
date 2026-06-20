@@ -421,7 +421,7 @@ export default function ProjectForm({
               )}
             </div>
           </div>
-          {/* Columna Derecha */}
+          
           <div className="flex flex-col gap-4">
             <div className="space-y-1.5">
               <Label

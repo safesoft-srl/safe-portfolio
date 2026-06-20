@@ -232,4 +232,31 @@ class PortfolioController extends Controller
             'URL del portafolio guardada exitosamente'
         );
     }
+
+    public function setPublic(Request $request, int $id)
+    {
+        $validateData = $request->validate([
+            'is_public' => 'required|boolean'
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        $portfolio = $user->portfolios()->findOrFail($id);
+
+        $portfolio->update([
+            'is_public'=> $validateData['is_public']
+        ]);
+
+        if($portfolio->is_public) {
+            return ApiResponse::success(
+                $portfolio,
+                'Su portfolio se publico exitosamente.'
+            );
+        } else {
+            return ApiResponse::success(
+                $portfolio,
+                'Su portfolio dejo de ser publico.'
+            );
+        }
+    }
 }

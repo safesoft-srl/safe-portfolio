@@ -97,7 +97,7 @@ export function SoftSkillsSection() {
 
         <Button onClick={() => setIsAddModalOpen(true)}>
           <PlusIcon size={16} />
-          Agregar
+          Agregar Habilidad
         </Button>
       </div>
 
