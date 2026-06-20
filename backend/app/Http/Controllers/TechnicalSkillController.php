@@ -120,9 +120,7 @@ class TechnicalSkillController extends Controller
         );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(int $id)
     {
         $skill = TechnicalSkill::find($id);

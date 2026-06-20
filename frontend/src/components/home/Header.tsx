@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { RowsIcon, SignOutIcon, ShieldCheckIcon, Globe } from "@phosphor-icons/react";
+import { RowsIcon, SignOutIcon, ShieldCheckIcon } from "@phosphor-icons/react";
 import { useAuthStore } from "@/lib/auth-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -30,10 +30,10 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
     { id: "como-funciona", label: "Cómo funciona" },
     { id: "ayuda", label: "Ayuda" },
     { id: "footer", label: "Contactos" },
-    // Renombrado para evitar confusión con el feed público
+    { id: "public_portfolios", label: "Portafolios", href: "/feed" },
     { id: "portfolios", label: "Mis Portafolios", href: "/portfolios" },
   ];
-  
+
   const visibleMenuItems = isAuthenticated
     ? menuItems
     : menuItems.filter((it) => it.id !== "portfolios");
@@ -41,6 +41,11 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
   const handleMenuClick = (sectionId: string) => {
     if (sectionId === "portfolios") {
       navigate("/portfolios");
+      return;
+    }
+
+    if (sectionId === "public_portfolios") {
+      navigate("/feed")
       return;
     }
 
@@ -64,19 +69,18 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
 
         <nav className="hidden md:flex items-center gap-6">
           {visibleMenuItems.map((item) => {
-            const isPortfoliosLink = item.id === "portfolios";
-            const isActive = isPortfoliosLink
-              ? pathname === "/portfolios"
-              : activeSection === item.id;
+            const isActive =
+              item.href && pathname === item.href
+                ? true
+                : activeSection === item.id;
 
-            if (isPortfoliosLink) {
+            if (isActive) {
               return (
                 <Link
                   key={item.id}
                   to={item.href || "#"}
-                  className={`text-sm tracking-wide transition-colors ${
-                    isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
-                  }`}
+                  className={`text-sm tracking-wide transition-colors ${isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
+                    }`}
                 >
                   {item.label}
                 </Link>
@@ -87,27 +91,13 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
               <button
                 key={item.id}
                 onClick={() => handleMenuClick(item.id)}
-                className={`text-sm tracking-wide transition-colors ${
-                  isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
-                }`}
+                className={`text-sm tracking-wide transition-colors ${isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
+                  }`}
               >
                 {item.label}
               </button>
             );
           })}
-
-          {/*Enlace público al Feed de Portafolios */}
-          <Link
-            to="/feed"
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full border ${
-              pathname === "/feed"
-                ? "bg-[#6c72ff] text-white border-[#6c72ff] shadow-[0_0_15px_rgba(108,114,255,0.4)]"
-                : "bg-[#6c72ff]/10 text-slate-200 border-[#6c72ff]/30 hover:bg-[#6c72ff] hover:text-white hover:border-[#6c72ff] hover:shadow-[0_0_15px_rgba(108,114,255,0.4)]"
-            }`}
-          >
-            <Globe size={18} weight={pathname === "/feed" ? "bold" : "regular"} />
-            <span>Explorar</span>
-          </Link>
         </nav>
 
         <div className="flex items-center gap-3">

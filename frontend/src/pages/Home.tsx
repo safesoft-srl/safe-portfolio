@@ -57,30 +57,24 @@ export default function Home() {
       />
 
       <div className="relative z-10">
-        {/* Header con menú de navegación */}
         <Header activeSection={activeSection} onNavigate={handleNavigate} />
 
-        {/* Sección de Inicio */}
         <div id="inicio" ref={inicioRef} className="reveal">
           <Welcome />
         </div>
 
-        {/* Sección Cómo funciona */}
         <div id="como-funciona" ref={comoRef} className="reveal">
           <Characteristics />
         </div>
 
-        {/* Sección Ayuda */}
         <div id="ayuda" ref={ayudaRef} className="reveal">
           <Help />
         </div>
 
-        {/* Sección Contactos */}
         <div id="contactos" ref={contactosRef} className="reveal">
           <Join />
         </div>
 
-        {/* Footer */}
         <Footer />
       </div>
     </div>
