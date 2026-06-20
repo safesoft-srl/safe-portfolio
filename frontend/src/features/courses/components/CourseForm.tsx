@@ -77,20 +77,25 @@ const defaultValues: CourseFormValues = {
 
 const levels = [
   {
-    value: 'Basico',
-    label: 'Basico',
+    value: "Basico",
+    label: "Basico",
   },
   {
-    value: 'Intermedio',
-    label: 'Intermedio',
+    value: "Intermedio",
+    label: "Intermedio",
   },
   {
-    value: 'Avanzado',
-    label: 'Avanzado',
+    value: "Avanzado",
+    label: "Avanzado",
   },
-]
+];
 
-export default function CourseForm({ initialData, onSubmit, onCancel, existingCourses = [] }: Props) {
+export default function CourseForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  existingCourses = [],
+}: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<CourseFormValues | null>(null);
@@ -304,14 +309,14 @@ export default function CourseForm({ initialData, onSubmit, onCancel, existingCo
         <div className="space-y-2">
           <Label className="text-slate-300">Nivel</Label>
           <Controller
-            name='level'
+            name="level"
             control={control}
             render={({ field }) => (
               <Combobox
                 options={levels}
                 value={field.value}
                 onChange={field.onChange}
-                placeholder='Selecciona un título'
+                placeholder="Selecciona un título"
                 disabled={!!initialData}
               />
             )}
@@ -409,7 +414,8 @@ export default function CourseForm({ initialData, onSubmit, onCancel, existingCo
           <AlertDialogHeader>
             <AlertDialogTitle>Curso duplicado</AlertDialogTitle>
             <p className="text-slate-600 dark:text-slate-300 text-sm mt-2">
-              Ya existe un curso registrado con la misma institución, título y área. ¿Deseas continuar de todas formas?
+              Ya existe un curso registrado con la misma institución, título y área. ¿Deseas
+              continuar de todas formas?
             </p>
           </AlertDialogHeader>
 

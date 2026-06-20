@@ -103,7 +103,11 @@ export default function ProfileForm({
     if (field === "portfolioName") {
       if (trimmedValue.length > 60)
         return "El nombre del portafolio debe tener máximo 60 caracteres.";
-      if (existingPortfolios.some((p) => p.portfolio_name?.toLowerCase() === trimmedValue.toLowerCase())) {
+      if (
+        existingPortfolios.some(
+          (p) => p.portfolio_name?.toLowerCase() === trimmedValue.toLowerCase()
+        )
+      ) {
         return "El nombre de este portafolio ya está en uso";
       }
       return "";

@@ -74,40 +74,45 @@ const defaultValues: AcademicFormValues = {
 
 const academicTitles = [
   {
-    value: 'Licenciatura',
-    label:'Licenciatura'
+    value: "Licenciatura",
+    label: "Licenciatura",
   },
   {
-    value: 'Ingeneria',
-    label: 'Ingeneria',
+    value: "Ingeneria",
+    label: "Ingeneria",
   },
   {
-    value: 'Maestria',
-    label: 'Maestria',
+    value: "Maestria",
+    label: "Maestria",
   },
   {
-    value: 'Doctorado',
-    label:'Doctorado',
+    value: "Doctorado",
+    label: "Doctorado",
   },
   {
-    value: 'Diplomado',
-    label:'Diplomado',
+    value: "Diplomado",
+    label: "Diplomado",
   },
   {
-    value: 'Tecnico Superior',
-    label:'Tecnico Superior',
+    value: "Tecnico Superior",
+    label: "Tecnico Superior",
   },
   {
-    value:'Especialidad',
-    label:'Especialidad'
+    value: "Especialidad",
+    label: "Especialidad",
   },
   {
-    value:'MBA',
-    label:'MBA',
-  }
-  ];
+    value: "MBA",
+    label: "MBA",
+  },
+];
 
-export default function AcademicForm({ initialData, onSubmit, onCancel, existingAcademics = [] }: Props) {
+export default function AcademicForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  existingAcademics = [],
+}: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -178,7 +183,6 @@ export default function AcademicForm({ initialData, onSubmit, onCancel, existing
     const fieldOfStudyLower = formData.field_of_study.trim().toLowerCase();
 
     return existingAcademics.some((academic) => {
-      
       if (initialData && academic.id === initialData.id) {
         return false;
       }
@@ -192,7 +196,6 @@ export default function AcademicForm({ initialData, onSubmit, onCancel, existing
   };
 
   const submitForm = async (data: AcademicFormValues) => {
-    
     if (checkDuplicateAcademic(data)) {
       setShowDuplicateWarning(true);
       return;
@@ -255,14 +258,14 @@ export default function AcademicForm({ initialData, onSubmit, onCancel, existing
         <div className="space-y-2">
           <Label className="text-slate-300">Título</Label>
           <Controller
-            name='title'
+            name="title"
             control={control}
-            render={({field}) =>(
+            render={({ field }) => (
               <Combobox
                 options={academicTitles}
                 value={field.value}
                 onChange={field.onChange}
-                placeholder='Selecciona un título'
+                placeholder="Selecciona un título"
                 disabled={!!initialData}
               />
             )}
@@ -368,7 +371,8 @@ export default function AcademicForm({ initialData, onSubmit, onCancel, existing
           <AlertDialogHeader>
             <AlertDialogTitle>Grado académico duplicado</AlertDialogTitle>
             <p className="text-slate-600 dark:text-slate-300 text-xs mt-2">
-              Ya existe un grado académico registrado con la misma institución, título y campo de estudio.
+              Ya existe un grado académico registrado con la misma institución, título y campo de
+              estudio.
             </p>
           </AlertDialogHeader>
 
