@@ -21,7 +21,7 @@ const DUMMY_PORTFOLIOS: PortfolioFeedData[] = [
     bio: "Passionate about building scalable web applications with modern technologies.",
     stats: { projects: 12, skills: 24, years: 5 },
     rating: 4.9,
-    technologies: ["React", "Node.js", "TypeScript"]
+    technologies: ["React", "Node.js", "TypeScript"],
   },
   {
     id: 2,
@@ -32,7 +32,7 @@ const DUMMY_PORTFOLIOS: PortfolioFeedData[] = [
     bio: "Creating beautiful and intuitive user experiences that users love.",
     stats: { projects: 8, skills: 18, years: 3 },
     rating: 4.7,
-    technologies: ["Figma", "React", "CSS"]
+    technologies: ["Figma", "React", "CSS"],
   },
   {
     id: 3,
@@ -43,8 +43,8 @@ const DUMMY_PORTFOLIOS: PortfolioFeedData[] = [
     bio: "Automating infrastructure and improving deployment pipelines at scale.",
     stats: { projects: 15, skills: 30, years: 7 },
     rating: 5.0,
-    technologies: ["Docker", "Kubernetes", "AWS"]
-  }
+    technologies: ["Docker", "Kubernetes", "AWS"],
+  },
 ];
 
 export default function PortfolioFeedPage() {
@@ -61,7 +61,6 @@ export default function PortfolioFeedPage() {
       <div className="flex-1 p-8 animate-in fade-in duration-500">
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="bg-[#13152e] border border-[#232555] rounded-3xl p-6 shadow-xl flex flex-col md:flex-row gap-4 items-center">
-
             <div className="relative grow w-full">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <MagnifyingGlass size={20} className="text-slate-500" />
@@ -114,7 +113,6 @@ export default function PortfolioFeedPage() {
             <Button className="w-full md:w-auto h-12 bg-[#6c72ff] hover:bg-[#5b61e2] text-white px-8 rounded-xl font-bold shadow-lg shadow-indigo-500/20">
               Buscar
             </Button>
-
           </div>
 
           <p className="text-slate-400 text-sm">
@@ -126,7 +124,6 @@ export default function PortfolioFeedPage() {
               <PortfolioFeedCard key={portfolio.id} data={portfolio} />
             ))}
           </div>
-
         </div>
       </div>
     </div>

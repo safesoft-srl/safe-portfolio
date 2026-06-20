@@ -45,7 +45,7 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
     }
 
     if (sectionId === "public_portfolios") {
-      navigate("/feed")
+      navigate("/feed");
       return;
     }
 
@@ -69,18 +69,16 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
 
         <nav className="hidden md:flex items-center gap-6">
           {visibleMenuItems.map((item) => {
-            const isActive =
-              item.href && pathname === item.href
-                ? true
-                : activeSection === item.id;
+            const isActive = item.href && pathname === item.href ? true : activeSection === item.id;
 
             if (isActive) {
               return (
                 <Link
                   key={item.id}
                   to={item.href || "#"}
-                  className={`text-sm tracking-wide transition-colors ${isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
-                    }`}
+                  className={`text-sm tracking-wide transition-colors ${
+                    isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -91,8 +89,9 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
               <button
                 key={item.id}
                 onClick={() => handleMenuClick(item.id)}
-                className={`text-sm tracking-wide transition-colors ${isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
-                  }`}
+                className={`text-sm tracking-wide transition-colors ${
+                  isActive ? "text-[#6c72ff]" : "text-slate-300 hover:text-slate-100"
+                }`}
               >
                 {item.label}
               </button>

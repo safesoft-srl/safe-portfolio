@@ -120,7 +120,6 @@ class TechnicalSkillController extends Controller
         );
     }
 
-    
     public function destroy(int $id)
     {
         $skill = TechnicalSkill::find($id);

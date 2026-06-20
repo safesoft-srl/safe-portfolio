@@ -1,7 +1,6 @@
 import { MapPin, Code, Briefcase, Clock, ArrowSquareOut } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 
-
 export interface PortfolioFeedData {
   id: string | number;
   slug: string;
@@ -34,7 +33,6 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
 
   return (
     <div className="bg-[#13152e] border border-[#232555] rounded-3xl p-6 flex flex-col h-full hover:border-[#6c72ff]/50 hover:shadow-[0_0_20px_rgba(108,114,255,0.1)] transition-all duration-300">
-      
       <div className="flex items-start justify-between">
         <div className="w-14 h-14 rounded-2xl bg-[#6c72ff] text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-indigo-500/20">
           {getInitials(data.name)}
@@ -52,9 +50,7 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
       </div>
 
       {/* Bio */}
-      <p className="text-slate-300 text-sm mt-4 line-clamp-2 min-h-[40px]">
-        {data.bio}
-      </p>
+      <p className="text-slate-300 text-sm mt-4 line-clamp-2 min-h-[40px]">{data.bio}</p>
 
       {/* Estadísticas */}
       <div className="grid grid-cols-3 gap-2 mt-6 p-4 rounded-2xl border border-[#232555] bg-[#1c1f38]/50">
@@ -74,7 +70,6 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
           <span className="text-slate-500 text-[10px] uppercase tracking-wider">Años</span>
         </div>
       </div>
-
 
       {/* Tags de Tecnologías */}
       <div className="flex flex-wrap gap-2 mt-4 mb-6">
@@ -97,12 +92,7 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
       <div className="flex-grow"></div>
 
       {/* Botón de visitar el portfolio de la tarjeta (Abre en nueva pestaña) */}
-      <a 
-        href={`/p/${data.slug}`} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="w-full mt-2"
-      >
+      <a href={`/p/${data.slug}`} target="_blank" rel="noopener noreferrer" className="w-full mt-2">
         <Button className="w-full bg-[#1c1f38] hover:bg-[#6c72ff] text-white border border-[#232555] hover:border-[#6c72ff] transition-all flex items-center justify-center gap-2 rounded-xl h-11">
           Visitar portfolio
           <ArrowSquareOut size={16} />
