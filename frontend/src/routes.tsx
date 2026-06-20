@@ -31,11 +31,17 @@ import AdminExperience from "./pages/admin/AdminExperience";
 import AdminFormation from "./pages/admin/AdminFormation";
 import AdminCourses from "./pages/admin/AdminCourses";
 import NotFound from "./pages/NotFound";
+import PortfolioFeedPage from "./pages/portfolio-feed-page";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  
+  {
+    path: "/feed",
+    element: <PortfolioFeedPage />,
   },
   {
     path: "/p/:slug",
