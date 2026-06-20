@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { http } from "@/services/http.service";
+
 import { MagnifyingGlass, FunnelSimple } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { PortfolioFeedCard } from "@/components/portfolio-feed/portfolio-feed-card";
-import type { PortfolioFeedData } from "@/components/portfolio-feed/portfolio-feed-card";
 import Header from "@/components/home/Header";
+import Loading from "@/components/Loading";
 
 type FilterState = {
   search: string;
@@ -11,41 +14,28 @@ type FilterState = {
   role: string;
 };
 
-const DUMMY_PORTFOLIOS: PortfolioFeedData[] = [
-  {
-    id: 1,
-    slug: "john-doe",
-    name: "John Doe",
-    role: "Full Stack Developer",
-    location: "San Francisco, CA",
-    bio: "Passionate about building scalable web applications with modern technologies.",
-    stats: { projects: 12, skills: 24, years: 5 },
-    rating: 4.9,
-    technologies: ["React", "Node.js", "TypeScript"],
-  },
-  {
-    id: 2,
-    slug: "jane-doe",
-    name: "Jane Doe",
-    role: "UI/UX Designer & Frontend",
-    location: "New York, NY",
-    bio: "Creating beautiful and intuitive user experiences that users love.",
-    stats: { projects: 8, skills: 18, years: 3 },
-    rating: 4.7,
-    technologies: ["Figma", "React", "CSS"],
-  },
-  {
-    id: 3,
-    slug: "alex-smith",
-    name: "Alex Smith",
-    role: "DevOps Engineer",
-    location: "Austin, TX",
-    bio: "Automating infrastructure and improving deployment pipelines at scale.",
-    stats: { projects: 15, skills: 30, years: 7 },
-    rating: 5.0,
-    technologies: ["Docker", "Kubernetes", "AWS"],
-  },
-];
+type Skill = {
+  name: string;
+  url_ligth: string;
+  url_dark: string;
+};
+
+export type PublicPortfolioData = {
+  id: number;
+  profile_name: string;
+  profile_email: string;
+  profession: string;
+  bio: string;
+  profile_image: string;
+  url_portfolio: string;
+  portfolio_name: string;
+  portfolio_descripcion: string;
+  phone: string;
+  city: string;
+  github_username: string;
+  linkedin_url: string;
+  skills: Skill[];
+};
 
 export default function PortfolioFeedPage() {
   const [filters, setFilters] = useState<FilterState>({
@@ -53,6 +43,23 @@ export default function PortfolioFeedPage() {
     technology: "all",
     role: "all",
   });
+  const { data, isLoading, error } = useQuery<PublicPortfolioData[]>({
+    queryKey: ["portfolios"],
+    queryFn: async (): Promise<PublicPortfolioData[]> => {
+      const response = await http.get<{ data: PublicPortfolioData[] }>("/api/portfolios");
+      return response.data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  console.log("data", data);
+
+  if (error) {
+    console.error("ocurrio un error al cargar los portafolios:", error);
+  }
 
   return (
     <div className="min-h-screen bg-[#0f1123] text-white font-sans flex flex-col">
@@ -115,12 +122,10 @@ export default function PortfolioFeedPage() {
             </Button>
           </div>
 
-          <p className="text-slate-400 text-sm">
-            {DUMMY_PORTFOLIOS.length} portafolios encontrados
-          </p>
+          <p className="text-slate-400 text-sm">{data?.length} portafolios encontrados</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {DUMMY_PORTFOLIOS.map((portfolio) => (
+            {data?.map((portfolio) => (
               <PortfolioFeedCard key={portfolio.id} data={portfolio} />
             ))}
           </div>

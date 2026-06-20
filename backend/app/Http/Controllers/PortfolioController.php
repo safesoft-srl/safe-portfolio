@@ -7,6 +7,7 @@ use App\Constants\ResponseMessages;
 use App\Http\Requests\StorePortfolioRequest;
 use App\Http\Requests\UpdatePortfolioRequest;
 use App\Http\Resources\PortfolioResource;
+use App\Http\Resources\PublicPortfolioResource;
 use App\Services\PortfolioService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class PortfolioController extends Controller
         $portfolios = $this->portfolioService->showAll();
 
         return ApiResponse::success(
-            $portfolios,
+            PublicPortfolioResource::collection($portfolios),
             ResponseMessages::FETCHED_SUCCESSFULLY
         );
     }

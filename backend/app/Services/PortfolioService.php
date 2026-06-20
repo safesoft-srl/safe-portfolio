@@ -15,7 +15,7 @@ class PortfolioService
 
     public function showAll()
     {
-        return Portfolio::where('is_public', true)->get();
+        return Portfolio::with('portfolioSkills.technicalSkill')->where('is_public', true)->get();
     }
 
     public function create(array $data, User $user)
