@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { http } from "@/services/http.service";
 
-import { MagnifyingGlass, FunnelSimple,  Globe } from "@phosphor-icons/react";
+import { MagnifyingGlass, FunnelSimple, Globe } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { PortfolioFeedCard } from "@/components/portfolio-feed/portfolio-feed-card";
 import Header from "@/components/home/Header";
@@ -10,13 +10,12 @@ import Loading from "@/components/Loading";
 
 type FilterState = {
   search: string;
-  technology: string;
   role: string;
 };
 
 type Skill = {
   name: string;
-  url_light?: string; 
+  url_light?: string;
   url_dark?: string;
 };
 
@@ -28,7 +27,7 @@ export type PublicPortfolioData = {
   bio: string;
   profile_image: string;
   url_portfolio: string;
-  portfolio_slug: string; 
+  portfolio_slug: string;
   portfolio_name: string;
   portfolio_descripcion: string;
   phone: string;
@@ -38,51 +37,62 @@ export type PublicPortfolioData = {
   skills: Skill[];
 };
 
+// Definimos estrictamente cómo puede llegar el JSON anidado de Laravel
+type LaravelApiResponse = 
+  | PublicPortfolioData[] 
+  | { data: PublicPortfolioData[] } 
+  | { data: { data: PublicPortfolioData[] } };
+
 export default function PortfolioFeedPage() {
-  // Estado para lo que el usuario escribe en tiempo real
-  const [inputs, setInputs] = useState<FilterState>({
-    search: "",
-    technology: "all",
-    role: "all",
-  });
-
-
-  const [appliedFilters, setAppliedFilters] = useState<FilterState>({
-    search: "",
-    technology: "all",
-    role: "all",
-  });
+  const [inputs, setInputs] = useState<FilterState>({ search: "", role: "all" });
+  const [appliedFilters, setAppliedFilters] = useState<FilterState>({ search: "", role: "all" });
 
   const { data, isLoading, error } = useQuery<PublicPortfolioData[]>({
     queryKey: ["portfolios"],
     queryFn: async (): Promise<PublicPortfolioData[]> => {
-      const response = await http.get<{ data: PublicPortfolioData[] }>("/api/portfolios");
-      return response.data.data;
+      // Reemplazamos <any> por nuestro tipo estricto LaravelApiResponse
+      const response = await http.get<LaravelApiResponse>("/api/portfolios");
+      const resData = response.data;
+      
+      // Type guards seguros (sin usar anys implícitos)
+      if (Array.isArray(resData)) {
+        return resData;
+      }
+      
+      if (resData && typeof resData === "object" && "data" in resData) {
+        if (Array.isArray(resData.data)) {
+          return resData.data;
+        }
+        
+        if (resData.data && typeof resData.data === "object" && "data" in resData.data) {
+          if (Array.isArray(resData.data.data)) {
+            return resData.data.data;
+          }
+        }
+      }
+      
+      return [];
     },
   });
 
-  // Lógica de filtrado en el cliente (Client-side filtering)
+  // Filtrado 100% en el cliente
   const filteredPortfolios = data?.filter((portfolio) => {
-    // 1. Filtro de búsqueda (nombre, rol o ciudad)
-    const matchesSearch =
-      appliedFilters.search === "" ||
-      portfolio.profile_name?.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      portfolio.profession?.toLowerCase().includes(appliedFilters.search.toLowerCase()) ||
-      portfolio.city?.toLowerCase().includes(appliedFilters.search.toLowerCase());
+    const searchLower = appliedFilters.search.toLowerCase();
 
-    // 2. Filtro de Rol
+    // 1. Filtro General: Busca en nombre, profesión, ciudad y también en las SKILLS
+    const matchesSearch =
+      searchLower === "" ||
+      (portfolio.profile_name || "").toLowerCase().includes(searchLower) ||
+      (portfolio.profession || "").toLowerCase().includes(searchLower) ||
+      (portfolio.city || "").toLowerCase().includes(searchLower) ||
+      (portfolio.skills || []).some(skill => (skill.name || "").toLowerCase().includes(searchLower));
+
+    // 2. Filtro de Rol específico
     const matchesRole =
       appliedFilters.role === "all" ||
-      portfolio.profession?.toLowerCase().includes(appliedFilters.role.toLowerCase());
+      (portfolio.profession || "").toLowerCase().includes(appliedFilters.role.toLowerCase());
 
-    // 3. Filtro de Tecnología
-    const matchesTech =
-      appliedFilters.technology === "all" ||
-      portfolio.skills?.some((skill) =>
-        skill.name.toLowerCase().includes(appliedFilters.technology.toLowerCase())
-      );
-
-    return matchesSearch && matchesRole && matchesTech;
+    return matchesSearch && matchesRole;
   });
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
@@ -118,13 +128,14 @@ export default function PortfolioFeedPage() {
           </div>
 
           <form onSubmit={handleSearch} className="bg-[#13152e] border border-[#232555] rounded-3xl p-6 shadow-xl flex flex-col md:flex-row gap-4 items-center">
+            
             <div className="relative grow w-full">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <MagnifyingGlass size={20} className="text-slate-500" />
               </div>
               <input
                 type="text"
-                placeholder="Buscar por nombre, rol o ciudad..."
+                placeholder="Buscar por nombre, rol, ciudad o tecnología (ej. java)..."
                 value={inputs.search}
                 onChange={(e) => setInputs({ ...inputs, search: e.target.value })}
                 className="w-full h-12 bg-[#1c1f38] text-white rounded-xl pl-12 pr-4 border border-[#232555] focus:ring-2 focus:ring-[#6c72ff] outline-none placeholder:text-slate-500 transition-all"
@@ -132,34 +143,17 @@ export default function PortfolioFeedPage() {
             </div>
 
             <div className="flex w-full md:w-auto gap-4">
-              <div className="relative w-1/2 md:w-48">
+              <div className="relative w-full md:w-56">
                 <select
                   value={inputs.role}
                   onChange={(e) => setInputs({ ...inputs, role: e.target.value })}
                   className="w-full h-12 bg-[#1c1f38] text-slate-300 rounded-xl px-4 border border-[#232555] focus:ring-2 focus:ring-[#6c72ff] outline-none appearance-none cursor-pointer"
                 >
                   <option value="all">Todos los Roles</option>
-                  <option value="frontend">Frontend</option>
-                  <option value="backend">Backend</option>
-                  <option value="fullstack">Fullstack</option>
+                  <option value="frontend">Frontend Dev</option>
+                  <option value="backend">Backend Dev</option>
+                  <option value="fullstack">Fullstack Dev</option>
                   <option value="devops">DevOps</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                  <FunnelSimple size={16} className="text-slate-500" />
-                </div>
-              </div>
-
-              <div className="relative w-1/2 md:w-48">
-                <select
-                  value={inputs.technology}
-                  onChange={(e) => setInputs({ ...inputs, technology: e.target.value })}
-                  className="w-full h-12 bg-[#1c1f38] text-slate-300 rounded-xl px-4 border border-[#232555] focus:ring-2 focus:ring-[#6c72ff] outline-none appearance-none cursor-pointer"
-                >
-                  <option value="all">Cualquier Tecnología</option>
-                  <option value="react">React</option>
-                  <option value="java">Java</option>
-                  <option value="python">Python</option>
-                  <option value="php">PHP</option>
                 </select>
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                   <FunnelSimple size={16} className="text-slate-500" />
@@ -186,8 +180,8 @@ export default function PortfolioFeedPage() {
               <Button 
                 variant="link" 
                 onClick={() => {
-                  setInputs({ search: "", role: "all", technology: "all" });
-                  setAppliedFilters({ search: "", role: "all", technology: "all" });
+                  setInputs({ search: "", role: "all" });
+                  setAppliedFilters({ search: "", role: "all" });
                 }}
                 className="text-[#6c72ff]"
               >
