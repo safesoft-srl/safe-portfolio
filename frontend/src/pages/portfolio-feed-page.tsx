@@ -16,7 +16,7 @@ type FilterState = {
 
 type Skill = {
   name: string;
-  url_light?: string; // Ajustado por si viene vacío
+  url_light?: string; 
   url_dark?: string;
 };
 
@@ -28,7 +28,7 @@ export type PublicPortfolioData = {
   bio: string;
   profile_image: string;
   url_portfolio: string;
-  portfolio_slug: string; // <-- Importante para la redirección
+  portfolio_slug: string; 
   portfolio_name: string;
   portfolio_descripcion: string;
   phone: string;
@@ -46,7 +46,7 @@ export default function PortfolioFeedPage() {
     role: "all",
   });
 
-  // Estado para los filtros que realmente se aplican al hacer clic en "Buscar"
+
   const [appliedFilters, setAppliedFilters] = useState<FilterState>({
     search: "",
     technology: "all",
