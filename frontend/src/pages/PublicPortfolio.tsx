@@ -7,19 +7,13 @@ import { type ProfileData } from "@/types/public-portfolio";
 import { getPublicPortfolio } from "@/services/url.service";
 import BusinessGit from "@/components/public-portfolio/BusinessGit";
 import { generateLatexPdf } from "@/lib/latex";
-// import Stats from "@/components/public-portfolio/Stats";
-// import BigSkilss from "@/components/public-portfolio/BigSkilss";
 import WorkExperience from "@/components/public-portfolio/WorkExperience";
 import AcademicFormation from "@/components/public-portfolio/AcademicFormation";
-// import EducationProjects from "@/components/public-portfolio/EducationProjects";
 import SkillsGrid from "@/components/public-portfolio/SkillsGrid";
 import SoftSkillsGrid from "@/components/public-portfolio/SoftSkillsGrid";
 import RecentWork from "@/components/public-portfolio/RecentWork";
 import { LinkedinLogo } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-// import ContactForm from "@/components/public-portfolio/ContactForm";
-
-// import { PersonIcon } from "@phosphor-icons/react";
 
 const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 

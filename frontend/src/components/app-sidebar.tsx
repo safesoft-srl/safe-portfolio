@@ -166,7 +166,7 @@ export function AppSidebar({
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user || {}} />
-        {hasPermission(user, "manage_portfolios") && (
+        {(hasPermission(user, "manage_portfolios") || user?.role == "user") && (
           <Button
             onClick={() => navigate("/portfolios")}
             className="gap-2 bg-[#0A0B1E] hover:bg-[#5c61eb] text-white rounded-ms h-10 mb-2 px-15 py-2 w-fit mx-auto"

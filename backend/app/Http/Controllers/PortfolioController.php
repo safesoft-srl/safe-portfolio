@@ -190,7 +190,6 @@ class PortfolioController extends Controller
         $portfolio = $this->portfolioService->getPortfolio($idPortfolio);
 
         $portfolio->update([
-            'is_public' => true,
             'portfolio_slug' => $validateData['slug'],
         ]);
 

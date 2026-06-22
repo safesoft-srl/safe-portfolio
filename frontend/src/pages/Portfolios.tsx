@@ -5,7 +5,6 @@ import CreateProfileModal from "@/components/CreateProfileModal";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@phosphor-icons/react";
 import type { ProfileData } from "@/services/profile.service";
-//import type { Portfolio } from "@/features/portfolios/types/portfolios.type";
 import PortfolioGrid from "@/features/portfolios/components/PortfolioGrid";
 import PortfolioToolbar from "@/features/portfolios/components/PortfolioToolbar";
 import { usePortfolio } from "@/features/portfolios/hooks/usePortfolio";
@@ -36,7 +35,18 @@ export default function Portfolios() {
     });
   }, [portfolios, query]);
   return (
-    <div className="min-h-screen bg-[#050816] bg-[url('/hero-bg.png')] bg-no-repeat bg-top bg-cover text-slate-100 font-heading">
+    <div className="relative isolate min-h-screen bg-[#050816] text-slate-100 font-heading overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage: `
+        radial-gradient(circle at 30% 35%, rgba(124, 58, 237, 0.28), transparent 15%),
+        radial-gradient(circle at 52% 42%, rgba(88, 28, 135, 0.38), transparent 30%),
+        radial-gradient(circle at 82% 48%, rgba(173, 19, 127, 0.26), transparent 24%)
+      `,
+        }}
+      />
       <Header />
 
       <main className="pt-4">
@@ -102,7 +112,6 @@ export default function Portfolios() {
           />
         </section>
       </main>
-
       <Footer />
     </div>
   );

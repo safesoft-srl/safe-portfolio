@@ -11,18 +11,13 @@ export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
     { name: "Proyectos", href: `/p/${slug}/projects` },
     { name: "Experiencia", href: `/p/${slug}/experience` },
     { name: "Formación", href: `/p/${slug}/formation` },
-    // { name: "Habilidades", href: `/p/${slug}/skills` },
     { name: "Habilidades Técnicas", href: `/p/${slug}/skillstechnical` },
     { name: "Habilidades Blandas", href: `/p/${slug}/skillssoft` },
-
-    // { name: "Blog", href: "#sobre-mi" }, // Placeholder for blog
-    // { name: "Contacto", href: "#contacto" },
   ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[#1c2139] bg-[#13152e]/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6">
-        {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#bcfd49] text-[#0a0b1e] shadow-lg shadow-[#bcfd49]/20">
             <span className="text-xl font-bold">&lt;/&gt;</span>
@@ -35,7 +30,6 @@ export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
           </div>
         </div>
 
-        {/* Center Navigation */}
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <a
@@ -48,7 +42,6 @@ export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
           ))}
         </nav>
 
-        {/* Socials & Mobile Trigger */}
         <div className="flex items-center gap-6">
           <div className="hidden items-center gap-4 text-slate-400 lg:flex">
             <a href="#" className="hover:text-white transition-colors">
