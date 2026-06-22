@@ -1,5 +1,5 @@
 import type { Portfolio } from "@/features/portfolios/types/portfolios.type";
-import { MedalIcon, GraduationCapIcon, CodeIcon } from "@phosphor-icons/react";
+import { MedalIcon, GraduationCapIcon, CodeIcon, HandTapIcon } from "@phosphor-icons/react";
 import defaultProfileImage from "@/assets/image.png";
 import { useNavigate } from "react-router-dom";
 
@@ -12,19 +12,19 @@ export default function PortfolioCard({
 }) {
   const navigate = useNavigate();
   const projectsCount = portfolio.projects?.length ?? 0;
-  const skillsCount = portfolio.skills?.length ?? 0;
-  const experiencesCount = portfolio.experiences?.length ?? 0;
+  const skillsCount = portfolio.portfolio_skills?.length ?? 0;
+  const experiencesCount = portfolio.work_experiences?.length ?? 0;
 
   const isListView = variant === "list";
 
-  const handleCardClick = () => {
+  const handleCustomizeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigate(`/dashboard/${portfolio.id}`);
   };
 
   return (
     <div
-      onClick={handleCardClick}
-      className={`rounded-2xl border border-sidebar-border bg-[#0f1224] shadow-sm cursor-pointer transition-all hover:border-[#6c72ff] hover:shadow-lg ${isListView ? "p-4 sm:p-5" : "p-6"}`}
+      className={`rounded-2xl border border-white/10 bg-linear-to-br from-[#12162f] via-[#181c3d] to-[#11162d] backdrop-blur-xl shadow-lg hover:border-[#6c72ff]/40 hover:shadow-[0_0_30px_rgba(108,114,255,0.15)] transition-all duration-300 ${isListView ? "p-4 sm:p-5" : "p-6"}`}
     >
       {!isListView && portfolio.portfolio_name ? (
         <div className="w-full text-center mb-2">
@@ -78,8 +78,9 @@ export default function PortfolioCard({
               {portfolio.profile_name || "Nombre"}
             </h3>
             <p className="text-xs text-slate-300">{portfolio.profession || "Profesión ejemplo"}</p>
+            
             <p
-              className={`mt-2 text-xs text-sidebar-foreground break-words line-clamp-3 ${
+              className={`mt-2 text-xs text-sidebar-foreground break-words line-clamp-2 ${
                 isListView ? "max-w-2xl lg:pr-8" : "max-w-[36rem]"
               }`}
             >
@@ -126,6 +127,17 @@ export default function PortfolioCard({
                 <div className="text-xs text-slate-400 mt-1">Experiencias</div>
               </div>
             </div>
+
+            <div className={`mt-4 ${isListView ? "w-full text-center lg:text-left" : "w-full"}`}>
+              <button
+                onClick={handleCustomizeClick}
+                className="w-full bg-[#1c1f38] hover:bg-[#6c72ff] text-white text-xs border border-[#232555] hover:border-[#6c72ff] transition-all flex items-center justify-center gap-2 rounded-xl h-9 px-4 font-medium active:scale-[0.98]"
+              >
+                <HandTapIcon size={16} weight="bold" />
+                Personalizar portafolio
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
