@@ -24,6 +24,6 @@ export type Portfolio = {
   profile_image: string | null;
   url_portfolio: string;
   projects: Project[];
-  skills: Skill[];
-  experiences: WorkExperience[];
+  portfolio_skills: Skill[];
+  work_experiences: WorkExperience[];
 };
