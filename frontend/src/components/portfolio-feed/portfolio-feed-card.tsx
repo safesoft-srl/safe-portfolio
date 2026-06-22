@@ -9,7 +9,8 @@ interface PortfolioFeedCardProps {
 
 export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
   return (
-    <div className="
+    <div
+      className="
       relative
       rounded-3xl
       border border-white/10
@@ -24,7 +25,8 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
       hover:border-[#6c72ff]/40
       hover:shadow-[0_0_30px_rgba(108,114,255,0.15)]
       transition-all duration-300
-    ">
+    "
+    >
       <div className="flex justify-center">
         <div className="flex h-60 w-auto">
           <img
@@ -41,7 +43,10 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
         <div className="pb-4 pt-4 flex items-center gap-1">
           {data.github_username && (
             <div className="flex items-center  text-slate-500">
-              <a href={`https://github.com/${data.github_username}`} className="hover:text-white transition-colors">
+              <a
+                href={`https://github.com/${data.github_username}`}
+                className="hover:text-white transition-colors"
+              >
                 <GithubLogo size={18} weight="fill" />
               </a>
             </div>
@@ -63,11 +68,10 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
       </div>
       <div className="flex flex-wrap gap-2 mt-4 mb-6 ">
         {data.skills?.slice(0, 4).map((tech, index) => (
-          <span
-            key={index}
-          >
-            {tech.url_dark && <img src={tech.url_dark} alt={tech.name} className="w-9 h-9 object-contain" />}
-
+          <span key={index}>
+            {tech.url_dark && (
+              <img src={tech.url_dark} alt={tech.name} className="w-9 h-9 object-contain" />
+            )}
           </span>
         ))}
         {data.skills && data.skills.length > 3 && (

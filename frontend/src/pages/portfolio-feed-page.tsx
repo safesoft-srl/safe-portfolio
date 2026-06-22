@@ -46,7 +46,7 @@ export default function PortfolioFeedPage() {
   const [inputs, setInputs] = useState<FilterState>({ search: "", role: "all" });
   const [appliedFilters, setAppliedFilters] = useState<FilterState>({ search: "", role: "all" });
 
-  const { data, isLoading, error, refetch, } = useQuery<PublicPortfolioData[]>({
+  const { data, isLoading, error, refetch } = useQuery<PublicPortfolioData[]>({
     queryKey: ["public_portfolios"],
     queryFn: async (): Promise<PublicPortfolioData[]> => {
       const response = await http.get<LaravelApiResponse>("/api/portfolios");
@@ -76,7 +76,6 @@ export default function PortfolioFeedPage() {
     refetch();
   }, []);
 
-
   const filteredPortfolios = data?.filter((portfolio) => {
     const searchLower = appliedFilters.search.toLowerCase();
 
@@ -85,7 +84,9 @@ export default function PortfolioFeedPage() {
       (portfolio.profile_name || "").toLowerCase().includes(searchLower) ||
       (portfolio.profession || "").toLowerCase().includes(searchLower) ||
       (portfolio.city || "").toLowerCase().includes(searchLower) ||
-      (portfolio.skills || []).some(skill => (skill.name || "").toLowerCase().includes(searchLower));
+      (portfolio.skills || []).some((skill) =>
+        (skill.name || "").toLowerCase().includes(searchLower)
+      );
 
     const matchesRole =
       appliedFilters.role === "all" ||
@@ -122,7 +123,6 @@ export default function PortfolioFeedPage() {
       <Header />
       <div className="flex-1 p-8 animate-in fade-in duration-500">
         <div className="max-w-7xl mx-auto space-y-8">
-
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#232555] pb-6">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -130,13 +130,16 @@ export default function PortfolioFeedPage() {
                 Descubre Portafolios
               </h1>
               <p className="text-slate-400 text-sm md:text-base max-w-2xl">
-                Explora portafolios de profesionales talentosos. Filtra por tecnologías o roles específicos.
+                Explora portafolios de profesionales talentosos. Filtra por tecnologías o roles
+                específicos.
               </p>
             </div>
           </div>
 
-          <form onSubmit={handleSearch} className="bg-[#13152e] border border-[#232555] rounded-3xl p-6 shadow-xl flex flex-col md:flex-row gap-4 items-center">
-
+          <form
+            onSubmit={handleSearch}
+            className="bg-[#13152e] border border-[#232555] rounded-3xl p-6 shadow-xl flex flex-col md:flex-row gap-4 items-center"
+          >
             <div className="relative grow w-full">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <MagnifyingGlass size={20} className="text-slate-500" />
@@ -149,12 +152,17 @@ export default function PortfolioFeedPage() {
                 className="w-full h-12 bg-[#1c1f38] text-white rounded-xl pl-12 pr-4 border border-[#232555] focus:ring-2 focus:ring-[#6c72ff] outline-none placeholder:text-slate-500 transition-all"
               />
             </div>
-            <Button type="submit" className="w-full md:w-auto h-12 bg-[#6c72ff] hover:bg-[#5b61e2] text-white px-8 rounded-xl font-bold shadow-lg shadow-indigo-500/20">
+            <Button
+              type="submit"
+              className="w-full md:w-auto h-12 bg-[#6c72ff] hover:bg-[#5b61e2] text-white px-8 rounded-xl font-bold shadow-lg shadow-indigo-500/20"
+            >
               Buscar
             </Button>
           </form>
 
-          <p className="text-slate-400 text-sm">{filteredPortfolios?.length || 0} portafolios encontrados</p>
+          <p className="text-slate-400 text-sm">
+            {filteredPortfolios?.length || 0} portafolios encontrados
+          </p>
 
           {filteredPortfolios && filteredPortfolios.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -15,7 +15,6 @@ import RecentWork from "@/components/public-portfolio/RecentWork";
 import { LinkedinLogo } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 
-
 const DEFAULT_PROFILE_IMAGE = defaultProfileImage;
 
 export default function PublicPortfolio() {
