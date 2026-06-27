@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { showErrorToast } from "@/components/ui/showErrorToast";
+import { showSuccessToast } from "@/components/ui/showErrorToast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -59,7 +59,7 @@ export function EditSoftSkillModal({ isOpen, onClose, skill, onSuccess, portfoli
         return;
       }
 
-      toast.success("Habilidad actualizada");
+      showSuccessToast("Habilidad actualizada");
       onSuccess();
       onClose();
     } catch {

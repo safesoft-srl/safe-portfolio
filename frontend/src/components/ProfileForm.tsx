@@ -277,9 +277,9 @@ export default function ProfileForm({
 
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center items-center min-h-[60vh] mt-36">
+      <div className="w-full flex justify-center items-center min-h-[50vh] mt-36">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[#6c72ff] border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#6c72ff] border-t-transparent" />
           <span className="text-sm text-slate-700 dark:text-slate-200">Cargando...</span>
         </div>
       </div>

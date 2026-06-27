@@ -145,7 +145,7 @@ export default function Configuration() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-10">
+    <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-10 animate-in fade-in zoom-in duration-500">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex-1">
@@ -154,7 +154,7 @@ export default function Configuration() {
       </div>
 
       {/* GitHub Section */}
-      <div className="rounded-2xl border border-[#262b46] bg-[#13152e] p-6 space-y-5">
+      <div className="rounded-2xl border border-[#262b46] bg-slate-900/50 p-6 space-y-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1d3a] border border-[#262b46]">
             <GithubLogo size={22} weight="fill" className="text-white" />
@@ -216,7 +216,7 @@ export default function Configuration() {
       </div>
 
       {/* LinkedIn Section */}
-      <div className="rounded-2xl border border-[#262b46] bg-[#13152e] p-6 space-y-5">
+      <div className="rounded-2xl border border-[#262b46] bg-slate-900/50 p-6 space-y-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1d3a] border border-[#262b46]">
             <LinkedinLogo size={22} weight="fill" className="text-white" />

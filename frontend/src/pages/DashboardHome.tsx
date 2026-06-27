@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import {
   CopySimple,
   UserCircle,
@@ -19,6 +18,7 @@ import {
 import { checkSlug, publishPortfolio, saveUrlPortfolio } from "@/services/url.service";
 import { getPortfolio, setPublicPortfolio } from "@/services/profile.service";
 import type { ProfileData } from "@/services/profile.service";
+import { showSuccessToast } from "@/components/ui/showErrorToast";
 
 export default function DashboardHome() {
   const { idPortfolio } = useParams();
@@ -149,9 +149,9 @@ export default function DashboardHome() {
       await setPublicPortfolio(checked, Number(idPortfolio));
 
       if (checked) {
-        toast.success("Su portafolio se publicó exitosamente.");
+        showSuccessToast("Su portafolio se publicó exitosamente.");
       } else {
-        toast.success("Su portafolio dejó de ser publicó");
+        showSuccessToast("Su portafolio dejó de ser publicado.");
       }
     } catch (error) {
       console.error("Error al actualizar el estado", error);
@@ -164,8 +164,11 @@ export default function DashboardHome() {
 
   if (loadingData) {
     return (
-      <div className="flex h-[50vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2a2f55] border-t-[#6c72ff]"></div>
+      <div className="w-full flex justify-center items-center min-h-[60vh] mt-36">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#6c72ff] border-t-transparent" />
+          <span className="text-sm text-slate-700 dark:text-slate-200">Cargando...</span>
+        </div>
       </div>
     );
   }
@@ -279,7 +282,7 @@ export default function DashboardHome() {
               className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all hover:border-[#6c72ff]/50 hover:bg-[#1a1e36]"
             >
               <div className="flex items-center gap-3 text-slate-300 group-hover:text-white">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-[#6c72ff] group-hover:text-white transition-colors">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <UserCircle size={20} weight="fill" />
                 </div>
                 <span className="font-medium font-sans">Editar Perfil</span>
@@ -295,7 +298,7 @@ export default function DashboardHome() {
               className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all hover:border-[#6c72ff]/50 hover:bg-[#1a1e36]"
             >
               <div className="flex items-center gap-3 text-slate-300 group-hover:text-white">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-[#6c72ff] group-hover:text-white transition-colors">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <Code size={20} weight="fill" />
                 </div>
                 <span className="font-medium font-sans">Añadir Proyectos</span>
@@ -311,7 +314,7 @@ export default function DashboardHome() {
               className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all hover:border-[#6c72ff]/50 hover:bg-[#1a1e36]"
             >
               <div className="flex items-center gap-3 text-slate-300 group-hover:text-white">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-[#6c72ff] group-hover:text-white transition-colors">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   <Briefcase size={20} weight="fill" />
                 </div>
                 <span className="font-medium font-sans">Añadir Experiencia</span>
@@ -368,12 +371,14 @@ export default function DashboardHome() {
                 </div>
 
                 <Button
+                  type="button"
+                  variant="default"
                   disabled={!isValidSlug || loading}
                   className={`w-full h-10 rounded-lg font-medium tracking-wide text-white transition-all
                       ${
                         !isValidSlug || loading
-                          ? "bg-[#2a2f55] text-slate-400 cursor-not-allowed"
-                          : "bg-[#6c72ff] hover:bg-[#5c61eb] shadow-[0_0_15px_rgba(108,114,255,0.3)] hover:shadow-[0_0_20px_rgba(108,114,255,0.5)]"
+                          ? "text-slate-400 cursor-not-allowed"
+                          : "shadow-[0_0_15px_rgba(108,114,255,0.3)]"
                       }`}
                   onClick={handlePublish}
                 >

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@phosphor-icons/react";
-import { toast } from "sonner";
 import { showErrorToast } from "@/components/ui/showErrorToast";
+import { showSuccessToast } from "@/components/ui/showErrorToast";
 
 interface Skill {
   id: number;
@@ -119,7 +119,7 @@ export function AddTechnicalSkill({
         return;
       }
 
-      toast.success("Solicitud enviada a revisión");
+      showSuccessToast("Solicitud enviada a revisión");
 
       setSearch("");
     } catch {

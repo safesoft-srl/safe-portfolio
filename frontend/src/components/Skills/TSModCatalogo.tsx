@@ -51,10 +51,6 @@ export function TSModCatalogo() {
 
   const handleToggleStatus = async (id: number, currentStatus: boolean) => {
     const action = currentStatus ? "deshabilitar" : "habilitar";
-    const confirm = window.confirm(
-      `¿Estás seguro de que deseas ${action} esta habilidad del catálogo?`
-    );
-    if (!confirm) return;
 
     try {
       const res = await fetch(
@@ -141,10 +137,12 @@ export function TSModCatalogo() {
           />
           <Button
             onClick={openModalForCreate}
-            className="bg-[#6c72ff] hover:bg-[#5a60d6] text-white font-bold h-10 px-5 rounded-xl shadow-lg shadow-indigo-500/20 shrink-0"
+            type="button"
+            variant="default"
+            className="text-white font-bold h-10 px-5 rounded-xl shadow-lg shadow-indigo-500/20 shrink-0"
           >
             <PlusIcon weight="bold" className="mr-2" size={16} />
-            Nueva
+            Agregar Habilidad
           </Button>
         </div>
       </div>

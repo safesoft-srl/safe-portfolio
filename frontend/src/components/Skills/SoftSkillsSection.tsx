@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { PlusIcon } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
-import { showErrorToast } from "@/components/ui/showErrorToast";
+import { showErrorToast, showSuccessToast } from "@/components/ui/showErrorToast";
 
 import { SoftSkillCard, type SoftSkill } from "./SoftSkillCard";
 import { AddSoftSkillModal } from "./AddSoftSkillModal";
@@ -10,8 +10,6 @@ import { EditSoftSkillModal } from "./EditSoftSkillModal";
 import { SoftSkillRequestSection } from "./SoftSkillRequestSection";
 
 import { usePortfolioId } from "@/hooks/usePortfolio";
-
-import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -78,7 +76,7 @@ export function SoftSkillsSection() {
         return;
       }
 
-      toast.success("Eliminado correctamente");
+      showSuccessToast("Eliminado correctamente");
 
       fetchSoftSkills();
     } catch {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { showErrorToast } from "@/components/ui/showErrorToast";
+import { showSuccessToast } from "@/components/ui/showErrorToast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -102,7 +102,7 @@ export function AddSoftSkillModal({ isOpen, onClose, portfolioId, onSuccess }: P
         return;
       }
 
-      toast.success("Habilidad agregada");
+      showSuccessToast("Habilidad agregada");
 
       resetForm();
       onSuccess();
@@ -136,7 +136,7 @@ export function AddSoftSkillModal({ isOpen, onClose, portfolioId, onSuccess }: P
         return;
       }
 
-      toast.success("Solicitud enviada a revisión");
+      showSuccessToast("Solicitud enviada a revisión");
 
       resetForm();
       onSuccess();

@@ -2,6 +2,7 @@ import type { Portfolio } from "@/features/portfolios/types/portfolios.type";
 import { MedalIcon, GraduationCapIcon, CodeIcon, HandTapIcon } from "@phosphor-icons/react";
 import defaultProfileImage from "@/assets/image.png";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function PortfolioCard({
   portfolio,
@@ -129,13 +130,15 @@ export default function PortfolioCard({
             </div>
 
             <div className={`mt-4 ${isListView ? "w-full text-center lg:text-left" : "w-full"}`}>
-              <button
+              <Button
+                type="button"
+                variant="default"
                 onClick={handleCustomizeClick}
-                className="w-full bg-[#1c1f38] hover:bg-[#6c72ff] text-white text-xs border border-[#232555] hover:border-[#6c72ff] transition-all flex items-center justify-center gap-2 rounded-xl h-9 px-4 font-medium active:scale-[0.98]"
+                className="w-full bg-[#1c1f38] text-white text-xs border border-[#232555] transition-all flex items-center justify-center gap-2 rounded-xl h-10 px-4 font-medium active:scale-[0.98]"
               >
                 <HandTapIcon size={16} weight="bold" />
                 Personalizar portafolio
-              </button>
+              </Button>
             </div>
           </div>
         </div>
