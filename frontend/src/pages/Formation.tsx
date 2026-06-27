@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { PlusIcon, GraduationCapIcon, BriefcaseIcon } from "@phosphor-icons/react";
+import { PlusIcon, GraduationCapIcon, BriefcaseIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle, AlertAction } from "@/components/ui/alert";
 
 import AcademicForm from "@/features/formation/components/AcademicForm";
 import AcademicList from "@/features/formation/components/AcademicList";
@@ -56,8 +57,16 @@ export default function FormationPage() {
   const [editingCourse, setEditingCourse] = useState<CourseRecord | null>(null);
   const [deleteAcademicId, setDeleteAcademicId] = useState<number | null>(null);
   const [deleteCourseId, setDeleteCourseId] = useState<number | null>(null);
+  const [isWarningDismissed, setIsWarningDismissed] = useState(false);
+  const [isCoursesWarningDismissed, setIsCoursesWarningDismissed] = useState(false);
 
   const isModalOpen = modalMode !== null;
+  const currentAcademicsCount = academics?.filter((a) => a.is_current).length || 0;
+  const currentCoursesCount = courses?.filter((c) => c.is_current).length || 0;
+
+  if (isWarningDismissed && currentAcademicsCount < 2) {
+    setIsWarningDismissed(false);
+  }
 
   const invalidateAcademics = async () => {
     if (!portfolioId) {
@@ -263,7 +272,7 @@ export default function FormationPage() {
           }
         }}
       >
-        <main className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl flex-col px-1 pb-4 font-sans text-foreground">
+        <main className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl flex-col px-1 pb-4 font-sans text-foreground animate-in fade-in zoom-in duration-500">
           <header className="mt-8 flex flex-col gap-4">
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -316,6 +325,44 @@ export default function FormationPage() {
               </Button>
             </div>
           </header>
+
+          {activeTab === "academic" && currentAcademicsCount >= 3 && !isWarningDismissed && (
+            <Alert className="mt-6 bg-amber-500/10 text-amber-500 border-amber-500/50">
+              <WarningIcon size={20} className="text-amber-500" />
+              <AlertTitle className="text-amber-500 font-bold">Advertencia</AlertTitle>
+              <AlertDescription className="text-amber-500/90">
+                Actualmente estás cursando dos grados académicos al mismo tiempo.
+                Para evitar confusiones, te recomendamos revisar y actualizar la información de tu formación académica.
+              </AlertDescription>
+              <AlertAction>
+                <button
+                  onClick={() => setIsWarningDismissed(true)}
+                  className="text-amber-500/80 hover:text-amber-500 transition-colors cursor-pointer"
+                >
+                  <XIcon size={16} weight="bold" />
+                </button>
+              </AlertAction>
+            </Alert>
+          )}
+
+          {activeTab === "courses" && currentCoursesCount > 5 && !isCoursesWarningDismissed && (
+            <Alert className="mt-6 bg-amber-500/10 text-amber-500 border-amber-500/50">
+              <WarningIcon size={20} className="text-amber-500" />
+              <AlertTitle className="text-amber-500 font-bold">Advertencia</AlertTitle>
+              <AlertDescription className="text-amber-500/90">
+                Actualmente estás cursando más de 5 cursos al mismo tiempo.
+                Para evitar confusiones, te recomendamos revisar y actualizar la información de tus cursos realizados.
+              </AlertDescription>
+              <AlertAction>
+                <button
+                  onClick={() => setIsCoursesWarningDismissed(true)}
+                  className="text-amber-500/80 hover:text-amber-500 transition-colors cursor-pointer"
+                >
+                  <XIcon size={16} weight="bold" />
+                </button>
+              </AlertAction>
+            </Alert>
+          )}
 
           {activeTab === "academic" && (
             <section className="mt-4 flex w-full flex-1 items-start">

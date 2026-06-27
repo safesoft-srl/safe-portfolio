@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { usePortfolioId } from "@/hooks/usePortfolio";
+import { showSuccessToast } from "@/components/ui/showErrorToast";
 
 // Types
 interface WorkExperience {
@@ -145,7 +146,7 @@ export default function ExperiencePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
-      toast.success("Experiencia laboral registrada correctamente");
+      showSuccessToast("Experiencia laboral registrada correctamente");
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -160,7 +161,7 @@ export default function ExperiencePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["work-experiences"] });
       handleCloseModal();
-      toast.success("Experiencia laboral actualizada correctamente");
+      showSuccessToast("Experiencia laboral actualizada correctamente");
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
