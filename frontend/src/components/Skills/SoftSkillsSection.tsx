@@ -11,7 +11,6 @@ import { SoftSkillRequestSection } from "./SoftSkillRequestSection";
 
 import { usePortfolioId } from "@/hooks/usePortfolio";
 
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function SoftSkillsSection() {

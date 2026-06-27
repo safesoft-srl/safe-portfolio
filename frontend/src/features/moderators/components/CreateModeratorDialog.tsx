@@ -85,11 +85,8 @@ export default function CreateModeratorDialog() {
         if (!v) reset();
       }}
     >
-      <DialogTrigger >
-        <Button
-          type="button"
-          variant="default" 
-          className="gap-2 text-white">
+      <DialogTrigger>
+        <Button type="button" variant="default" className="gap-2 text-white">
           <ShieldPlus size={18} weight="bold" />
           Agregar Moderador
         </Button>

@@ -48,7 +48,7 @@ export default function Portfolios() {
       `,
         }}
       />
-      
+
       <div className="fixed top-0 left-0 w-full z-50 bg-[#050816]/10 backdrop-blur-md border-b border-slate-800/40">
         <Header />
       </div>

@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { PlusIcon, GraduationCapIcon, BriefcaseIcon, WarningIcon, XIcon } from "@phosphor-icons/react";
+import {
+  PlusIcon,
+  GraduationCapIcon,
+  BriefcaseIcon,
+  WarningIcon,
+  XIcon,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -331,8 +337,9 @@ export default function FormationPage() {
               <WarningIcon size={20} className="text-amber-500" />
               <AlertTitle className="text-amber-500 font-bold">Advertencia</AlertTitle>
               <AlertDescription className="text-amber-500/90">
-                Actualmente estás cursando dos grados académicos al mismo tiempo.
-                Para evitar confusiones, te recomendamos revisar y actualizar la información de tu formación académica.
+                Actualmente estás cursando dos grados académicos al mismo tiempo. Para evitar
+                confusiones, te recomendamos revisar y actualizar la información de tu formación
+                académica.
               </AlertDescription>
               <AlertAction>
                 <button
@@ -350,8 +357,8 @@ export default function FormationPage() {
               <WarningIcon size={20} className="text-amber-500" />
               <AlertTitle className="text-amber-500 font-bold">Advertencia</AlertTitle>
               <AlertDescription className="text-amber-500/90">
-                Actualmente estás cursando más de 5 cursos al mismo tiempo.
-                Para evitar confusiones, te recomendamos revisar y actualizar la información de tus cursos realizados.
+                Actualmente estás cursando más de 5 cursos al mismo tiempo. Para evitar confusiones,
+                te recomendamos revisar y actualizar la información de tus cursos realizados.
               </AlertDescription>
               <AlertAction>
                 <button

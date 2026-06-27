@@ -52,7 +52,6 @@ export function TSModCatalogo() {
   const handleToggleStatus = async (id: number, currentStatus: boolean) => {
     const action = currentStatus ? "deshabilitar" : "habilitar";
 
-
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/moderator/technical-skills/${id}/toggle-status`,
