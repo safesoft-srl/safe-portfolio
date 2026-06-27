@@ -77,9 +77,9 @@ export default function Profile() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl font-sans text-slate-900 dark:text-white">
+    <div className="space-y-8 p-4 sm:p-6 lg:p-8 mx-auto w-full max-w-4xl font-sans text-slate-900 dark:text-white animate-in fade-in zoom-in duration-500">
       {!profileQuery.isLoading && (
-        <h1 className="mb-4 text-3xl font-semibold">Editar Perfil de Portafolio</h1>
+        <h1 className="mb-10 text-3xl font-semibold">Editar Perfil de Portafolio</h1>
       )}
       <ProfileForm
         mode="edit"
