@@ -61,16 +61,6 @@ export default function ModalRequest({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim()) {
-      alert("El nombre es requerido");
-      return;
-    }
-
-    if (!category) {
-      alert("La categoría es requerida");
-      return;
-    }
-
     onSubmit({
       name,
       category,
@@ -129,7 +119,6 @@ export default function ModalRequest({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* NAME */}
       <div className="space-y-2">
         <Label className="text-slate-300">Nombre de la Skill</Label>
 
@@ -141,7 +130,6 @@ export default function ModalRequest({
         />
       </div>
 
-      {/* CATEGORY */}
       <div className="space-y-2">
         <Label className="text-slate-300">Categoría</Label>
 
@@ -163,7 +151,6 @@ export default function ModalRequest({
       {renderUploader("light", previewLight)}
       {renderUploader("dark", previewDark)}
 
-      {/* BUTTONS */}
       <div className="flex justify-end gap-3 pt-2">
         <Button
           type="button"

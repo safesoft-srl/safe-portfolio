@@ -85,11 +85,13 @@ export default function CreateModeratorDialog() {
         if (!v) reset();
       }}
     >
-      {/* @ts-expect-error asChild type issue with React 19 / Shadcn */}
-      <DialogTrigger asChild>
-        <Button className="gap-2 bg-[#6c72ff] hover:bg-[#5a60e6] text-white">
+      <DialogTrigger >
+        <Button
+          type="button"
+          variant="default" 
+          className="gap-2 text-white">
           <ShieldPlus size={18} weight="bold" />
-          Ascender a Moderador
+          Agregar Moderador
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md bg-[#14172b] border-[#2a2f55] text-white">
