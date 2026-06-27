@@ -36,12 +36,12 @@ export default function PortfolioToolbar({
               value={query}
               onChange={(event) => onQueryChange(event.target.value)}
               placeholder="Buscar por profesion, habilidades, proyectos o experiencias..."
-              className="h-9 rounded-xl border border-[#2a2d58] bg-[#171a3a] pl-12 pr-4 text-base text-slate-100 placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-[#6c72ff]"
+              className="h-10 rounded-xl border border-[#2a2d58] bg-[#171a3a] pl-12 pr-4 text-base text-slate-100 placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-[#6c72ff]"
             />
           </div>
         </div>
 
-        <div className="flex items-center self-end rounded-xl border border-[#2a2d58] bg-[#171a3a] p-1">
+        <div className="h-10 flex items-center self-end rounded-xl border border-[#2a2d58] bg-[#171a3a] p-1">
           <Button
             type="button"
             variant="ghost"

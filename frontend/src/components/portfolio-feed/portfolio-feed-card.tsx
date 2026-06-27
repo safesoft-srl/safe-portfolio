@@ -45,6 +45,7 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
             <div className="flex items-center  text-slate-500">
               <a
                 href={`https://github.com/${data.github_username}`}
+                target="_blank"
                 className="hover:text-white transition-colors"
               >
                 <GithubLogo size={18} weight="fill" />
@@ -53,7 +54,7 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
           )}
           {data.linkedin_url && (
             <div className="flex items-center  text-slate-500">
-              <a href="#" className="hover:text-white transition-colors">
+              <a href={data.linkedin_url} target="_blank" className="hover:text-white transition-colors">
                 <LinkedinLogo size={18} weight="fill" />
               </a>
             </div>
@@ -89,7 +90,14 @@ export function PortfolioFeedCard({ data }: PortfolioFeedCardProps) {
         rel="noopener noreferrer"
         className="w-full mt-2"
       >
-        <Button className="w-full bg-[#1c1f38] hover:bg-[#6c72ff] text-white text-md border border-[#232555] hover:border-[#6c72ff] transition-all flex items-center justify-center gap-2 rounded-xl h-11">
+        <Button 
+          type="button"
+          variant="default"
+          onClick={(e) => {
+            e.preventDefault();
+            window.open(data.url_portfolio, "_blank", "noopener,noreferrer");
+          }}
+          className="w-full bg-[#1c1f38] text-white text-xs border border-[#232555] transition-all flex items-center justify-center gap-2 rounded-xl h-10">
           Visitar portfolio
           <ArrowSquareOut size={16} />
         </Button>

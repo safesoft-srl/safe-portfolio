@@ -34,6 +34,7 @@ export default function Portfolios() {
       return haystack.includes(search);
     });
   }, [portfolios, query]);
+
   return (
     <div className="relative isolate min-h-screen bg-[#050816] text-slate-100 font-heading overflow-hidden">
       <div
@@ -47,9 +48,12 @@ export default function Portfolios() {
       `,
         }}
       />
-      <Header />
+      
+      <div className="fixed top-0 left-0 w-full z-50 bg-[#050816]/10 backdrop-blur-md border-b border-slate-800/40">
+        <Header />
+      </div>
 
-      <main className="pt-4">
+      <main className="pt-24">
         <section className="mx-auto flex w-full max-w-6xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-2 sm:px-3 md:px-6 py-6">
           <div className="mb-4 lg:mb-0">
             <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {displayName}!</h1>
@@ -94,7 +98,7 @@ export default function Portfolios() {
               onViewChange={setView}
             />
             {isLoading ? (
-              <div className="text-sm text-slate-400">Cargando portafolio...</div>
+              <div className="text-sm text-slate-400">Cargando portafolios...</div>
             ) : (
               <PortfolioGrid portfolios={filteredPortfolios} view={view} />
             )}
