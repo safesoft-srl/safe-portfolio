@@ -9,7 +9,6 @@ export default function AdminModerators() {
 
   return (
     <div className="p-8 w-full">
-      {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white font-heading">Gestión de Moderadores</h1>
@@ -20,7 +19,6 @@ export default function AdminModerators() {
         <CreateModeratorDialog />
       </div>
 
-      {/* Stats Card */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
         <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
           <div className="flex flex-row items-center justify-between pb-2">
@@ -33,7 +31,6 @@ export default function AdminModerators() {
         </div>
       </div>
 
-      {/* Table */}
       <div className="rounded-2xl border border-[#2a2f55] bg-[#14172b] p-5">
         <div className="mb-4">
           <h3 className="text-white font-semibold flex items-center gap-2 text-lg">
