@@ -54,26 +54,26 @@ export default function Portfolios() {
       </div>
 
       <main className="pt-24">
-        <section className="mx-auto flex w-full max-w-6xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-2 sm:px-3 md:px-6 py-6">
-          <div className="mb-4 lg:mb-0">
-            <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {displayName}!</h1>
-            <p className="mt-1 text-sm font-sans">Gestiona tus portafolios</p>
-          </div>
+        <section className="mx-auto flex w-full max-w-6xl flex-col gap-5 lg:flex-row lg:items-center lg:justify-between px-4 md:px-6 py-6">
           <div>
+            <h1 className="text-2xl font-bold tracking-tight">¡Bienvenido, {displayName}!</h1>
+            <p className="mt-1 text-sm font-sans text-slate-400">Gestiona tus portafolios</p>
+          </div>
+          <div className="w-full lg:w-auto mt-2 lg:mt-0">
             <Button
               onClick={() => setCreateOpen(true)}
               variant="default"
               size="lg"
-              className="px-5 font-heading flex items-center gap-2"
+              className="w-full lg:w-auto px-5 font-heading flex items-center justify-center gap-2 shadow-lg shadow-[#6c72ff]/10"
             >
               <PlusIcon weight="bold" /> Crear portafolio
             </Button>
           </div>
         </section>
-        <section className="mt-2 w-full max-w-6xl mx-auto px-2 sm:px-3 md:px-6 pb-10">
+        <section className="mt-2 w-full max-w-6xl mx-auto px-4 md:px-6 pb-10">
           {(!portfolios || portfolios.length === 0) && !isLoading && (
-            <div className="w-full rounded-2xl bg-sidebar py-4 border border-sidebar-border px-4 sm:px-8">
-              <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-4 text-center py-6">
+            <div className="w-full rounded-2xl bg-sidebar py-8 border border-sidebar-border px-4 sm:px-8 shadow-sm">
+              <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-5 text-center">
                 <p className="text-sm text-sidebar-foreground">
                   Crea un portafolio ahora para mostrar tus proyectos, habilidades y experiencia.
                 </p>
@@ -81,7 +81,7 @@ export default function Portfolios() {
                   onClick={() => setCreateOpen(true)}
                   variant="default"
                   size="lg"
-                  className="px-5 font-heading flex items-center gap-2"
+                  className="w-full sm:w-auto px-5 font-heading flex items-center justify-center gap-2 shadow-lg shadow-[#6c72ff]/10"
                 >
                   <PlusIcon weight="bold" /> Crear portafolio
                 </Button>

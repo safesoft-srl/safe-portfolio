@@ -1,4 +1,10 @@
 import { List, FacebookLogo, XLogo, LinkedinLogo, GithubLogo } from "@phosphor-icons/react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 interface PublicNavbarProps {
   firstName: string;
@@ -58,9 +64,34 @@ export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
             </a>
           </div>
 
-          <button className="flex h-9 w-9 items-center justify-center rounded-full border border-[#262b46] bg-[#181b36] text-slate-200 hover:border-[#3b4270] md:hidden">
-            <List className="h-4 w-4" weight="bold" />
-          </button>
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <button className="flex h-9 w-9 items-center justify-center rounded-full border border-[#262b46] bg-[#181b36] text-slate-200 hover:border-[#3b4270] outline-none">
+                    <List className="h-4 w-4" weight="bold" />
+                  </button>
+                }
+              />
+              <DropdownMenuContent
+                align="end"
+                sideOffset={8}
+                className="w-48 rounded-xl border border-[#262b46] bg-[#111327] p-2 shadow-2xl md:hidden"
+              >
+                {navLinks.map((link) => (
+                  <DropdownMenuItem
+                    key={link.name}
+                    render={
+                      <a href={link.href} className="w-full block">
+                        {link.name}
+                      </a>
+                    }
+                    className="cursor-pointer rounded-lg px-3 py-2.5 font-mono text-xs font-medium text-slate-300 hover:bg-[#1a1d3a] hover:text-[#bcfd49] transition-colors focus:bg-[#1a1d3a] focus:text-[#bcfd49]"
+                  ></DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
     </header>

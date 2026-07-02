@@ -60,12 +60,47 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
   return (
     <header className="border-b border-white/5 bg-[#050816]/70 backdrop-blur-md sticky top-0 z-20">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <RowsIcon />
+        <div className="flex items-center gap-2">
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <button className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground outline-none">
+                    <RowsIcon />
+                  </button>
+                }
+              ></DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                sideOffset={8}
+                className="w-56 rounded-lg bg-slate-900 backdrop-blur-md border border-white/10"
+              >
+                {visibleMenuItems.map((item) => {
+                  const isActive =
+                    item.href && pathname === item.href ? true : activeSection === item.id;
+                  return (
+                    <DropdownMenuItem
+                      key={item.id}
+                      onClick={() => handleMenuClick(item.id)}
+                      className={`cursor-pointer focus:bg-white/5 ${
+                        isActive ? "text-[#6c72ff] font-medium" : "text-slate-300"
+                      }`}
+                    >
+                      {item.label}
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <span className="truncate text-base md:text-lg font-semibold">Safe Portfolio</span>
-        </Link>
+
+          <Link to="/" className="flex items-center gap-2">
+            <div className="hidden md:flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <RowsIcon />
+            </div>
+            <span className="truncate text-base md:text-lg font-semibold">Safe Portfolio</span>
+          </Link>
+        </div>
 
         <nav className="hidden md:flex items-center gap-6">
           {visibleMenuItems.map((item) => {
@@ -99,7 +134,7 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
           })}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-4">
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger
@@ -157,13 +192,14 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
           ) : (
             <>
               <Button
-                className="h-9 rounded-lg border border-slate-600/60 bg-transparent px-4 text-xs sm:text-sm tracking-wide text-slate-100 hover:bg-white/5"
+                className="h-9 sm:h-10 rounded-lg sm:rounded-xl border border-slate-600/60 bg-transparent px-3 sm:px-6 text-xs sm:text-sm tracking-wide text-slate-100 hover:bg-white/5 transition-all"
                 onClick={() => navigate("/login")}
               >
-                Iniciar sesión
+                <span className="hidden sm:inline">Iniciar sesión</span>
+                <span className="sm:hidden">Entrar</span>
               </Button>
               <Button
-                className="h-9 rounded-lg bg-[#6c72ff] px-4 text-xs sm:text-sm tracking-wide text-white hover:bg-[#5c61eb]"
+                className="h-9 sm:h-10 rounded-lg sm:rounded-xl bg-[#6c72ff] px-3 sm:px-6 text-xs sm:text-sm font-medium tracking-wide text-white hover:bg-[#5c61eb] shadow-lg shadow-[#6c72ff]/20 transition-all"
                 onClick={() => navigate("/register")}
               >
                 Registrarse

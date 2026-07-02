@@ -278,47 +278,17 @@ export default function FormationPage() {
           }
         }}
       >
-        <main className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl flex-col px-1 pb-4 font-sans text-foreground animate-in fade-in zoom-in duration-500">
-          <header className="mt-8 flex flex-col gap-4">
-            <div className="flex items-start justify-between gap-3">
+        <main className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-5xl flex-col px-4 sm:px-6 pb-4 font-sans text-foreground animate-in fade-in zoom-in duration-500">
+          <header className="mt-8 flex flex-col gap-6 sm:gap-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Formación Académica</h1>
-                <p className="mt-1 text-sm text-slate-400"></p>
+                <p className="mt-1 text-sm text-slate-400">Gestiona tu formación</p>
               </div>
-            </div>
-
-            <div className="flex w-full gap-2 rounded-full border border-slate-800 bg-[#1E2140] p-1">
-              <button
-                type="button"
-                onClick={() => setActiveTab("academic")}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 font-medium transition-all ${
-                  activeTab === "academic"
-                    ? "border border-slate-600 bg-slate-900 text-white shadow-lg"
-                    : "text-slate-400 hover:text-slate-300"
-                }`}
-              >
-                <GraduationCapIcon weight="bold" className="size-5" />
-                <span>Grado Académico ({academics.length})</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab("courses")}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2 font-medium transition-all ${
-                  activeTab === "courses"
-                    ? "border border-slate-600 bg-slate-900 text-white shadow-lg"
-                    : "text-slate-400 hover:text-slate-300"
-                }`}
-              >
-                <BriefcaseIcon weight="bold" className="size-5" />
-                <span>Cursos ({courses.length})</span>
-              </button>
-            </div>
-
-            <div className="mt-3 flex justify-end">
               <Button
                 type="button"
                 size="lg"
-                className="gap-2 font-heading"
+                className="w-full sm:w-auto gap-2 font-heading"
                 onClick={() =>
                   activeTab === "academic" ? handleOpenAcademicModal() : handleOpenCourseModal()
                 }
@@ -329,6 +299,33 @@ export default function FormationPage() {
                   {activeTab === "academic" ? "Agregar Grado Académico" : "Agregar Curso"}
                 </span>
               </Button>
+            </div>
+
+            <div className="flex w-full sm:w-fit gap-1 sm:gap-2 rounded-full border border-slate-800 bg-[#1E2140] p-1 shadow-lg">
+              <button
+                type="button"
+                onClick={() => setActiveTab("academic")}
+                className={`flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-full px-4 py-2 font-medium transition-all ${
+                  activeTab === "academic"
+                    ? "border border-slate-600 bg-slate-900 text-white shadow-lg"
+                    : "text-slate-400 sm:hover:text-slate-300 active:scale-[0.98] active:bg-white/5"
+                }`}
+              >
+                <GraduationCapIcon weight="bold" className="size-5" />
+                <span>Grado Académico ({academics.length})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("courses")}
+                className={`flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-full px-4 py-2 font-medium transition-all ${
+                  activeTab === "courses"
+                    ? "border border-slate-600 bg-slate-900 text-white shadow-lg"
+                    : "text-slate-400 sm:hover:text-slate-300 active:scale-[0.98] active:bg-white/5"
+                }`}
+              >
+                <BriefcaseIcon weight="bold" className="size-5" />
+                <span>Cursos ({courses.length})</span>
+              </button>
             </div>
           </header>
 
@@ -383,7 +380,7 @@ export default function FormationPage() {
                       type="button"
                       variant="default"
                       size="lg"
-                      className="gap-2 font-heading"
+                      className="w-full sm:w-auto gap-2 font-heading"
                       onClick={() => handleOpenAcademicModal()}
                       disabled={!portfolioId}
                     >
@@ -416,7 +413,7 @@ export default function FormationPage() {
                       type="button"
                       variant="default"
                       size="lg"
-                      className="gap-2 font-heading"
+                      className="w-full sm:w-auto gap-2 font-heading"
                       onClick={() => handleOpenCourseModal()}
                       disabled={!portfolioId}
                     >

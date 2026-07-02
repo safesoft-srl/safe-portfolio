@@ -120,7 +120,7 @@ export default function RecentWork({ projects }: Props) {
               {/* Project Image */}
               <div
                 className="relative w-full max-w-48 min-[518px]:max-w-sm min-[1024px]:max-w-full overflow-hidden rounded-xl border border-[#262b46] bg-[#0a0b1e] group mx-auto min-[518px]:mr-3 min-[1024px]:mr-0"
-                style={{ aspectRatio: "1 / 1" }}
+                style={{ aspectRatio: "16 / 9" }}
               >
                 <div className="absolute inset-0 bg-white/5 group-hover:bg-transparent transition-colors duration-500" />
                 <img

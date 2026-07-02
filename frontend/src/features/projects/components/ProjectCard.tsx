@@ -49,8 +49,8 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
       >
         {isListView ? (
           <>
-            <div className="shrink-0 w-[140px] sm:w-[170px]">
-              <div className="flex items-center justify-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60 h-[110px] sm:h-[130px]">
+            <div className="shrink-0 w-[140px] sm:w-[220px]">
+              <div className="flex items-center justify-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60 aspect-video">
                 <img
                   src={project.url_image || DEFAULT_PROJECT_IMAGE}
                   alt={project.name}
@@ -169,13 +169,13 @@ export default function ProjectCard({ project, onEdit, onDelete, variant = "grid
                 </div>
                 {/* Imagen debajo del título y antes de la descripción */}
                 <div
-                  className="w-full my-4 flex justify-center items-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60"
+                  className="w-full my-4 flex justify-center items-center overflow-hidden rounded-xl border border-sidebar-border bg-black/60 aspect-video"
                   style={{ background: "#181c2f" }}
                 >
                   <img
                     src={project.url_image || DEFAULT_PROJECT_IMAGE}
                     alt={project.name}
-                    className="w-full h-auto max-h-[320px] object-cover rounded-xl"
+                    className="w-full h-full object-cover rounded-xl"
                     style={{ background: "#181c2f" }}
                   />
                 </div>
