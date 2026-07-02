@@ -569,7 +569,12 @@ export default function ProfileForm({
       <div className="border-b border-slate-800 my-6"></div>
       <div className="mt-6">
         <div className="flex flex-col sm:flex-row justify-center gap-3">
-          <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={isSaving || !hasUnsavedChanges}>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full sm:w-auto"
+            disabled={isSaving || !hasUnsavedChanges}
+          >
             {isSaving ? (
               <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
             ) : mode === "edit" ? (
