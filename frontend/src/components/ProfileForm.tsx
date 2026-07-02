@@ -290,17 +290,17 @@ export default function ProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="w-full bg-slate-900 rounded-2xl p-4 sm:p-5">
-      <h2 className="mb-4 text-2xl font-semibold">
+      <h2 className="mb-4 text-xl sm:text-2xl font-semibold break-words">
         {mode === "edit" ? "Información Básica" : "Crear Perfil de Portafolio"}
       </h2>
       <div className="border-b border-slate-800 mb-8"></div>
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[420px_1fr]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[360px_1fr] xl:grid-cols-[420px_1fr]">
         <div className="space-y-5">
           <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
             Foto de Perfil
           </Label>
-          <div ref={photoActionsRef} className="relative mx-auto -mt-8 w-fit">
-            <Avatar className="h-60 w-60">
+          <div ref={photoActionsRef} className="relative mx-auto -mt-2 sm:-mt-8 w-fit">
+            <Avatar className="h-44 w-44 sm:h-52 sm:w-52 lg:h-60 lg:w-60">
               <AvatarImage
                 src={formData.profile_image || DEFAULT_PROFILE_IMAGE}
                 alt="Foto de perfil"
@@ -319,7 +319,7 @@ export default function ProfileForm({
                 type="button"
                 size="sm"
                 variant="default"
-                className="absolute bottom-2 left-2 px-2 h-7"
+                className="absolute bottom-2 left-2 px-2 h-7 text-xs sm:text-sm"
                 onClick={handleUploadPhoto}
               >
                 Subir foto
@@ -330,7 +330,7 @@ export default function ProfileForm({
                   type="button"
                   size="sm"
                   variant="default"
-                  className="absolute bottom-2 left-2 px-2 h-7 gap-1"
+                  className="absolute bottom-2 left-2 px-2 h-7 gap-1 text-xs sm:text-sm"
                   onClick={() => setShowPhotoActions((prev) => !prev)}
                 >
                   <PencilSimpleLineIcon size={32} />
@@ -568,8 +568,8 @@ export default function ProfileForm({
       </div>
       <div className="border-b border-slate-800 my-6"></div>
       <div className="mt-6">
-        <div className="flex justify-center gap-3">
-          <Button type="submit" size="lg" disabled={isSaving || !hasUnsavedChanges}>
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
+          <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={isSaving || !hasUnsavedChanges}>
             {isSaving ? (
               <span className="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full inline-block align-middle" />
             ) : mode === "edit" ? (
@@ -582,6 +582,7 @@ export default function ProfileForm({
             type="button"
             size="lg"
             variant="outline"
+            className="w-full sm:w-auto"
             onClick={() => {
               setErrors(EMPTY_ERRORS);
               setFormData(initialData);

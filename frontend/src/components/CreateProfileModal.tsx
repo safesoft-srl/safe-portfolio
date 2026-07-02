@@ -83,7 +83,7 @@ export default function CreateProfileModal({
           </Button>
         </AlertDialogTrigger>
       )}
-      <AlertDialogContent className="max-w-4xl bg-slate-900 p-0 overflow-hidden border-slate-800">
+      <AlertDialogContent className="w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] max-w-4xl max-h-[92vh] overflow-y-auto bg-slate-900 p-0 border-slate-800">
         <button
           type="button"
           aria-label="Cerrar"
