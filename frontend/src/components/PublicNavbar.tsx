@@ -81,13 +81,13 @@ export function PublicNavbar({ firstName, slug }: PublicNavbarProps) {
                 {navLinks.map((link) => (
                   <DropdownMenuItem
                     key={link.name}
-                    asChild
+                    render={
+                      <a href={link.href} className="w-full block">
+                        {link.name}
+                      </a>
+                    }
                     className="cursor-pointer rounded-lg px-3 py-2.5 font-mono text-xs font-medium text-slate-300 hover:bg-[#1a1d3a] hover:text-[#bcfd49] transition-colors focus:bg-[#1a1d3a] focus:text-[#bcfd49]"
-                  >
-                    <a href={link.href} className="w-full block">
-                      {link.name}
-                    </a>
-                  </DropdownMenuItem>
+                  ></DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
