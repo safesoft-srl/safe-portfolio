@@ -312,9 +312,7 @@ export default function ExperiencePage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight text-white">
-            Experiencia Laboral
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white">Experiencia Laboral</h1>
           <p className="mt-1 text-sm text-slate-400">Gestiona tu experiencia</p>
         </div>
         <Button className="w-full sm:w-auto gap-2" size="lg" onClick={() => handleOpenModal()}>
