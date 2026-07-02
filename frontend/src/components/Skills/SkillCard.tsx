@@ -40,7 +40,7 @@ export function SkillCard({ skill, onEdit, onDelete }: SkillCardProps) {
 
   return (
     <Card className="relative bg-[#13152e] border border-[#232555] rounded-2xl overflow-hidden shadow-2xl transition-all hover:border-[#6c72ff]/50 group">
-      <div className="absolute top-3 right-3 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div className="absolute top-3 right-3 z-20 flex gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200">
         <Button
           variant="ghost"
           onClick={(e) => {

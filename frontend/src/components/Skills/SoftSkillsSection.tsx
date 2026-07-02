@@ -86,14 +86,17 @@ export function SoftSkillsSection() {
 
   return (
     <div className="w-full animate-in fade-in duration-300">
-      <div className="flex justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12">
         <div>
           <h2 className="text-white text-2xl font-bold">Habilidades Blandas</h2>
 
           <p className="text-slate-400 text-sm">Gestiona tus habilidades</p>
         </div>
 
-        <Button onClick={() => setIsAddModalOpen(true)}>
+        <Button
+          className="w-full sm:w-auto gap-2 font-heading px-6 h-9"
+          onClick={() => setIsAddModalOpen(true)}
+        >
           <PlusIcon size={16} />
           Agregar Habilidad
         </Button>

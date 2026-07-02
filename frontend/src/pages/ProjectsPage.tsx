@@ -74,17 +74,17 @@ export default function ProjectsPage() {
     <>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <main className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-7xl flex-col px-1 pb-4 text-foreground font-sans animate-in fade-in zoom-in duration-500">
-          <header className="flex items-start justify-between gap-3">
+          <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Proyectos</h1>
-              <p className="mt-1 text-sm text-slate-400"></p>
+              <p className="mt-1 text-sm text-slate-400">Gestiona tus proyectos</p>
             </div>
 
-            <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
               <Button
                 type="button"
                 size="lg"
-                className="gap-2 font-heading"
+                className="w-full sm:w-auto gap-2 font-heading"
                 onClick={() => {
                   setEditingProject(null);
                   setOpen(true);

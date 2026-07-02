@@ -310,13 +310,16 @@ export default function ExperiencePage() {
   return (
     <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 animate-in fade-in zoom-in duration-500">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex-1">
-          Experiencia Laboral
-        </h1>
-        <Button size="lg" onClick={() => handleOpenModal()}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold tracking-tight text-white">
+            Experiencia Laboral
+          </h1>
+          <p className="mt-1 text-sm text-slate-400">Gestiona tu experiencia</p>
+        </div>
+        <Button className="w-full sm:w-auto gap-2" size="lg" onClick={() => handleOpenModal()}>
           <PlusIcon weight="bold" />
-          Agregar Experiencia
+          <span>Agregar Experiencia</span>
         </Button>
       </div>
 
