@@ -63,18 +63,21 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
         <div className="flex items-center gap-2">
           <div className="md:hidden">
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground outline-none">
-                  <RowsIcon />
-                </button>
-              </DropdownMenuTrigger>
+              <DropdownMenuTrigger
+                render={
+                  <button className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground outline-none">
+                    <RowsIcon />
+                  </button>
+                }
+              ></DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
                 sideOffset={8}
                 className="w-56 rounded-lg bg-slate-900 backdrop-blur-md border border-white/10"
               >
                 {visibleMenuItems.map((item) => {
-                  const isActive = item.href && pathname === item.href ? true : activeSection === item.id;
+                  const isActive =
+                    item.href && pathname === item.href ? true : activeSection === item.id;
                   return (
                     <DropdownMenuItem
                       key={item.id}

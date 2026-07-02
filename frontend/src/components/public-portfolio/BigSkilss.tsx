@@ -51,7 +51,7 @@ export default function BigSkilss() {
             className="group relative overflow-hidden rounded-2xl border border-[#262b46] bg-[#13152e]/50 p-8 transition-all hover:bg-[#13152e] hover:shadow-2xl hover:shadow-[#000000]/40"
           >
             {/* Image Placeholder (White block) */}
-            <div className="mb-8 flex aspect-video w-full items-center justify-center rounded-xl border border-[#262b46] bg-[#1a1d3a] p-4 grayscale opacity-60 group-hover:opacity-100 transition-opacity overflow-hidden">
+            <div className="mb-8 flex aspect-video w-full items-center justify-center rounded-xl border border-[#262b46] bg-[#1a1d3a] p-4 lg:grayscale lg:opacity-60 grayscale-0 opacity-100 group-hover:grayscale-0 group-hover:opacity-100 transition-opacity overflow-hidden">
               {/* This represents the colorful illustration in the screenshot */}
               <div className="relative h-full w-full bg-white/5 rounded-lg flex items-center justify-center">
                 <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent" />

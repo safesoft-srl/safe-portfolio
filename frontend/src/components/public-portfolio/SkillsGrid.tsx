@@ -67,9 +67,9 @@ export default function SkillsGrid({ skills = [] }: SkillsGridProps) {
           <div className="mt-14 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {filteredSkills.map((skill) => {
               return (
-                <div key={skill.id} className="group [perspective:1000px] isolate">
+                <div key={skill.id} className="group [perspective:1000px] isolate" tabIndex={0}>
                   <div className="relative aspect-square w-32 sm:w-36 md:w-40 lg:w-44 xl:w-48 mx-auto will-change-transform">
-                    <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(-180deg)]">
+                    <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(-180deg)] group-focus:[transform:rotateY(-180deg)] outline-none">
                       {/* FRONT */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl border border-[#2a2f4a] bg-[#1a1d3a]/40 p-4 [backface-visibility:hidden]">
                         <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/5 p-2">

@@ -174,7 +174,7 @@ export default function DashboardHome() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 sm:px-6 py-6 sm:py-8 animate-in fade-in zoom-in duration-500">
       {/* Header */}
       <div className="mb-2">
         <h1 className="text-3xl font-bold tracking-tight text-white">
@@ -279,7 +279,7 @@ export default function DashboardHome() {
           <div className="flex flex-col gap-3">
             <Link
               to={`/dashboard/${idPortfolio}/profile`}
-              className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all hover:border-[#6c72ff]/50 hover:bg-[#1a1e36]"
+              className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all sm:hover:border-[#6c72ff]/50 sm:hover:bg-[#1a1e36] active:scale-[0.98] active:bg-[#1a1e36]"
             >
               <div className="flex items-center gap-3 text-slate-300 group-hover:text-white">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-indigo-600 group-hover:text-white transition-colors">
@@ -295,7 +295,7 @@ export default function DashboardHome() {
 
             <Link
               to={`/dashboard/${idPortfolio}/projects`}
-              className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all hover:border-[#6c72ff]/50 hover:bg-[#1a1e36]"
+              className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all sm:hover:border-[#6c72ff]/50 sm:hover:bg-[#1a1e36] active:scale-[0.98] active:bg-[#1a1e36]"
             >
               <div className="flex items-center gap-3 text-slate-300 group-hover:text-white">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-indigo-600 group-hover:text-white transition-colors">
@@ -311,7 +311,7 @@ export default function DashboardHome() {
 
             <Link
               to={`/dashboard/${idPortfolio}/experience`}
-              className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all hover:border-[#6c72ff]/50 hover:bg-[#1a1e36]"
+              className="group flex items-center justify-between rounded-xl bg-[#0f1224] p-3 border border-[#2a2f55] transition-all sm:hover:border-[#6c72ff]/50 sm:hover:bg-[#1a1e36] active:scale-[0.98] active:bg-[#1a1e36]"
             >
               <div className="flex items-center gap-3 text-slate-300 group-hover:text-white">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2a2f55] text-[#6c72ff] group-hover:bg-indigo-600 group-hover:text-white transition-colors">
@@ -389,14 +389,14 @@ export default function DashboardHome() {
 
             {portfolioUrl && (
               <div className="mt-6 border-t border-[#2a2f55] pt-4">
-                <div className="p-4 flex justify-between">
-                  <span className="text-xs font-sans text-slate-400 block mb-2">
+                <div className="p-0 sm:p-4 mb-4 sm:mb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <span className="text-xs font-sans text-slate-400 block">
                     Tu enlace público activo:
                   </span>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <Checkbox checked={isPublic} onCheckedChange={handleCheckedChange} />
-                    <Label className="cursor-pointer font-medium text-sidebar-foreground text-xs">
-                      Visible para todo publico
+                    <Label className="cursor-pointer font-medium text-slate-300 text-xs">
+                      Visible para todo público
                     </Label>
                   </div>
                 </div>

@@ -80,20 +80,22 @@ export default function ProjectsPage() {
               <p className="mt-1 text-sm text-slate-400">Gestiona tus proyectos</p>
             </div>
 
-            <AlertDialogTrigger asChild>
-              <Button
-                type="button"
-                size="lg"
-                className="w-full sm:w-auto gap-2 font-heading"
-                onClick={() => {
-                  setEditingProject(null);
-                  setOpen(true);
-                }}
-              >
-                <PlusIcon weight="bold" className="size-4" />
-                <span>Agregar Proyecto</span>
-              </Button>
-            </AlertDialogTrigger>
+            <AlertDialogTrigger
+              render={
+                <Button
+                  type="button"
+                  size="lg"
+                  className="w-full sm:w-auto gap-2 font-heading"
+                  onClick={() => {
+                    setEditingProject(null);
+                    setOpen(true);
+                  }}
+                >
+                  <PlusIcon weight="bold" className="size-4" />
+                  <span>Agregar Proyecto</span>
+                </Button>
+              }
+            ></AlertDialogTrigger>
           </header>
 
           <section className="mt-4 flex w-full flex-1 flex-col items-start gap-4">

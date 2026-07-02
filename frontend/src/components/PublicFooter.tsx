@@ -1,11 +1,16 @@
 import { FacebookLogo, XLogo, LinkedinLogo, GithubLogo } from "@phosphor-icons/react";
+import { Link } from "react-router-dom";
 
 interface PublicFooterProps {
   firstName: string;
 }
 
 export function PublicFooter({ firstName }: PublicFooterProps) {
-  const navLinks = ["About me", "Resume", "Services", "Portfolio", "Blog", "Contact"];
+  const navLinks = [
+    { name: "Ver portafolios", path: "/feed" },
+    { name: "Landing Page", path: "/" },
+    { name: "Login", path: "/login" },
+  ];
 
   return (
     <footer className="mt-20 border-t border-[#1c2139] bg-[#0a0b1e] py-12">
@@ -25,16 +30,36 @@ export function PublicFooter({ firstName }: PublicFooterProps) {
 
         {/* Social Icons */}
         <div className="mt-8 flex items-center gap-6 text-slate-400">
-          <a href="#" className="hover:text-[#6c72ff] transition-colors">
+          <a
+            href="https://www.facebook.com/UmssBolOficial/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#6c72ff] transition-colors"
+          >
             <FacebookLogo size={20} weight="fill" />
           </a>
-          <a href="#" className="hover:text-[#6c72ff] transition-colors">
+          <a
+            href="https://x.com/dylancalle_"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#6c72ff] transition-colors"
+          >
             <XLogo size={20} weight="fill" />
           </a>
-          <a href="#" className="hover:text-[#6c72ff] transition-colors">
+          <a
+            href="https://www.linkedin.com/school/umssboloficial/posts/?feedView=all"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#6c72ff] transition-colors"
+          >
             <LinkedinLogo size={20} weight="fill" />
           </a>
-          <a href="#" className="hover:text-[#6c72ff] transition-colors">
+          <a
+            href="https://github.com/safesoft-srl/safe-portfolio"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#6c72ff] transition-colors"
+          >
             <GithubLogo size={20} weight="fill" />
           </a>
         </div>
@@ -42,13 +67,13 @@ export function PublicFooter({ firstName }: PublicFooterProps) {
         {/* Navigation Links */}
         <nav className="mt-10 flex flex-wrap justify-center gap-x-10 gap-y-4">
           {navLinks.map((link) => (
-            <a
-              key={link}
-              href="#"
+            <Link
+              key={link.name}
+              to={link.path}
               className="font-mono text-xs font-medium text-slate-500 hover:text-white transition-colors"
             >
-              {link}
-            </a>
+              {link.name}
+            </Link>
           ))}
         </nav>
       </div>
